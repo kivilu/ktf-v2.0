@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.kivi</groupId>
+    <artifactId>ktf-v2</artifactId>
+    <version>2.0.0</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <artifactId>ktf-dubbo</artifactId>
+  <description>基于dubbo2.7.0集成</description>
+  
+  <properties>
+  		<dubbo.version>2.7.0</dubbo.version>
+  </properties>
+  
+  <dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-dependencies-bom</artifactId>
+            <version>${dubbo.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+  </dependencyManagement>
+  
+  <dependencies>
+  		<dependency>
+       		<groupId>com.kivi</groupId>
+       		<artifactId>ktf-common</artifactId>
+       		<version>2.0.0</version>
+       		<optional>true</optional>
+       		<exclusions>
+       			<exclusion>
+       				<groupId>com.github.pagehelper</groupId>
+       				<artifactId>
+       					pagehelper-spring-boot-starter
+       				</artifactId>
+       			</exclusion>
+       		</exclusions>
+  		</dependency>
+  
+  	   <dependency>
+  			<groupId>org.apache.dubbo</groupId>
+	    	<artifactId>dubbo</artifactId>
+	    	<version>${dubbo.version}</version>
+  		</dependency>
+  		
+	    <dependency>
+	        <groupId>io.netty</groupId>
+	        <artifactId>netty-all</artifactId>
+	    </dependency>
+                
+        <dependency>
+			<groupId>org.apache.zookeeper</groupId>
+			<artifactId>zookeeper</artifactId>
+			<exclusions>
+		    	<exclusion>
+		    		 <groupId>org.slf4j</groupId>
+	    			 <artifactId>slf4j-log4j12</artifactId>
+		    	</exclusion>
+		    	<exclusion> 
+	    			<groupId>log4j</groupId> 
+	    			<artifactId>log4j</artifactId> 
+	    		</exclusion> 
+		    </exclusions>
+		</dependency> 
+
+        <dependency>
+		    <groupId>org.apache.curator</groupId>
+		    <artifactId>curator-framework</artifactId>
+		</dependency>
+		
+  </dependencies>
+  
+</project>

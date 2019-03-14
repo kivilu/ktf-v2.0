@@ -1,0 +1,110 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.kivi</groupId>
+  <artifactId>ktf-v2</artifactId>
+  <version>2.0.0</version>
+  <packaging>pom</packaging>
+  
+  <parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.2.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<generatorConfig.type></generatorConfig.type>
+		<fastjson.version>1.2.56</fastjson.version>
+		<springfox-swagger2-version>2.9.2</springfox-swagger2-version>
+		
+		<spring-boot-admin-server.version>1.5.6</spring-boot-admin-server.version>
+		<commons-logging.version>1.2</commons-logging.version>
+		<oracle-ojdbc6.version>11.2.0.1.0</oracle-ojdbc6.version>
+		<mybatis-spring.version>1.3.1</mybatis-spring.version>
+		<mybatis-tool.version>1.2.3</mybatis-tool.version>
+		<mybatis-pagehelper.version>1.2.3</mybatis-pagehelper.version>
+		<jodd.version>4.1.2</jodd.version>
+		<beetl.version>2.8.0</beetl.version>
+		<netty.version>4.1.25.Final</netty.version>
+		
+		<commons-lang3.version>3.2.1</commons-lang3.version>
+		
+	</properties>
+	
+  <repositories>
+    <repository>
+        <id>Eclipse Paho Repo</id>
+        <url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
+    </repository>
+  </repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+	
+		<!-- md5、sha256等工具包 -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
+		<!-- /md5、sha256等工具包 -->
+		
+		<!-- fastjson -->
+		<dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+        
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- Disable annotation processors during normal compilation -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+			<!-- <plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin> -->
+		</plugins>
+	</build>
+	
+	<modules>
+	<module>ktf-apollo</module>
+	<module>ktf-cache</module>
+	<module>ktf-common</module>
+	<module>ktf-crypto</module>
+	<module>ktf-db</module>
+	<module>ktf-dubbo</module>
+	</modules>
+</project>
