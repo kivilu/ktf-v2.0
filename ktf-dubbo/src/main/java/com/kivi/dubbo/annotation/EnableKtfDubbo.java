@@ -6,12 +6,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 
 @Inherited
-@Retention( RetentionPolicy.RUNTIME )
-@Target( { ElementType.TYPE } )
-@EnableDubbo( scanBasePackages = { "com.kivi", "${dubbo.scan-base-packages}" } )
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.TYPE })
+@EnableDubbo(scanBasePackages = { "com.kivi", "${dubbo.scan-base-packages}" })
 public @interface EnableKtfDubbo {
 
 }

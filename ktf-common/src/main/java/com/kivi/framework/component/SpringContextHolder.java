@@ -11,9 +11,10 @@ import org.springframework.stereotype.Component;
  * Spring的ApplicationContext的持有者,可以用静态方法的方式获取spring容器中的bean
  *
  */
-@Component
+@Component(SpringContextHolder.BEAN_NAME)
 @Order( value = Ordered.HIGHEST_PRECEDENCE )
 public class SpringContextHolder implements ApplicationContextAware {
+	public static final String BEAN_NAME="springContextHolder";
 
     private static ApplicationContext applicationContext;
 

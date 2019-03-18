@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.kivi</groupId>
-    <artifactId>ktf-v2</artifactId>
+    <artifactId>ktf</artifactId>
     <version>2.0.0</version>
     <relativePath>..</relativePath>
   </parent>
@@ -13,6 +13,9 @@
   
   <properties>
   	<druid-spring.version>1.1.13</druid-spring.version>
+  	<tk.mybatis.version>2.1.5</tk.mybatis.version>
+  	<mybatis-spring-boot-starter.version>2.0.0</mybatis-spring-boot-starter.version>
+	<pagehelper-spring-boot-starter.version>1.2.3</pagehelper-spring-boot-starter.version>
   </properties>
   
   <dependencies>
@@ -20,6 +23,12 @@
         <dependency>
        		<groupId>com.kivi</groupId>
        		<artifactId>ktf-common</artifactId>
+       		<version>2.0.0</version>
+       		<optional>true</optional>
+       	</dependency>
+       	<dependency>
+       		<groupId>com.kivi</groupId>
+       		<artifactId>ktf-web</artifactId>
        		<version>2.0.0</version>
        		<optional>true</optional>
        	</dependency>
@@ -45,27 +54,28 @@
 		
 		<!-- Mybatis -->
 		<dependency>
-		    <groupId>tk.mybatis</groupId>
-		    <artifactId>mapper-spring-boot-starter</artifactId>
-		    <version>${mybatis-tool.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>${mybatis-spring.version}</version>
+			<version>${mybatis-spring-boot-starter.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>tk.mybatis</groupId>
+		    <artifactId>mapper-spring-boot-starter</artifactId>
+		    <version>${tk.mybatis.version}</version>
 		</dependency>
 		<!-- mybatis test -->
 		<dependency>
 		    <groupId>org.mybatis.spring.boot</groupId>
 		    <artifactId>mybatis-spring-boot-starter-test</artifactId>
-		    <version>${mybatis-spring.version}</version>
+		    <version>${mybatis-spring-boot-starter.version}</version>
+		    <scope>test</scope>
 		</dependency>
 		
 		<!-- pagehelper 分页插件 -->
 		<dependency>
 		    <groupId>com.github.pagehelper</groupId>
 		    <artifactId>pagehelper-spring-boot-starter</artifactId>
-		    <version>${mybatis-pagehelper.version}</version>
+		    <version>${pagehelper-spring-boot-starter.version}</version>
 		</dependency>
 		<!-- /Mybatis -->
   </dependencies>
@@ -75,7 +85,7 @@
   		<plugin>
 				<groupId>org.mybatis.generator</groupId>
 				<artifactId>mybatis-generator-maven-plugin</artifactId>
-				<version>1.3.5</version>
+				<version>1.3.6</version>
 				<configuration>
 					<configurationFile>${basedir}/src/main/resources/generator/generatorConfig${generatorConfig.type}.xml</configurationFile>
 					<overwrite>true</overwrite>
@@ -90,7 +100,7 @@
 					<dependency>
 						<groupId>tk.mybatis</groupId>
 						<artifactId>mapper</artifactId>
-						<version>${mybatis-tool.version}</version>
+						<version>4.0.0</version>
 					</dependency>
 				</dependencies>
 			</plugin>

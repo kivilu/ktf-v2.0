@@ -11,7 +11,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.kivi.framework.cache.constant.KtfCache;
-import com.kivi.framework.cache.service.KtfTokenService;
+import com.kivi.framework.service.KtfTokenService;
 import com.kivi.framework.util.kit.CollectionKit;
 import com.kivi.framework.util.kit.StrKit;
 

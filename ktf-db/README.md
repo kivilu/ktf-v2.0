@@ -14,8 +14,7 @@
 2. 接口
 
    - IDao：Dao操作接口。
-   - IDaoEx：继承于IDao接口，扩展了功能
-   - MyMapper<T>：所有mapper接口的继承接口，tk.mybatis工具用过这个接口实现对Mapper的管理。
+   - KtfMapper<T>：所有业务mapper接口都需要继承本接口接口。本接口继承了tk.mybatis包中的Mapper<T>, MySqlMapper<T>, IdsMapper<T>的接口，tk.mybatis工具用过这个接口实现对Mapper的管理。
 
 3. Configuration配置
 
@@ -23,13 +22,8 @@
 
 4. 注解
 
-   @DataSource：多数据源标识
-   @BizLog：业务日志
+   @KtfMapperScan：多数据源标识
 
-5. Aspect
-
-   - MultiDataSourceAspect： 多数据源切换的Aspect
-   - LogAspect：业务日志Aspect
 
 ## 3、Druid配置示例
 

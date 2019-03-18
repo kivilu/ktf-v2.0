@@ -8,22 +8,25 @@ import com.kivi.framework.properties.IKtfProperties;
 import lombok.Data;
 
 @Data
-@Configuration( KtfDbProperties.BEAN_NAME )
-@ConfigurationProperties( prefix = KtfDbProperties.PREFIX )
+@Configuration(KtfDbProperties.BEAN_NAME)
+@ConfigurationProperties(prefix = KtfDbProperties.PREFIX)
 public class KtfDbProperties implements IKtfProperties {
-    public static final String BEAN_NAME               = "ktfDbProperties";
-    public static final String PREFIX                  = "ktf.db";
-    
-    private String             componentScan           = "com.kivi";
-    private String             txPointcutExpression;
-    private String             txAdviceRequired        = "insert*,update*,delete*,save*,modify*,add*";
-    private String             txAdviceSupports        = "find*,get*,query*,list*,select*";
-    private String             txAdviceNotSupported    = "log*";
-    
+	public static final String	BEAN_NAME	= "ktfDbProperties";
+	public static final String	PREFIX		= "ktf.db";
+	public static final String	MAPPER_SCAN	= "${" + PREFIX + ".mappers}";
+
+	private String				mappers		= "com.kivi.**.persist";
+	// private String txPointcutExpression;
+	// private String txAdviceRequired =
+	// "insert*,update*,delete*,save*,modify*,add*";
+	// private String txAdviceSupports = "find*,get*,query*,list*,select*";
+	// private String txAdviceNotSupported = "log*";
+
 	@Override
 	public String beanName() {
 		return BEAN_NAME;
 	}
+
 	@Override
 	public String prefix() {
 		return PREFIX;

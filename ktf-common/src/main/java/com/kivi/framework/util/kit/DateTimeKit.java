@@ -41,6 +41,7 @@ public class DateTimeKit {
      * ISO 日期时间格式
      */
     public final static String                   ISO_DATETIME_PATTERN         = "yyyyMMdd'T'HHmmssZ";
+    public final static String                   ISO_DATETIME_MS_PATTERN      = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
     /** 紧凑日期时间格式，精确到秒 ，yyyyMMddHHmmss */
     public final static String                   COMPACT_DATETIME_PATTERN     = "yyyyMMddHHmmss";
@@ -470,9 +471,14 @@ public class DateTimeKit {
             else if (length == NORM_DATETIME_MINUTE_PATTERN.length()) {
                 return parse(dateStr, NORM_DATETIME_MINUTE_PATTERN);
             }
+            else if (length == ISO_DATETIME_MS_PATTERN.length() - 2) {
+                dateStr = dateStr.replaceFirst("T", " ").replaceFirst(".\\d{3}Z", "");
+                return parseDateTime(dateStr);
+            }
             else if (length >= NORM_DATETIME_MS_PATTERN.length() - 2) {
                 return parse(dateStr, NORM_DATETIME_MS_PATTERN);
             }
+            
         }
         catch (Exception e) {
             throw new ToolBoxException(StrKit.format("Parse [{}] with format normal error!", dateStr));
