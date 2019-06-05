@@ -20,43 +20,44 @@ import com.kivi.framework.util.kit.StrKit;
  */
 public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 
-    private static final Logger log = LoggerFactory.getLogger(FastJson2JsonRedisSerializer.class);
+	private static final Logger	log	= LoggerFactory.getLogger(FastJson2JsonRedisSerializer.class);
 
-    private Class<T>            clazz;
+	private Class<T>			clazz;
 
-    public FastJson2JsonRedisSerializer( Class<T> clazz ) {
-        super();
-        ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+	public FastJson2JsonRedisSerializer(Class<T> clazz) {
+		super();
+		ParserConfig.getGlobalInstance().addAccept("com.kivi.,com.ins.");
+		ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
 
-        this.clazz = clazz;
-    }
+		this.clazz = clazz;
+	}
 
-    @Override
-    public byte[] serialize( T t ) throws SerializationException {
-        if (t == null) {
-            return new byte[0];
-        }
-        byte[] bytes = JSON.toJSONString(t, SerializerFeature.WriteClassName).getBytes(KtfConstant.DEFAULT_CHARSET);
+	@Override
+	public byte[] serialize(T t) throws SerializationException {
+		if (t == null) {
+			return new byte[0];
+		}
+		byte[] bytes = JSON.toJSONString(t, SerializerFeature.WriteClassName).getBytes(KtfConstant.DEFAULT_CHARSET);
 
-        if (log.isTraceEnabled())
-            log.trace("json:{}", StrKit.str(bytes, KtfConstant.DEFAULT_CHARSET.name()));
+		if (log.isTraceEnabled())
+			log.trace("json:{}", StrKit.str(bytes, KtfConstant.DEFAULT_CHARSET.name()));
 
-        return bytes;
-    }
+		return bytes;
+	}
 
-    @Override
-    public T deserialize( byte[] bytes ) throws SerializationException {
-        if (bytes == null || bytes.length <= 0) {
-            return null;
-        }
-        String str = new String(bytes, KtfConstant.DEFAULT_CHARSET);
+	@Override
+	public T deserialize(byte[] bytes) throws SerializationException {
+		if (bytes == null || bytes.length <= 0) {
+			return null;
+		}
+		String str = new String(bytes, KtfConstant.DEFAULT_CHARSET);
 
-        if (log.isTraceEnabled())
-            log.trace("json:{}", str);
+		if (log.isTraceEnabled())
+			log.trace("json:{}", str);
 
-        T obj = JSON.parseObject(str, clazz);
+		T obj = JSON.parseObject(str, clazz);
 
-        return obj;
-    }
+		return obj;
+	}
 
 }

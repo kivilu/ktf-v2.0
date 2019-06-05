@@ -10,7 +10,8 @@ import com.kivi.framework.dto.KtfBaseRsp;
 
 import io.swagger.annotations.ApiModel;
 
-@ApiModel(value = "KtfAsyncResult", description = "异步响应对象")
+@ApiModel(value = "KtfAsyncResult",
+		description = "异步响应对象")
 public class KtfAsyncResult<T> extends DeferredResult<T> {
 	private static final Logger	log	= LoggerFactory.getLogger(KtfAsyncResult.class);
 

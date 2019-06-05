@@ -7,12 +7,12 @@ import java.lang.annotation.Target;
 
 import org.springframework.context.annotation.ComponentScan;
 
-import com.kivi.framework.constant.KiviFramework;
+import com.kivi.framework.constant.KtfFramework;
 
 @Target( ElementType.TYPE )
 @Retention( RetentionPolicy.RUNTIME )
 @ComponentScan(
-                basePackages = { KiviFramework.BasePackages.KTF_COMPONENT_SCAN, KiviFramework.BasePackages.COMPONENT_SCAN } )
+                basePackages = { KtfFramework.BasePackages.KTF_COMPONENT_SCAN, KtfFramework.BasePackages.COMPONENT_SCAN } )
 public @interface EnableKTF {
 
 }

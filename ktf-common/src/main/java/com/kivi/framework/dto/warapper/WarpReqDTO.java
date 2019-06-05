@@ -17,7 +17,8 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-@ApiModel(value = "WarpperReqDTO", description = "DTO wapper")
+@ApiModel(value = "WarpperReqDTO",
+		description = "DTO wapper")
 public class WarpReqDTO<T> implements Serializable {
 	/**
 	 * 
@@ -40,19 +41,25 @@ public class WarpReqDTO<T> implements Serializable {
 	/**
 	 * 客户端IP
 	 */
-	@ApiModelProperty(position = 1, value = "客户端IP", dataType = "String", example = "127.0.0.1")
+	@ApiModelProperty(hidden = true)
 	private String	clientIp;
 
 	/**
 	 * 调用发起应用名称
 	 */
-	@ApiModelProperty(position = 2, value = "调用发起应用名称", dataType = "String", example = "")
-	private String	fromAppName;
+	@ApiModelProperty(position = 2,
+			value = "调用发起方",
+			dataType = "String",
+			example = "")
+	private String	from;
 
 	/**
 	 * 交易流水号
 	 */
-	@ApiModelProperty(position = 3, value = "交易流水号", dataType = "String", example = "")
+	@ApiModelProperty(position = 3,
+			value = "交易流水号",
+			dataType = "String",
+			example = "")
 	private String	tranSeqId;
 
 	/**
@@ -67,7 +74,9 @@ public class WarpReqDTO<T> implements Serializable {
 	/**
 	 * 请求内容
 	 */
-	@ApiModelProperty(position = 4, value = "请求内容", dataType = "Object")
+	@ApiModelProperty(position = 4,
+			value = "请求内容",
+			dataType = "Object")
 	private T		reqObject;
 
 }

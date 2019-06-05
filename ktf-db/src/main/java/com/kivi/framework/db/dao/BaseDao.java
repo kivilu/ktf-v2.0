@@ -177,9 +177,10 @@ public abstract class BaseDao<T> implements IDao<T> {
 			pageReq = new PageReqVO();
 		int page = pageReq.getOffset() / pageReq.getLimit() + 1;
 		PageHelper.startPage(page, pageReq.getLimit());
-		List<T>			list		= mapper.selectByExample(example);
-		PageInfo<T>		pageInfo	= new PageInfo<>(list);
-		PageInfoVO<T>	result		= new PageInfoVO<>();
+		List<T>		list		= mapper.selectByExample(example);
+		PageInfo<T>	pageInfo	= new PageInfo<>(list);
+		pageInfo.setList(null);
+		PageInfoVO<T> result = new PageInfoVO<>();
 		BeanUtils.copyProperties(pageInfo, result);
 		result.setList(list);
 		return result;

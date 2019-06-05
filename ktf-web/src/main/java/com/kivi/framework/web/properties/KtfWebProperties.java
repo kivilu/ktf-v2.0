@@ -21,6 +21,9 @@ public class KtfWebProperties implements IKtfProperties {
 
 	private Boolean				enabled				= true;
 	private Boolean				kaptchaOpen			= false;
+	/**
+	 * Web请求默认超时时间
+	 */
 	private Long				webRequestTimeout	= 30000L;
 	private String				fileUploadPath		= "/app/upload";
 

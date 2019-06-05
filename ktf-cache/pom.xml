@@ -10,7 +10,7 @@
   <description>Spring Boot 缓存的集成</description>
   
   <properties>
-  	<redisson.version>3.10.1</redisson.version>
+  	<redisson.version>3.10.6</redisson.version>
   </properties>
   
   <dependencies>

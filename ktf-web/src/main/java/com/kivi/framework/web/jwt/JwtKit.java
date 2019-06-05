@@ -8,14 +8,12 @@ import com.auth0.jwt.JWTCreator.Builder;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.kivi.framework.constant.KtfError;
 import com.kivi.framework.dto.JwtUserDTO;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.util.kit.DateTimeKit;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class JwtKit {
 
 	/**
@@ -37,11 +35,13 @@ public class JwtKit {
 
 	public static boolean verify(String jwt, String token) {
 		JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(token)).build();
+
 		try {
 			jwtVerifier.verify(jwt);
+		} catch (TokenExpiredException e) {
+			throw new KtfException(KtfError.E_UNAUTHORIZED, "登录状态已过期，请重新登录");
 		} catch (JWTVerificationException e) {
-			log.error("JWT认证失败", e);
-			throw new KtfException(KtfError.E_UNAUTHORIZED, "用户未认证");
+			throw new KtfException(KtfError.E_UNAUTHORIZED, "用户未登录");
 		}
 
 		return true;

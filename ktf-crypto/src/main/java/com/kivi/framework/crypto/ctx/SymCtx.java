@@ -15,52 +15,52 @@ import lombok.Getter;
 @Builder
 @Getter
 public class SymCtx implements Serializable {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
 
-    @Default
-    private int               blockSize        = 16;
+	@Default
+	private int					blockSize			= 16;
 
-    /**
-     * CTX唯一标识
-     */
-    String                    uuid;
+	/**
+	 * CTX唯一标识
+	 */
+	String						uuid;
 
-    /**
-     * 算法标识
-     */
-    private String            alg;
+	/**
+	 * 算法标识
+	 */
+	private String				alg;
 
-    /**
-     * cbc标识
-     */
-    private boolean           cbc;
+	/**
+	 * cbc标识
+	 */
+	private boolean				cbc;
 
-    /**
-     * 密钥
-     */
-    private byte[]            key;
+	/**
+	 * 密钥
+	 */
+	private byte[]				key;
 
-    /**
-     * 初始向量
-     */
-    private byte[]            iv;
+	/**
+	 * 初始向量
+	 */
+	private byte[]				iv;
 
-    /**
-     * 3DES标识
-     */
-    private boolean           triple;
+	/**
+	 * 3DES标识
+	 */
+	private boolean				triple;
 
-    /**
-     * 0填充标识
-     */
-    private boolean           zeroPadding;
+	/**
+	 * 0填充标识
+	 */
+	private boolean				zeroPadding;
 
-    /**
-     * 密钥对象
-     */
-    private Object            secretKey;
+	/**
+	 * 密钥对象
+	 */
+	private Object				secretKey;
 
 }

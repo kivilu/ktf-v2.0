@@ -20,12 +20,13 @@ public class ServiceParameterBeanPostProcessor extends InstantiationAwareBeanPos
 	}
 
 	@Override
-	public PropertyValues postProcessPropertyValues(PropertyValues pvs, PropertyDescriptor[] pds, Object bean,
-			String beanName) throws BeansException {
+	public PropertyValues
+			postProcessPropertyValues(PropertyValues pvs, PropertyDescriptor[] pds, Object bean, String beanName)
+					throws BeansException {
 		// pvs.getPropertyValue("parameter")
 		if (bean instanceof ServiceBean) {
-			PropertyValue propertyValue = pvs.getPropertyValue("parameters");
-			ConversionService conversionService = getConversionService();
+			PropertyValue		propertyValue		= pvs.getPropertyValue("parameters");
+			ConversionService	conversionService	= getConversionService();
 
 			if (propertyValue != null && propertyValue.getValue() != null
 					&& conversionService.canConvert(propertyValue.getValue().getClass(), Map.class)) {
@@ -38,8 +39,8 @@ public class ServiceParameterBeanPostProcessor extends InstantiationAwareBeanPos
 
 	private ConversionService getConversionService() {
 		DefaultConversionService conversionService = new DefaultConversionService();
-		// conversionService.addConverter(new StringArrayToStringConverter());
-		// conversionService.addConverter(new StringArrayToMapConverter());
+		conversionService.addConverter(new StringArrayToStringConverter());
+		conversionService.addConverter(new StringArrayToMapConverter());
 		return conversionService;
 	}
 }

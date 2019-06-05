@@ -1,4 +1,4 @@
-package com.kivi.framework.persist.model;
+package com.kivi.framework.model;
 
 import java.io.Serializable;
 

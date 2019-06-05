@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class KtfDubboConfiguration {
-    @Bean
-    ServiceParameterBeanPostProcessor serviceParameterBeanPostProcessor() {
-        return new ServiceParameterBeanPostProcessor();
-    }
+	@Bean
+	ServiceParameterBeanPostProcessor serviceParameterBeanPostProcessor() {
+		return new ServiceParameterBeanPostProcessor();
+	}
 }

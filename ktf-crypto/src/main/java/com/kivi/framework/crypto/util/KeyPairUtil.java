@@ -22,6 +22,7 @@ import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 
 import com.kivi.framework.constant.KtfError;
+import com.kivi.framework.crypto.domain.KeyPairResult;
 import com.kivi.framework.crypto.enums.KeyType;
 import com.kivi.framework.crypto.sm2.Sm2KeyPair;
 import com.kivi.framework.crypto.sm2.Sm2KeyPairImpl;

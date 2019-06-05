@@ -11,6 +11,7 @@
   
   <properties>	
   		<fst.version>2.57</fst.version>
+  		<persistence-api>1.0</persistence-api>
   </properties>
   
   <dependencies>
@@ -46,6 +47,13 @@
 			<version>${springfox-swagger2-version}</version>
 		</dependency>
 		<!-- /swagger -->
+		
+		<!-- mapper tool -->
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<version>${persistence-api}</version>
+		</dependency>
 		
   </dependencies>
   

@@ -4,42 +4,39 @@ import java.util.Arrays;
 import java.util.Optional;
 
 /**
- * 用户类型：01-管理员，02：用户
+ * 用户类型：00-任意，01-管理员，02：用户
  * 
  * @author Eric
  *
  */
 public enum UserType {
-    ADMIN( "01" ), // 管理员
-    USER( "02" );// 用户
+	ANYONE("00"), // 任意
+		ADMIN("01"), // 管理员
+		USER("02");// 用户
 
-    private final static UserType[] userRoles = { USER };
+	private final static UserType[]	userRoles	= { USER };
 
-    public final String             code;
+	public final String				code;
 
-    private UserType( String code ) {
-        this.code = code;
-    }
+	private UserType(String code) {
+		this.code = code;
+	}
 
-    public static UserType userType( String code ) {
-        Optional<UserType> op = Arrays.stream(UserType.values())
-                .filter(s-> s.code.equals(code))
-                .findFirst();
+	public static UserType userType(String code) {
+		Optional<UserType> op = Arrays.stream(UserType.values()).filter(s -> s.code.equals(code)).findFirst();
 
-        return op.isPresent() ? op.get() : null;
-    }
+		return op.isPresent() ? op.get() : null;
+	}
 
-    public byte toByte() {
-        Byte b = Byte.parseByte(this.code);
+	public byte toByte() {
+		Byte b = Byte.parseByte(this.code);
 
-        return b.byteValue();
-    }
+		return b.byteValue();
+	}
 
-    public boolean isUser() {
-        Optional<UserType> op = Arrays.stream(userRoles)
-                .filter(s-> s.code.equals(this.code))
-                .findFirst();
+	public boolean isUser() {
+		Optional<UserType> op = Arrays.stream(userRoles).filter(s -> s.code.equals(this.code)).findFirst();
 
-        return op.isPresent();
-    }
+		return op.isPresent();
+	}
 }

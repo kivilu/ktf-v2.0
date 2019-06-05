@@ -6,11 +6,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnProperty( name = { "spring.cache.type" }, havingValue = "ehcache", matchIfMissing = false )
-// @ImportResource( "classpath*:ehcache*.xml" )
+@ConditionalOnProperty(name = { "spring.cache.type" }, havingValue = "ehcache", matchIfMissing = false)
 @EnableCaching
 public class EhcacheConfiguration extends CachingConfigurerSupport {
-    public EhcacheConfiguration() {
-
-    }
 }
