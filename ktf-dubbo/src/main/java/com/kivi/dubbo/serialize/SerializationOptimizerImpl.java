@@ -53,6 +53,8 @@ public class SerializationOptimizerImpl implements SerializationOptimizer {
 			}
 		}
 
+		log.trace("序列号注册类：{}", classes);
+
 		return classes;
 	}
 

@@ -19,6 +19,7 @@ public class ServiceParameterBeanPostProcessor extends InstantiationAwareBeanPos
 		return PriorityOrdered.LOWEST_PRECEDENCE;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public PropertyValues
 			postProcessPropertyValues(PropertyValues pvs, PropertyDescriptor[] pds, Object bean, String beanName)
