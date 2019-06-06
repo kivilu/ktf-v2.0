@@ -9,12 +9,12 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kivi.framework.db.util.KtfMapper;
+import com.kivi.framework.db.util.PageInfoKit;
 import com.kivi.framework.exception.DaoException;
 import com.kivi.framework.util.kit.BeanKit;
 import com.kivi.framework.util.kit.ObjectKit;
@@ -177,12 +177,8 @@ public abstract class BaseDao<T> implements IDao<T> {
 			pageReq = new PageReqVO();
 		int page = pageReq.getOffset() / pageReq.getLimit() + 1;
 		PageHelper.startPage(page, pageReq.getLimit());
-		List<T>		list		= mapper.selectByExample(example);
-		PageInfo<T>	pageInfo	= new PageInfo<>(list);
-		pageInfo.setList(null);
-		PageInfoVO<T> result = new PageInfoVO<>();
-		BeanUtils.copyProperties(pageInfo, result);
-		result.setList(list);
+		List<T>			list	= mapper.selectByExample(example);
+		PageInfoVO<T>	result	= PageInfoKit.convert(new PageInfo<>(list));
 		return result;
 	}
 
@@ -190,11 +186,8 @@ public abstract class BaseDao<T> implements IDao<T> {
 	public PageInfoVO<T> selectByPage(T entity, PageReqVO pageReq) {
 		int page = pageReq.getOffset() / pageReq.getLimit() + 1;
 		PageHelper.startPage(page, pageReq.getLimit());
-		List<T>			list		= this.selectByEntity(entity);
-		PageInfo<T>		pageInfo	= new PageInfo<>(list);
-		PageInfoVO<T>	result		= new PageInfoVO<>();
-		BeanUtils.copyProperties(pageInfo, result);
-		result.setList(list);
+		List<T>			list	= this.selectByEntity(entity);
+		PageInfoVO<T>	result	= PageInfoKit.convert(new PageInfo<>(list));
 		return result;
 	}
 
