@@ -1,4 +1,4 @@
-package com.kivi.framework.service;
+package com.kivi.framework.cache.service;
 
 public interface KtfTokenService {
 

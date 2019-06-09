@@ -1,15 +1,14 @@
 package com.kivi.framework.cache.redis.serializer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.kivi.framework.constant.KtfConstant;
-import com.kivi.framework.util.kit.StrKit;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Redis fastjson Serializer
@@ -18,16 +17,15 @@ import com.kivi.framework.util.kit.StrKit;
  *
  * @param <T>
  */
+@Slf4j
 public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 
-	private static final Logger	log	= LoggerFactory.getLogger(FastJson2JsonRedisSerializer.class);
-
-	private Class<T>			clazz;
+	private Class<T> clazz;
 
 	public FastJson2JsonRedisSerializer(Class<T> clazz) {
 		super();
-		ParserConfig.getGlobalInstance().addAccept("com.kivi.,com.ins.");
-		ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+		//ParserConfig.getGlobalInstance().addAccept("com.kivi.,com.ins.");
+		//ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
 
 		this.clazz = clazz;
 	}
@@ -37,10 +35,7 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 		if (t == null) {
 			return new byte[0];
 		}
-		byte[] bytes = JSON.toJSONString(t, SerializerFeature.WriteClassName).getBytes(KtfConstant.DEFAULT_CHARSET);
-
-		if (log.isTraceEnabled())
-			log.trace("json:{}", StrKit.str(bytes, KtfConstant.DEFAULT_CHARSET.name()));
+		byte[] bytes = JSON.toJSONBytes(t, SerializerFeature.WriteClassName);
 
 		return bytes;
 	}
@@ -50,12 +45,13 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 		if (bytes == null || bytes.length <= 0) {
 			return null;
 		}
-		String str = new String(bytes, KtfConstant.DEFAULT_CHARSET);
 
-		if (log.isTraceEnabled())
+		if (log.isTraceEnabled()) {
+			String str = new String(bytes, KtfConstant.DEFAULT_CHARSET);
 			log.trace("json:{}", str);
+		}
 
-		T obj = JSON.parseObject(str, clazz);
+		T obj = JSON.parseObject(bytes, clazz, Feature.SupportAutoType, Feature.IgnoreNotMatch);
 
 		return obj;
 	}

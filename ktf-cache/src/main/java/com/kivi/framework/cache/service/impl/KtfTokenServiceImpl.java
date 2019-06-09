@@ -18,45 +18,48 @@ import com.kivi.framework.util.kit.StrKit;
 @Service
 public class KtfTokenServiceImpl implements KtfTokenService {
 
-    private static final Logger log = LoggerFactory.getLogger(KtfTokenServiceImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(KtfTokenServiceImpl.class);
 
-    @Override
-    public String nonce( Object... seeds ) {
-        return generate(seeds);
-    }
+	@Override
+	public String nonce(Object... seeds) {
+		return generate(seeds);
+	}
 
-    @Override
-    public String token( Object... seeds ) {
-        return generate(seeds);
-    }
+	@Override
+	public String token(Object... seeds) {
+		return generate(seeds);
+	}
 
-    @CachePut( value = KtfCache.KTF_TOKEN, key = "caches[0].name+'_'+#key" )
-    @Override
-    public <T> T cache( String key, T value ) {
-        log.info("缓存：name={}, key={}_{}，value={}", KtfCache.KTF_TOKEN, KtfCache.KTF_TOKEN, key, value);
-        return value;
-    }
+	@CachePut(value = KtfCache.KTF_TOKEN,
+			key = "caches[0].name+'_'+#key")
+	@Override
+	public <T> T cache(String key, T value) {
+		log.info("缓存：name={}, key={}_{}，value={}", KtfCache.KTF_TOKEN, KtfCache.KTF_TOKEN, key, value);
+		return value;
+	}
 
-    @Cacheable( value = KtfCache.KTF_TOKEN, key = "caches[0].name+'_'+#key" )
-    @Override
-    public <T> T cache( String key ) {
-        log.info("缓存：name={}, key={}_{}不存在", KtfCache.KTF_TOKEN, KtfCache.KTF_TOKEN, key);
-        return null;
-    }
+	@Cacheable(value = KtfCache.KTF_TOKEN,
+			key = "caches[0].name+'_'+#key")
+	@Override
+	public <T> T cache(String key) {
+		log.info("缓存：name={}, key={}_{}不存在", KtfCache.KTF_TOKEN, KtfCache.KTF_TOKEN, key);
+		return null;
+	}
 
-    private String generate( Object[] seeds ) {
-        StringBuilder plain = StrKit.builder();
+	private String generate(Object[] seeds) {
+		StringBuilder	plain	= StrKit.builder();
 
-        List<Object> datas = CollectionKit.newArrayList(seeds);
-        datas.forEach(data-> plain.append(data));
+		List<Object>	datas	= CollectionKit.newArrayList(seeds);
+		datas.forEach(data -> plain.append(data));
 
-        return DigestUtils.md5Hex(plain.toString());
-    }
+		return DigestUtils.md5Hex(plain.toString());
+	}
 
-    @CacheEvict( value = KtfCache.KTF_TOKEN, key = "caches[0].name+'_'+#key" )
-    @Override
-    public void evict( String key ) {
-        log.info("清除缓存：name={}, key={}_{}", KtfCache.KTF_TOKEN, KtfCache.KTF_TOKEN, key);
-    }
+	@CacheEvict(value = KtfCache.KTF_TOKEN,
+			key = "caches[0].name+'_'+#key")
+	@Override
+	public void evict(String key) {
+		log.info("清除缓存：name={}, key={}_{}", KtfCache.KTF_TOKEN, KtfCache.KTF_TOKEN, key);
+	}
 
 }

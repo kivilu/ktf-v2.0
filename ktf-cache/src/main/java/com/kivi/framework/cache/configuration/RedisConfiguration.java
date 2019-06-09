@@ -25,6 +25,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair;
 
+import com.alibaba.fastjson.parser.ParserConfig;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,25 +37,26 @@ import com.kivi.framework.cache.redis.serializer.Fst2JsonRedisSerializer;
 import com.kivi.framework.cache.redis.serializer.KtfStringRedisSerializer;
 
 @Configuration
-@ConditionalOnProperty( name = { "spring.cache.type" }, 
-						havingValue = "redis", 
-						matchIfMissing = false )
-@EnableCaching( proxyTargetClass = true, mode = AdviceMode.PROXY )
+@ConditionalOnProperty(name = { "spring.cache.type" },
+		havingValue = "redis",
+		matchIfMissing = false)
+@EnableCaching(proxyTargetClass = true,
+		mode = AdviceMode.PROXY)
 public class RedisConfiguration extends CachingConfigurerSupport {
 	@Autowired(required = false)
-	private LettuceConnectionFactory lettuceConnectionFactory;
+	private LettuceConnectionFactory	lettuceConnectionFactory;
 
 	@Autowired(required = false)
-	JedisConnectionFactory jedisConnectionFactory;
+	JedisConnectionFactory				jedisConnectionFactory;
 
 	@Autowired(required = false)
-	private RedissonConnectionFactory redissonConnectionFactory;
-	
-	@Autowired
-	private KtfCacheProperties ktfCacheProperties;
+	private RedissonConnectionFactory	redissonConnectionFactory;
 
 	@Autowired
-	private KtfRedisProperties ktfRedisProperties;
+	private KtfCacheProperties			ktfCacheProperties;
+
+	@Autowired
+	private KtfRedisProperties			ktfRedisProperties;
 
 	// 缓存管理器
 	@Override
@@ -82,20 +84,25 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 	}
 
 	private CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+		ParserConfig.getGlobalInstance().addAccept("com.kivi.,com.ins.");
+		ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+
 		// 创建自定义序列化器
-		FastJson2JsonRedisSerializer<?> fastJson2JsonRedisSerializer = new FastJson2JsonRedisSerializer<>(Object.class);
+		FastJson2JsonRedisSerializer<?>	fastJson2JsonRedisSerializer	= new FastJson2JsonRedisSerializer<>(
+				Object.class);
 
 		// 包装成SerializationPair类型
-		SerializationPair<?> serializationPair = SerializationPair.fromSerializer(fastJson2JsonRedisSerializer);
+		SerializationPair<?>			serializationPair				= SerializationPair
+				.fromSerializer(fastJson2JsonRedisSerializer);
 
 		// redis默认配置文件
-		RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-				.serializeValuesWith(serializationPair) // 设置序列化器
-				.entryTtl(Duration.ofHours(ktfCacheProperties.getExpireHour()))// 缓存1天
+		RedisCacheConfiguration			redisCacheConfiguration			= RedisCacheConfiguration.defaultCacheConfig()
+				.serializeValuesWith(serializationPair)																	// 设置序列化器
+				.entryTtl(Duration.ofHours(ktfCacheProperties.getExpireHour()))											// 缓存1天
 				.prefixKeysWith(ktfCacheProperties.getPrefixKey());
 
 		// 设置一个初始化的缓存空间set集合
-		Set<String> cacheNames = new HashSet<>();
+		Set<String>						cacheNames						= new HashSet<>();
 		cacheNames.addAll(Arrays.asList(KtfCache.KTF_CACHE_NAMES));
 
 		// 对每个缓存空间应用不同的配置
@@ -122,8 +129,10 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 	 * RedisTemplate配置
 	 */
 	@Bean
-	@ConditionalOnProperty(prefix = KtfRedisProperties.PREFIX, name = {
-			"client-type" }, havingValue = "lettuce", matchIfMissing = false)
+	@ConditionalOnProperty(prefix = KtfRedisProperties.PREFIX,
+			name = { "client-type" },
+			havingValue = "lettuce",
+			matchIfMissing = false)
 	public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
 
 		// 配置redisTemplate
@@ -138,8 +147,10 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 	}
 
 	@Bean
-	@ConditionalOnProperty(prefix = KtfRedisProperties.PREFIX, name = {
-			"client-type" }, havingValue = "jedis", matchIfMissing = false)
+	@ConditionalOnProperty(prefix = KtfRedisProperties.PREFIX,
+			name = { "client-type" },
+			havingValue = "jedis",
+			matchIfMissing = false)
 	public RedisTemplate<?, ?> redisTemplate(JedisConnectionFactory jedisConnectionFactory) {
 		RedisTemplate<String, Object> template = new RedisTemplate<>();
 		template.setConnectionFactory(jedisConnectionFactory);
@@ -153,9 +164,9 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 	 */
 	@SuppressWarnings("unused")
 	private void setJackson2JsonRedisSerializer(RedisTemplate<?, ?> template) {
-		Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(
+		Jackson2JsonRedisSerializer<Object>	jackson2JsonRedisSerializer	= new Jackson2JsonRedisSerializer<>(
 				Object.class);
-		ObjectMapper om = new ObjectMapper();
+		ObjectMapper						om							= new ObjectMapper();
 		om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
 		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 		jackson2JsonRedisSerializer.setObjectMapper(om);
@@ -176,10 +187,10 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 	 */
 
 	private void setFastJson2JsonRedisSerializer(RedisTemplate<?, ?> template) {
-		FastJson2JsonRedisSerializer<Object> fastJson2JsonRedisSerializer = new FastJson2JsonRedisSerializer<>(
+		FastJson2JsonRedisSerializer<Object>	fastJson2JsonRedisSerializer	= new FastJson2JsonRedisSerializer<>(
 				Object.class);
 
-		KtfStringRedisSerializer keySerializer = new KtfStringRedisSerializer();
+		KtfStringRedisSerializer				keySerializer					= new KtfStringRedisSerializer();
 		// template.setKeySerializer(template.getKeySerializer());
 		template.setKeySerializer(keySerializer);
 		template.setValueSerializer(fastJson2JsonRedisSerializer);
@@ -194,9 +205,9 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 	 */
 	@SuppressWarnings("unused")
 	private void setFst2JsonRedisSerializer(RedisTemplate<?, ?> template) {
-		Fst2JsonRedisSerializer<Object> fst2JsonRedisSerializer = new Fst2JsonRedisSerializer<>(Object.class);
+		Fst2JsonRedisSerializer<Object>	fst2JsonRedisSerializer	= new Fst2JsonRedisSerializer<>(Object.class);
 
-		KtfStringRedisSerializer keySerializer = new KtfStringRedisSerializer();
+		KtfStringRedisSerializer		keySerializer			= new KtfStringRedisSerializer();
 		// template.setKeySerializer(template.getKeySerializer());
 		template.setKeySerializer(keySerializer);
 		template.setValueSerializer(fst2JsonRedisSerializer);
