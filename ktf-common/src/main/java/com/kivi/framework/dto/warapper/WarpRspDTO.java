@@ -26,7 +26,8 @@ public class WarpRspDTO<T> implements Serializable {
 	}
 
 	public WarpRspDTO(Long tranUniqueId, T rspObject) {
-		this.rspObject = rspObject;
+		this.rspObject		= rspObject;
+		this.tranUniqueId	= tranUniqueId;
 	}
 
 	/**

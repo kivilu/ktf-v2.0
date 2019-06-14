@@ -87,7 +87,7 @@ public class CacheKit {
 	 * @param value
 	 */
 	public void put(String cacheName, Object key, Object value, Long expire) {
-		cacheFactory.put(cacheName,  key(cacheName, key), value, expire);
+		cacheFactory.put(cacheName, key(cacheName, key), value, expire);
 	}
 
 	public <T> T get(String cacheName, Object key) {
