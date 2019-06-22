@@ -3,20 +3,23 @@ package com.kivi.framework.constant.enums;
 import java.util.Arrays;
 import java.util.Optional;
 
+import lombok.Getter;
+
 /**
  * 用户类型：00-任意，01-管理员，02：用户
  * 
  * @author Eric
  *
  */
+@Getter
 public enum UserType {
 	ANYONE("00"), // 任意
-		ADMIN("01"), // 管理员
-		USER("02");// 用户
+	ADMIN("01"), // 管理员
+	USER("02");// 用户
 
-	private final static UserType[]	userRoles	= { USER };
+	private final static UserType[] userRoles = { USER };
 
-	public final String				code;
+	public final String code;
 
 	private UserType(String code) {
 		this.code = code;
