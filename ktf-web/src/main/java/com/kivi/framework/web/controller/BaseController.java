@@ -168,11 +168,15 @@ public class BaseController {
 	}
 
 	protected <T> KtfAsyncResult<T> newAsyncResultResult() {
-		KtfWebProperties	ktfWebProperties	= SpringContextHolder.getBean(KtfWebProperties.class);
-		ITimeoutService		timeoutService		= SpringContextHolder.getBean(ITimeoutService.class);
+		KtfWebProperties ktfWebProperties = SpringContextHolder.getBean(KtfWebProperties.class);
 
-		KtfAsyncResult<T>	result				= new KtfAsyncResult<>(msgId(),
-				ktfWebProperties.getWebRequestTimeout());
+		return newAsyncResultResult(ktfWebProperties.getWebRequestTimeout());
+	}
+
+	protected <T> KtfAsyncResult<T> newAsyncResultResult(Long timeout) {
+		ITimeoutService		timeoutService	= SpringContextHolder.getBean(ITimeoutService.class);
+
+		KtfAsyncResult<T>	result			= new KtfAsyncResult<>(msgId(), timeout);
 		result.onTimeout(new KtfAsyncTimeoutRunnable<>(result, timeoutService));
 
 		return result;
