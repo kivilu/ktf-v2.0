@@ -97,7 +97,7 @@ public class RedisBlockingQueueKit {
 
 		if (log.isTraceEnabled()) {
 			long endInMillions = System.currentTimeMillis();
-			log.trace("向[{}]队列push数据用时(毫秒)：{}", name, (endInMillions - beginInMillions));
+			log.trace("从[{}]队列poll数据用时(毫秒)：{}", name, (endInMillions - beginInMillions));
 		}
 
 		return resultObject;

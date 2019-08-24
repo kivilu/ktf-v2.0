@@ -4,7 +4,7 @@
 package com.kivi.framework.cache.redis.redission;
 
 import java.math.BigDecimal;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.redisson.api.RAtomicDouble;
 import org.redisson.api.RAtomicLong;
@@ -22,41 +22,41 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class RedisCounterKit {
-	private static final String								PREFIX				= "RC_";
-	private final RedissonClient							redissonClient;
-
-	private final ConcurrentHashMap<String, RAtomicLong>	rRAtomicLongMap		= new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<String, RAtomicDouble>	rRAtomicDoubleMap	= new ConcurrentHashMap<>();
+	private final RedissonClient redissonClient;
 
 	public RedisCounterKit(RedissonClient redissonClient) {
 		this.redissonClient = redissonClient;
 	}
 
 	private RAtomicLong getRAtomicLong(final String name) {
-		String		rName	= StrKit.join(".", PREFIX, "Long", name);
-		RAtomicLong	result	= rRAtomicLongMap.get(rName);
-		if (result == null) {
-			result = redissonClient.getAtomicLong(rName);
-			rRAtomicLongMap.put(rName, result);
-		}
-		return result;
+		String rName = StrKit.join(".", "RAtomicLong", "Long", name);
+		return redissonClient.getAtomicLong(rName);
 	}
 
 	private RAtomicDouble getRAtomicDouble(final String name) {
-		String			rName	= StrKit.join(".", PREFIX, "Double", name);
-		RAtomicDouble	result	= rRAtomicDoubleMap.get(rName);
-		if (result == null) {
-			result = redissonClient.getAtomicDouble(rName);
-			rRAtomicDoubleMap.put(rName, result);
+		String rName = StrKit.join(".", "RAtomicDouble", "Double", name);
+		return redissonClient.getAtomicDouble(rName);
+	}
+
+	/**
+	 * 
+	 * @param timeToLive - timeout before object will be deletedtimeUnit
+	 * @param timeUnit   - time unit
+	 * @return Returns:true if the timeout was set and false if not
+	 */
+	public boolean expire(String key, long timeToLive, TimeUnit timeUnit) {
+		RAtomicLong raLong = getRAtomicLong(key);
+		if (raLong != null) {
+			return raLong.expire(timeToLive, timeUnit);
 		}
-		return result;
+
+		RAtomicDouble raDecimal = getRAtomicDouble(key);
+		return raDecimal.expire(timeToLive, timeUnit);
 	}
 
 	public long getValue(String key) {
 		RAtomicLong	raLong	= getRAtomicLong(key);
-
 		long		result	= raLong.get();
-		log.trace("RedisCounter：key={}，value={}", key, result);
 
 		return result;
 	}
@@ -74,10 +74,26 @@ public class RedisCounterKit {
 		return val;
 	}
 
+	/**
+	 * 每次调用加一
+	 * 
+	 * @param key
+	 * @return
+	 */
 	public long incr(String key) {
 		RAtomicLong	raLong	= getRAtomicLong(key);
 
 		long		result	= raLong.incrementAndGet();
+		return result;
+	}
+
+	public int incrCyclic(String key, int max) {
+		RAtomicLong	raLong	= getRAtomicLong(key);
+		Long		value	= raLong.incrementAndGet();
+		int			result	= value.intValue();
+		if (result == max)
+			raLong.setAsync(0L);
+
 		return result;
 	}
 

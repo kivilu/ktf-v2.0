@@ -6,6 +6,7 @@ package com.kivi.framework.cache.redis.redission;
 import java.io.Serializable;
 
 import org.redisson.api.RMap;
+import org.redisson.api.RMapCache;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.Codec;
 
@@ -36,9 +37,9 @@ public class RedisMapKit {
 		this.codec			= codec;
 	}
 
-	public <K, V> RMap<K, V> getRMap(String name) {
+	public <K, V> RMapCache<K, V> getRMap(String name) {
 		String rName = StrKit.join(".", PREFIX, name);
-		return codec == null ? redissonClient.getMap(rName) : redissonClient.getMap(rName, codec);
+		return codec == null ? redissonClient.getMapCache(rName) : redissonClient.getMapCache(rName, codec);
 
 	}
 
