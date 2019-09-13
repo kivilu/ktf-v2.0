@@ -1,5 +1,7 @@
 package com.kivi.framework.util.kit;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -7,17 +9,16 @@ import com.kivi.framework.constant.enums.BasicType;
 import com.kivi.framework.exception.ToolBoxException;
 
 /**
- * 类工具类
- * 1、扫描指定包下的所有类<br>
+ * 类工具类 1、扫描指定包下的所有类<br>
  * 参考 http://www.oschina.net/code/snippet_234657_22722
  *
  */
 public class ClassKit {
-	
+
 	private ClassKit() {
 		// 静态类不可实例化
 	}
-	
+
 	/**
 	 * 是否为标准的类<br>
 	 * 这个类必须：<br>
@@ -27,10 +28,11 @@ public class ClassKit {
 	 * @return 是否为标准类
 	 */
 	public static boolean isNormalClass(Class<?> clazz) {
-		return null != clazz && false == clazz.isInterface() && false == isAbstract(clazz) && false == clazz.isEnum() && false == clazz.isArray() && false == clazz.isAnnotation() && false == clazz
-				.isSynthetic() && false == clazz.isPrimitive();
+		return null != clazz && false == clazz.isInterface() && false == isAbstract(clazz) && false == clazz.isEnum()
+				&& false == clazz.isArray() && false == clazz.isAnnotation() && false == clazz.isSynthetic()
+				&& false == clazz.isPrimitive();
 	}
-	
+
 	/**
 	 * 是否为抽象类
 	 * 
@@ -40,7 +42,7 @@ public class ClassKit {
 	public static boolean isAbstract(Class<?> clazz) {
 		return Modifier.isAbstract(clazz.getModifiers());
 	}
-	
+
 	/**
 	 * 实例化对象
 	 * 
@@ -52,25 +54,30 @@ public class ClassKit {
 		if (null == clazz)
 			return null;
 		try {
-			return (T) Class.forName(clazz).newInstance();
+			Class<T> clz = (Class<T>) Class.forName(clazz).getClass();
+			return newInstance(clz);
 		} catch (Exception e) {
 			throw new ToolBoxException(StrKit.format("Instance class [{}] error!", clazz), e);
 		}
 	}
 
 	/**
-	 * 实例化对象
-	 * 
-	 * @param clazz 类
-	 * @return 对象
+	 * 根据指定的 class ， 实例化一个对象，根据构造参数来实例化
+	 * <p>
+	 * 在 java9 及其之后的版本 Class.newInstance() 方法已被废弃
+	 *
+	 * @param clazz 需要实例化的对象
+	 * @param <T>   类型，由输入类型决定
+	 * @return 返回新的实例
 	 */
 	public static <T> T newInstance(Class<T> clazz) {
-		if (null == clazz)
-			return null;
 		try {
-			return (T) clazz.newInstance();
-		} catch (Exception e) {
-			throw new ToolBoxException(StrKit.format("Instance class [{}] error!", clazz), e);
+			Constructor<T> constructor = clazz.getDeclaredConstructor();
+			constructor.setAccessible(true);
+			return constructor.newInstance();
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException
+				| NoSuchMethodException e) {
+			throw new ToolBoxException("实例化对象时出现错误,请尝试给 %s 添加无参的构造方法", e, clazz.getName());
 		}
 	}
 
@@ -92,20 +99,21 @@ public class ClassKit {
 			throw new ToolBoxException(StrKit.format("Instance class [{}] error!", clazz), e);
 		}
 	}
-	
+
 	/**
 	 * 获得对象数组的类数组
+	 * 
 	 * @param objects 对象数组
 	 * @return 类数组
 	 */
-	public static Class<?>[] getClasses(Object... objects){
+	public static Class<?>[] getClasses(Object... objects) {
 		Class<?>[] classes = new Class<?>[objects.length];
 		for (int i = 0; i < objects.length; i++) {
 			classes[i] = objects[i].getClass();
 		}
 		return classes;
 	}
-	
+
 	/**
 	 * 检查目标类是否可以从原类转化<br>
 	 * 转化包括：<br>
@@ -143,7 +151,7 @@ public class ClassKit {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 设置方法为可访问
 	 * 
@@ -156,7 +164,7 @@ public class ClassKit {
 		}
 		return method;
 	}
-	
+
 	/**
 	 * 指定类是否为非public
 	 * 
@@ -176,7 +184,7 @@ public class ClassKit {
 	public static boolean isNotPublic(Method method) {
 		return false == isPublic(method);
 	}
-	
+
 	/**
 	 * 指定类是否为Public
 	 * 
@@ -189,7 +197,7 @@ public class ClassKit {
 		}
 		return Modifier.isPublic(clazz.getModifiers());
 	}
-	
+
 	/**
 	 * 指定方法是否为Public
 	 * 

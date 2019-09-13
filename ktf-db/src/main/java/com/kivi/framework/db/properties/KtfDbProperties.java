@@ -16,11 +16,6 @@ public class KtfDbProperties implements IKtfProperties {
 	public static final String	MAPPER_SCAN	= "${" + PREFIX + ".mappers}";
 
 	private String				mappers		= "com.kivi.**.persist";
-	// private String txPointcutExpression;
-	// private String txAdviceRequired =
-	// "insert*,update*,delete*,save*,modify*,add*";
-	// private String txAdviceSupports = "find*,get*,query*,list*,select*";
-	// private String txAdviceNotSupported = "log*";
 
 	@Override
 	public String beanName() {

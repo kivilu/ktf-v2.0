@@ -19,74 +19,72 @@ import lombok.extern.slf4j.Slf4j;
  * Description: 通用工具类
  * </p>
  */
+@Deprecated
 @Slf4j
 public class IpUtils {
 
-    public static String geLocaltHostIp() {
-        return geLocaltHostIp(null);
-    }
+	public static String geLocaltHostIp() {
+		return geLocaltHostIp(null);
+	}
 
-    public static String geLocaltHostIp(String prefix) {
-        String ip = "";
-        List<String> ips = new ArrayList<String>();
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress() &&
-                            inetAddress.isSiteLocalAddress()) {
-                        String local_ip = inetAddress.getHostAddress().toString();
-                        if (!"127.0.0.1".equals(local_ip)) {
-                            if (prefix != null && !local_ip.startsWith(prefix)) {
-                                continue;
-                            }
-                            ips.add(local_ip);
-                        }
+	public static String geLocaltHostIp(String prefix) {
+		String			ip	= "";
+		List<String>	ips	= new ArrayList<String>();
+		try {
+			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+				NetworkInterface intf = en.nextElement();
+				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+					InetAddress inetAddress = enumIpAddr.nextElement();
+					if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress()
+							&& inetAddress.isSiteLocalAddress()) {
+						String local_ip = inetAddress.getHostAddress().toString();
+						if (!"127.0.0.1".equals(local_ip)) {
+							if (prefix != null && !local_ip.startsWith(prefix)) {
+								continue;
+							}
+							ips.add(local_ip);
+						}
 
-                    }
+					}
 
-                }
-            }
+				}
+			}
 
-        }
-        catch (SocketException ex) {
-            log.error("获取IP异常", ex);
-        }
-        if (ips.isEmpty()) {
-            InetAddress netAddress = getInetAddress();
-            if (null == netAddress) {
-                return null;
-            }
+		} catch (SocketException ex) {
+			log.error("获取IP异常", ex);
+		}
+		if (ips.isEmpty()) {
+			InetAddress netAddress = getInetAddress();
+			if (null == netAddress) {
+				return null;
+			}
 
-            ip = netAddress.getHostAddress();
-        }
-        else {
-            ip = ips.get(0);
-        }
+			ip = netAddress.getHostAddress();
+		} else {
+			ip = ips.get(0);
+		}
 
-        return ip;
-    }
+		return ip;
+	}
 
-    public static String getLocalHostName() {
-        InetAddress netAddress = getInetAddress();
-        if (null == netAddress) {
-            return null;
-        }
-        String name = netAddress.getHostName(); // get the host address
-        return name;
-    }
+	public static String getLocalHostName() {
+		InetAddress netAddress = getInetAddress();
+		if (null == netAddress) {
+			return null;
+		}
+		String name = netAddress.getHostName(); // get the host address
+		return name;
+	}
 
-    private static InetAddress getInetAddress() {
+	private static InetAddress getInetAddress() {
 
-        try {
-            return InetAddress.getLocalHost();
-        }
-        catch (UnknownHostException e) {
-            log.error("unknown host!", e);
-        }
-        return null;
+		try {
+			return InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			log.error("unknown host!", e);
+		}
+		return null;
 
-    }
+	}
 
 }

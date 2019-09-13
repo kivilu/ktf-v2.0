@@ -5,11 +5,9 @@ import java.io.Serializable;
 import com.kivi.framework.dto.JwtUserDTO;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Setter
-@Getter
+@Data
 public class WarpRspDTO<T> implements Serializable {
 
 	/**

@@ -1,4 +1,4 @@
-package com.kivi.framework.web.util.xss;
+package com.kivi.framework.web.xss;
 
 
 import javax.servlet.*;

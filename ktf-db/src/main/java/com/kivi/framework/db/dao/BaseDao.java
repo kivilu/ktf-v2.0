@@ -111,6 +111,16 @@ public abstract class BaseDao<T> implements IDao<T> {
 
 		return mapper.deleteByExample(example);
 	}
+	
+	public int deleteByIds(Object[] ids) {
+		int row = 0 ;
+		try {
+		row = mapper.deleteByIds(StrKit.join(StrKit.COMMA, ids));
+		} catch (Exception e) {
+			throw new DaoException("删除数据异常：" + e.getMessage(), e);
+		}
+		return row;
+	}
 
 	@Override
 	public T updateAll(T entity) {
@@ -157,18 +167,33 @@ public abstract class BaseDao<T> implements IDao<T> {
 
 	@Override
 	public List<T> selectByIds(String ids) {
-		return mapper.selectByIds(ids);
+		List<T> result = null ;
+		try {
+			result =  mapper.selectByIds(ids);
+		}
+		catch (Exception e) {
+			throw new DaoException("查询数据异常：" + e.getMessage());
+		}
+		
+		return result;
 	}
 
 	@Override
 	public List<T> selectByIds(List<Object> ids) {
-
 		return selectByIds(StrKit.join(StrKit.COMMA, ids));
 	}
 
 	@Override
 	public List<T> selectByExample(Object example) {
-		return mapper.selectByExample(example);
+		List<T> result = null ;
+		try {
+			result =  mapper.selectByExample(example);
+		}
+		catch (Exception e) {
+			throw new DaoException("查询数据异常：" + e.getMessage());
+		}
+		
+		return result;
 	}
 
 	@Override

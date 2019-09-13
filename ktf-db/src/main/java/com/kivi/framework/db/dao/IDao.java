@@ -24,6 +24,8 @@ public interface IDao<T> {
 	int deleteByEntity(T entity);
 
 	int deleteByExample(Object example);
+	
+	int deleteByIds(Object[] ids);
 
 	T updateAll(T entity);
 

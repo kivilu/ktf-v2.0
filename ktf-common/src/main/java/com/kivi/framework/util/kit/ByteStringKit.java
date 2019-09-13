@@ -1,11 +1,8 @@
 package com.kivi.framework.util.kit;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.BinaryCodec;
-import org.apache.commons.codec.binary.Hex;
 
-import com.kivi.framework.exception.KtfException;
+import com.vip.vjtools.vjkit.text.EncodeUtil;
 
 /**
  * 字符和byte数组 转换工具
@@ -23,13 +20,13 @@ public class ByteStringKit {
 			return null;
 		switch (type) {
 		case BASE64:
-			return Base64.encodeBase64String(data);
+			return EncodeUtil.encodeBase64(data);
 		case HEX:
-			return Hex.encodeHexString(data);
+			return EncodeUtil.encodeHex(data);
 		case ASCII:
 			return BinaryCodec.toAsciiString(data);
 		default:
-			return Base64.encodeBase64String(data);
+			return EncodeUtil.encodeBase64(data);
 		}
 	}
 
@@ -38,17 +35,13 @@ public class ByteStringKit {
 			return new byte[0];
 		switch (type) {
 		case BASE64:
-			return Base64.decodeBase64(data);
+			return EncodeUtil.decodeBase64(data);
 		case HEX:
-			try {
-				return Hex.decodeHex(data);
-			} catch (DecoderException e) {
-				throw new KtfException(e);
-			}
+			return EncodeUtil.decodeHex(data.toUpperCase());
 		case ASCII:
 			return BinaryCodec.fromAscii(data.getBytes());
 		default:
-			return Base64.decodeBase64(data);
+			return EncodeUtil.decodeBase64(data);
 		}
 	}
 

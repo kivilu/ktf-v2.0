@@ -14,11 +14,11 @@ import com.kivi.framework.component.SpringContextHolder;
 import com.kivi.framework.constant.KtfError;
 import com.kivi.framework.dto.JwtUserDTO;
 import com.kivi.framework.exception.KtfException;
+import com.kivi.framework.service.IJwtUserServie;
 import com.kivi.framework.service.KtfTokenService;
 import com.kivi.framework.web.annotation.LoginToken;
 import com.kivi.framework.web.annotation.PassToken;
 import com.kivi.framework.web.constant.WebConst;
-import com.kivi.framework.web.jwt.IJwtUserServie;
 import com.kivi.framework.web.jwt.JwtKit;
 
 import lombok.extern.slf4j.Slf4j;

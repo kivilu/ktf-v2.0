@@ -3,11 +3,14 @@ package com.kivi.framework.web.configuration;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -18,7 +21,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.kivi.framework.web.util.xss.XssFilter;
+import com.kivi.framework.spring.validator.KtfValidatorCollection;
+import com.kivi.framework.web.undertow.UndertowServerFactoryCustomizer;
+import com.kivi.framework.web.xss.XssFilter;
+
+import io.undertow.Undertow;
 
 @Configuration
 @EnableWebMvc
@@ -26,6 +33,11 @@ public class KftWebMvcConfigurer implements WebMvcConfigurer {
 
 	@Autowired(required = false)
 	FastJsonHttpMessageConverter fastJsonHttpMessageConverter;
+
+	@Override
+	public Validator getValidator() {
+		return new SpringValidatorAdapter(new KtfValidatorCollection());
+	}
 
 	@Override
 	public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -105,6 +117,8 @@ public class KftWebMvcConfigurer implements WebMvcConfigurer {
 	public FilterRegistrationBean<XssFilter> xssFilterRegistration() {
 		FilterRegistrationBean<XssFilter> registration = new FilterRegistrationBean<>(new XssFilter());
 		registration.addUrlPatterns("/*");
+		registration.setName("xssFilter");
+		registration.setOrder(Integer.MAX_VALUE);
 		return registration;
 	}
 
@@ -114,6 +128,12 @@ public class KftWebMvcConfigurer implements WebMvcConfigurer {
 	@Bean
 	public ServletListenerRegistrationBean<RequestContextListener> requestContextListenerRegistration() {
 		return new ServletListenerRegistrationBean<>(new RequestContextListener());
+	}
+
+	@Bean
+	@ConditionalOnClass(Undertow.class)
+	public UndertowServerFactoryCustomizer undertowServerFactoryCustomizer() {
+		return new UndertowServerFactoryCustomizer();
 	}
 
 }
