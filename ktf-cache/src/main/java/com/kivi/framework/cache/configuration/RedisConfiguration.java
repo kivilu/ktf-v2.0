@@ -9,7 +9,9 @@ import java.util.Set;
 
 import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -17,7 +19,8 @@ import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheManager.RedisCacheManagerBuilder;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -37,11 +40,9 @@ import com.kivi.framework.cache.redis.serializer.Fst2JsonRedisSerializer;
 import com.kivi.framework.cache.redis.serializer.KtfStringRedisSerializer;
 
 @Configuration
-@ConditionalOnProperty(name = { "spring.cache.type" },
-		havingValue = "redis",
-		matchIfMissing = false)
-@EnableCaching(proxyTargetClass = true,
-		mode = AdviceMode.PROXY)
+@ConditionalOnProperty(name = { "spring.cache.type" }, havingValue = "redis", matchIfMissing = false)
+@EnableCaching(proxyTargetClass = true, mode = AdviceMode.PROXY)
+@AutoConfigureAfter({ RedisAutoConfiguration.class })
 public class RedisConfiguration extends CachingConfigurerSupport {
 	@Autowired(required = false)
 	private LettuceConnectionFactory	lettuceConnectionFactory;
@@ -61,7 +62,6 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 	// 缓存管理器
 	@Override
 	@Bean
-
 	public CacheManager cacheManager() {
 		CacheManager cacheManager = null;
 		switch (ktfRedisProperties.getClientType()) {
@@ -97,9 +97,13 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 
 		// redis默认配置文件
 		RedisCacheConfiguration			redisCacheConfiguration			= RedisCacheConfiguration.defaultCacheConfig()
-				.serializeValuesWith(serializationPair)																	// 设置序列化器
-				.entryTtl(Duration.ofHours(ktfCacheProperties.getExpireHour()))											// 缓存1天
-				.prefixKeysWith(ktfCacheProperties.getPrefixKey());
+				// 设置序列化器
+				.serializeValuesWith(serializationPair)
+				// 缓存1天
+				.entryTtl(Duration.ofHours(ktfCacheProperties.getExpireHour()))
+				.prefixKeysWith(ktfCacheProperties.getPrefixKey())
+				// 不缓存空值
+				.disableCachingNullValues();
 
 		// 设置一个初始化的缓存空间set集合
 		Set<String>						cacheNames						= new HashSet<>();
@@ -111,7 +115,7 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 				redisCacheConfiguration.entryTtl(Duration.ofHours(ktfCacheProperties.getTtlToken())));
 
 		// RedisCacheManager 生成器创建
-		return RedisCacheManagerBuilder.fromConnectionFactory(redisConnectionFactory)
+		return RedisCacheManager.builder(RedisCacheWriter.lockingRedisCacheWriter(redisConnectionFactory))
 				.cacheDefaults(redisCacheConfiguration).initialCacheNames(cacheNames)
 				.withInitialCacheConfigurations(configMap).build();
 	}
@@ -128,35 +132,17 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 	/**
 	 * RedisTemplate配置
 	 */
-	@Bean
-	@ConditionalOnProperty(prefix = KtfRedisProperties.PREFIX,
-			name = { "client-type" },
-			havingValue = "lettuce",
-			matchIfMissing = false)
-	public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
-
+	@Bean(name = "redisTemplate")
+	public RedisTemplate<String, Object> objectRedisTemplate(RedisConnectionFactory factory) {
 		// 配置redisTemplate
 		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-		redisTemplate.setConnectionFactory(lettuceConnectionFactory);
+		redisTemplate.setConnectionFactory(factory);
 
 		setFastJson2JsonRedisSerializer(redisTemplate);
 
 		redisTemplate.afterPropertiesSet();
 
 		return redisTemplate;
-	}
-
-	@Bean
-	@ConditionalOnProperty(prefix = KtfRedisProperties.PREFIX,
-			name = { "client-type" },
-			havingValue = "jedis",
-			matchIfMissing = false)
-	public RedisTemplate<?, ?> redisTemplate(JedisConnectionFactory jedisConnectionFactory) {
-		RedisTemplate<String, Object> template = new RedisTemplate<>();
-		template.setConnectionFactory(jedisConnectionFactory);
-		setFastJson2JsonRedisSerializer(template);
-		template.afterPropertiesSet();
-		return template;
 	}
 
 	/**

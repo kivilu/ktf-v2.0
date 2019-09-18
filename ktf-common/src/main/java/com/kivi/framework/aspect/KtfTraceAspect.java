@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.kivi.framework.annotation.KtfTrace;
-import com.kivi.framework.util.kit.DateTimeKit;
+import com.vip.vjtools.vjkit.time.ClockUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -70,7 +70,7 @@ public class KtfTraceAspect {
 
 		if (log.isTraceEnabled()) {
 			log.trace(">>>>>{}：{}.{}执行耗时：{}ms，返回值：{}", annotation.value(), className, methodName,
-					DateTimeKit.spendMs(start),
+					ClockUtil.elapsedTime(start),
 					JSON.toJSONString(result, SerializerFeature.WriteClassName, SerializerFeature.PrettyFormat));
 		}
 

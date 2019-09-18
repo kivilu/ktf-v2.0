@@ -12,15 +12,12 @@ import org.redisson.api.RedissonClient;
 
 import com.kivi.framework.util.kit.StrKit;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * Redis Counter
  * 
  * @author Lu Xueqiang
  *
  */
-@Slf4j
 public class RedisCounterKit {
 	private final RedissonClient redissonClient;
 

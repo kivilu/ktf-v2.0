@@ -3,108 +3,49 @@
   <parent>
     <groupId>com.kivi</groupId>
     <artifactId>ktf</artifactId>
-    <version>2.0.0</version>
-    <relativePath>..</relativePath>
+    <version>2.0.1</version>
   </parent>
   <artifactId>ktf-db</artifactId>
-  
   <name>ktf-db</name>
-  <description>Spring Boot数据库集成</description>
+  <description>SpringBoot2.0环境使用Mybatis-Plus的数据库基础包</description>
   
   <properties>
-  	<druid-spring.version>1.1.13</druid-spring.version>
-  	<tk.mybatis.version>2.1.5</tk.mybatis.version>
-  	<mybatis-spring-boot-starter.version>2.0.0</mybatis-spring-boot-starter.version>
-	<pagehelper-spring-boot-starter.version>1.2.3</pagehelper-spring-boot-starter.version>
+  	<mybatis-plus.version>3.2.0</mybatis-plus.version>
+  	<p6spy.version>3.8.5</p6spy.version>
+  	<mybatis-typehandlers-jsr310.version>1.0.2</mybatis-typehandlers-jsr310.version>
   </properties>
   
   <dependencies>
-       <!-- kivi -->
-        <dependency>
-       		<groupId>com.kivi</groupId>
-       		<artifactId>ktf-common</artifactId>
-       		<version>2.0.0</version>
-       		<optional>true</optional>
-       	</dependency>
-       	<dependency>
-       		<groupId>com.kivi</groupId>
-       		<artifactId>ktf-web</artifactId>
-       		<version>2.0.0</version>
-       		<optional>true</optional>
-       	</dependency>
-       <!-- /kivi -->
-  
-  		<!-- JDBC -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
-		</dependency>
-		<dependency>
-		   <groupId>com.alibaba</groupId>
-		   <artifactId>druid-spring-boot-starter</artifactId>
-		   <version>${druid-spring.version}</version>
+	  		<groupId>com.kivi</groupId>
+	    	<artifactId>ktf-common</artifactId>
+	    	<version>${ktf.version}</version>
+	  	</dependency>
+		
+  		<dependency>
+		    <groupId>com.baomidou</groupId>
+		    <artifactId>mybatis-plus-boot-starter</artifactId>
+		    <version>${mybatis-plus.version}</version>
 		</dependency>
 		
-			<!-- mysql jdbc驱动 -->
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-typehandlers-jsr310</artifactId>
+            <version>${mybatis-typehandlers-jsr310.version}</version>
+    	</dependency>
+    	
+    	<dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
 		</dependency>
 		
-		<!-- Mybatis -->
+		<!-- sql监控 -->
 		<dependency>
-			<groupId>org.mybatis.spring.boot</groupId>
-			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>${mybatis-spring-boot-starter.version}</version>
+		    <groupId>p6spy</groupId>
+		    <artifactId>p6spy</artifactId>
+		    <version>${p6spy.version}</version>
 		</dependency>
-		<dependency>
-		    <groupId>tk.mybatis</groupId>
-		    <artifactId>mapper-spring-boot-starter</artifactId>
-		    <version>${tk.mybatis.version}</version>
-		</dependency>
-		<!-- mybatis test -->
-		<dependency>
-		    <groupId>org.mybatis.spring.boot</groupId>
-		    <artifactId>mybatis-spring-boot-starter-test</artifactId>
-		    <version>${mybatis-spring-boot-starter.version}</version>
-		    <scope>test</scope>
-		</dependency>
-		
-		<!-- pagehelper 分页插件 -->
-		<dependency>
-		    <groupId>com.github.pagehelper</groupId>
-		    <artifactId>pagehelper-spring-boot-starter</artifactId>
-		    <version>${pagehelper-spring-boot-starter.version}</version>
-		</dependency>
-		<!-- /Mybatis -->
+  		
   </dependencies>
-  
-  <build>
-  	<plugins>
-  		<plugin>
-				<groupId>org.mybatis.generator</groupId>
-				<artifactId>mybatis-generator-maven-plugin</artifactId>
-				<version>1.3.6</version>
-				<configuration>
-					<configurationFile>${basedir}/src/main/resources/generator/generatorConfig${generatorConfig.type}.xml</configurationFile>
-					<overwrite>true</overwrite>
-					<verbose>true</verbose>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>mysql</groupId>
-						<artifactId>mysql-connector-java</artifactId>
-						<version>8.0.13</version>
-					</dependency>
-					<dependency>
-						<groupId>tk.mybatis</groupId>
-						<artifactId>mapper</artifactId>
-						<version>4.0.0</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-  	</plugins>
-  </build>
-  
 </project>

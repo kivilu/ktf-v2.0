@@ -10,9 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.async.DeferredResult;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.google.common.collect.Sets;
 import com.kivi.framework.properties.KtfSwaggerProperties;
 import com.kivi.framework.util.kit.CollectionKit;
 import com.kivi.framework.web.constant.WebConst;
@@ -43,16 +42,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 		name = "enabled",
 		havingValue = "true",
 		matchIfMissing = false)
-public class SwaggerConfiguration implements WebMvcConfigurer {
+public class SwaggerConfiguration {
 
 	@Autowired
 	private KtfSwaggerProperties ktfSwaggerProperties;
-
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-
-	}
 
 	/**
 	 * 可以定义多个组，比如本类中定义把test和demo区分开了 （访问页面就可以看到效果了）
@@ -98,8 +91,9 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 				.consumes(
 						CollectionKit.newHashSet(MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE))
 				.produces(CollectionKit.newHashSet(MediaType.APPLICATION_JSON_UTF8_VALUE))
-				.genericModelSubstitutes(DeferredResult.class).genericModelSubstitutes(ResponseEntity.class)
-				.useDefaultResponseMessages(false).forCodeGeneration(true).enableUrlTemplating(true).pathMapping("/")// base，最终调用接口后会和paths拼接在一
+				.protocols(Sets.newHashSet("http", "https")).genericModelSubstitutes(DeferredResult.class)
+				.genericModelSubstitutes(ResponseEntity.class).useDefaultResponseMessages(false).forCodeGeneration(true)
+				.enableUrlTemplating(true).pathMapping("/")// base，最终调用接口后会和paths拼接在一
 				.apiInfo(buildApiInfo()).select().apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
 				.paths(PathSelectors.any()).build();
 	}

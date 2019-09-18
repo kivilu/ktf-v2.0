@@ -24,11 +24,8 @@ public class JwtKit {
 	 * @throws Exception
 	 */
 	public static String create(JwtUserKit jwtUser, String token, Date expiresAt) throws Exception {
-
-		long	nowMillis	= System.currentTimeMillis();
-
-		Builder	builder		= JWT.create().withIssuer("kTF").withAudience(jwtUser.audience()).withExpiresAt(expiresAt)
-				.withIssuedAt(DateTimeKit.date(nowMillis));
+		Builder builder = JWT.create().withIssuer("kTF").withAudience(jwtUser.audience()).withExpiresAt(expiresAt)
+				.withIssuedAt(DateTimeKit.now());
 
 		return builder.sign(Algorithm.HMAC256(token));
 	}

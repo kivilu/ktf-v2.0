@@ -21,6 +21,7 @@ public class KtfWebProperties implements IKtfProperties {
 
 	private Boolean				enabled				= true;
 	private Boolean				kaptchaOpen			= false;
+	private Boolean				enableCsrf			= true;
 	/**
 	 * Web请求默认超时时间
 	 */

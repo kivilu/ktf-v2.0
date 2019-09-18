@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/ktf?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+  application:
+    name: ktf-dashboard-impl
+
+mybatis-plus:
+  mapper-locations: classpath*:com/kivi/dashboard/*/mapper/xml/*Mapper.xml
+  type-aliases-package: com.kivi.dashboard.*.entity
+  global-config:
+    db-config:
+      id-type: ID_WORKER
+      table-underline: true
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+
+logging:
+  level:
+    com.kivi: trace
+    com.com.baomidou: trace
+
+ktf:  common:    component-scan: com.kivi.dashboard  db:    mappers: com.ins.dashboard.*.mapper

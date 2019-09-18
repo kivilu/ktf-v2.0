@@ -9,13 +9,13 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import com.kivi.framework.cache.ehcache.factory.EhcacheFactory;
 import com.kivi.framework.cache.factory.ICache;
 import com.kivi.framework.cache.factory.ILoader;
 import com.kivi.framework.cache.properties.KtfCacheProperties;
+import com.kivi.framework.cache.redis.IRedisService;
 import com.kivi.framework.cache.redis.factory.RedisFactory;
 import com.kivi.framework.component.KtfKit;
 import com.kivi.framework.component.SpringContextHolder;
@@ -24,7 +24,8 @@ import com.kivi.framework.util.kit.StrKit;
 /**
  * 缓存工具类
  */
-@ConditionalOnProperty(prefix = KtfCacheProperties.PREFIX,
+@ConditionalOnProperty(
+		prefix = KtfCacheProperties.PREFIX,
 		name = "enabled",
 		havingValue = "true",
 		matchIfMissing = true)
@@ -32,13 +33,13 @@ import com.kivi.framework.util.kit.StrKit;
 @DependsOn(value = { "springContextHolder" })
 public class CacheKit {
 
-	private static ICache		cacheFactory;
+	private static ICache	cacheFactory;
 
 	@Autowired
-	CacheManager				cacheManager;
+	CacheManager			cacheManager;
 
 	@Autowired(required = false)
-	RedisTemplate<String, ?>	redisTemplate;
+	IRedisService			iRedisService;
 
 	@PostConstruct
 	private void init() {
@@ -47,7 +48,7 @@ public class CacheKit {
 			EhCacheCacheManager ehCacheCacheManager = (EhCacheCacheManager) cacheManager;
 			cacheFactory = new EhcacheFactory(ehCacheCacheManager.getCacheManager());
 		} else if (CacheType.REDIS.compareTo(cacheType) == 0) {
-			cacheFactory = new RedisFactory((RedisCacheManager) cacheManager, redisTemplate);
+			cacheFactory = new RedisFactory(iRedisService);
 		}
 
 	}

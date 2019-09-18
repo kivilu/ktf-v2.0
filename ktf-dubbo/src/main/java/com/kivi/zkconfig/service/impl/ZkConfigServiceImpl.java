@@ -8,10 +8,11 @@ import java.util.stream.Collectors;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.dubbo.common.utils.ConcurrentHashSet;
 
-import com.kivi.framework.util.Convert;
+import com.kivi.framework.converter.BeanConverter;
 import com.kivi.zkconfig.service.ZkConfigService;
 import com.kivi.zkconfig.service.ZkConfigServiceCallback;
 import com.kivi.zkconfig.util.ZkMap;
+import com.vip.vjtools.vjkit.number.NumberUtil;
 
 public class ZkConfigServiceImpl implements ZkConfigService {
 	private final ZkMap											zkmap;
@@ -59,9 +60,7 @@ public class ZkConfigServiceImpl implements ZkConfigService {
 
 	@Override
 	public Integer getInt(String key) {
-		Object obj = get(key);
-
-		return Convert.toInt(obj);
+		return NumberUtil.toInt(getStr(key));
 	}
 
 	@Override
@@ -69,13 +68,14 @@ public class ZkConfigServiceImpl implements ZkConfigService {
 		Object obj = get(key);
 		if (obj == null)
 			return null;
-		return obj.toString();
+		return BeanConverter.convert(String.class, obj);
 	}
 
 	@Override
 	public <T> T get(String key, Class<T> clazz) {
 		Object obj = get(key);
-		return Convert.convertObject(obj, clazz);
+
+		return BeanConverter.convert(clazz, obj);
 	}
 
 	@Override

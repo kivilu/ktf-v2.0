@@ -10,6 +10,10 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.vip.vjtools.vjkit.collection.CollectionUtil;
+import com.vip.vjtools.vjkit.collection.ListUtil;
+import com.vip.vjtools.vjkit.collection.MapUtil;
+
 /**
  * Object通用的函数
  * 
@@ -159,13 +163,13 @@ public class ObjectKit {
 			return true;
 		}
 		if (o instanceof String) {
-			return StringUtils.isBlank(o.toString());
+			return StringUtils.isBlank((String) o);
 		} else if (o instanceof List) {
-			return ((List) o).isEmpty();
+			return ListUtil.isEmpty((List) o);
 		} else if (o instanceof Map) {
-			return ((Map) o).isEmpty();
+			return MapUtil.isEmpty((Map) o);
 		} else if (o instanceof Set) {
-			return ((Set) o).isEmpty();
+			return CollectionUtil.isEmpty((Set) o);
 		} else if (o instanceof Object[]) {
 			if (((Object[]) o).length == 0) {
 				return true;

@@ -1,9 +1,10 @@
 package com.kivi.framework.web.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -21,13 +22,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 
 import com.kivi.framework.component.KtfKit;
 import com.kivi.framework.component.SpringContextHolder;
-import com.kivi.framework.constant.enums.Order;
 import com.kivi.framework.dto.JwtUserDTO;
 import com.kivi.framework.service.ITimeoutService;
-import com.kivi.framework.util.FileUtil;
-import com.kivi.framework.util.kit.StrKit;
-import com.kivi.framework.vo.page.PageInfoBT;
-import com.kivi.framework.vo.page.PageReqVO;
 import com.kivi.framework.web.async.KtfAsyncResult;
 import com.kivi.framework.web.async.KtfAsyncTimeoutRunnable;
 import com.kivi.framework.web.async.KtfDeferredResult;
@@ -36,6 +32,7 @@ import com.kivi.framework.web.constant.WebConst;
 import com.kivi.framework.web.properties.KtfWebProperties;
 import com.kivi.framework.web.util.kit.HttpKit;
 import com.kivi.framework.web.warpper.BaseControllerWarpper;
+import com.vip.vjtools.vjkit.io.FileUtil;
 
 @DependsOn(value = { SpringContextHolder.BEAN_NAME, KtfWebProperties.BEAN_NAME })
 public class BaseController {
@@ -98,30 +95,6 @@ public class BaseController {
 		return (JwtUserDTO) HttpKit.getRequest().getAttribute(WebConst.ATTR_USERACCOUNT);
 	}
 
-	protected Integer getSystemInvokCount() {
-		return (Integer) this.getHttpServletRequest().getServletContext().getAttribute("systemCount");
-	}
-
-	public PageReqVO defaultPage() {
-		HttpServletRequest	request	= HttpKit.getRequest();
-		int					limit	= Integer.valueOf(request.getParameter("limit"));
-		int					offset	= Integer.valueOf(request.getParameter("offset"));
-		String				sort	= request.getParameter("sort");
-		String				order	= request.getParameter("order");
-		sort = StrKit.toUnderlineCase(sort);
-		PageReqVO pageReq = new PageReqVO(limit, offset, sort, order);
-		if (StrKit.isEmpty(sort)) {
-			pageReq.setOpenSort(false);
-		} else {
-			if (Order.ASC.getCode().equals(order)) {
-				pageReq.setAsc(true);
-			} else {
-				pageReq.setAsc(false);
-			}
-		}
-		return pageReq;
-	}
-
 	/**
 	 * 包装一个list，让list增加额外属性
 	 */
@@ -145,10 +118,12 @@ public class BaseController {
 
 	/**
 	 * 返回前台文件流
+	 * 
+	 * @throws IOException
 	 *
 	 */
-	protected ResponseEntity<byte[]> renderFile(String fileName, String filePath) {
-		byte[] bytes = FileUtil.toByteArray(filePath);
+	protected ResponseEntity<byte[]> renderFile(String fileName, String filePath) throws IOException {
+		byte[] bytes = FileUtil.toByteArray(new File(filePath));
 		return renderFile(fileName, bytes);
 	}
 
@@ -167,13 +142,6 @@ public class BaseController {
 		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 		headers.setContentDispositionFormData("attachment", dfileName);
 		return new ResponseEntity<>(fileBytes, headers, HttpStatus.CREATED);
-	}
-
-	/**
-	 * 把service层的分页信息，封装为bootstrap table通用的分页封装
-	 */
-	protected <T> PageInfoBT<T> packForBT(long total, List<T> list) {
-		return new PageInfoBT<>(total, list);
 	}
 
 	protected Long msgId() {

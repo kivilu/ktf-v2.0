@@ -7,34 +7,43 @@ import java.util.Set;
  */
 public interface ICache {
 
-    /**
-     * 缓存数据，默认超时：3600000毫秒
-     * 
-     * @param cacheName
-     * @param key
-     * @param value
-     */
-    void put( String cacheName, Object key, Object value );
+	/**
+	 * 缓存数据，默认超时：3600000毫秒
+	 * 
+	 * @param cacheName
+	 * @param key
+	 * @param value
+	 */
+	void put(String cacheName, Object key, Object value);
 
-    /**
-     * /** 缓存数据，
-     * 
-     * @param cacheName
-     * @param key
-     * @param value
-     */
-    void put( String cacheName, Object key, Object value, Long expire );
+	/**
+	 * /** 缓存数据，
+	 * 
+	 * @param cacheName
+	 * @param key
+	 * @param value
+	 */
+	void put(String cacheName, Object key, Object value, Long expire);
 
-    <T> T get( String cacheName, Object key );
+	<T> T get(String cacheName, Object key);
 
-    Set<String> getKeys( String cacheName );
+	Set<String> getKeys(String cacheName);
 
-    void remove( String cacheName, Object key );
+	/**
+	 * 实现命令：expire设置过期时间，单位秒
+	 *
+	 * @param key
+	 * @param second
+	 * @return
+	 */
+	boolean expire(String cacheName, String key, int second);
 
-    void removeAll( String cacheName );
+	void remove(String cacheName, Object key);
 
-    <T> T get( String cacheName, Object key, ILoader iLoader );
+	void removeAll(String cacheName);
 
-    <T> T get( String cacheName, Object key, Class<? extends ILoader> iLoaderClass );
+	<T> T get(String cacheName, Object key, ILoader iLoader);
+
+	<T> T get(String cacheName, Object key, Class<? extends ILoader> iLoaderClass);
 
 }

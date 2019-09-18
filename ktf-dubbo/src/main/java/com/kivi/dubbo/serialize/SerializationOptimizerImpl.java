@@ -13,9 +13,7 @@ import com.kivi.framework.dto.warapper.WarpRspDTO;
 import com.kivi.framework.dto.warapper.WarpperDTO;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.util.kit.StrKit;
-import com.kivi.framework.vo.page.PageInfoBT;
 import com.kivi.framework.vo.page.PageInfoVO;
-import com.kivi.framework.vo.page.PageReqVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,9 +28,7 @@ public class SerializationOptimizerImpl implements SerializationOptimizer {
 		classes.add(WarpperDTO.class);
 		classes.add(WarpReqDTO.class);
 		classes.add(WarpRspDTO.class);
-		classes.add(PageInfoBT.class);
 		classes.add(PageInfoVO.class);
-		classes.add(PageReqVO.class);
 		classes.add(byte.class);
 		classes.add(Byte.class);
 		classes.add(KtfException.class);

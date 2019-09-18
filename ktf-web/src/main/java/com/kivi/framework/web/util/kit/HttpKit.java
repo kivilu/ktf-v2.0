@@ -11,11 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.kivi.framework.util.kit.BeanKit;
-import com.kivi.framework.util.kit.BeanKit.ValueProvider;
-import com.kivi.framework.util.kit.ClassKit;
-import com.kivi.framework.util.kit.StrKit;
-
 public class HttpKit {
 
 	public static String getIp() {
@@ -77,44 +72,6 @@ public class HttpKit {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
 				.getRequest();
 		return new WafRequestWrapper(request);
-	}
-
-	/**
-	 * ServletRequest 参数转Bean
-	 * 
-	 * @param request   ServletRequest
-	 * @param beanClass Bean Class
-	 * @return Bean
-	 */
-	public static <T> T requestParamToBean(javax.servlet.ServletRequest request, Class<T> beanClass) {
-		return fillBeanWithRequestParam(request, ClassKit.newInstance(beanClass));
-	}
-
-	/**
-	 * ServletRequest 参数转Bean
-	 * 
-	 * @param request ServletRequest
-	 * @param bean    Bean
-	 * @return Bean
-	 */
-	public static <T> T fillBeanWithRequestParam(final javax.servlet.ServletRequest request, T bean) {
-
-		final String beanName = StrKit.lowerFirst(bean.getClass().getSimpleName());
-		return BeanKit.fillBean(bean, new ValueProvider() {
-			@Override
-			public Object value(String name) {
-				String value = request.getParameter(name);
-				if (StrKit.isEmpty(value)) {
-					// 使用类名前缀尝试查找值
-					value = request.getParameter(beanName + StrKit.DOT + name);
-					if (StrKit.isEmpty(value)) {
-						// 此处取得的值为空时跳过，包括null和""
-						value = null;
-					}
-				}
-				return value;
-			}
-		});
 	}
 
 }
