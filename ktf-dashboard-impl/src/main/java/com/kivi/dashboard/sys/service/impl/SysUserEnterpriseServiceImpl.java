@@ -1,9 +1,12 @@
 package com.kivi.dashboard.sys.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +22,13 @@ import com.kivi.dashboard.sys.mapper.SysUserEnterpriseMapper;
 import com.kivi.dashboard.sys.service.ISysUserEnterpriseService;
 import com.kivi.db.page.PageParams;
 import com.kivi.framework.annotation.KtfTrace;
+import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.util.kit.NumberKit;
 import com.kivi.framework.util.kit.ObjectKit;
 import com.kivi.framework.vo.page.PageInfoVO;
+import com.vip.vjtools.vjkit.collection.ListUtil;
+import com.vip.vjtools.vjkit.collection.MapUtil;
 
 /**
  * <p>
@@ -32,6 +38,7 @@ import com.kivi.framework.vo.page.PageInfoVO;
  * @author Auto-generator
  * @since 2019-09-18
  */
+@Primary
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class SysUserEnterpriseServiceImpl extends ServiceImpl<SysUserEnterpriseMapper, SysUserEnterprise>
@@ -89,6 +96,8 @@ public class SysUserEnterpriseServiceImpl extends ServiceImpl<SysUserEnterpriseM
 	@KtfTrace("指定列查询列表监管用户与企业关联")
 	@Override
 	public List<SysUserEnterpriseDTO> list(Map<String, Object> params, String... columns) {
+		if (params != null)
+			params.remove(KtfConstant.URL_TIMESTAMP);
 		QueryWrapper<SysUserEnterprise>	query	= Wrappers.<SysUserEnterprise>query().select(columns).allEq(true,
 				params, false);
 		List<SysUserEnterprise>			list	= super.list(query);
@@ -110,15 +119,19 @@ public class SysUserEnterpriseServiceImpl extends ServiceImpl<SysUserEnterpriseM
 	 */
 	@Override
 	public List<SysUserEnterpriseDTO> listLike(Map<String, Object> params, String... columns) {
+		if (params != null)
+			params.remove(KtfConstant.URL_TIMESTAMP);
 		QueryWrapper<SysUserEnterprise> query = Wrappers.<SysUserEnterprise>query().select(columns);
-		params.entrySet().stream().forEach(entry -> {
-			if (ObjectKit.isNotEmpty(entry.getValue())) {
-				if (NumberKit.isNumberic(entry.getValue()))
-					query.eq(entry.getKey(), entry.getValue());
-				else
-					query.like(entry.getKey(), entry.getValue());
-			}
-		});
+		if (MapUtil.isNotEmpty(params)) {
+			params.entrySet().stream().forEach(entry -> {
+				if (ObjectKit.isNotEmpty(entry.getValue())) {
+					if (NumberKit.isNumberic(entry.getValue()))
+						query.eq(entry.getKey(), entry.getValue());
+					else
+						query.like(entry.getKey(), entry.getValue());
+				}
+			});
+		}
 
 		List<SysUserEnterprise> list = super.list(query);
 		return BeanConverter.convert(SysUserEnterpriseDTO.class, list);
@@ -127,21 +140,24 @@ public class SysUserEnterpriseServiceImpl extends ServiceImpl<SysUserEnterpriseM
 	/**
 	 * 分页查询
 	 */
-	@KtfTrace("分页查询监管用户与企业关联")
+	@Override
+	@KtfTrace("分页查询用户与企业关联")
 	public PageInfoVO<SysUserEnterpriseDTO> page(Map<String, Object> params) {
 		PageParams<SysUserEnterpriseDTO>	pageParams	= new PageParams<>(params);
 		Page<SysUserEnterprise>				page		= new Page<>(pageParams.getCurrPage(),
 				pageParams.getPageSize());
 
 		QueryWrapper<SysUserEnterprise>		query		= Wrappers.<SysUserEnterprise>query();
-		params.entrySet().stream().forEach(entry -> {
-			if (ObjectKit.isNotEmpty(entry.getValue())) {
-				if (NumberKit.isNumberic(entry.getValue()))
-					query.eq(entry.getKey(), entry.getValue());
-				else
-					query.like(entry.getKey(), entry.getValue());
-			}
-		});
+		if (MapUtil.isNotEmpty(params)) {
+			params.entrySet().stream().forEach(entry -> {
+				if (ObjectKit.isNotEmpty(entry.getValue())) {
+					if (NumberKit.isNumberic(entry.getValue()))
+						query.eq(entry.getKey(), entry.getValue());
+					else
+						query.like(entry.getKey(), entry.getValue());
+				}
+			});
+		}
 
 		IPage<SysUserEnterprise>			iPage	= super.page(page, query);
 
@@ -158,9 +174,55 @@ public class SysUserEnterpriseServiceImpl extends ServiceImpl<SysUserEnterpriseM
 
 	}
 
+	@KtfTrace("根据ID查找所属企业ID")
 	@Override
 	public List<Long> selectEnterpriseIdByUserId(Long userId) {
 		return sysUserEnterpriseExMapper.selectEnterpriseIdByUserId(userId);
+	}
+
+	@KtfTrace("保存或修改用户所监管的企业关系")
+	@Override
+	public void saveOrUpdateUserEnterprise(Long userId, List<Long> enterpriseIdList) {
+		// 先删除企业与用户关系
+		Map<String, Object> params = new HashMap<>();
+		params.put(SysUserEnterprise.DB_USER_ID, userId);
+		this.removeByMap(params);
+		if (enterpriseIdList == null || enterpriseIdList.size() == 0) {
+			return;
+		}
+
+		// 保存用户与企业关系
+		List<SysUserEnterprise> list = enterpriseIdList.stream().map(enterpriseId -> {
+			SysUserEnterprise sysUserEnterprise = new SysUserEnterprise();
+			sysUserEnterprise.setUserId(userId);
+			sysUserEnterprise.setEnterpriseId(enterpriseId);
+			return sysUserEnterprise;
+		}).collect(Collectors.toList());
+
+		this.saveBatch(list);
+
+	}
+
+	@KtfTrace("根据用户批量删除")
+	@Override
+	public Boolean deleteBatchByUserIds(Long[] userIds) {
+		if (userIds == null)
+			return false;
+		QueryWrapper<SysUserEnterprise> query = Wrappers.<SysUserEnterprise>query();
+		query.in(SysUserEnterprise.DB_USER_ID, ListUtil.newArrayList(userIds));
+
+		return super.remove(query);
+	}
+
+	@KtfTrace("根据企业批量删除")
+	@Override
+	public Boolean deleteBatchByEnterpriseIds(Long[] enterpriseIds) {
+		if (enterpriseIds == null)
+			return false;
+		QueryWrapper<SysUserEnterprise> query = Wrappers.<SysUserEnterprise>query();
+		query.in(SysUserEnterprise.DB_ENTERPRISE_ID, ListUtil.newArrayList(enterpriseIds));
+
+		return super.remove(query);
 	}
 
 }

@@ -78,12 +78,12 @@ public class EnterpriseDepartment extends Model<EnterpriseDepartment> {
     /**
      * 记录创建者(用户)
      */
-    @TableField("create_user")
+     @TableField(value = "create_user", fill = FieldFill.INSERT)
     private String createUser;
     /**
      * 记录最后修改者(用户)
      */
-    @TableField("update_user")
+    @TableField(value = "update_user", fill = FieldFill.INSERT_UPDATE)
     private String updateUser;
 
 

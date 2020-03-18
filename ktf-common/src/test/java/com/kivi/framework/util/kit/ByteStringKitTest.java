@@ -8,12 +8,19 @@ public class ByteStringKitTest {
 
 	@Test
 	public void testToStringByteArrayInt() {
+
+		byte[] surPin = { (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80,
+				(byte) 0x80 };
+
+		System.out.println(ByteStringKit.toHex(surPin));
+
 		byte[] datas = ByteStringKit.toBytes("2d91bad32e9bb6dd458498e633319f6dc49b62f0454b5d3c4cd3025093f81451",
 				ByteStringKit.HEX);
 		assertEquals(new byte[0].length, datas.length);
 
 		datas = ByteStringKit.toBytes(null, ByteStringKit.BASE64);
 		assertEquals(new byte[0].length, datas.length);
+
 	}
 
 	@Test

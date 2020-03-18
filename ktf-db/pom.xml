@@ -21,6 +21,11 @@
 	    	<artifactId>ktf-common</artifactId>
 	    	<version>${ktf.version}</version>
 	  	</dependency>
+	  	<dependency>
+	  		<groupId>com.kivi</groupId>
+	    	<artifactId>ktf-crypto</artifactId>
+	    	<version>${ktf.version}</version>
+	  	</dependency>
 		
   		<dependency>
 		    <groupId>com.baomidou</groupId>
@@ -46,6 +51,11 @@
 		    <artifactId>p6spy</artifactId>
 		    <version>${p6spy.version}</version>
 		</dependency>
-  		
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
   </dependencies>
 </project>

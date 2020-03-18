@@ -1,12 +1,11 @@
 package com.kivi.dashboard.sys.service;
 
-import com.kivi.dashboard.sys.entity.SysRegion;
-import com.kivi.dashboard.sys.dto.SysRegionDTO;
-import com.baomidou.mybatisplus.extension.service.IService;
-
 import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.kivi.dashboard.sys.dto.SysRegionDTO;
+import com.kivi.dashboard.sys.entity.SysRegion;
 import com.kivi.framework.vo.page.PageInfoVO;
 
 /**
@@ -18,28 +17,28 @@ import com.kivi.framework.vo.page.PageInfoVO;
  * @since 2019-09-18
  */
 public interface ISysRegionService extends IService<SysRegion> {
- 
-    /**
-     * 根据ID查询DTO
-     */
- 	SysRegionDTO getDTOById(Long id);   
- 	
- 	/**
- 	 * 新增
- 	 */
- 	Boolean save(SysRegionDTO sysRegionDTO);
- 	
- 	/**
- 	 * 修改
- 	 */
- 	Boolean updateById(SysRegionDTO sysRegionDTO);
- 	
- 	/**
- 	 * 查询列表
- 	 */
- 	List<SysRegionDTO> list(SysRegionDTO sysRegionDTO);
- 	
- 	/**
+
+	/**
+	 * 根据ID查询DTO
+	 */
+	SysRegionDTO getDTOById(Long id);
+
+	/**
+	 * 新增
+	 */
+	Boolean save(SysRegionDTO sysRegionDTO);
+
+	/**
+	 * 修改
+	 */
+	Boolean updateById(SysRegionDTO sysRegionDTO);
+
+	/**
+	 * 查询列表
+	 */
+	List<SysRegionDTO> list(SysRegionDTO sysRegionDTO);
+
+	/**
 	 * 指定列查询列表
 	 */
 	List<SysRegionDTO> list(Map<String, Object> params, String... columns);
@@ -53,9 +52,17 @@ public interface ISysRegionService extends IService<SysRegion> {
 	 * 指定列模糊查询
 	 */
 	List<SysRegionDTO> listLike(Map<String, Object> params, String... columns);
- 	
- 	/**
- 	 * 分页查询
- 	 */
- 	PageInfoVO<SysRegionDTO> page(Map<String, Object> params);
+
+	/**
+	 * 查询省列表
+	 * 
+	 * @return
+	 */
+	List<SysRegionDTO> listProvice();
+
+	/**
+	 * 分页查询
+	 */
+	PageInfoVO<SysRegionDTO> page(Map<String, Object> params);
+
 }

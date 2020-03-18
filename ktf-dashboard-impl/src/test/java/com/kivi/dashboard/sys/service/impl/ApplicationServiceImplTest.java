@@ -69,7 +69,6 @@ public class ApplicationServiceImplTest {
 		SysApplication application = new SysApplication();
 		application.setId(1174228209126289409L);
 		application.setName("测试Entity更新");
-		application.setUpdateUser("junit更新");
 		ret = applicationService.updateById(application);
 		assertEquals(true, ret);
 	}

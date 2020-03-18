@@ -15,7 +15,7 @@ public class KtfDbProperties implements IKtfProperties {
 	public static final String	PREFIX		= "ktf.db";
 	public static final String	MAPPER_SCAN	= "${" + PREFIX + ".mappers}";
 
-	private String				mappers		= "com.kivi.*.mapper";
+	private String				mappers;
 
 	@Override
 	public String beanName() {

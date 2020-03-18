@@ -13,6 +13,7 @@
         <result column="icon" property="icon" />
         <result column="seq" property="seq" />
         <result column="resource_type" property="resourceType" />
+        <result column="hidden" property="hidden" />
         <result column="status" property="status" />
         <result column="gmt_create" property="gmtCreate" />
         <result column="gmt_update" property="gmtUpdate" />

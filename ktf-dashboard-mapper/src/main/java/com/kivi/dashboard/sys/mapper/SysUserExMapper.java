@@ -1,8 +1,12 @@
 package com.kivi.dashboard.sys.mapper;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
-import com.kivi.dashboard.sys.entity.vo.UserVo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.kivi.framework.vo.UserVo;
 
 /**
  * <p>
@@ -13,6 +17,13 @@ import com.kivi.dashboard.sys.entity.vo.UserVo;
  * @since 2019-09-18
  */
 public interface SysUserExMapper {
+
+	/**
+	 * 查找用户树
+	 * 
+	 * @return
+	 */
+	List<Map<String, Object>> selectUserTree();
 
 	/**
 	 * 根据用户ID查找
@@ -29,5 +40,32 @@ public interface SysUserExMapper {
 	 * @return
 	 */
 	UserVo selectByLoginName(@Param("loginName") String loginName);
+
+	/*
+	 * 查询用户的所有菜单ID**
+	 * 
+	 * @param userId
+	 * 
+	 * @return
+	 */
+	List<Long> selectResourceIdListByUserId(@Param("userId") Long userId);
+
+	/**
+	 * 查询用户的所有权限
+	 *
+	 * @param userId
+	 * @return
+	 */
+	List<String> selectPerms(@Param("userId") Long userId);
+
+	/**
+	 * 分页查询
+	 *
+	 * @param page
+	 * @param params
+	 * @return
+	 */
+	IPage<Map<String, Object>>
+			selectSysUserPage(IPage<Map<String, Object>> page, @Param("params") Map<String, Object> params);
 
 }

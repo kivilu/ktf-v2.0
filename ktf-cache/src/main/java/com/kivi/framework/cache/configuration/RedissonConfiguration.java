@@ -52,12 +52,18 @@ public class RedissonConfiguration {
 	@Autowired
 	private ApplicationContext		ctx;
 
-	@Bean
-	public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-		RedisTemplate<Object, Object> template = new RedisTemplate<Object, Object>();
+	@Bean("fastJsonRedisTemplate")
+	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+		RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
 		template.setConnectionFactory(redisConnectionFactory);
+
+		RedisSerializerKit.setFastJson2JsonRedisSerializer(template);
+
+		template.afterPropertiesSet();
+
 		return template;
 	}
+
 
 	@Bean
 	@ConditionalOnMissingBean(RedisConnectionFactory.class)

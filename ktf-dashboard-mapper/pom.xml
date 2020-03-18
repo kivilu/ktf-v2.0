@@ -14,6 +14,7 @@
        		<artifactId>ktf-db</artifactId>
        		<version>${ktf.version}</version>
   		</dependency>
+
   </dependencies>
   
 </project>

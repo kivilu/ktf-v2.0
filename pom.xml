@@ -16,14 +16,14 @@
         <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
         <maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
         
-        <spring-boot.version>2.1.6.RELEASE</spring-boot.version>
-        <spring-cloud.version>Greenwich.SR2</spring-cloud.version>
+        <spring-boot.version>2.2.2.RELEASE</spring-boot.version>
+        <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
         <spring-cloud-alibaba.version>2.1.0.RELEASE</spring-cloud-alibaba.version>
         <!-- springboot-admin -->
-        <spring-boot-admin.version>2.1.6</spring-boot-admin.version>
+        <spring-boot-admin.version>2.2.1</spring-boot-admin.version>
         <!-- dubbo -->
-        <dubbo.version>2.7.3</dubbo.version>
-        <dubbo-spring-boot.version>2.7.1</dubbo-spring-boot.version>
+        <dubbo.version>2.7.5</dubbo.version>
+        <dubbo-spring-boot.version>2.7.5</dubbo-spring-boot.version>
 		
 		<!-- <fastjson.version>1.2.56</fastjson.version> -->
 		<springfox-swagger2-version>2.9.2</springfox-swagger2-version>
@@ -33,28 +33,22 @@
 		<oracle-ojdbc6.version>11.2.0.1.0</oracle-ojdbc6.version>
 		<vjkit.version>1.0.8</vjkit.version>
   		<modelmapper.version>2.3.5</modelmapper.version>
+  		<!-- zxing -->
+        <zxing.core.version>3.3.1</zxing.core.version>
+        
+        <fst.version>2.57</fst.version>
+        
 		<ktf.version>2.0.1</ktf.version>
 	</properties>
 
-	<!-- <dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-autoconfigure</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
-		</dependency>
-		
+	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
         
-	</dependencies> -->
+	</dependencies> 
 
 	<dependencyManagement>
         <dependencies>
@@ -97,22 +91,43 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+	
+	<distributionManagement>
+		<repository>
+			<id>rdc-releases</id>
+			<url>https://repo.rdc.aliyun.com/repository/106428-release-lfVNdn/</url>
+		</repository>
+		<snapshotRepository>
+			<id>rdc-snapshots</id>
+			<url>https://repo.rdc.aliyun.com/repository/106428-snapshot-j1QtNx/</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 
     <repositories>
-        <repository>
-            <id>alimaven</id>
+       <repository>
+            <id>central</id>
             <name>aliyun maven</name>
             <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
         </repository>
+		<repository>
+			<id>rdc-releases</id>
+			<url>https://repo.rdc.aliyun.com/repository/106428-release-lfVNdn/</url>
+		</repository>
+		<!--
+		<snapshotRepository>
+			<id>rdc-snapshots</id>
+			<url>https://repo.rdc.aliyun.com/repository/106428-snapshot-j1QtNx/</url>
+		</snapshotRepository>
+		-->
     </repositories>
 
     <profiles>
         <profile>
             <!-- 生产环境 -->
-            <id>prod</id>
+            <id>prd</id>
             <properties>
-                <profileActive>prod</profileActive>
+                <profileActive>prd</profileActive>
             </properties>
         </profile>
         <profile>
@@ -127,9 +142,9 @@
         </profile>
         <profile>
             <!-- 测试环境 -->
-            <id>test</id>
+            <id>tst</id>
             <properties>
-                <profileActive>test</profileActive>
+                <profileActive>tst</profileActive>
             </properties>
         </profile>
     </profiles>
@@ -166,12 +181,56 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>${maven.compiler.encoding}</encoding>
+                    <fork>true</fork>
+                    <outputDirectory>../bin</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>${maven-resources-plugin.version}</version>
+            </plugin>
+            <!-- source包 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 生成doc文档 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <aggregate>true</aggregate>
+                    <charset>UTF-8</charset>
+                    <docencoding>UTF-8</docencoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                          <!-- <additionalparam>-Xdoclint:none</additionalparam>  -->
+                          <additionalJOption>-Xdoclint:none</additionalJOption>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <!--打包跳过测试-->
@@ -198,5 +257,9 @@
 	<module>ktf-dashboard-mapper</module>
 	<module>ktf-dashboard-web</module>
 	<module>ktf-dashboard-impl</module>
+	<module>ktf-cif-facade</module>
+	<module>ktf-cif-db</module>
+	<module>ktf-dashboard-shiro</module>
+	<module>ktf-dashboard-dubbo</module>
 	</modules>
 </project>

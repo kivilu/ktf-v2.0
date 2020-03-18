@@ -14,16 +14,16 @@
         <result column="create_user_id" property="createUserId" />
     </resultMap>
     
-    <resultMap id="RoleVoResultMap" type="com.kivi.dashboard.sys.entity.vo.RoleVo">
+    <resultMap id="RoleVoResultMap" type="com.kivi.framework.vo.RoleVo">
         <result column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="seq" property="seq"/>
         <result column="description" property="description"/>
         <result column="status" property="status"/>
         <result column="gmt_create" property="gmtCreate" />
-        <result column="gmt_update" property="gmtUpdate" />
+        <!-- <result column="gmt_update" property="gmtUpdate" /> -->
         <result column="create_user_id" property="createUserId"/>
-        <collection property="permissions" ofType="com.kivi.dashboard.sys.entity.SysResource">
+        <collection property="permissions" ofType="com.kivi.framework.vo.ResourceVo">
             <result column="resourceId" property="id"/>
             <result column="resourceParentId" property="parentId"/>
             <result column="resourceName" property="name"/>
@@ -49,7 +49,7 @@
 	        t.description,
 	        t.`status`,
 	        t.gmt_create,
-	        t.gmt_update,
+	        <!-- t.gmt_update, -->
 	        t.create_user_id,
 	        t3.id AS resourceId,
 	        t3. NAME AS resourceName,
@@ -78,7 +78,7 @@
 	        t.description,
 	        t.`status`,
 	        t.gmt_create,
-		    t.gmt_update,
+		    <!-- t.gmt_update, -->
 	        t.create_user_id,
 	        t3.id AS resourceId,
 	        t3. NAME AS resourceName,

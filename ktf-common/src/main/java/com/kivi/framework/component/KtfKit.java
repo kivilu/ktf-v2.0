@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.kivi.framework.exception.ToolBoxException;
 import com.kivi.framework.service.ISessionNotify;
 import com.kivi.framework.util.IdWalker;
+import com.kivi.framework.util.kit.StrKit;
 
 /**
  * 应用帮助类，主要用于获取SpringBoot应用的相关信息
@@ -22,66 +23,69 @@ import com.kivi.framework.util.IdWalker;
 @Component
 public class KtfKit {
 
-    @Autowired
-    private ApplicationContext             applicationContext;
+	@Autowired
+	private ApplicationContext				applicationContext;
 
-    @Autowired
-    private Environment                    env;
+	@Autowired
+	private Environment						env;
 
-    private static HashSet<ISessionNotify> sessionNotifySet = new HashSet<>();
+	private static HashSet<ISessionNotify>	sessionNotifySet	= new HashSet<>();
 
-    private static IdWalker                idWalker         = new IdWalker();
+	private static IdWalker					idWalker			= new IdWalker();
 
-    public static KtfKit me() {
-        return SpringContextHolder.getBean(KtfKit.class);
-    }
+	public static KtfKit me() {
+		return SpringContextHolder.getBean(KtfKit.class);
+	}
 
-    public int getServerPort() {
-        String port = getEnvProperty("server.port");
-        return Integer.parseInt(port);
-    }
+	public int getServerPort() {
+		String port = getEnvProperty("server.port");
+		return Integer.parseInt(port);
+	}
 
-    public String getServerContext() {
-        String context = getEnvProperty("server.servlet.context");
-        return context ;
-    }
+	public String getServerContext() {
+		String context = getEnvProperty("server.servlet.context");
+		return context;
+	}
 
-    public String getAppcationName() {
-        String name = getEnvProperty("spring.application.name");
-        return name;
-    }
+	public String getAppcationName() {
+		String name = getEnvProperty("spring.application.name");
+		return name;
+	}
 
-    public String getEnvProperty( String key ) {
-        return env.getProperty(key);
-    }
+	public String getEnvProperty(String key) {
+		return env.getProperty(key);
+	}
 
-    public long nextId() {
-        return idWalker.nextId();
-    }
+	public Boolean isActiveDev() {
+		return StrKit.equals("dev", getEnvProperty("spring.profiles.active"));
+	}
 
-    public int nextIntId() {
-        return idWalker.nextIntId();
-    }
+	public long nextId() {
+		return idWalker.nextId();
+	}
 
-    public Resource[] getResources( String locationPattern ) {
-        Resource[] resources = null;
+	public int nextIntId() {
+		return idWalker.nextIntId();
+	}
 
-        try {
-            resources = applicationContext.getResources(locationPattern);
-        }
-        catch (IOException e) {
-            throw new ToolBoxException("获取资源文件异常", e);
-        }
+	public Resource[] getResources(String locationPattern) {
+		Resource[] resources = null;
 
-        return resources;
-    }
+		try {
+			resources = applicationContext.getResources(locationPattern);
+		} catch (IOException e) {
+			throw new ToolBoxException("获取资源文件异常", e);
+		}
 
-    public void sessionCreated( String id ) {
+		return resources;
+	}
 
-    }
+	public void sessionCreated(String id) {
 
-    public void sessionDestroyed( String id ) {
-        sessionNotifySet.stream().forEach(notify-> notify.onDestroyed(id));
-    }
+	}
+
+	public void sessionDestroyed(String id) {
+		sessionNotifySet.stream().forEach(notify -> notify.onDestroyed(id));
+	}
 
 }

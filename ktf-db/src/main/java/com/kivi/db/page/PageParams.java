@@ -69,6 +69,7 @@ public class PageParams<T> extends Page<T> implements Serializable {
 		params.remove(KtfConstant.PAGE_LIMIT_KEY);
 		params.remove(KtfConstant.PAGE_ORDER_KEY);
 		params.remove(KtfConstant.PAGE_SORT_KEY);
+		params.remove(KtfConstant.URL_TIMESTAMP);
 		requestMap.putAll(params);
 
 	}

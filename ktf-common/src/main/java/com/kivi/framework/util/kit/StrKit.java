@@ -1,20 +1,17 @@
 package com.kivi.framework.util.kit;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.vip.vjtools.vjkit.collection.ArrayUtil;
+import com.vip.vjtools.vjkit.number.NumberUtil;
 
 /**
  * 本工具类主要是对org.apache.commons.lang3.StringUtils类的封装，目的是为了兼容之前的代码
@@ -69,6 +66,25 @@ public class StrKit {
 	public static final String	MUTI_STR_VALUE	= "VALUE";
 
 	public static final String	EMPTY_JSON		= "{}";
+
+	/**
+	 * 空字符串数组
+	 * 
+	 * @return
+	 */
+	public static String[] emptyArray() {
+		return new String[0];
+	}
+
+	/**
+	 * String-->bytes
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static byte[] toBytes(String str) {
+		return str.getBytes(Charset.forName("UTF-8"));
+	}
 
 	/**
 	 * 将对象转为pretty json字符串
@@ -441,6 +457,8 @@ public class StrKit {
 	 * @return 切分后的集合
 	 */
 	public static List<String> split(String str, char separator) {
+		if (StrKit.isBlank(str))
+			return null;
 		return Arrays.asList(StringUtils.split(str, separator));
 	}
 
@@ -583,104 +601,6 @@ public class StrKit {
 	}
 
 	/**
-	 * 编码字符串
-	 * 
-	 * @param str     字符串
-	 * @param charset 字符集，如果此字段为空，则解码的结果取决于平台
-	 * @return 编码后的字节码
-	 */
-	public static byte[] bytes(String str, String charset) {
-		return bytes(str, isBlank(charset) ? Charset.defaultCharset() : Charset.forName(charset));
-	}
-
-	/**
-	 * 编码字符串
-	 * 
-	 * @param str     字符串
-	 * @param charset 字符集，如果此字段为空，则解码的结果取决于平台
-	 * @return 编码后的字节码
-	 */
-	public static byte[] bytes(String str, Charset charset) {
-		if (str == null) {
-			return null;
-		}
-
-		if (null == charset) {
-			return str.getBytes();
-		}
-		return str.getBytes(charset);
-	}
-
-	/**
-	 * 将byte数组转为字符串
-	 * 
-	 * @param bytes   byte数组
-	 * @param charset 字符集
-	 * @return 字符串
-	 */
-	public static String str(byte[] bytes, String charset) {
-		return str(bytes, isBlank(charset) ? Charset.defaultCharset() : Charset.forName(charset));
-	}
-
-	/**
-	 * 解码字节码
-	 * 
-	 * @param data    字符串
-	 * @param charset 字符集，如果此字段为空，则解码的结果取决于平台
-	 * @return 解码后的字符串
-	 */
-	public static String str(byte[] data, Charset charset) {
-		if (data == null) {
-			return null;
-		}
-
-		if (null == charset) {
-			return new String(data);
-		}
-		return new String(data, charset);
-	}
-
-	/**
-	 * 将编码的byteBuffer数据转换为字符串
-	 * 
-	 * @param data    数据
-	 * @param charset 字符集，如果为空使用当前系统字符集
-	 * @return 字符串
-	 */
-	public static String str(ByteBuffer data, String charset) {
-		if (data == null) {
-			return null;
-		}
-
-		return str(data, Charset.forName(charset));
-	}
-
-	/**
-	 * 将编码的byteBuffer数据转换为字符串
-	 * 
-	 * @param data    数据
-	 * @param charset 字符集，如果为空使用当前系统字符集
-	 * @return 字符串
-	 */
-	public static String str(ByteBuffer data, Charset charset) {
-		if (null == charset) {
-			charset = Charset.defaultCharset();
-		}
-		return charset.decode(data).toString();
-	}
-
-	/**
-	 * 字符串转换为byteBuffer
-	 * 
-	 * @param str     字符串
-	 * @param charset 编码
-	 * @return byteBuffer
-	 */
-	public static ByteBuffer byteBuffer(String str, String charset) {
-		return ByteBuffer.wrap(StrKit.bytes(str, charset));
-	}
-
-	/**
 	 * 以 conjunction 为分隔符将多个对象转换为字符串
 	 * 
 	 * @param conjunction 分隔符
@@ -707,354 +627,35 @@ public class StrKit {
 	}
 
 	/**
-	 * 将驼峰式命名的字符串转换为下划线方式。如果转换前的驼峰式命名的字符串为空，则返回空字符串。</br>
-	 * 例如：HelloWorld->hello_world
-	 *
-	 * @param camelCaseStr 转换前的驼峰式命名的字符串
-	 * @return 转换后下划线大写方式命名的字符串
-	 */
-	public static String toUnderlineCase(String camelCaseStr) {
-		if (camelCaseStr == null) {
-			return null;
-		}
-
-		final int		length			= camelCaseStr.length();
-		StringBuilder	sb				= new StringBuilder();
-		char			c;
-		boolean			isPreUpperCase	= false;
-		for (int i = 0; i < length; i++) {
-			c = camelCaseStr.charAt(i);
-			boolean isNextUpperCase = true;
-			if (i < (length - 1)) {
-				isNextUpperCase = Character.isUpperCase(camelCaseStr.charAt(i + 1));
-			}
-			if (Character.isUpperCase(c)) {
-				if (!isPreUpperCase || !isNextUpperCase) {
-					if (i > 0)
-						sb.append(UNDERLINE);
-				}
-				isPreUpperCase = true;
-			} else {
-				isPreUpperCase = false;
-			}
-			sb.append(Character.toLowerCase(c));
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * 将下划线方式命名的字符串转换为驼峰式。如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。</br>
-	 * 例如：hello_world->HelloWorld
-	 *
-	 * @param name 转换前的下划线大写方式命名的字符串
-	 * @return 转换后的驼峰式命名的字符串
-	 */
-	public static String toCamelCase(String name) {
-		if (name == null) {
-			return null;
-		}
-		if (name.contains(UNDERLINE)) {
-			name = name.toLowerCase();
-
-			StringBuilder	sb			= new StringBuilder(name.length());
-			boolean			upperCase	= false;
-			for (int i = 0; i < name.length(); i++) {
-				char c = name.charAt(i);
-
-				if (c == '_') {
-					upperCase = true;
-				} else if (upperCase) {
-					sb.append(Character.toUpperCase(c));
-					upperCase = false;
-				} else {
-					sb.append(c);
-				}
-			}
-			return sb.toString();
-		} else
-			return name;
-	}
-
-	/**
-	 * 包装指定字符串
+	 * 将字符串数组转换为Long数组
 	 * 
-	 * @param str    被包装的字符串
-	 * @param prefix 前缀
-	 * @param suffix 后缀
-	 * @return 包装后的字符串
+	 * @param values
+	 * @return
 	 */
-	public static String wrap(String str, String prefix, String suffix) {
-		return format("{}{}{}", prefix, str, suffix);
+	public static Long[] toLongArray(String[] values) {
+		if (values == null)
+			return new Long[0];
+
+		List<Long> list = Arrays.asList(values).stream().map(NumberUtil::toLong).collect(Collectors.toList());
+		return ArrayUtil.toArray(list, Long.class);
 	}
 
-	/**
-	 * 指定字符串是否被包装
-	 * 
-	 * @param str    字符串
-	 * @param prefix 前缀
-	 * @param suffix 后缀
-	 * @return 是否被包装
-	 */
-	public static boolean isWrap(String str, String prefix, String suffix) {
-		return str.startsWith(prefix) && str.endsWith(suffix);
-	}
-
-	/**
-	 * 指定字符串是否被同一字符包装（前后都有这些字符串）
-	 * 
-	 * @param str     字符串
-	 * @param wrapper 包装字符串
-	 * @return 是否被包装
-	 */
-	public static boolean isWrap(String str, String wrapper) {
-		return isWrap(str, wrapper, wrapper);
-	}
-
-	/**
-	 * 指定字符串是否被同一字符包装（前后都有这些字符串）
-	 * 
-	 * @param str     字符串
-	 * @param wrapper 包装字符
-	 * @return 是否被包装
-	 */
-	public static boolean isWrap(String str, char wrapper) {
-		return isWrap(str, wrapper, wrapper);
-	}
-
-	/**
-	 * 指定字符串是否被包装
-	 * 
-	 * @param str        字符串
-	 * @param prefixChar 前缀
-	 * @param suffixChar 后缀
-	 * @return 是否被包装
-	 */
-	public static boolean isWrap(String str, char prefixChar, char suffixChar) {
-		return str.charAt(0) == prefixChar && str.charAt(str.length() - 1) == suffixChar;
-	}
-
-	/**
-	 * 补充字符串以满足最小长度 StrUtil.padPre("1", 3, '0');//"001"
-	 * 
-	 * @param str       字符串
-	 * @param minLength 最小长度
-	 * @param padChar   补充的字符
-	 * @return 补充后的字符串
-	 */
-	public static String padPre(String str, int minLength, char padChar) {
-		if (str.length() >= minLength) {
+	public static String mask(String str) {
+		final String MASK = "****";
+		if (isBlank(str))
 			return str;
-		}
-		StringBuilder sb = new StringBuilder(minLength);
-		for (int i = str.length(); i < minLength; i++) {
-			sb.append(padChar);
-		}
-		sb.append(str);
-		return sb.toString();
-	}
 
-	/**
-	 * 补充字符串以满足最小长度 StrUtil.padEnd("1", 3, '0');//"100"
-	 * 
-	 * @param str       字符串
-	 * @param minLength 最小长度
-	 * @param padChar   补充的字符
-	 * @return 补充后的字符串
-	 */
-	public static String padEnd(String str, int minLength, char padChar) {
-		if (str.length() >= minLength) {
-			return str;
-		}
-		StringBuilder sb = new StringBuilder(minLength);
-		sb.append(str);
-		for (int i = str.length(); i < minLength; i++) {
-			sb.append(padChar);
-		}
-		return sb.toString();
-	}
+		int length = str.length();
 
-	/**
-	 * 创建StringBuilder对象
-	 * 
-	 * @return StringBuilder对象
-	 */
-	public static StringBuilder builder() {
-		return new StringBuilder();
-	}
+		if (length == 1)
+			return StringUtils.join(str, MASK);
+		else if (length < 5)
+			return StringUtils.join(StringUtils.substring(str, 0, 1), MASK, StringUtils.substring(str, length - 1));
+		else if (length < 9)
+			return StringUtils.join(StringUtils.substring(str, 0, 2), MASK, StringUtils.substring(str, length - 2));
+		else
+			return StringUtils.join(StringUtils.substring(str, 0, 4), MASK, StringUtils.substring(str, length - 4));
 
-	/**
-	 * 创建StringBuilder对象
-	 * 
-	 * @return StringBuilder对象
-	 */
-	public static StringBuilder builder(int capacity) {
-		return new StringBuilder(capacity);
-	}
-
-	/**
-	 * 创建StringBuilder对象
-	 * 
-	 * @return StringBuilder对象
-	 */
-	public static StringBuilder builder(String... strs) {
-		final StringBuilder sb = new StringBuilder();
-		for (String str : strs) {
-			sb.append(str);
-		}
-		return sb;
-	}
-
-	/**
-	 * 创建StringBuilder对象
-	 *
-	 * @return StringBuilder对象
-	 */
-	public static void builder(StringBuilder sb, String... strs) {
-		for (String str : strs) {
-			sb.append(str);
-		}
-	}
-
-	/**
-	 * 获得StringReader
-	 * 
-	 * @param str 字符串
-	 * @return StringReader
-	 */
-	public static StringReader getReader(String str) {
-		return new StringReader(str);
-	}
-
-	/**
-	 * 获得StringWriter
-	 * 
-	 * @return StringWriter
-	 */
-	public static StringWriter getWriter() {
-		return new StringWriter();
-	}
-
-	/**
-	 * 编码字符串
-	 * 
-	 * @param str     字符串
-	 * @param charset 字符集，如果此字段为空，则解码的结果取决于平台
-	 * @return 编码后的字节码
-	 */
-	public static byte[] encode(String str, String charset) {
-		if (str == null) {
-			return null;
-		}
-
-		if (isBlank(charset)) {
-			return str.getBytes();
-		}
-		try {
-			return str.getBytes(charset);
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(format("Charset [{}] unsupported!", charset));
-		}
-	}
-
-	/**
-	 * 解码字节码
-	 * 
-	 * @param data    字符串
-	 * @param charset 字符集，如果此字段为空，则解码的结果取决于平台
-	 * @return 解码后的字符串
-	 */
-	public static String decode(byte[] data, String charset) {
-		if (data == null) {
-			return null;
-		}
-
-		if (isBlank(charset)) {
-			return new String(data);
-		}
-		try {
-			return new String(data, charset);
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(format("Charset [{}] unsupported!", charset));
-		}
-	}
-
-	/**
-	 * 强转->string,并去掉多余空格
-	 *
-	 * @param str
-	 * @return
-	 */
-	public static String toStr(Object str) {
-		return toStr(str, "");
-	}
-
-	/**
-	 * 强转->string,并去掉多余空格
-	 *
-	 * @param str
-	 * @param defaultValue
-	 * @return
-	 */
-	public static String toStr(Object str, String defaultValue) {
-		if (null == str) {
-			return defaultValue;
-		}
-		return str.toString().trim();
-	}
-
-	/**
-	 * String-->bytes
-	 * 
-	 * @param str
-	 * @return
-	 */
-	public static byte[] toBytes(String str) {
-		return str.getBytes(Charset.forName("UTF-8"));
-	}
-
-	/**
-	 * 解析一个组合字符串(例如: "1:启用;2:禁用;3:冻结" 这样的字符串)
-	 *
-	 */
-	public static List<Map<String, String>> parseKeyValue(String mutiString) {
-		if (StrKit.isEmpty(mutiString)) {
-			return new ArrayList<>();
-		} else {
-			ArrayList<Map<String, String>>	results	= new ArrayList<>();
-			String[]						items	= StrKit.split(StringUtils.removeEnd(mutiString, ITEM_SPLIT),
-					ITEM_SPLIT);
-			for (String item : items) {
-				String[]				attrs	= item.split(ATTR_SPLIT);
-				HashMap<String, String>	itemMap	= new HashMap<>();
-				itemMap.put(MUTI_STR_KEY, attrs[0]);
-				itemMap.put(MUTI_STR_VALUE, attrs[1]);
-				results.add(itemMap);
-			}
-			return results;
-		}
-	}
-
-	/**
-	 * 解析id:key:value这样类型的字符串
-	 * 
-	 */
-	public static List<Map<String, String>> parseIdKeyValue(String mutiString) {
-		if (StrKit.isEmpty(mutiString)) {
-			return new ArrayList<>();
-		} else {
-			ArrayList<Map<String, String>>	results	= new ArrayList<>();
-			String[]						items	= StrKit.split(StringUtils.removeEnd(mutiString, ITEM_SPLIT),
-					ITEM_SPLIT);
-			for (String item : items) {
-				String[]				attrs	= item.split(ATTR_SPLIT);
-				HashMap<String, String>	itemMap	= new HashMap<>();
-				itemMap.put(MUTI_STR_ID, attrs[0]);
-				itemMap.put(MUTI_STR_KEY, attrs[1]);
-				itemMap.put(MUTI_STR_VALUE, attrs[2]);
-				results.add(itemMap);
-			}
-			return results;
-		}
 	}
 
 }

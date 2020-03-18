@@ -3,6 +3,7 @@ package com.kivi.dashboard.sys.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +19,12 @@ import com.kivi.dashboard.sys.mapper.SysUserTokenMapper;
 import com.kivi.dashboard.sys.service.ISysUserTokenService;
 import com.kivi.db.page.PageParams;
 import com.kivi.framework.annotation.KtfTrace;
+import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.util.kit.NumberKit;
 import com.kivi.framework.util.kit.ObjectKit;
 import com.kivi.framework.vo.page.PageInfoVO;
+import com.vip.vjtools.vjkit.collection.MapUtil;
 
 /**
  * <p>
@@ -31,6 +34,7 @@ import com.kivi.framework.vo.page.PageInfoVO;
  * @author Auto-generator
  * @since 2019-09-18
  */
+@Primary
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class SysUserTokenServiceImpl extends ServiceImpl<SysUserTokenMapper, SysUserToken>
@@ -85,6 +89,8 @@ public class SysUserTokenServiceImpl extends ServiceImpl<SysUserTokenMapper, Sys
 	@KtfTrace("指定列查询列表系统用户Token")
 	@Override
 	public List<SysUserTokenDTO> list(Map<String, Object> params, String... columns) {
+		if (params != null)
+			params.remove(KtfConstant.URL_TIMESTAMP);
 		QueryWrapper<SysUserToken>	query	= Wrappers.<SysUserToken>query().select(columns).allEq(true, params, false);
 		List<SysUserToken>			list	= super.list(query);
 		return BeanConverter.convert(SysUserTokenDTO.class, list);
@@ -105,15 +111,19 @@ public class SysUserTokenServiceImpl extends ServiceImpl<SysUserTokenMapper, Sys
 	 */
 	@Override
 	public List<SysUserTokenDTO> listLike(Map<String, Object> params, String... columns) {
+		if (params != null)
+			params.remove(KtfConstant.URL_TIMESTAMP);
 		QueryWrapper<SysUserToken> query = Wrappers.<SysUserToken>query().select(columns);
-		params.entrySet().stream().forEach(entry -> {
-			if (ObjectKit.isNotEmpty(entry.getValue())) {
-				if (NumberKit.isNumberic(entry.getValue()))
-					query.eq(entry.getKey(), entry.getValue());
-				else
-					query.like(entry.getKey(), entry.getValue());
-			}
-		});
+		if (MapUtil.isNotEmpty(params)) {
+			params.entrySet().stream().forEach(entry -> {
+				if (ObjectKit.isNotEmpty(entry.getValue())) {
+					if (NumberKit.isNumberic(entry.getValue()))
+						query.eq(entry.getKey(), entry.getValue());
+					else
+						query.like(entry.getKey(), entry.getValue());
+				}
+			});
+		}
 
 		List<SysUserToken> list = super.list(query);
 		return BeanConverter.convert(SysUserTokenDTO.class, list);
@@ -122,20 +132,23 @@ public class SysUserTokenServiceImpl extends ServiceImpl<SysUserTokenMapper, Sys
 	/**
 	 * 分页查询
 	 */
+	@Override
 	@KtfTrace("分页查询系统用户Token")
 	public PageInfoVO<SysUserTokenDTO> page(Map<String, Object> params) {
 		PageParams<SysUserTokenDTO>	pageParams	= new PageParams<>(params);
 		Page<SysUserToken>			page		= new Page<>(pageParams.getCurrPage(), pageParams.getPageSize());
 
 		QueryWrapper<SysUserToken>	query		= Wrappers.<SysUserToken>query();
-		params.entrySet().stream().forEach(entry -> {
-			if (ObjectKit.isNotEmpty(entry.getValue())) {
-				if (NumberKit.isNumberic(entry.getValue()))
-					query.eq(entry.getKey(), entry.getValue());
-				else
-					query.like(entry.getKey(), entry.getValue());
-			}
-		});
+		if (MapUtil.isNotEmpty(pageParams.getRequestMap())) {
+			pageParams.getRequestMap().entrySet().stream().forEach(entry -> {
+				if (ObjectKit.isNotEmpty(entry.getValue())) {
+					if (NumberKit.isNumberic(entry.getValue()))
+						query.eq(entry.getKey(), entry.getValue());
+					else
+						query.like(entry.getKey(), entry.getValue());
+				}
+			});
+		}
 
 		IPage<SysUserToken>			iPage	= super.page(page, query);
 

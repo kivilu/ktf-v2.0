@@ -2,6 +2,10 @@ package com.kivi.framework.util.kit;
 
 import java.math.BigDecimal;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.vip.vjtools.vjkit.number.NumberUtil;
+
 /**
  * 数字工具类
  *
@@ -17,6 +21,13 @@ public class NumberKit {
 	 * @return
 	 */
 	public static boolean equals(Long val1, Long val2) {
+		if (val1 == null || val2 == null)
+			return false;
+
+		return val1.compareTo(val2) == 0;
+	}
+
+	public static boolean equals(Integer val1, Integer val2) {
 		if (val1 == null || val2 == null)
 			return false;
 
@@ -39,6 +50,18 @@ public class NumberKit {
 		}
 
 		return false;
+	}
+
+	public static Integer toInt(Object obj) {
+		if (obj == null || StringUtils.isBlank(obj.toString()))
+			return null;
+		return NumberUtil.toInt(obj.toString(), -1);
+	}
+
+	public static Long toLong(Object obj) {
+		if (obj == null || StringUtils.isBlank(obj.toString()))
+			return null;
+		return NumberUtil.toLong(obj.toString(), -1);
 	}
 
 }

@@ -65,4 +65,26 @@ public interface ISysUserEnterpriseService extends IService<SysUserEnterprise> {
 	 * 分页查询
 	 */
 	PageInfoVO<SysUserEnterpriseDTO> page(Map<String, Object> params);
+
+	/**
+	 * 保存或修改用户所监管的企业关系
+	 *
+	 * @param userId
+	 * @param enterpriseIdList
+	 */
+	void saveOrUpdateUserEnterprise(Long userId, List<Long> enterpriseIdList);
+
+	/**
+	 * 根据用户批量删除
+	 *
+	 * @param userIds
+	 */
+	Boolean deleteBatchByUserIds(Long[] userIds);
+
+	/**
+	 * 根据企业批量删除
+	 *
+	 * @param enterpriseIds
+	 */
+	Boolean deleteBatchByEnterpriseIds(Long[] enterpriseIds);
 }

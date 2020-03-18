@@ -5,8 +5,10 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -106,6 +108,16 @@ public class DateTimeKit {
 		return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 	}
 
+	/**
+	 * 时间转换：LocalDateTime ---> Date
+	 * 
+	 * @param localDateTime
+	 * @return
+	 */
+	public static Date toDate(LocalDateTime localDateTime) {
+		return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+	}
+
 	public static long toMilliseconds(LocalDateTime ldate) {
 		if (ldate == null)
 			return 0;
@@ -125,8 +137,44 @@ public class DateTimeKit {
 	}
 
 	// ----------format----------------------
+	/**
+	 * 格式化：yyyy-MM-dd HH:mm:ss
+	 * 
+	 * @param date
+	 * @return
+	 */
 	public static String formatDateTime(Date date) {
 		return DateFormatUtil.formatDate(DateFormatUtil.PATTERN_DEFAULT_ON_SECOND, date);
+	}
+
+	/**
+	 * 格式化： yyyy-MM-dd
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static String formatDate(Date date) {
+		return DateFormatUtil.formatDate(DateFormatUtil.PATTERN_ISO_ON_DATE, date);
+	}
+
+	/**
+	 * 格式化：yyyy-MM-dd HH:mm:ss
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static String formatDateTime(LocalDateTime date) {
+		return date.format(DateTimeFormatter.ofPattern(DateFormatUtil.PATTERN_DEFAULT_ON_SECOND));
+	}
+
+	/**
+	 * 格式化： yyyy-MM-dd
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static String formatDate(LocalDateTime date) {
+		return date.format(DateTimeFormatter.ofPattern(DateFormatUtil.PATTERN_ISO_ON_DATE));
 	}
 
 	// ----------parse----------------------
@@ -208,4 +256,24 @@ public class DateTimeKit {
 			return this.length;
 		}
 	};
+
+	/**
+	 * 获取某天的结束时间, 23:59:59.000
+	 * 
+	 * @param date 日期
+	 * @return 某天的结束时间
+	 */
+	public static Date getEndTimeOfDay(Date date) {
+		if (date == null)
+			return null;
+
+		Calendar calendarEnd = Calendar.getInstance();
+		calendarEnd.setTime(date);
+		calendarEnd.set(Calendar.HOUR_OF_DAY, 23);
+		calendarEnd.set(Calendar.MINUTE, 59);
+		calendarEnd.set(Calendar.SECOND, 59);
+		calendarEnd.set(Calendar.MILLISECOND, 0);
+
+		return calendarEnd.getTime();
+	}
 }

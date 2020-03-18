@@ -1,0 +1,6 @@
+com.kivi.cif.constant
+com.kivi.cif.dto
+com.kivi.cif.dubbo.mock
+com.kivi.cif.dubbo.service
+com.kivi.cif.enums
+com.kivi.cif.properties

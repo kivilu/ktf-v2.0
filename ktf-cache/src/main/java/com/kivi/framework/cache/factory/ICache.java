@@ -22,8 +22,9 @@ public interface ICache {
 	 * @param cacheName
 	 * @param key
 	 * @param value
+	 * @param seconds
 	 */
-	void put(String cacheName, Object key, Object value, Long expire);
+	void put(String cacheName, Object key, Object value, Long seconds);
 
 	<T> T get(String cacheName, Object key);
 

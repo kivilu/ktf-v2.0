@@ -10,7 +10,7 @@
   <description>Spring Boot 缓存的集成</description>
   
   <properties>
-  	<redisson.version>3.11.3</redisson.version>
+  	<redisson.version>3.12.0</redisson.version>
   </properties>
   
   <dependencies>
@@ -57,6 +57,12 @@
 		   <groupId>org.redisson</groupId>
 		   <artifactId>redisson</artifactId>
 		   <version>${redisson.version}</version>
+		   <exclusions>
+		   	<exclusion>
+		   		<groupId>de.ruedigermoeller</groupId>
+		   		<artifactId>fst</artifactId>
+		   	</exclusion>
+		   </exclusions>
 		</dependency>
 		<dependency>
 		    <groupId>org.redisson</groupId>
@@ -72,6 +78,17 @@
 		    <artifactId>commons-pool2</artifactId>
 		</dependency>
 		
+		<dependency>
+		      <groupId>com.fasterxml.jackson.datatype</groupId>
+		      <artifactId>jackson-datatype-jsr310</artifactId>
+		      <scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
   </dependencies>
   
 </project>

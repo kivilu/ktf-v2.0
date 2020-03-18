@@ -29,6 +29,7 @@
   	   <dependency>
   			<groupId>org.apache.dubbo</groupId>
 	    	<artifactId>dubbo</artifactId>
+	    	<!-- <version>${dubbo.version}-a</version> -->
 	    	<exclusions>
                 <exclusion>
                     <groupId>org.springframework</groupId>
@@ -112,7 +113,12 @@
 		    <artifactId>netty-transport-native-epoll</artifactId>
 		    <classifier>linux-x86_64</classifier>
 		</dependency>
-		
+
+	    <dependency>
+	    	<groupId>org.springframework.boot</groupId>
+	    	<artifactId>spring-boot-configuration-processor</artifactId>
+	    	<optional>true</optional>
+	    </dependency>
   </dependencies>
   
   

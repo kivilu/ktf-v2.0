@@ -23,7 +23,7 @@ import com.kivi.framework.cache.properties.KtfCacheProperties;
 @Component
 public class RedisServiceImpl implements IRedisService {
 
-	@Resource(name = "redisTemplate")
+	@Resource(name = "fastJsonRedisTemplate")
 	private RedisTemplate<String, Object>	redisTemplate;
 
 	@Autowired
@@ -87,7 +87,7 @@ public class RedisServiceImpl implements IRedisService {
 
 	@Override
 	public void set(String key, Object value) {
-		this.set(key, value, ktfCacheProperties.getExpireSeconds());
+		this.set(key, value, ktfCacheProperties.getTtl());
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class RedisServiceImpl implements IRedisService {
 
 	@Override
 	public <T> void ladd(String key, T values) {
-		this.ladd(key, values, ktfCacheProperties.getExpireSeconds());
+		this.ladd(key, values, ktfCacheProperties.getTtl());
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public class RedisServiceImpl implements IRedisService {
 	@Override
 	public <T> void ladd(String key, List<T> values) {
 		for (T t : values) {
-			this.ladd(key, t, ktfCacheProperties.getExpireSeconds());
+			this.ladd(key, t, ktfCacheProperties.getTtl());
 		}
 	}
 
@@ -144,7 +144,7 @@ public class RedisServiceImpl implements IRedisService {
 
 	@Override
 	public void sadd(String key, Object value) {
-		this.sadd(key, value, ktfCacheProperties.getExpireSeconds());
+		this.sadd(key, value, ktfCacheProperties.getTtl());
 	}
 
 	@Override
@@ -170,7 +170,7 @@ public class RedisServiceImpl implements IRedisService {
 
 	@Override
 	public void madd(String key, Map<String, Object> par) {
-		this.madd(key, par, ktfCacheProperties.getExpireSeconds());
+		this.madd(key, par, ktfCacheProperties.getTtl());
 	}
 
 	@Override

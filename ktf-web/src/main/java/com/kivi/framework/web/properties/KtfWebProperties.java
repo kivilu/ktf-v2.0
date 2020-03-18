@@ -1,13 +1,10 @@
 package com.kivi.framework.web.properties;
 
-import java.io.File;
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import com.kivi.framework.properties.IKtfProperties;
-import com.kivi.framework.util.kit.StrKit;
 
 import lombok.Data;
 
@@ -26,18 +23,11 @@ public class KtfWebProperties implements IKtfProperties {
 	 * Web请求默认超时时间
 	 */
 	private Long				webRequestTimeout	= 30000L;
-	private String				fileUploadPath		= "/app/upload";
 
-	public String getFileUploadPath() {
-		if (!StrKit.endWith(fileUploadPath, "/", true))
-			fileUploadPath += "/";
-
-		File dir = new File(fileUploadPath).getAbsoluteFile();
-		if (!dir.exists())
-			dir.mkdirs();
-
-		return fileUploadPath;
-	}
+	/**
+	 * 允许的上传文件类型
+	 */
+	private String				allowFileSuffix		= "gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks";
 
 	@Override
 	public String prefix() {

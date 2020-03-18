@@ -10,8 +10,8 @@
         <result column="business_license_number" property="businessLicenseNumber" />
         <result column="enterprise_code" property="enterpriseCode" />
         <result column="enterprise_name" property="enterpriseName" />
-        <result column="industry_code" property="industryCode" />
-        <result column="area_code" property="areaCode" />
+        <result column="industry_id" property="industryId" />
+        <result column="area_id" property="areaId" />
         <result column="enterprise_type" property="enterpriseType" />
         <result column="telephone" property="telephone" />
         <result column="email" property="email" />

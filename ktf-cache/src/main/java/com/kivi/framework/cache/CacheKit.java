@@ -19,7 +19,6 @@ import com.kivi.framework.cache.redis.IRedisService;
 import com.kivi.framework.cache.redis.factory.RedisFactory;
 import com.kivi.framework.component.KtfKit;
 import com.kivi.framework.component.SpringContextHolder;
-import com.kivi.framework.util.kit.StrKit;
 
 /**
  * 缓存工具类
@@ -77,7 +76,7 @@ public class CacheKit {
 	}
 
 	public void put(String cacheName, Object key, Object value) {
-		cacheFactory.put(cacheName, key(cacheName, key), value);
+		cacheFactory.put(cacheName, key, value);
 	}
 
 	/**
@@ -88,11 +87,11 @@ public class CacheKit {
 	 * @param value
 	 */
 	public void put(String cacheName, Object key, Object value, Long expire) {
-		cacheFactory.put(cacheName, key(cacheName, key), value, expire);
+		cacheFactory.put(cacheName, key, value, expire);
 	}
 
 	public <T> T get(String cacheName, Object key) {
-		return cacheFactory.get(cacheName, key(cacheName, key));
+		return cacheFactory.get(cacheName, key);
 	}
 
 	/*
@@ -101,9 +100,8 @@ public class CacheKit {
 	 */
 
 	public <T> T remove(String cacheName, Object key) {
-		String	rsKey	= key(cacheName, key);
-		T		result	= get(cacheName, rsKey);
-		cacheFactory.remove(cacheName, rsKey);
+		T result = get(cacheName, key);
+		cacheFactory.remove(cacheName, key);
 		return result;
 	}
 
@@ -112,15 +110,11 @@ public class CacheKit {
 	}
 
 	public <T> T get(String cacheName, Object key, ILoader iLoader) {
-		return cacheFactory.get(cacheName, key(cacheName, key), iLoader);
+		return cacheFactory.get(cacheName, key, iLoader);
 	}
 
 	public <T> T get(String cacheName, Object key, Class<? extends ILoader> iLoaderClass) {
-		return cacheFactory.get(cacheName, key(cacheName, key), iLoaderClass);
-	}
-
-	private String key(String cacheName, Object key) {
-		return StrKit.join(".", cacheName, key);
+		return cacheFactory.get(cacheName, key, iLoaderClass);
 	}
 
 }

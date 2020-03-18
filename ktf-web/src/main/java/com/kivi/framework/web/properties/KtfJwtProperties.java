@@ -2,7 +2,6 @@ package com.kivi.framework.web.properties;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,7 +10,7 @@ import com.kivi.framework.util.kit.CollectionKit;
 
 import lombok.Data;
 
-@ConditionalOnProperty(prefix = KtfJwtProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = false)
+//@ConditionalOnProperty(prefix = KtfJwtProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = false)
 @Configuration(KtfJwtProperties.BEAN_NAME)
 @ConfigurationProperties(prefix = KtfJwtProperties.PREFIX)
 @Data

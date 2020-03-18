@@ -1,10 +1,5 @@
 package com.kivi.dubbo.properties;
 
-import org.apache.dubbo.config.ApplicationConfig;
-import org.apache.dubbo.config.ConsumerConfig;
-import org.apache.dubbo.config.ProtocolConfig;
-import org.apache.dubbo.config.ProviderConfig;
-import org.apache.dubbo.config.RegistryConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -18,12 +13,16 @@ import lombok.Setter;
 @Getter
 @Configuration(KtfDubboProperties.BEAN_NAME)
 @ConfigurationProperties(prefix = KtfDubboProperties.PREFIX)
-@ConditionalOnProperty(prefix = KtfDubboProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(
+		prefix = KtfDubboProperties.PREFIX,
+		name = "enabled",
+		havingValue = "true",
+		matchIfMissing = true)
 public class KtfDubboProperties implements IKtfProperties {
-	public static final String BEAN_NAME = "ktfDubboProperties";
-	public static final String PREFIX = "dubbo";
+	public static final String	BEAN_NAME	= "ktfDubboProperties";
+	public static final String	PREFIX		= "dubbo";
 
-	private Boolean enabled;
+	private Boolean				enabled;
 
 	/**
 	 * 是否开启Restful接口
@@ -32,21 +31,21 @@ public class KtfDubboProperties implements IKtfProperties {
 	/**
 	 * Dubbo Service 扫描包，多个包名直接采用“,”分割
 	 */
-	private String scanBasePackages;
+	private String				scanBasePackages;
 	/**
 	 * dubbo启用Kryo和FST序列化工具时注册的类，多个类名之间使用“,”分割
 	 */
-	private String serializeClasses;
+	private String				serializeClasses;
 
-	private ApplicationConfig application;
+	// private ApplicationConfig application;
 
-	private RegistryConfig registry;
+	// private RegistryConfig registry;
 
-	private ProtocolConfig protocol;
+	// private ProtocolConfig protocol;
 
-	private ProviderConfig provider;
+	// private ProviderConfig provider;
 
-	private ConsumerConfig consumer;
+	// private ConsumerConfig consumer;
 
 	@Override
 	public String prefix() {

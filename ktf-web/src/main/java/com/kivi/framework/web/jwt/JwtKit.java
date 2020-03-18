@@ -36,9 +36,9 @@ public class JwtKit {
 		try {
 			jwtVerifier.verify(jwt);
 		} catch (TokenExpiredException e) {
-			throw new KtfException(KtfError.E_UNAUTHORIZED, "登录状态已过期，请重新登录");
+			throw new KtfException(KtfError.E_UNAUTHORIZED, "登录状态已过期，请重新登录", e);
 		} catch (JWTVerificationException e) {
-			throw new KtfException(KtfError.E_UNAUTHORIZED, "用户未登录");
+			throw new KtfException(KtfError.E_UNAUTHORIZED, "Token验证失败，请重新登录", e);
 		}
 
 		return true;

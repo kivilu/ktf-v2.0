@@ -14,5 +14,58 @@
         <result column="create_user" property="createUser" />
         <result column="update_user" property="updateUser" />
     </resultMap>
+    
+    
+    <select id="getByVarCode" resultMap="BaseResultMap" >
+    	SELECT
+			d.*
+		FROM
+			ktf_sys_dic d
+		LEFT JOIN (
+			SELECT
+				d1.id
+			FROM
+				ktf_sys_dic d1
+			WHERE
+				d1.var_code = #{pVarCode}
+		) A ON d.parent_id = A.id
+		WHERE
+			d.parent_id = A.id
+		AND d.var_code = #{varCode}
+    </select>
+    
+    <select id="getByVarName" resultMap="BaseResultMap" >
+    	SELECT
+			d.*
+		FROM
+			ktf_sys_dic d
+		LEFT JOIN (
+			SELECT
+				d1.id
+			FROM
+				ktf_sys_dic d1
+			WHERE
+			d1.var_name = #{pVarName}
+		) A ON d.parent_id = A.id
+		WHERE
+			d.var_name = #{varName}
+    </select>
+    
+    <select id="listVarCode" resultType="String">
+	    SELECT
+				d.var_code
+		FROM
+				ktf_sys_dic d
+		LEFT JOIN (
+			SELECT
+				d1.id
+			FROM
+				ktf_sys_dic d1
+			WHERE
+				d1.parent_id = #{ppId}
+			AND d1.var_code = #{pVarCode}
+		) A ON d.parent_id = A.id
+		 WHERE d.parent_id = A.id 
+    </select>
 
 </mapper>

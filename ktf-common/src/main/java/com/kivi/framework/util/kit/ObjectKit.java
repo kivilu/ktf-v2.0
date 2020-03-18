@@ -228,5 +228,17 @@ public class ObjectKit {
 		}
 		return str;
 	}
+	
+	/**
+	 * 判断一个对象是否是一个数组
+	 * @param obj
+	 * @return
+	 */
+	public static boolean isArray(Object obj) {
+        if(obj == null) {
+            return false;
+        }
+        return obj.getClass().isArray();
+    }
 
 }

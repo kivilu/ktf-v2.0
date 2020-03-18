@@ -36,6 +36,7 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.cglib.beans.BeanMap;
 
+import com.google.common.collect.Maps;
 import com.kivi.framework.converter.modelmapper.jdk8.Jdk8Module;
 import com.kivi.framework.converter.modelmapper.jsr310.Jsr310Module;
 import com.kivi.framework.converter.modelmapper.jsr310.Jsr310ModuleConfig;
@@ -129,6 +130,7 @@ public class BeanConverter {
 			for (Object key : beanMap.keySet()) {
 				map.put(String.valueOf(key), beanMap.get(key));
 			}
+			map = Maps.filterValues(map, value -> value != null);
 		}
 		return map;
 	}
@@ -211,6 +213,8 @@ public class BeanConverter {
 	 * @return 转换后的目标对象
 	 */
 	public static <T> T convert(Class<T> targetClass, Object source) {
+		if (source == null)
+			return null;
 		return getModelMapper().map(source, targetClass);
 	}
 
@@ -235,6 +239,8 @@ public class BeanConverter {
 	 * @return 转换后的目标对象
 	 */
 	public static <T> T convert(Class<T> targetClass, Object source, Converter<?, ?>... converters) {
+		if (source == null)
+			return null;
 		ModelMapper mapper = getModelMapper();
 		if (converters != null) {
 			for (Converter<?, ?> converter : converters) {

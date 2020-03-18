@@ -54,4 +54,16 @@ public class ByteStringKit {
 	public static String toHex(byte[] data) {
 		return toString(data, HEX);
 	}
+
+	public static byte[] fromHex(String data) {
+		return toBytes(data, HEX);
+	}
+
+	public static String toBase64(byte[] data) {
+		return toString(data, BASE64);
+	}
+
+	public static byte[] fromBase64(String data) {
+		return toBytes(data, BASE64);
+	}
 }

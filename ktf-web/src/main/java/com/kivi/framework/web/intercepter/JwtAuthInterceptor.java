@@ -27,19 +27,20 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtAuthInterceptor implements HandlerInterceptor {
 
 	@Override
-	public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-			Object object) throws Exception {
+	public boolean
+			preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object)
+					throws Exception {
 
 		// 从http请求头中取出x-access-token
-		String jwtToken = httpServletRequest.getHeader(WebConst.HTTP_AUTHORIZATION);
+		String jwtToken = httpServletRequest.getHeader(WebConst.AUTH_TOKEN);
 		log.trace("从http请求头中取出x-access-token:{}", jwtToken);
 
 		// 如果不是映射到方法直接通过
 		if (!(object instanceof HandlerMethod)) {
 			return true;
 		}
-		HandlerMethod handlerMethod = (HandlerMethod) object;
-		Method method = handlerMethod.getMethod();
+		HandlerMethod	handlerMethod	= (HandlerMethod) object;
+		Method			method			= handlerMethod.getMethod();
 		// 检查是否有passtoken注释，有则跳过认证
 		if (method.isAnnotationPresent(PassToken.class)) {
 			PassToken passToken = method.getAnnotation(PassToken.class);
@@ -67,8 +68,8 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
 					throw new KtfException(KtfError.E_UNAUTHORIZED, "用户尚未登录，请重新登录");
 				}
 
-				KtfTokenService tokenService = SpringContextHolder.getBean(KtfTokenService.class);
-				String token = tokenService.cache(jwtUser.getId().toString());
+				KtfTokenService	tokenService	= SpringContextHolder.getBean(KtfTokenService.class);
+				String			token			= tokenService.cache(jwtUser.getId().toString());
 				log.trace("从缓存中获取用户{}的token:{}", jwtUser.getId(), token);
 				if (token == null) {
 					IJwtUserServie jwtUserService = SpringContextHolder.getBeanNoAssert(IJwtUserServie.class);
@@ -86,14 +87,20 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
 	}
 
 	@Override
-	public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o,
+	public void postHandle(
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse,
+			Object o,
 			ModelAndView modelAndView) throws Exception {
 		log.trace("---postHandle---");
 	}
 
 	@Override
-	public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-			Object o, Exception e) throws Exception {
+	public void afterCompletion(
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse,
+			Object o,
+			Exception e) throws Exception {
 		log.trace("---afterCompletion---");
 	}
 }

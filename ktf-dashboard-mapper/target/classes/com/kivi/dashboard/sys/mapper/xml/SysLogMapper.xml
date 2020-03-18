@@ -4,9 +4,10 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.kivi.dashboard.sys.entity.SysLog">
-        <id column="id" property="id" />
+         <id column="id" property="id" />
         <result column="login_name" property="loginName" />
-        <result column="role_name" property="roleName" />
+        <result column="user_name" property="userName" />
+        <result column="user_type" property="userType" />
         <result column="type" property="type" />
         <result column="operation" property="operation" />
         <result column="class_name" property="className" />
@@ -14,7 +15,10 @@
         <result column="params" property="params" />
         <result column="time" property="time" />
         <result column="client_ip" property="clientIp" />
+        <result column="result" property="result" />
+        <result column="operation_sign" property="operationSign" />
         <result column="gmt_create" property="gmtCreate" />
+        <result column="gmt_update" property="gmtUpdate" />
     </resultMap>
 
 </mapper>

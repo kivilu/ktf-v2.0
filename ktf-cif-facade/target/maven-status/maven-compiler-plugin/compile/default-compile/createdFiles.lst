@@ -1,0 +1,12 @@
+com\kivi\cif\dubbo\service\CertService.class
+com\kivi\cif\dto\CifCertsDTO.class
+com\kivi\cif\dubbo\mock\CifCustomerServiceMock.class
+com\kivi\cif\dubbo\mock\CifAuthServiceMock.class
+com\kivi\cif\properties\CifProperties.class
+com\kivi\cif\dto\CifCustomerAuthsDTO.class
+com\kivi\cif\dto\CifCustomerDTO.class
+com\kivi\cif\dubbo\service\AuthService.class
+com\kivi\cif\constant\CifConstant.class
+com\kivi\cif\enums\IdentityType.class
+com\kivi\cif\dubbo\mock\CifCertServiceMock.class
+com\kivi\cif\dubbo\service\CustomerService.class

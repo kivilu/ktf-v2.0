@@ -26,6 +26,7 @@ import org.apache.ibatis.reflection.MetaObject;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.kivi.framework.component.SpringContextHolder;
+import com.kivi.framework.dto.JwtUserDTO;
 import com.kivi.framework.service.IJwtUserServie;
 
 /**
@@ -49,9 +50,21 @@ public class CommonMetaObjectHandler implements MetaObjectHandler {
 	private final String	createUid	= "createUid";
 
 	/**
+	 * 创建者用户名
+	 */
+	private final String	createUser	= "createUser";
+
+	/**
 	 * 修改者ID
 	 */
 	private final String	updateUid	= "updateUid";
+
+	/**
+	 * 修改者用户名
+	 */
+	private final String	updateUser	= "updateUser";
+
+	private IJwtUserServie	iJwtUserServie;
 
 	@Override
 	public void insertFill(MetaObject metaObject) {
@@ -59,12 +72,15 @@ public class CommonMetaObjectHandler implements MetaObjectHandler {
 		setInsertFieldValByName(createUid, currentUid(), metaObject);
 		setInsertFieldValByName(gmtUpdate, LocalDateTime.now(), metaObject);
 		setInsertFieldValByName(updateUid, currentUid(), metaObject);
+		setInsertFieldValByName(createUser, currentUser(), metaObject);
+		setInsertFieldValByName(updateUser, currentUser(), metaObject);
 	}
 
 	@Override
 	public void updateFill(MetaObject metaObject) {
 		setUpdateFieldValByName(gmtUpdate, LocalDateTime.now(), metaObject);
 		setUpdateFieldValByName(updateUid, currentUid(), metaObject);
+		setInsertFieldValByName(updateUser, currentUser(), metaObject);
 	}
 
 	/**
@@ -73,12 +89,35 @@ public class CommonMetaObjectHandler implements MetaObjectHandler {
 	private Long currentUid() {
 		Long uid = null;
 		try {
-			IJwtUserServie iJwtUserServie = SpringContextHolder.getBean(IJwtUserServie.class);
-			if (iJwtUserServie != null)
-				uid = iJwtUserServie.currentUid();
+			IJwtUserServie iJwtUserServie = iJwtUserServie();
+			if (iJwtUserServie != null) {
+				JwtUserDTO jwtUser = iJwtUserServie.getLoginUser();
+				uid = jwtUser != null ? jwtUser.getId() : null;
+			}
 		} catch (Exception ignored) {
 		}
 		return uid;
+	}
+
+	private String currentUser() {
+		String user = null;
+		try {
+			IJwtUserServie iJwtUserServie = iJwtUserServie();
+			if (iJwtUserServie != null) {
+				JwtUserDTO jwtUser = iJwtUserServie.getLoginUser();
+				user = jwtUser != null ? jwtUser.getIdentifier() : null;
+			}
+		} catch (Exception ignored) {
+		}
+
+		return user;
+	}
+
+	private IJwtUserServie iJwtUserServie() {
+		if (this.iJwtUserServie == null)
+			this.iJwtUserServie = SpringContextHolder.getBean(IJwtUserServie.class);
+
+		return this.iJwtUserServie;
 	}
 
 }

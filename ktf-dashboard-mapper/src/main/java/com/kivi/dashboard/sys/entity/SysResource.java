@@ -75,6 +75,11 @@ public class SysResource extends Model<SysResource> {
     @TableField("resource_type")
     private Integer resourceType;
     /**
+     * 是否隐藏菜单，0：显示，1：隐藏
+     */
+    @TableField("hidden")
+    private Integer hidden;
+    /**
      * 状态(0：开，1：关）
      */
     @TableField("status")
@@ -92,12 +97,12 @@ public class SysResource extends Model<SysResource> {
     /**
      * 记录创建用户
      */
-    @TableField("create_user")
+     @TableField(value = "create_user", fill = FieldFill.INSERT)
     private String createUser;
     /**
      * 记录最后修改用户
      */
-    @TableField("update_user")
+    @TableField(value = "update_user", fill = FieldFill.INSERT_UPDATE)
     private String updateUser;
 
 

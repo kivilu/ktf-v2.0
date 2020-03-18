@@ -35,7 +35,7 @@ import com.kivi.framework.web.warpper.BaseControllerWarpper;
 import com.vip.vjtools.vjkit.io.FileUtil;
 
 @DependsOn(value = { SpringContextHolder.BEAN_NAME, KtfWebProperties.BEAN_NAME })
-public class BaseController {
+public abstract class BaseController {
 
 	protected static String	SUCCESS		= "SUCCESS";
 	protected static String	ERROR		= "ERROR";

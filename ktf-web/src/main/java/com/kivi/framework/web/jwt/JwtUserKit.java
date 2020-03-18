@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.kivi.framework.constant.enums.UserType;
 import com.kivi.framework.dto.JwtUserDTO;
 import com.kivi.framework.util.kit.ByteStringKit;
 
@@ -33,17 +32,18 @@ public class JwtUserKit extends JwtUserDTO {
 	// private UserType userType;
 
 	public String[] audience() {
-		String[] result = new String[3];
+		String[] result = new String[4];
 		result[0]	= id.toString();
 		result[1]	= encode(identifier);
-		result[2]	= userType == null ? "" : userType.code;
+		result[2]	= userType == null ? "" : userType.toString();
+		result[3]	= encode(name);
 
 		return result;
 	}
 
 	public static JwtUserDTO audience(List<String> audiences) {
 		JwtUserDTO result = JwtUserDTO.builder().id(Long.valueOf(audiences.get(0))).identifier(decode(audiences.get(1)))
-				.userType(UserType.userType(audiences.get(2))).build();
+				.userType(Integer.valueOf(audiences.get(2))).name(decode(audiences.get(3))).build();
 		return result;
 	}
 
@@ -87,7 +87,7 @@ public class JwtUserKit extends JwtUserDTO {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("id=").append(id).append(", ").append("identifier=").append(identifier).append(", ")
-				.append("userType=").append(userType.name());
+				.append("userType=").append(userType);
 		return builder.toString();
 	}
 

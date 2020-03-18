@@ -58,4 +58,6 @@ public interface ISysLogService extends IService<SysLog> {
  	 * 分页查询
  	 */
  	PageInfoVO<SysLogDTO> page(Map<String, Object> params);
+ 	
+ 	
 }

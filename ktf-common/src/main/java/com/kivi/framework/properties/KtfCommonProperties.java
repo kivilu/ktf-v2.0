@@ -9,17 +9,27 @@ import lombok.Data;
 @Configuration(KtfCommonProperties.BEAN_NAME)
 @ConfigurationProperties(prefix = KtfCommonProperties.PREFIX)
 public class KtfCommonProperties implements IKtfProperties {
-	public static final String	BEAN_NAME		= "ktfCommonProperties";
-	public static final String	PREFIX			= "ktf.common";
+	public static final String	BEAN_NAME			= "ktfCommonProperties";
+	public static final String	PREFIX				= "ktf.common";
 
-	private String				sidDir			= "/app/sid";
+	private String				sidDir				= "/app/sid";
 
-	private String				componentScan	= "com.kivi";
+	private String				componentScan		= "com.kivi";
+
+	/**
+	 * 业务应用代码
+	 */
+	private String				bzApplicatonCode	= "BZ-default";
+
+	/**
+	 * 业务应用名称
+	 */
+	private String				bzApplicatonName	= "默认业务应用";
 
 	/**
 	 * 测试是否开启
 	 */
-	private Boolean				enableTest		= false;
+	private Boolean				enableTest			= false;
 
 	@Override
 	public String prefix() {

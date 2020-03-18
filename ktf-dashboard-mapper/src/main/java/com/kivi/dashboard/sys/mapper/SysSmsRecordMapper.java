@@ -1,7 +1,7 @@
 package com.kivi.dashboard.sys.mapper;
 
-import com.kivi.dashboard.sys.entity.SysSmsRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.kivi.dashboard.sys.entity.SysSmsRecord;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author Auto-generator
- * @since 2019-09-18
+ * @since 2019-09-24
  */
 public interface SysSmsRecordMapper extends BaseMapper<SysSmsRecord> {
 

@@ -3,6 +3,7 @@ package com.kivi.dashboard.enterprise.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.dashboard.enterprise.dto.EnterpriseDTO;
 import com.kivi.dashboard.enterprise.entity.Enterprise;
+import com.kivi.dashboard.enterprise.mapper.EnterpriseExMapper;
 import com.kivi.dashboard.enterprise.mapper.EnterpriseMapper;
 import com.kivi.dashboard.enterprise.service.IEnterpriseService;
 import com.kivi.db.page.PageParams;
@@ -30,9 +32,13 @@ import com.kivi.framework.vo.page.PageInfoVO;
  * @author Auto-generator
  * @since 2019-09-18
  */
+
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class EnterpriseServiceImpl extends ServiceImpl<EnterpriseMapper, Enterprise> implements IEnterpriseService {
+
+	@Autowired
+	private EnterpriseExMapper enterpriseExMapper;
 
 	/**
 	 * 根据ID查询企业信息
@@ -51,10 +57,12 @@ public class EnterpriseServiceImpl extends ServiceImpl<EnterpriseMapper, Enterpr
 	 */
 	@KtfTrace("新增企业信息")
 	@Override
-	public Boolean save(EnterpriseDTO enterpriseDTO) {
+	public Enterprise save(EnterpriseDTO enterpriseDTO) {
 		Enterprise entity = BeanConverter.convert(Enterprise.class, enterpriseDTO);
 
-		return super.save(entity);
+		super.save(entity);
+
+		return entity;
 	}
 
 	/**
@@ -120,6 +128,7 @@ public class EnterpriseServiceImpl extends ServiceImpl<EnterpriseMapper, Enterpr
 	/**
 	 * 分页查询
 	 */
+	@Override
 	@KtfTrace("分页查询企业信息")
 	public PageInfoVO<EnterpriseDTO> page(Map<String, Object> params) {
 		PageParams<EnterpriseDTO>	pageParams	= new PageParams<>(params);
@@ -148,6 +157,37 @@ public class EnterpriseServiceImpl extends ServiceImpl<EnterpriseMapper, Enterpr
 
 		return pageVo;
 
+	}
+
+	@Override
+	public List<Map<String, Object>> selectNames() {
+		QueryWrapper<Enterprise>	query	= Wrappers.<Enterprise>query().select(Enterprise.DB_ID,
+				Enterprise.DB_ENTERPRISE_NAME);
+		List<Enterprise>			list	= super.list(query);
+		return BeanConverter.beansToMap(list);
+	}
+
+	@Override
+	public List<Map<String, Object>> select(Map<String, Object> params) {
+		return enterpriseExMapper.selectEnterpriseList(params);
+	}
+
+	@Override
+	public PageInfoVO<Map<String, Object>> selectByPage(Map<String, Object> params) {
+		PageParams<Map<String, Object>>	pageParams	= new PageParams<>(params);
+		Page<Map<String, Object>>		page		= new Page<>(pageParams.getCurrPage(), pageParams.getPageSize());
+		IPage<Map<String, Object>>		iPage		= enterpriseExMapper.selectEnterprisePage(page, params);
+
+		PageInfoVO<Map<String, Object>>	pageVo		= new PageInfoVO<>();
+		pageVo.setCurPage(iPage.getCurrent());
+		pageVo.setTotal(iPage.getTotal());
+		pageVo.setPageSize(iPage.getSize());
+		pageVo.setPages(iPage.getPages());
+		pageVo.setRequestMap(params);
+		pageVo.setList(iPage.getRecords());
+		pageVo.compute();
+
+		return pageVo;
 	}
 
 }

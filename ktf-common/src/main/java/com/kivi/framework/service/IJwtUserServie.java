@@ -21,16 +21,16 @@ public interface IJwtUserServie {
 	String getCredential(Long userId);
 
 	/**
-	 * 当前用户ID
-	 * 
-	 * @return
-	 */
-	Long currentUid();
-
-	/**
 	 * 用户已经退出
 	 * 
 	 * @param id
 	 */
 	void logouted(JwtUserDTO jwtUser);
+
+	/**
+	 * 当前登录用户名
+	 * 
+	 * @return
+	 */
+	JwtUserDTO getLoginUser();
 }

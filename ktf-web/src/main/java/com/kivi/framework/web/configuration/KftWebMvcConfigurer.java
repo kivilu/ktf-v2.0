@@ -5,15 +5,13 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.commons.codec.Charsets;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
@@ -23,14 +21,10 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
-import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,14 +37,13 @@ import com.kivi.framework.spring.validator.KtfValidatorCollection;
 import com.kivi.framework.web.csrf.CookieCsrfTokenRepository;
 import com.kivi.framework.web.csrf.CsrfInterceptor;
 import com.kivi.framework.web.intercepter.FileUploadTypeInterceptor;
-import com.kivi.framework.web.properties.KtfWebProperties;
-import com.kivi.framework.web.undertow.UndertowServerFactoryCustomizer;
+import com.kivi.framework.web.intercepter.JwtAuthInterceptor;
+import com.kivi.framework.web.intercepter.SwaggerInterceptor;
+import com.kivi.framework.web.properties.KtfJwtProperties;
 import com.kivi.framework.web.xss.XssFilter;
 
-import io.undertow.Undertow;
-
 @Configuration
-@EnableAspectJAutoProxy
+@AutoConfigureAfter(KtfJwtProperties.class)
 public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 
 	@Autowired(required = false)
@@ -61,6 +54,23 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 
 	@Autowired(required = false)
 	private CsrfInterceptor				csrfInterceptor;
+
+	@Autowired(required = false)
+	private JwtAuthInterceptor			jwtAuthInterceptor;
+
+	@Autowired
+	private SwaggerInterceptor			swaggerInterceptor;
+
+	@Autowired
+	private KtfJwtProperties			ktfJwtProperties;
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("swagger-ui.html", "doc.html")
+				.addResourceLocations("classpath:/META-INF/resources/");
+		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+		registry.addResourceHandler("static/**").addResourceLocations("classpath:/static/");
+	}
 
 	@Override
 	public Validator getValidator() {
@@ -75,7 +85,6 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 
 	@Override
 	public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-		// TODO Auto-generated method stub
 		super.extendMessageConverters(converters);
 	}
 
@@ -111,37 +120,23 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 		super.configureMessageConverters(converters);
 	}
 
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("swagger-ui.html", "doc.html")
-				.addResourceLocations("classpath:/META-INF/resources/");
-		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-		registry.addResourceHandler("static/**").addResourceLocations("classpath:/static/");
-	}
-
-	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
-		super.addViewControllers(registry);
-	}
-
-	@Override
-	public void configureViewResolvers(ViewResolverRegistry registry) {
-		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setPrefix("/WEB-INF/view");
-		registry.viewResolver(viewResolver);
-		super.configureViewResolvers(registry);
-	}
-
 	/**
 	 * 添加拦截器
 	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		// 注册自定义拦截器，添加拦截路径和排除拦截路径
+
 		// 添加文件上传类型拦截器
 		registry.addInterceptor(fileUploadTypeInterceptor).addPathPatterns("/**");
-		if (csrfInterceptor != null)
-			registry.addInterceptor(csrfInterceptor).addPathPatterns("/login");
+		registry.addInterceptor(csrfInterceptor).addPathPatterns("/login");
+
+		registry.addInterceptor(swaggerInterceptor).addPathPatterns("/swagger-ui.html", "/doc.html");
+
+		if (jwtAuthInterceptor != null) {
+			registry.addInterceptor(jwtAuthInterceptor).excludePathPatterns(ktfJwtProperties.getExcludePathPatterns())
+					.addPathPatterns("/**");
+		}
 
 		super.addInterceptors(registry);
 	}
@@ -168,6 +163,7 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 	/**
 	 * xssFilter注册
 	 */
+
 	@Bean
 	public FilterRegistrationBean<XssFilter> xssFilterRegistration() {
 		FilterRegistrationBean<XssFilter> registration = new FilterRegistrationBean<>(new XssFilter());
@@ -177,36 +173,12 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 		return registration;
 	}
 
-	/**
-	 * RequestContextListener注册
-	 */
 	@Bean
-	public ServletListenerRegistrationBean<RequestContextListener> requestContextListenerRegistration() {
-		return new ServletListenerRegistrationBean<>(new RequestContextListener());
-	}
-
-	@Bean
-	@ConditionalOnClass(Undertow.class)
-	public UndertowServerFactoryCustomizer undertowServerFactoryCustomizer() {
-		return new UndertowServerFactoryCustomizer();
-	}
-
-	@Bean
-	@ConditionalOnProperty(
-			prefix = KtfWebProperties.PREFIX,
-			name = { "enable-csrf" },
-			havingValue = "true",
-			matchIfMissing = false)
 	public CookieCsrfTokenRepository cookieCsrfTokenRepository() {
 		return new CookieCsrfTokenRepository();
 	}
 
 	@Bean
-	@ConditionalOnProperty(
-			prefix = KtfWebProperties.PREFIX,
-			name = { "enable-csrf" },
-			havingValue = "true",
-			matchIfMissing = false)
 	public CsrfInterceptor CsrfInterceptor(@Autowired CookieCsrfTokenRepository cookieCsrfTokenRepository) {
 		return new CsrfInterceptor(cookieCsrfTokenRepository);
 	}
@@ -214,6 +186,22 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 	@Bean
 	public FileUploadTypeInterceptor fileUploadTypeInterceptor() {
 		return new FileUploadTypeInterceptor();
+	}
+
+	/**
+	 * 用于解决有@RequiresPermissions注解的controller，swagger就读取不到
+	 * 
+	 * @return
+	 */
+	@Bean
+	public static DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator() {
+		DefaultAdvisorAutoProxyCreator creator = new DefaultAdvisorAutoProxyCreator();
+		/**
+		 * setUsePrefix(false)用于解决一个奇怪的bug。在引入spring aop的情况下。
+		 * 在@Controller注解的类的方法中加入@RequiresRole注解，会导致该方法无法映射请求，导致返回404。 加入这项配置能解决这个bug
+		 */
+		creator.setUsePrefix(true);
+		return creator;
 	}
 
 }

@@ -10,8 +10,8 @@
   <description>常用工具类以及自定义配置文件属性</description>
   
   <properties>	
-  		<fst.version>2.57</fst.version>
   		<persistence-api>1.0</persistence-api>
+  		<guava.version>28.1-jre</guava.version>
   </properties>
   
   <dependencies>
@@ -23,6 +23,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
 		</dependency>
 		
 		<dependency>
@@ -36,6 +37,12 @@
 		    <groupId>com.vip.vjtools</groupId>
 		    <artifactId>vjkit</artifactId>
 		    <version>${vjkit.version}</version>
+		    <exclusions>
+       			<exclusion>
+       				<groupId>com.google.guava</groupId>
+       				<artifactId>guava</artifactId>
+       			</exclusion>
+       		</exclusions>
 		</dependency>
 		<!-- 对象映射工具 mapper tool -->
 		<dependency>
@@ -77,6 +84,11 @@
 		    <groupId>joda-time</groupId>
 		    <artifactId>joda-time</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+  			<artifactId>jackson-databind</artifactId>
+		</dependency>
   		
   		<!-- /常用工具类 -->
 		
@@ -84,6 +96,7 @@
 		<dependency>
 		    <groupId>de.ruedigermoeller</groupId>
 		    <artifactId>fst</artifactId>
+		    <optional>true</optional>
 		</dependency>
 		
 		<!-- swagger -->
@@ -91,8 +104,35 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
 			<version>${springfox-swagger2-version}</version>
+			<exclusions>
+       			<exclusion>
+       				<groupId>com.google.guava</groupId>
+       				<artifactId>guava</artifactId>
+       			</exclusion>
+       		</exclusions>
 		</dependency>
 		<!-- /swagger -->
+		
+		<dependency>
+			<groupId>com.google.guava</groupId>
+       		<artifactId>guava</artifactId>
+       		<version>${guava.version}</version>
+		</dependency>
+		
+		  <!-- zxing begin -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>${zxing.core.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>${zxing.core.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <!-- zxing end -->
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

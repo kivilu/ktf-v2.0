@@ -2,7 +2,7 @@ package com.kivi.dashboard.sys.mapper;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.kivi.dashboard.sys.entity.vo.RoleVo;
+import com.kivi.framework.vo.RoleVo;
 
 /**
  * <p>

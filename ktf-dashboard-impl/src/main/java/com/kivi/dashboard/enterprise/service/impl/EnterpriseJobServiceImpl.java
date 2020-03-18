@@ -3,6 +3,7 @@ package com.kivi.dashboard.enterprise.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.dashboard.enterprise.dto.EnterpriseJobDTO;
 import com.kivi.dashboard.enterprise.entity.EnterpriseJob;
+import com.kivi.dashboard.enterprise.mapper.EnterpriseJobExMapper;
 import com.kivi.dashboard.enterprise.mapper.EnterpriseJobMapper;
 import com.kivi.dashboard.enterprise.service.IEnterpriseJobService;
 import com.kivi.db.page.PageParams;
@@ -21,6 +23,7 @@ import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.util.kit.NumberKit;
 import com.kivi.framework.util.kit.ObjectKit;
 import com.kivi.framework.vo.page.PageInfoVO;
+import com.vip.vjtools.vjkit.collection.MapUtil;
 
 /**
  * <p>
@@ -30,10 +33,14 @@ import com.kivi.framework.vo.page.PageInfoVO;
  * @author Auto-generator
  * @since 2019-09-18
  */
+
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class EnterpriseJobServiceImpl extends ServiceImpl<EnterpriseJobMapper, EnterpriseJob>
 		implements IEnterpriseJobService {
+
+	@Autowired
+	private EnterpriseJobExMapper enterpriseJobExMapper;
 
 	/**
 	 * 根据ID查询企业职务配置
@@ -106,14 +113,16 @@ public class EnterpriseJobServiceImpl extends ServiceImpl<EnterpriseJobMapper, E
 	@Override
 	public List<EnterpriseJobDTO> listLike(Map<String, Object> params, String... columns) {
 		QueryWrapper<EnterpriseJob> query = Wrappers.<EnterpriseJob>query().select(columns);
-		params.entrySet().stream().forEach(entry -> {
-			if (ObjectKit.isNotEmpty(entry.getValue())) {
-				if (NumberKit.isNumberic(entry.getValue()))
-					query.eq(entry.getKey(), entry.getValue());
-				else
-					query.like(entry.getKey(), entry.getValue());
-			}
-		});
+		if (MapUtil.isNotEmpty(params)) {
+			params.entrySet().stream().forEach(entry -> {
+				if (ObjectKit.isNotEmpty(entry.getValue())) {
+					if (NumberKit.isNumberic(entry.getValue()))
+						query.eq(entry.getKey(), entry.getValue());
+					else
+						query.like(entry.getKey(), entry.getValue());
+				}
+			});
+		}
 
 		List<EnterpriseJob> list = super.list(query);
 		return BeanConverter.convert(EnterpriseJobDTO.class, list);
@@ -122,20 +131,23 @@ public class EnterpriseJobServiceImpl extends ServiceImpl<EnterpriseJobMapper, E
 	/**
 	 * 分页查询
 	 */
+	@Override
 	@KtfTrace("分页查询企业职务配置")
 	public PageInfoVO<EnterpriseJobDTO> page(Map<String, Object> params) {
 		PageParams<EnterpriseJobDTO>	pageParams	= new PageParams<>(params);
 		Page<EnterpriseJob>				page		= new Page<>(pageParams.getCurrPage(), pageParams.getPageSize());
 
 		QueryWrapper<EnterpriseJob>		query		= Wrappers.<EnterpriseJob>query();
-		params.entrySet().stream().forEach(entry -> {
-			if (ObjectKit.isNotEmpty(entry.getValue())) {
-				if (NumberKit.isNumberic(entry.getValue()))
-					query.eq(entry.getKey(), entry.getValue());
-				else
-					query.like(entry.getKey(), entry.getValue());
-			}
-		});
+		if (MapUtil.isNotEmpty(params)) {
+			params.entrySet().stream().forEach(entry -> {
+				if (ObjectKit.isNotEmpty(entry.getValue())) {
+					if (NumberKit.isNumberic(entry.getValue()))
+						query.eq(entry.getKey(), entry.getValue());
+					else
+						query.like(entry.getKey(), entry.getValue());
+				}
+			});
+		}
 
 		IPage<EnterpriseJob>			iPage	= super.page(page, query);
 
@@ -150,6 +162,28 @@ public class EnterpriseJobServiceImpl extends ServiceImpl<EnterpriseJobMapper, E
 
 		return pageVo;
 
+	}
+
+	@Override
+	public List<EnterpriseJobDTO> select(Map<String, Object> params) {
+		return enterpriseJobExMapper.selectEnterpriseJobList(params);
+	}
+
+	@Override
+	public PageInfoVO<Map<String, Object>> selectByPage(Map<String, Object> params) {
+		PageParams<Map<String, Object>>	pageParams	= new PageParams<>(params);
+		Page<Map<String, Object>>		page		= new Page<>(pageParams.getCurrPage(), pageParams.getPageSize());
+		IPage<Map<String, Object>>		iPage		= enterpriseJobExMapper.selectEnterpriseJobPage(page, params);
+		PageInfoVO<Map<String, Object>>	pageVo		= new PageInfoVO<>();
+		pageVo.setCurPage(iPage.getCurrent());
+		pageVo.setTotal(iPage.getTotal());
+		pageVo.setPageSize(iPage.getSize());
+		pageVo.setPages(iPage.getPages());
+		pageVo.setRequestMap(params);
+		pageVo.setList(iPage.getRecords());
+		pageVo.compute();
+
+		return pageVo;
 	}
 
 }

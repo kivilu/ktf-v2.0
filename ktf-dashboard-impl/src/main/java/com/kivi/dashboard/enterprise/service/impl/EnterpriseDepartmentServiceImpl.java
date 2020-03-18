@@ -1,8 +1,10 @@
 package com.kivi.dashboard.enterprise.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.dashboard.enterprise.dto.EnterpriseDepartmentDTO;
 import com.kivi.dashboard.enterprise.entity.EnterpriseDepartment;
+import com.kivi.dashboard.enterprise.mapper.EnterpriseDepartmentExMapper;
 import com.kivi.dashboard.enterprise.mapper.EnterpriseDepartmentMapper;
 import com.kivi.dashboard.enterprise.service.IEnterpriseDepartmentService;
 import com.kivi.db.page.PageParams;
@@ -21,6 +24,7 @@ import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.util.kit.NumberKit;
 import com.kivi.framework.util.kit.ObjectKit;
 import com.kivi.framework.vo.page.PageInfoVO;
+import com.vip.vjtools.vjkit.collection.MapUtil;
 
 /**
  * <p>
@@ -30,10 +34,14 @@ import com.kivi.framework.vo.page.PageInfoVO;
  * @author Auto-generator
  * @since 2019-09-18
  */
+
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class EnterpriseDepartmentServiceImpl extends ServiceImpl<EnterpriseDepartmentMapper, EnterpriseDepartment>
 		implements IEnterpriseDepartmentService {
+
+	@Autowired
+	private EnterpriseDepartmentExMapper enterpriseDepartmentExMapper;
 
 	/**
 	 * 根据ID查询企业部门
@@ -41,8 +49,10 @@ public class EnterpriseDepartmentServiceImpl extends ServiceImpl<EnterpriseDepar
 	@KtfTrace("根据ID查询企业部门")
 	@Override
 	public EnterpriseDepartmentDTO getDTOById(Long id) {
-		EnterpriseDepartment	entity	= super.getById(id);
-		EnterpriseDepartmentDTO	dto		= BeanConverter.convert(EnterpriseDepartmentDTO.class, entity,
+		EnterpriseDepartment entity = super.getById(id);
+		if (entity == null)
+			return null;
+		EnterpriseDepartmentDTO dto = BeanConverter.convert(EnterpriseDepartmentDTO.class, entity,
 				BeanConverter.long2String, BeanConverter.integer2String);
 		return dto;
 	}
@@ -106,14 +116,16 @@ public class EnterpriseDepartmentServiceImpl extends ServiceImpl<EnterpriseDepar
 	@Override
 	public List<EnterpriseDepartmentDTO> listLike(Map<String, Object> params, String... columns) {
 		QueryWrapper<EnterpriseDepartment> query = Wrappers.<EnterpriseDepartment>query().select(columns);
-		params.entrySet().stream().forEach(entry -> {
-			if (ObjectKit.isNotEmpty(entry.getValue())) {
-				if (NumberKit.isNumberic(entry.getValue()))
-					query.eq(entry.getKey(), entry.getValue());
-				else
-					query.like(entry.getKey(), entry.getValue());
-			}
-		});
+		if (MapUtil.isNotEmpty(params)) {
+			params.entrySet().stream().forEach(entry -> {
+				if (ObjectKit.isNotEmpty(entry.getValue())) {
+					if (NumberKit.isNumberic(entry.getValue()))
+						query.eq(entry.getKey(), entry.getValue());
+					else
+						query.like(entry.getKey(), entry.getValue());
+				}
+			});
+		}
 
 		List<EnterpriseDepartment> list = super.list(query);
 		return BeanConverter.convert(EnterpriseDepartmentDTO.class, list);
@@ -129,14 +141,16 @@ public class EnterpriseDepartmentServiceImpl extends ServiceImpl<EnterpriseDepar
 				pageParams.getPageSize());
 
 		QueryWrapper<EnterpriseDepartment>	query		= Wrappers.<EnterpriseDepartment>query();
-		params.entrySet().stream().forEach(entry -> {
-			if (ObjectKit.isNotEmpty(entry.getValue())) {
-				if (NumberKit.isNumberic(entry.getValue()))
-					query.eq(entry.getKey(), entry.getValue());
-				else
-					query.like(entry.getKey(), entry.getValue());
-			}
-		});
+		if (MapUtil.isNotEmpty(params)) {
+			params.entrySet().stream().forEach(entry -> {
+				if (ObjectKit.isNotEmpty(entry.getValue())) {
+					if (NumberKit.isNumberic(entry.getValue()))
+						query.eq(entry.getKey(), entry.getValue());
+					else
+						query.like(entry.getKey(), entry.getValue());
+				}
+			});
+		}
 
 		IPage<EnterpriseDepartment>			iPage	= super.page(page, query);
 
@@ -151,6 +165,30 @@ public class EnterpriseDepartmentServiceImpl extends ServiceImpl<EnterpriseDepar
 
 		return pageVo;
 
+	}
+
+	@Override
+	public List<Map<String, Object>> selectTreeGrid(Map<String, Object> params) {
+		return enterpriseDepartmentExMapper.selectTreeGrid(params);
+	}
+
+	@Override
+	public List<EnterpriseDepartmentDTO> selectEnterpriseDepartmentList(Map<String, Object> params) {
+		return enterpriseDepartmentExMapper.selectEnterpriseDepartmentList(params);
+	}
+
+	@Override
+	public Boolean removeByParentId(Long parentId) {
+		QueryWrapper<EnterpriseDepartment> wrapper = new QueryWrapper<>();
+		wrapper.eq(EnterpriseDepartment.DB_PARENT_ID, parentId);
+		return super.remove(wrapper);
+	}
+
+	@Override
+	public Boolean removeByParentIds(Long[] parentIds) {
+		QueryWrapper<EnterpriseDepartment> wrapper = new QueryWrapper<>();
+		wrapper.in(EnterpriseDepartment.DB_PARENT_ID, Arrays.asList(parentIds));
+		return super.remove(wrapper);
 	}
 
 }

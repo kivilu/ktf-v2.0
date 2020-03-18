@@ -6,7 +6,7 @@ import java.util.Map;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.kivi.dashboard.sys.dto.SysRoleDTO;
 import com.kivi.dashboard.sys.entity.SysRole;
-import com.kivi.dashboard.sys.entity.vo.RoleVo;
+import com.kivi.framework.vo.RoleVo;
 import com.kivi.framework.vo.page.PageInfoVO;
 
 /**
@@ -30,9 +30,19 @@ public interface ISysRoleService extends IService<SysRole> {
 	Boolean save(SysRoleDTO sysRoleDTO);
 
 	/**
+	 * 新增
+	 */
+	Boolean saveByVo(SysRoleDTO sysRoleDTO);
+
+	/**
 	 * 修改
 	 */
 	Boolean updateById(SysRoleDTO sysRoleDTO);
+
+	/**
+	 * 修改
+	 */
+	Boolean updateByVo(SysRoleDTO sysRoleDTO);
 
 	/**
 	 * 查询列表
@@ -66,4 +76,12 @@ public interface ISysRoleService extends IService<SysRole> {
 	 * @return
 	 */
 	RoleVo selectByRoleId(Long roleId);
+
+	/**
+	 * 批量删除
+	 * 
+	 * @param roleIds
+	 */
+	void deleteBatch(Long[] roleIds);
+
 }

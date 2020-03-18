@@ -1,0 +1,6 @@
+com.kivi.dashboard.enterprise.dto
+com.kivi.dashboard.enterprise.entity
+com.kivi.dashboard.enterprise.mapper
+com.kivi.dashboard.sys.dto
+com.kivi.dashboard.sys.entity
+com.kivi.dashboard.sys.mapper

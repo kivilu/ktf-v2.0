@@ -4,11 +4,11 @@ import java.util.concurrent.Executor;
 
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 import com.kivi.framework.constant.KtfFramework;
 import com.kivi.framework.properties.KtfTaskPoolProperties;
@@ -16,8 +16,8 @@ import com.kivi.framework.task.KtfAsyncUncaughtExceptionHandler;
 import com.kivi.framework.task.KtfThreadPoolTaskExecutor;
 import com.kivi.framework.task.RejectedPolicy;
 
+@EnableConfigurationProperties
 @Configuration
-@EnableAsync
 public class KtfConfiguration implements AsyncConfigurer {
 
 	@Autowired

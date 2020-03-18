@@ -2,8 +2,6 @@ package com.kivi.framework.dto;
 
 import java.io.Serializable;
 
-import com.kivi.framework.constant.enums.UserType;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +29,6 @@ public class JwtUserDTO implements Serializable {
 	protected String			name				= "---";
 
 	// 用户类型
-	protected UserType			userType;
+	protected Integer			userType;
 
 }
