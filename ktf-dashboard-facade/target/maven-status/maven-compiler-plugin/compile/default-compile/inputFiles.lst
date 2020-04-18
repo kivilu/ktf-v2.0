@@ -17,8 +17,7 @@ D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-facade\src\main\java\com\kivi\da
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-facade\src\main\java\com\kivi\dashboard\sys\service\ISysIndustryService.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-facade\src\main\java\com\kivi\dashboard\sys\service\ISysRegionService.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-facade\src\main\java\com\kivi\dashboard\sys\service\ISysSmsTypeService.java
-D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-facade\src\main\java\com\kivi\dashboard\cif\service\ICustomerAuthsService.java
-D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-facade\src\main\java\com\kivi\dashboard\cif\service\ICustomerService.java
+D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-facade\src\main\java\com\kivi\dashboard\sys\service\SysApi3rdpartyService.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-facade\src\main\java\com\kivi\dashboard\enums\KmsUserType.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-facade\src\main\java\com\kivi\dashboard\sys\service\ISysUserTokenService.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-facade\src\main\java\com\kivi\dashboard\sys\service\ISysFileService.java

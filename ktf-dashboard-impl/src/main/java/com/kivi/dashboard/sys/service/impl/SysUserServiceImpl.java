@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +39,7 @@ import com.kivi.dashboard.sys.service.ISysUserRoleService;
 import com.kivi.dashboard.sys.service.ISysUserService;
 import com.kivi.db.page.PageParams;
 import com.kivi.framework.annotation.KtfTrace;
+import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.component.KtfKit;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.constant.enums.KtfGender;
@@ -232,6 +234,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		return sysUserExMapper.selectResourceIdListByUserId(userId);
 	}
 
+	@Cacheable(value = KtfCache.SysUser, key = "caches[0].name+'_pm_'+#id", unless = "#result == null")
 	@Override
 	public Set<String> selectUserPermissions(long userId) {
 		List<String> permsList;
@@ -295,7 +298,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		user.setEnterpriseId(1L);
 		user.setDepartmentId(1L);
 		user.setJobId(1L);
-		user.setStatus(KtfStatus.INIT.code);
+		// user.setStatus(KtfStatus.INIT.code); //非U盾登录，状态默认为初始状态
+		user.setStatus(KtfStatus.ENABLED.code); // U盾登录，状态默认为有效状态
 		this.save(user);
 
 		// 检查角色是否越权

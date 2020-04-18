@@ -1,7 +1,7 @@
-D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\cif\service\impl\CustomerAuthsServiceImpl.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\sys\service\impl\SysDicServiceImpl.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\sys\service\impl\SysSmsTypeServiceImpl.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\sys\service\impl\SysRegionServiceImpl.java
+D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\sys\service\impl\SysApi3rdpartyServiceImpl.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\sys\service\impl\SysUserTokenServiceImpl.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\sys\service\impl\SysRoleServiceImpl.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\sys\service\impl\SysApplicationServiceImpl.java
@@ -11,7 +11,6 @@ D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dash
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\sys\service\impl\SysResourceServiceImpl.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\sys\service\impl\SysUserServiceImpl.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\enterprise\service\impl\EnterpriseJobServiceImpl.java
-D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\cif\service\impl\CustomerServiceImpl.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\sys\service\impl\SysSmsRecordServiceImpl.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\enterprise\service\impl\EnterpriseServiceImpl.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-impl\src\main\java\com\kivi\dashboard\sys\service\impl\SysFileServiceImpl.java

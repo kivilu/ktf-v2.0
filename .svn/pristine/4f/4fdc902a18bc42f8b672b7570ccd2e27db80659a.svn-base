@@ -1,0 +1,237 @@
+package com.kivi.dashboard.sys.controller;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.kivi.dashboard.cif.entity.CustomerAuths;
+import com.kivi.dashboard.cif.service.ICustomerAuthsService;
+import com.kivi.dashboard.shiro.ShiroKit;
+import com.kivi.dashboard.shiro.form.PasswordForm;
+//import com.kivi.dashboard.shiro.ShiroKit;
+import com.kivi.dashboard.sys.dto.SysUserDTO;
+import com.kivi.dashboard.sys.entity.vo.UserVo;
+import com.kivi.dashboard.sys.service.ISysUserEnterpriseService;
+import com.kivi.dashboard.sys.service.ISysUserRoleService;
+import com.kivi.dashboard.sys.service.ISysUserService;
+import com.kivi.framework.constant.KtfConstant;
+import com.kivi.framework.converter.BeanConverter;
+import com.kivi.framework.model.ResultMap;
+import com.kivi.framework.model.SelectNode;
+import com.kivi.framework.vo.page.PageInfoVO;
+import com.kivi.framework.web.controller.BaseController;
+import com.vip.vjtools.vjkit.number.NumberUtil;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * <p>
+ * 用户管理前端控制器
+ * </p>
+ *
+ * @author Auto-generator
+ * @since 2019-09-18
+ */
+
+@Api(value = "用户管理", tags = { "用户管理" })
+@RestController
+@RequestMapping("/sys/user")
+@Slf4j
+public class SysUserController extends BaseController {
+
+	@Autowired
+	private ISysUserService				sysUserService;
+
+	@Autowired
+	private ICustomerAuthsService		customerAuthsService;
+
+	@Autowired
+	private ISysUserRoleService			sysUserRoleService;
+	@Autowired
+	private ISysUserEnterpriseService	sysUserEnterpriseService;
+
+	/**
+	 * 所有用户列表
+	 */
+	@GetMapping("/list")
+	@RequiresPermissions("sys/user/list")
+	public ResultMap list(@RequestParam Map<String, Object> params) {
+		// 只有超级管理员，才能查看所有管理员列表
+		if (ShiroKit.getUser().getId() != KtfConstant.SUPER_ADMIN) {
+			params.put("userId", ShiroKit.getUser().getId());
+		}
+		PageInfoVO<Map<String, Object>> page = sysUserService.selectDataGrid(params);
+
+		return ResultMap.ok().put("page", page);
+	}
+
+	/**
+	 * 获取登录的用户信息
+	 */
+	@GetMapping("/info")
+	public ResultMap info() {
+		return ResultMap.ok().put("user", ShiroKit.getUser());
+	}
+
+	/**
+	 * 修改登录用户密码
+	 */
+	@PostMapping("/password")
+	public ResultMap password(@Valid @RequestBody PasswordForm form) {
+		CustomerAuths	userAuth	= customerAuthsService.getById(ShiroKit.getUser().getId());
+		String			password	= ShiroKit.md5(form.getPassword(),
+				userAuth.getIdentifier() + userAuth.getCredentialSalt());
+		if (!userAuth.getCredential().equals(password)) {
+			return ResultMap.error("原密码不正确");
+		}
+		String			newPassword	= ShiroKit.md5(form.getNewPassword(),
+				userAuth.getIdentifier() + userAuth.getCredentialSalt());
+
+		CustomerAuths	updateAuth	= new CustomerAuths();
+		updateAuth.setId(userAuth.getId());
+		updateAuth.setCredential(newPassword);
+		customerAuthsService.updateById(updateAuth);
+		return ResultMap.ok("密码修改成功");
+	}
+
+	@ApiOperation(value = "用户信息", notes = "用户信息")
+	@GetMapping("/info/{id}")
+	@RequiresPermissions("sys/user/info")
+	public ResultMap info(@PathVariable("id") String id) {
+		UserVo		user		= sysUserService.selectByUserId(NumberUtil.toLongObject(id, -1L));
+		List<Long>	roleIdList	= sysUserRoleService.selectRoleIdListByUserId(user.getId());
+		user.setRoleIdList(roleIdList);
+		List<Long> enterpriseIdList = sysUserEnterpriseService.selectEnterpriseIdByUserId(user.getId());
+		user.setEnterpriseIdList(enterpriseIdList);
+		return ResultMap.ok().put("user", user);
+	}
+
+	/**
+	 * 新增
+	 */
+	@ApiOperation(value = "新增用户", notes = "新增用户")
+	@RequiresPermissions("sys/user/save")
+	@PostMapping("/save")
+	public ResultMap save(@Valid @RequestBody SysUserDTO sysUserDTO) {
+		try {
+			UserVo u = sysUserService.selectByLoginName(sysUserDTO.getLoginName());
+			if (u != null) {
+				return ResultMap.error("登录名已存在");
+			}
+
+			UserVo user = new UserVo();
+			BeanConverter.copyProperties(sysUserDTO, sysUserDTO);
+			String salt = ShiroKit.getRandomSalt(16);
+			user.setSalt(salt);
+			String pwd = ShiroKit.md5(user.getPassword(), user.getLoginName() + salt);
+			user.setPassword(pwd);
+			user.setCreateUserId(ShiroKit.getUser().getId());
+			sysUserService.saveByVo(user);
+			return ResultMap.ok("添加成功");
+		} catch (Exception e) {
+			log.error("新增用户异常", e);
+			return ResultMap.error("运行异常，请联系管理员");
+		}
+	}
+
+	/**
+	 * 修改
+	 */
+	@ApiOperation(value = "修改用户", notes = "修改用户")
+	@RequiresPermissions("sys/user/update")
+	@PostMapping("/update")
+	public ResultMap updateById(@Valid @RequestBody SysUserDTO sysUserDTO) {
+		try {
+			UserVo user = new UserVo();
+			BeanConverter.copyProperties(sysUserDTO, sysUserDTO);
+
+			if (StringUtils.isNotBlank(user.getPassword())) {
+				String salt = ShiroKit.getRandomSalt(16);
+				user.setSalt(salt);
+				String pwd = ShiroKit.md5(user.getPassword(), user.getLoginName() + salt);
+				user.setPassword(pwd);
+			} else {
+				user.setPassword(null);
+			}
+
+			user.setCreateUserId(ShiroKit.getUser().getId());
+			boolean b = sysUserService.updateByVo(user);
+			if (b) {
+				return ResultMap.ok("编辑成功！");
+			} else {
+				return ResultMap.ok("编辑失败！");
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return ResultMap.error("编辑失败，请联系管理员");
+		}
+	}
+
+	/**
+	 * 批量删除
+	 */
+	@ApiOperation(value = "批量删除用户", notes = "删除用户")
+	@PostMapping("/delete")
+	@RequiresPermissions("sys/user/delete")
+	public ResultMap deleteBatchIds(@RequestBody Long[] ids) {
+		try {
+			if (ArrayUtils.contains(ids, KtfConstant.SUPER_ADMIN)) {
+				return ResultMap.error("系统管理员不能删除");
+			}
+			if (ArrayUtils.contains(ids, ShiroKit.getUser().getId())) {
+				return ResultMap.error("当前用户不能删除");
+			}
+
+			Boolean b = sysUserService.deleteBatch(ids);
+			if (b) {
+				return ResultMap.ok("删除成功！");
+			} else {
+				return ResultMap.ok("删除失败！");
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return ResultMap.error("批量删除失败，请联系管理员");
+		}
+	}
+
+	/**
+	 * 用户选择树
+	 * 
+	 * @return
+	 */
+	@ApiOperation(value = "用户选择树", notes = "用户选择树")
+	@GetMapping("/getUserTree")
+	public ResultMap getUserTree() {
+		try {
+			List<Map<String, Object>>	list		= sysUserService.selectUserTree();
+			List<SelectNode>			nodeList	= list.stream().map(baseUser -> {
+														SelectNode node = new SelectNode();
+														node.setLabel(baseUser.get("name").toString());
+														node.setValue(baseUser.get("id").toString());
+														return node;
+													}).collect(Collectors.toList());
+
+			return ResultMap.ok().put("list", nodeList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultMap.error("运行异常，请联系管理员");
+		}
+	}
+
+}

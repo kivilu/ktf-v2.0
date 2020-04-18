@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kivi.dashboard.enterprise.mapper.EnterpriseExMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kivi.dashboard.enterprise.entity.Enterprise">
+        <id column="id" property="id" />
+        <result column="application_id" property="applicationId" />
+        <result column="prefix" property="prefix" />
+        <result column="business_license_number" property="businessLicenseNumber" />
+        <result column="enterprise_code" property="enterpriseCode" />
+        <result column="enterprise_name" property="enterpriseName" />
+        <result column="industry_id" property="industryId" />
+        <result column="area_id" property="areaId" />
+        <result column="enterprise_type" property="enterpriseType" />
+        <result column="telephone" property="telephone" />
+        <result column="email" property="email" />
+        <result column="legal_person" property="legalPerson" />
+        <result column="main_person" property="mainPerson" />
+        <result column="main_person_mobile" property="mainPersonMobile" />
+        <result column="map_x" property="mapX" />
+        <result column="map_y" property="mapY" />
+        <result column="map_z" property="mapZ" />
+        <result column="zip_code" property="zipCode" />
+        <result column="address" property="address" />
+        <result column="is_sync" property="isSync" />
+        <result column="status" property="status" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="gmt_update" property="gmtUpdate" />
+        <result column="create_user" property="createUser" />
+        <result column="update_user" property="updateUser" />
+    </resultMap>
+    
+    <!-- 多表页面信息查询 -->
+    <select id="selectEnterprisePage" parameterType="map" resultType="map">
+        SELECT DISTINCT
+	        t.id,
+	        t.application_id AS applicationId
+	        t.prefix,
+	        t.business_license_number AS businessLicenseNumber,
+	        t.enterprise_code AS enterpriseCode,
+	        t.enterprise_name AS enterpriseName,
+	        t.industry_id AS industryId,
+	        t.area_id AS areaId,
+	        t.enterprise_type AS enterpriseType,
+	        t.telephone,
+	        t.email,
+	        t.legal_person AS legalPerson,
+	        t.main_person AS mainPerson,
+	        t.main_person_mobile AS mainPersonMobile,
+	        t.map_x AS mapX,
+	        t.map_y AS mapY,
+	        t.map_z AS mapZ,
+	        t.address AS address,
+	        t.is_sync AS isSync,
+	        t.`status`,
+	        t.gmt_create AS gmtCreate,
+	        t.gmt_update AS gmtUpdate,
+	        t.create_user AS createUser,
+	        t.update_user AS updateUser,
+	        t4.`name` AS areaName,
+        	t5.`name` AS industryName
+        FROM
+        	ktf_enterprise t
+        LEFT JOIN ktf_sys_user t2 ON t.id = t2.enterprise_id
+        LEFT JOIN ktf_sys_user_enterprise t3 ON t2.id = t3.user_id
+        LEFT JOIN ktf_sys_region t4 ON t.area_id = t4.id
+        LEFT JOIN ktf_sys_industry t5 ON t.industry_id = t5.id
+        <where>
+            <if test="params.enterpriseId!=null and params.enterpriseId!=''">
+                t.id=#{params.enterpriseId}
+            </if>
+            <if test="params.enterpriseCode!=null and params.enterpriseCode!=''">
+                and t.enterprise_code=#{params.enterpriseCode}
+            </if>
+            <if test="params.enterpriseType!=null and params.enterpriseType!=''">
+                and t.enterprise_type=#{params.enterpriseType}
+            </if>
+            <if test="params.enterpriseName!=null and params.enterpriseName!=''">
+                and t.enterprise_name like '%${params.enterpriseName}%'
+            </if>
+            <if test="params.areaCode!=null and params.areaCode!=''">
+                and t.area_id=#{params.areaId}
+            </if>
+            <if test="params.industryCode!=null and params.industryCode!=''">
+                and t.industry_id=#{params.industrId}
+            </if>
+            <if test="params.userId!=null and params.userId!=''">
+                and t2.id=#{params.userId}
+            </if>
+        </where>
+    </select>
+    
+    <!-- 多表页面信息查询 -->
+    <select id="selectEnterpriseList" parameterType="map" resultType="map">
+        SELECT DISTINCT
+	        t.id,
+	        t.application_id AS applicationId
+	        t.prefix,
+	        t.business_license_number AS businessLicenseNumber,
+	        t.enterprise_code AS enterpriseCode,
+	        t.enterprise_name AS enterpriseName,
+	        t.industry_id AS industryId,
+	        t.area_id AS areaId,
+	        t.enterprise_type AS enterpriseType,
+	        t.telephone,
+	        t.email,
+	        t.legal_person AS legalPerson,
+	        t.main_person AS mainPerson,
+	        t.main_person_mobile AS mainPersonMobile,
+	        t.map_x AS mapX,
+	        t.map_y AS mapY,
+	        t.map_z AS mapZ,
+	        t.address AS address,
+	        t.is_sync AS isSync,
+	        t.`status`,
+	        t.gmt_create AS gmtCreate,
+	        t.gmt_update AS gmtUpdate,
+	        t.create_user AS createUser,
+	        t.update_user AS updateUser,
+	        t4.`name` AS areaName,
+        	t5.`name` AS industryName
+        FROM
+        	ktf_enterprise t
+        LEFT JOIN ktf_sys_user t2 ON t.id = t2.enterprise_id
+        LEFT JOIN ktf_sys_user_enterprise t3 ON t2.id = t3.user_id
+        LEFT JOIN ktf_sys_region t4 ON t.area_id = t4.id
+        LEFT JOIN ktf_sys_industry t5 ON t.industry_id = t5.id
+        <where>
+            <if test="params.enterpriseId!=null and params.enterpriseId!=''">
+                t.id=#{params.enterpriseId}
+            </if>
+            <if test="params.enterpriseCode!=null and params.enterpriseCode!=''">
+                and t.enterprise_code=#{params.enterpriseCode}
+            </if>
+            <if test="params.enterpriseType!=null and params.enterpriseType!=''">
+                and t.enterprise_type=#{params.enterpriseType}
+            </if>
+            <if test="params.enterpriseName!=null and params.enterpriseName!=''">
+                and t.enterprise_name like '%${params.enterpriseName}%'
+            </if>
+            <if test="params.areaCode!=null and params.areaCode!=''">
+                and t.area_id=#{params.areaId}
+            </if>
+            <if test="params.industryCode!=null and params.industryCode!=''">
+                and t.industry_id=#{params.industrId}
+            </if>
+            <if test="params.userId!=null and params.userId!=''">
+                and t2.id=#{params.userId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

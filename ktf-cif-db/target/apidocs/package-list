@@ -1,4 +1,2 @@
-com.kivi.cif.entity
 com.kivi.cif.mapper
-com.kivi.cif.service
 com.kivi.cif.service.impl

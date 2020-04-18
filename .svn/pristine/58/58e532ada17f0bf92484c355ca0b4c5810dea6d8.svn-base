@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kivi.dashboard.sys.mapper.SysResourceExMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kivi.dashboard.sys.entity.SysResource">
+        <id column="id" property="id" />
+        <result column="application_id" property="applicationId" />
+        <result column="parent_id" property="parentId" />
+        <result column="name" property="name" />
+        <result column="url" property="url" />
+        <result column="description" property="description" />
+        <result column="icon" property="icon" />
+        <result column="seq" property="seq" />
+        <result column="resource_type" property="resourceType" />
+        <result column="hidden" property="hidden" />
+        <result column="status" property="status" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="gmt_update" property="gmtUpdate" />
+        <result column="create_user" property="createUser" />
+        <result column="update_user" property="updateUser" />
+    </resultMap>
+    
+    
+    <resultMap id="ResouceVoResultMap" type="com.kivi.dashboard.sys.entity.vo.ResourceVo">
+        <id column="id" property="id" />
+        <result column="application_id" property="applicationId" />
+        <result column="parent_id" property="parentId" />
+        <result column="name" property="name" />
+        <result column="url" property="url" />
+        <result column="description" property="description" />
+        <result column="icon" property="icon" />
+        <result column="seq" property="seq" />
+        <result column="resource_type" property="resourceType" />
+        <result column="status" property="status" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="gmt_update" property="gmtUpdate" />
+        <result column="create_user" property="createUser" />
+        <result column="update_user" property="updateUser" />
+        <result column="parent_name" property="parentName" />
+    </resultMap>
+    
+    
+    <select id="selectResourceList" parameterType="map" resultMap="ResouceVoResultMap">
+        SELECT
+	        t.*,
+	        t2.`name` AS parent_name
+        FROM
+        	Ktf_sys_resource t
+        LEFT JOIN
+        	ktf_sys_resource t2 ON t.parent_id = t2.id
+        <where>
+            <if test="id!=null and id!=''">
+                t.id=#{id}
+            </if>
+            <if test="parentId!=null and parentId!=''">
+                and t.parent_id=#{parentId}
+            </if>
+            <if test="resourceType!=null and resourceType!=''">
+                and t.resource_type=#{resourceType}
+            </if>
+        </where>
+        order by t.seq asc
+    </select>
+    
+
+</mapper>

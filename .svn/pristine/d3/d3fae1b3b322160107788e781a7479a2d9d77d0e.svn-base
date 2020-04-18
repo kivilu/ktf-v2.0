@@ -1,0 +1,257 @@
+package com.kivi.dashboard.aspect;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.alibaba.fastjson.JSON;
+import com.kivi.dashboard.enums.SysLogType;
+import com.kivi.dashboard.service.SysLogSignService;
+import com.kivi.dashboard.shiro.ShiroKit;
+import com.kivi.dashboard.shiro.ShiroUser;
+import com.kivi.dashboard.shiro.form.LoginForm;
+import com.kivi.dashboard.sys.entity.SysDic;
+import com.kivi.dashboard.sys.entity.SysLog;
+import com.kivi.dashboard.sys.entity.SysLogEx;
+import com.kivi.dashboard.sys.service.ISysDicService;
+import com.kivi.dashboard.sys.service.ISysLogService;
+import com.kivi.framework.constant.KtfError;
+import com.kivi.framework.constant.enums.BasicType;
+import com.kivi.framework.converter.BeanConverter;
+import com.kivi.framework.dto.JwtUserDTO;
+import com.kivi.framework.model.ResultMap;
+import com.kivi.framework.util.kit.CollectionKit;
+import com.kivi.framework.util.kit.StrKit;
+import com.kivi.framework.web.jwt.JwtKit;
+import com.kivi.framework.web.util.kit.HttpKit;
+import com.vip.vjtools.vjkit.time.ClockUtil;
+
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * @description AOP 日志
+ */
+@Aspect
+@Component
+@Slf4j
+public class SysLogAspect {
+
+	@Autowired
+	private ISysDicService			sysDicService;
+
+	@Autowired
+	private ISysLogService			logService;
+
+	@Autowired(required = false)
+	private SysLogSignService		sysLogSignService;
+
+	private ThreadLocal<SysLogEx>	sysLogExs	= new ThreadLocal<>();
+
+	// @Pointcut("within(@org.springframework.stereotype.Controller *)")
+	@Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
+	public void cutController() {
+
+	}
+
+	@Before("cutController()")
+	public void doBefore(JoinPoint joinPoint) {
+		if (log.isTraceEnabled()) {
+			HttpServletRequest	request	= HttpKit.getRequest();
+			String				method	= request.getMethod();
+			Object[]			args	= joinPoint.getArgs();
+
+			log.trace("ip={}\r\nurl={}\r\nmethod={}\r\nclass_method={}\r\nargs={}",
+					// ip
+					HttpKit.getRemoteAddress(request),
+					// URL
+					request.getRequestURL(),
+					// method
+					method,
+					// 类方法
+					StringUtils.joinWith(".", joinPoint.getSignature().getDeclaringTypeName(),
+							joinPoint.getSignature().getName()),
+					// 参数
+					args);
+		}
+	}
+
+	@Around("cutController()")
+	public Object recordSysLog(ProceedingJoinPoint point) throws Throwable {
+		SysLogEx sysLogEx = new SysLogEx();
+		sysLogExs.set(sysLogEx);
+		String methodName = point.getSignature().getName();
+		sysLogEx.getSysLog().setMethod(methodName);
+		sysLogEx.getSysLog().setClassName(point.getTarget().getClass().getName());
+		Object[] params = point.getArgs();
+
+		if (StringUtils.equals("login", methodName) && CollectionKit.isNotEmpty(params)) {
+			Object obj = params[0];
+			if (obj instanceof LoginForm) {
+				LoginForm loginForm = (LoginForm) params[0];
+				sysLogEx.getSysLog().setLoginName(loginForm.getUsername());
+			}
+		}
+
+		log.trace("====================params:{}", params);
+
+		// 获取请求参数
+		Map<String, Object> reqPamras = HttpKit.getRequestParameters();
+		// 获取方法参数
+		if (params != null && params.length > 0) {
+			int index = 0;
+			for (Object obj : params) {
+				if (obj == null)
+					continue;
+				if (BasicType.isBasicType(obj.getClass())) {
+					reqPamras.put(StrKit.join("", "param", index++), obj);
+				} else if (obj.getClass().isArray()) {
+					reqPamras.put(StrKit.join("", "param", index++), obj);
+				} else {
+					reqPamras.putAll(BeanConverter.beanToMap(obj));
+				}
+			}
+
+		}
+		log.trace("====================reqPamras:{}", reqPamras);
+
+		sysLogEx.getSysLog().setOperationSign((String) reqPamras.remove("sign"));
+		sysLogEx.getSysLog().setParams(JSON.toJSONString(reqPamras));
+		sysLogEx.getSysLog().setClientIp(HttpKit.getRemoteAddress());
+
+		return point.proceed();
+	}
+
+	@AfterThrowing(throwing = "ex", pointcut = "cutController()")
+	public void doAfterThrowing(Throwable ex) {
+		log.error("Controller执行异常", ex);
+		writeLog(ResultMap.error(ex.getMessage()), sysLogExs.get());
+	}
+
+	@AfterReturning(returning = "object", pointcut = "cutController()")
+	public void doAfterReturning(JoinPoint joinPoint, Object object) {
+		SysLogEx sysLogEx = sysLogExs.get();
+		if (object != null) {
+			log.info("response={}", object.toString());
+		} else {
+			log.info("response=");
+		}
+
+		writeLog(object, sysLogEx);
+
+	}
+
+	@After("cutController()")
+	public void doAfter() {
+		SysLogEx	sysLogEx	= sysLogExs.get();
+		long		totalMillis	= ClockUtil.elapsedTime(sysLogEx.getStartTime());
+		sysLogEx.setTotalMillis(totalMillis);
+		log.info("----执行时间：{}毫秒----", totalMillis);
+	}
+
+	private Boolean writeLog(Object object, SysLogEx sysLogEx) {
+		SysLog sysLog = sysLogEx.getSysLog();
+		sysLog.setType(logType(sysLog.getMethod()).getCode());
+
+		if (isWriteLog(sysLog.getMethod())) {
+			try {
+				ShiroUser shiroUser = ShiroKit.getUser();
+				if (null != shiroUser) {
+					String loginName = shiroUser.getLoginName();
+					sysLog.setUserName(shiroUser.getName());
+					sysLog.setLoginName(loginName);
+					sysLog.setUserType(shiroUser.getUserType());
+				}
+
+				if (object instanceof ResultMap) {
+					ResultMap resultMap = (ResultMap) object;
+					sysLog.setResult(KtfError.SUCCESS == resultMap.code() ? "成功" : resultMap.msg());
+					if ((KtfError.SUCCESS == resultMap.code() || KtfError.ACCEPTED == resultMap.code())
+							&& StrKit.equals("login", sysLog.getMethod())) {
+						String		token	= (String) resultMap.get("token");
+						JwtUserDTO	jwtUser	= JwtKit.getJwtUser(token);
+						sysLog.setUserName(jwtUser.getName());
+						sysLog.setUserType(jwtUser.getUserType());
+					}
+				}
+
+				sysLog.setOperation(operation(sysLog.getClassName(), sysLog.getMethod()));
+				sysLog.setGmtCreate(LocalDateTime.now());
+
+				SysDic dic = sysDicService.getByVarCode(sysLog.getClassName(), "LOG_FOR_AUDIT");
+				if (dic != null) {
+					List<String>		patterns	= sysDicService.listVarCode(dic.getVarCode(), dic.getParentId());
+					Optional<String>	op			= patterns.stream()
+							.filter(pattern -> StringUtils.contains(sysLog.getMethod(), pattern)).findAny();
+					if (op.isPresent()) {
+						sysLog.setType(SysLogType.Signed.getCode());
+					}
+				}
+
+				sysLog.setTime(sysLogEx.getTotalMillis());
+
+				logService.save(sysLog);
+
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private SysLogType logType(String method) {
+		String[] pattern = { "login", "logout" };
+
+		return StringUtils.containsAny(method, pattern) ? SysLogType.Login : SysLogType.Operate;
+	}
+
+	private boolean isWriteLog(String method) {
+		List<String> patterns = sysDicService.listVarCode("METHOD_NAME_MAP");
+
+		return patterns.stream().filter(pattern -> StringUtils.contains(method, pattern)).findAny().isPresent();
+	}
+
+	private String signLog(SysLog sysLog) {
+		SysDic dic = sysDicService.getByVarCode(sysLog.getClassName(), "LOG_OF_SIGN");
+		if (dic == null)
+			return null;
+
+		List<String>		patterns	= sysDicService.listVarCode(dic.getVarCode(), dic.getParentId());
+		Optional<String>	op			= patterns.stream()
+				.filter(pattern -> StringUtils.contains(sysLog.getMethod(), pattern)).findAny();
+
+		String				sign		= null;
+		if (op.isPresent() && sysLogSignService != null) {
+			sign = sysLogSignService.sign(sysLog);
+			sysLog.setOperationSign(sign);
+			sysLog.setType(SysLogType.Signed.getCode());
+		}
+
+		return sign;
+	}
+
+	String operation(String className, String methodName) {
+		SysDic	dicModule	= sysDicService.getByVarCode(className, "MODULE_NAME_MAP");
+		SysDic	dicMethod	= sysDicService.getByVarCode(methodName, "METHOD_NAME_MAP");
+
+		return StrKit.join("", dicModule == null ? "" : dicModule.getVarName(),
+				dicMethod == null ? "" : dicMethod.getVarName());
+	}
+
+}

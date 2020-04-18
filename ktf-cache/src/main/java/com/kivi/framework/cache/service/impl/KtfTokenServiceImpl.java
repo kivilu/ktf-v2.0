@@ -42,7 +42,7 @@ public class KtfTokenServiceImpl implements KtfTokenService {
 
 	@Override
 	public <T> T cache(String key) {
-		log.trace("缓存：name={}, key={}_{}不存在", KtfCache.KTF_TOKEN, KtfCache.KTF_TOKEN, key);
+		log.trace("获取缓存：name={}, key={}_{}", KtfCache.KTF_TOKEN, KtfCache.KTF_TOKEN, key);
 		return CacheKit.me().get(KtfCache.KTF_TOKEN, key);
 	}
 
@@ -59,6 +59,18 @@ public class KtfTokenServiceImpl implements KtfTokenService {
 	public <T> T evict(String key) {
 		log.trace("清除缓存：name={}, key={}_{}", KtfCache.KTF_TOKEN, KtfCache.KTF_TOKEN, key);
 		return CacheKit.me().remove(KtfCache.KTF_TOKEN, key);
+	}
+
+	@Override
+	public void cacheJwt(String key, String token, String jwtToken, long seconds) {
+		CacheKit.me().put(KtfCache.KTF_TOKEN, key, token, seconds);
+		CacheKit.me().put(KtfCache.KTF_TOKEN, "jwt-" + key, jwtToken, seconds);
+	}
+
+	@Override
+	public void evictJwt(String key) {
+		log.trace("清除缓存：name={}, key={}_{}", KtfCache.KTF_TOKEN, KtfCache.KTF_TOKEN, key);
+		CacheKit.me().remove(KtfCache.KTF_TOKEN, key, "jwt-" + key);
 	}
 
 }

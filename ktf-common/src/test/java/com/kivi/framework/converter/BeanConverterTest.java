@@ -1,8 +1,26 @@
 package com.kivi.framework.converter;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.Test;
 
+import com.kivi.framework.dto.KtfBaseReq;
+
 public class BeanConverterTest {
+
+	@Test
+	public void testCopyProperties() {
+		KtfBaseReq<Integer>	srcDto	= new KtfBaseReq<>();
+		KtfBaseReq<Integer>	dstDto	= new KtfBaseReq<>();
+		srcDto.setReqBody(1);
+		dstDto.setReqBody(2);
+
+		BeanConverter.copyProperties(srcDto, dstDto);
+		System.out.println("srcDto:" + srcDto);
+		System.out.println("dstDto:" + dstDto);
+
+		assertEquals(1, dstDto.getReqBody());
+	}
 
 	@Test
 	public void testGetModelMapper() {
@@ -30,14 +48,7 @@ public class BeanConverterTest {
 
 	@Test
 	public void testConvertClassOfTObject() {
-		// WarpReqDTO<Boolean> reqDTO = new WarpReqDTO<>(1L, true);
-		// WarpReqDTO<Boolean> copyReqDTO = BeanConverter.convert(WarpReqDTO.class,
-		// reqDTO);
-		// System.out.println("copyReqDTO:" + copyReqDTO);
 
-		// WarpRspDTO<Boolean> copyRspDTO = BeanConverter.convert(WarpRspDTO.class,
-		// reqDTO);
-		// System.out.println("copyRspDTO:" + copyRspDTO);
 	}
 
 }

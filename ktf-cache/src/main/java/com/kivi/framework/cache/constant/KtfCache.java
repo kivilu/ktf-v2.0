@@ -21,6 +21,20 @@ public interface KtfCache {
 	public final static String		CifCustomerAuths	= "ktf.CifCustomerAuths";
 
 	/**
+	 * SysDic缓存
+	 */
+	public final static String		SysDic				= "ktf.SysDic";
+
+	/**
+	 * SysResource缓存
+	 */
+	public final static String		SysResource			= "ktf.SysResource";
+
+	/**
+	 * SysUser 缓存
+	 */
+	public final static String		SysUser				= "ktf.SysUser";
+	/**
 	 * 缓存名数组
 	 */
 	public final static String[]	KTF_CACHE_NAMES		= { KTF_TOKEN };

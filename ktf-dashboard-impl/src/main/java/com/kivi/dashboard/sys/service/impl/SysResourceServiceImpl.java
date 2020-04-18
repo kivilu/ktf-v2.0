@@ -1,10 +1,14 @@
 package com.kivi.dashboard.sys.service.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +26,7 @@ import com.kivi.dashboard.sys.service.ISysResourceService;
 import com.kivi.dashboard.sys.service.ISysUserService;
 import com.kivi.db.page.PageParams;
 import com.kivi.framework.annotation.KtfTrace;
+import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.constant.enums.CommonEnum;
 import com.kivi.framework.constant.enums.KtfStatus;
@@ -54,6 +59,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 	/**
 	 * 根据ID查询资源
 	 */
+	@Cacheable(value = KtfCache.SysResource, key = "caches[0].name+'_dto_'+#id", unless = "#result == null")
 	@KtfTrace("根据ID查询资源")
 	@Override
 	public SysResourceDTO getDTOById(Long id) {
@@ -66,6 +72,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 	/**
 	 * 新增资源
 	 */
+	@CacheEvict(cacheNames = { KtfCache.SysResource })
 	@KtfTrace("新增资源")
 	@Override
 	public Boolean save(SysResourceDTO sysResourceDTO) {
@@ -77,11 +84,32 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 	/**
 	 * 修改
 	 */
+	@CacheEvict(cacheNames = { KtfCache.SysResource })
 	@KtfTrace("修改资源")
 	@Override
 	public Boolean updateById(SysResourceDTO sysResourceDTO) {
 		SysResource entity = BeanConverter.convert(SysResource.class, sysResourceDTO);
 		return super.updateById(entity);
+	}
+
+	/**
+	 * 根据ID删除资源
+	 */
+	@CacheEvict(cacheNames = { KtfCache.SysResource })
+	@KtfTrace("删除资源")
+	@Override
+	public boolean removeById(Serializable id) {
+		return super.removeById(id);
+	}
+
+	/**
+	 * 根据IDs删除资源
+	 */
+	@CacheEvict(cacheNames = { KtfCache.SysResource })
+	@KtfTrace("删除资源")
+	@Override
+	public boolean removeByIds(Collection<? extends Serializable> idList) {
+		return super.removeByIds(idList);
 	}
 
 	/**
@@ -176,6 +204,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
 	}
 
+	@Cacheable(value = KtfCache.SysResource, key = "caches[0].name+'_list_'+#id", unless = "#result == null")
 	@KtfTrace("根据用户ID查询对应的资源列表")
 	@Override
 	public List<ResourceVo> selectUserResourceListByUserId(Long userId) {

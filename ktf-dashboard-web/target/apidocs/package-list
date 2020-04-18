@@ -1,5 +1,5 @@
 com.kivi.dashboard.auth
-com.kivi.dashboard.cif.controller
+com.kivi.dashboard.base
 com.kivi.dashboard.enterprise.controller
 com.kivi.dashboard.kaptcha
 com.kivi.dashboard.service.impl

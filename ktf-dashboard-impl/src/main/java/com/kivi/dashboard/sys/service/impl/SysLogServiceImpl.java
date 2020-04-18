@@ -160,7 +160,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
 				query.eq(SysLog.DB_USER_TYPE, userType);
 
 			if (StringUtils.isNotBlank(operation))
-				query.like(SysLog.DB_OPERATION, key);
+				query.like(SysLog.DB_OPERATION, operation);
 
 			if (startTime != null)
 				query.ge(SysLog.DB_GMT_CREATE, startTime);

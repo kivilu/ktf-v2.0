@@ -1,12 +1,6 @@
 com\kivi\cif\mapper\CifCustomerAuthsMapper.class
 com\kivi\cif\service\impl\CifCustomerServiceImpl.class
-com\kivi\cif\service\CifCertsService.class
-com\kivi\cif\entity\CifCustomerAuths.class
 com\kivi\cif\mapper\CifCertsMapper.class
-com\kivi\cif\entity\CifCerts.class
-com\kivi\cif\service\CifCustomerService.class
-com\kivi\cif\service\CifCustomerAuthsService.class
-com\kivi\cif\entity\CifCustomer.class
 com\kivi\cif\service\impl\CifCustomerAuthsServiceImpl.class
 com\kivi\cif\service\impl\CifCertsServiceImpl.class
 com\kivi\cif\mapper\CifCustomerMapper.class

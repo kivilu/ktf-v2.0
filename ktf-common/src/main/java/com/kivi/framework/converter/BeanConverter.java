@@ -33,6 +33,7 @@ import org.modelmapper.Conditions;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.BeanUtils;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.cglib.beans.BeanMap;
 
@@ -90,20 +91,8 @@ public class BeanConverter {
 	 * @param srcObj
 	 * @param destObj
 	 */
-	public static void copyProperties(Object srcObj, Object destObj) {
-		String		key		= genKey(srcObj.getClass(), destObj.getClass());
-		BeanCopier	copier	= null;
-		if (!BEAN_COPIERS.containsKey(key)) {
-			copier = BeanCopier.create(srcObj.getClass(), destObj.getClass(), false);
-			BEAN_COPIERS.put(key, copier);
-		} else {
-			copier = BEAN_COPIERS.get(key);
-		}
-		copier.copy(srcObj, destObj, null);
-	}
-
-	private static String genKey(Class<?> srcClazz, Class<?> destClazz) {
-		return srcClazz.getName() + destClazz.getName();
+	public static void copyProperties(Object source, Object target) {
+		BeanUtils.copyProperties(source, target);
 	}
 
 	/**

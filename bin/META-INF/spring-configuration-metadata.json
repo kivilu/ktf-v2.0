@@ -1,0 +1,19 @@
+{
+  "groups": [
+    {
+      "name": "ktf.cif",
+      "type": "com.kivi.cif.properties.CifProperties",
+      "sourceType": "com.kivi.cif.properties.CifProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "ktf.cif.dubbo-service-version",
+      "type": "java.lang.String",
+      "description": "dubbo service 版本号",
+      "sourceType": "com.kivi.cif.properties.CifProperties",
+      "defaultValue": "1.0.0"
+    }
+  ],
+  "hints": []
+}

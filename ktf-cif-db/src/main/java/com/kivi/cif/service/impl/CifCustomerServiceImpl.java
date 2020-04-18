@@ -80,7 +80,7 @@ public class CifCustomerServiceImpl extends ServiceImpl<CifCustomerMapper, CifCu
 	/**
 	 * 修改
 	 */
-	@CacheEvict(allEntries = true)
+	@CacheEvict()
 	@KtfTrace("修改客户信息")
 	@Override
 	public Boolean updateById(CifCustomerDTO cifCustomerDTO) {

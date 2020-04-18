@@ -15,6 +15,7 @@ com\kivi\dashboard\sys\service\ISysResourceService.class
 com\kivi\dashboard\sys\service\ISysUserRoleService.class
 com\kivi\dashboard\enterprise\service\IEnterpriseDepartmentService.class
 com\kivi\dashboard\sys\service\ISysSmsService.class
+com\kivi\dashboard\sys\service\SysApi3rdpartyService.class
 com\kivi\dashboard\sys\service\ISysRoleService.class
 com\kivi\dashboard\sys\service\ISysUserTokenService.class
 com\kivi\dashboard\sys\service\ISysApplicationService.class

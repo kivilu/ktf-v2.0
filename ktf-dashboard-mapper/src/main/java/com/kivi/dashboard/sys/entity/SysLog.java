@@ -33,7 +33,7 @@ public class SysLog extends Model<SysLog> {
 	/**
 	 * 主键id
 	 */
-	@TableId(value = "id", type = IdType.ID_WORKER)
+	@TableId(value = "id", type = IdType.ASSIGN_ID)
 	private Long				id;
 	/**
 	 * 客户姓名
@@ -102,6 +102,12 @@ public class SysLog extends Model<SysLog> {
 	 */
 	@TableField("operation_sign")
 	private String				operationSign;
+
+	/**
+	 * 日志操作管理记录ID
+	 */
+	@TableField("record_ids")
+	private String				recordIds;
 
 	public static final String	DB_ID				= "id";
 	public static final String	ID					= "id";

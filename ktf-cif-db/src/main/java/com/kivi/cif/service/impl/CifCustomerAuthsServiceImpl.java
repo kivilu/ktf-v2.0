@@ -106,7 +106,7 @@ public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMap
 	 * 修改
 	 */
 	@KtfTrace("修改客户验证")
-	@Caching(evict = { @CacheEvict(allEntries = true) })
+	@Caching(evict = { @CacheEvict() })
 
 	@Override
 	public Boolean updateById(CifCustomerAuthsDTO cifCustomerAuthsDTO) {
@@ -114,7 +114,7 @@ public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMap
 		return super.updateById(entity);
 	}
 
-	@CacheEvict(allEntries = true)
+	@CacheEvict()
 	@Override
 	public boolean removeById(Serializable id) {
 		return super.removeById(id);
