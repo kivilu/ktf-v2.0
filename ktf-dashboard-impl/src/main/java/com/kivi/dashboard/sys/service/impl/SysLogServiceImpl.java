@@ -24,6 +24,7 @@ import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.util.kit.DateTimeKit;
 import com.kivi.framework.util.kit.NumberKit;
 import com.kivi.framework.util.kit.ObjectKit;
+import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.vip.vjtools.vjkit.collection.MapUtil;
 
@@ -143,15 +144,15 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
 						SysLog.DB_OPERATION, SysLog.DB_RESULT, SysLog.DB_GMT_CREATE, SysLog.DB_CLIENT_IP)
 				.orderByDesc(SysLog.DB_GMT_CREATE);
 		if (MapUtil.isNotEmpty(pageParams.getRequestMap())) {
-			Object	type		= pageParams.getRequestMap().get(SysLog.TYPE);
+			String	types		= (String) pageParams.getRequestMap().get(SysLog.TYPE);
 			String	key			= (String) pageParams.getRequestMap().get("key");
 			Integer	userType	= NumberKit.toInt(pageParams.getRequestMap().get(SysLog.USER_TYPE));
 			String	operation	= (String) pageParams.getRequestMap().get(SysLog.OPERATION);
 			Date	startTime	= DateTimeKit.parse((String) params.get("startTime"));
 			Date	endTime		= DateTimeKit.parse((String) params.get("endTime"));
 
-			if (type != null)
-				query.eq(SysLog.DB_TYPE, type);
+			if (types != null)
+				query.in(SysLog.DB_TYPE, StrKit.split(types, ','));
 
 			if (StringUtils.isNotBlank(key))
 				query.like(SysLog.DB_LOGIN_NAME, key).or().like(SysLog.DB_USER_NAME, key);

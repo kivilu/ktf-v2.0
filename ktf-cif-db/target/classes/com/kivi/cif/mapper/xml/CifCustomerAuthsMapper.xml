@@ -8,7 +8,6 @@
         <result column="cif_id" property="cifId" />
         <result column="application_id" property="applicationIsd"/>
         <result column="user_type" property="userType" />
-        <result column="biz_code" property="bizCode" />
         <result column="identity_type" property="identityType" />
         <result column="identifier" property="identifier" />
         <result column="credential" property="credential" />

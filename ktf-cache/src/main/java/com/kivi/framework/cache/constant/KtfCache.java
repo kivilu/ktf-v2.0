@@ -34,6 +34,12 @@ public interface KtfCache {
 	 * SysUser 缓存
 	 */
 	public final static String		SysUser				= "ktf.SysUser";
+
+	/**
+	 * SysRole 缓存
+	 */
+	public final static String		SysRole				= "ktf.SysRole";
+
 	/**
 	 * 缓存名数组
 	 */

@@ -41,15 +41,6 @@ public interface SysUserExMapper {
 	 */
 	UserVo selectByLoginName(@Param("loginName") String loginName);
 
-	/*
-	 * 查询用户的所有菜单ID**
-	 * 
-	 * @param userId
-	 * 
-	 * @return
-	 */
-	List<Long> selectResourceIdListByUserId(@Param("userId") Long userId);
-
 	/**
 	 * 查询用户的所有权限
 	 *

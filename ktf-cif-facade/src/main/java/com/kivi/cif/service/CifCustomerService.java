@@ -1,6 +1,5 @@
 package com.kivi.cif.service;
 
-import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -17,6 +16,14 @@ import com.kivi.framework.vo.page.PageInfoVO;
  * @since 2019-10-28
  */
 public interface CifCustomerService extends IService<CifCustomer> {
+
+	/**
+	 * 根据客户号查询客户信息
+	 * 
+	 * @param regPhoneNumber
+	 * @return
+	 */
+	CifCustomer getByCustomerId(String customerId);
 
 	/**
 	 * 根据注册手机号查询客户信息
@@ -40,26 +47,6 @@ public interface CifCustomerService extends IService<CifCustomer> {
 	 * 修改
 	 */
 	Boolean updateById(CifCustomerDTO cifCustomerDTO);
-
-	/**
-	 * 查询列表
-	 */
-	List<CifCustomerDTO> list(CifCustomerDTO cifCustomerDTO);
-
-	/**
-	 * 指定列查询列表
-	 */
-	List<CifCustomerDTO> list(Map<String, Object> params, String... columns);
-
-	/**
-	 * 模糊查询
-	 */
-	List<CifCustomerDTO> listLike(CifCustomerDTO cifCustomerDTO);
-
-	/**
-	 * 指定列模糊查询
-	 */
-	List<CifCustomerDTO> listLike(Map<String, Object> params, String... columns);
 
 	/**
 	 * 分页查询

@@ -68,19 +68,19 @@ public class CommonMetaObjectHandler implements MetaObjectHandler {
 
 	@Override
 	public void insertFill(MetaObject metaObject) {
-		setInsertFieldValByName(gmtCreate, LocalDateTime.now(), metaObject);
-		setInsertFieldValByName(createUid, currentUid(), metaObject);
-		setInsertFieldValByName(gmtUpdate, LocalDateTime.now(), metaObject);
-		setInsertFieldValByName(updateUid, currentUid(), metaObject);
-		setInsertFieldValByName(createUser, currentUser(), metaObject);
-		setInsertFieldValByName(updateUser, currentUser(), metaObject);
+		this.strictInsertFill(metaObject, gmtCreate, LocalDateTime.class, LocalDateTime.now()); // 起始版本 3.3.0(推荐使用)
+		this.strictInsertFill(metaObject, createUid, Long.class, currentUid());
+		this.strictInsertFill(metaObject, gmtUpdate, LocalDateTime.class, LocalDateTime.now());
+		this.strictInsertFill(metaObject, updateUid, Long.class, currentUid());
+		this.strictInsertFill(metaObject, createUser, String.class, currentUser());
+		this.strictInsertFill(metaObject, updateUser, String.class, currentUser());
 	}
 
 	@Override
 	public void updateFill(MetaObject metaObject) {
-		setUpdateFieldValByName(gmtUpdate, LocalDateTime.now(), metaObject);
-		setUpdateFieldValByName(updateUid, currentUid(), metaObject);
-		setInsertFieldValByName(updateUser, currentUser(), metaObject);
+		strictUpdateFill(metaObject, gmtUpdate, LocalDateTime.class, LocalDateTime.now());
+		strictUpdateFill(metaObject, updateUid, Long.class, currentUid());
+		strictUpdateFill(metaObject, updateUser, String.class, currentUser());
 	}
 
 	/**

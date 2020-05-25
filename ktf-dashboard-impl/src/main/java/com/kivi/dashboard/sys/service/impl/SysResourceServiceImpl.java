@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -19,18 +18,20 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.dashboard.sys.dto.SysResourceDTO;
+import com.kivi.dashboard.sys.entity.SysMenu;
 import com.kivi.dashboard.sys.entity.SysResource;
 import com.kivi.dashboard.sys.mapper.SysResourceExMapper;
 import com.kivi.dashboard.sys.mapper.SysResourceMapper;
 import com.kivi.dashboard.sys.service.ISysResourceService;
-import com.kivi.dashboard.sys.service.ISysUserService;
 import com.kivi.db.page.PageParams;
 import com.kivi.framework.annotation.KtfTrace;
+import com.kivi.framework.cache.annotation.KtfCacheEvict;
 import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.constant.enums.CommonEnum;
 import com.kivi.framework.constant.enums.KtfStatus;
 import com.kivi.framework.converter.BeanConverter;
+import com.kivi.framework.util.kit.CollectionKit;
 import com.kivi.framework.util.kit.NumberKit;
 import com.kivi.framework.util.kit.ObjectKit;
 import com.kivi.framework.vo.ResourceVo;
@@ -50,16 +51,14 @@ import com.vip.vjtools.vjkit.collection.MapUtil;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysResource> implements ISysResourceService {
-	@Autowired
-	private ISysUserService		sysUserService;
 
 	@Autowired
-	private SysResourceExMapper	sysResourceExMapper;
+	private SysResourceExMapper sysResourceExMapper;
 
 	/**
 	 * 根据ID查询资源
 	 */
-	@Cacheable(value = KtfCache.SysResource, key = "caches[0].name+'_dto_'+#id", unless = "#result == null")
+	@Cacheable(value = KtfCache.SysResource, key = "caches[0].name+'.dto.'+#id", unless = "#result == null")
 	@KtfTrace("根据ID查询资源")
 	@Override
 	public SysResourceDTO getDTOById(Long id) {
@@ -72,7 +71,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 	/**
 	 * 新增资源
 	 */
-	@CacheEvict(cacheNames = { KtfCache.SysResource })
+	@KtfCacheEvict(cacheNames = { KtfCache.SysResource, KtfCache.SysUser })
 	@KtfTrace("新增资源")
 	@Override
 	public Boolean save(SysResourceDTO sysResourceDTO) {
@@ -84,7 +83,8 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 	/**
 	 * 修改
 	 */
-	@CacheEvict(cacheNames = { KtfCache.SysResource })
+	@KtfCacheEvict(cacheNames = { KtfCache.SysResource, KtfCache.SysUser })
+
 	@KtfTrace("修改资源")
 	@Override
 	public Boolean updateById(SysResourceDTO sysResourceDTO) {
@@ -95,7 +95,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 	/**
 	 * 根据ID删除资源
 	 */
-	@CacheEvict(cacheNames = { KtfCache.SysResource })
+	@KtfCacheEvict(cacheNames = { KtfCache.SysResource, KtfCache.SysUser })
 	@KtfTrace("删除资源")
 	@Override
 	public boolean removeById(Serializable id) {
@@ -105,67 +105,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 	/**
 	 * 根据IDs删除资源
 	 */
-	@CacheEvict(cacheNames = { KtfCache.SysResource })
+	@KtfCacheEvict(cacheNames = { KtfCache.SysResource, KtfCache.SysUser })
 	@KtfTrace("删除资源")
 	@Override
 	public boolean removeByIds(Collection<? extends Serializable> idList) {
 		return super.removeByIds(idList);
-	}
-
-	/**
-	 * 查询列表
-	 */
-	@KtfTrace("查询列表资源")
-	@Override
-	public List<SysResourceDTO> list(SysResourceDTO sysResourceDTO) {
-		Map<String, Object> params = BeanConverter.beanToMap(sysResourceDTO);
-		return this.list(params, new String[0]);
-	}
-
-	/**
-	 * 指定列查询列表
-	 */
-	@KtfTrace("指定列查询列表资源")
-	@Override
-	public List<SysResourceDTO> list(Map<String, Object> params, String... columns) {
-		if (params != null)
-			params.remove(KtfConstant.URL_TIMESTAMP);
-		QueryWrapper<SysResource>	query	= Wrappers.<SysResource>query().select(columns).allEq(true, params, false);
-		List<SysResource>			list	= super.list(query);
-		return BeanConverter.convert(SysResourceDTO.class, list);
-	}
-
-	/**
-	 * 模糊查询
-	 */
-	@KtfTrace("模糊查询资源")
-	@Override
-	public List<SysResourceDTO> listLike(SysResourceDTO applicationDTO) {
-		Map<String, Object> params = BeanConverter.beanToMap(applicationDTO);
-		return listLike(params, new String[0]);
-	}
-
-	/**
-	 * 指定列模糊查询
-	 */
-	@Override
-	public List<SysResourceDTO> listLike(Map<String, Object> params, String... columns) {
-		if (params != null)
-			params.remove(KtfConstant.URL_TIMESTAMP);
-		QueryWrapper<SysResource> query = Wrappers.<SysResource>query().select(columns);
-		if (MapUtil.isNotEmpty(params)) {
-			params.entrySet().stream().forEach(entry -> {
-				if (ObjectKit.isNotEmpty(entry.getValue())) {
-					if (NumberKit.isNumberic(entry.getValue()))
-						query.eq(entry.getKey(), entry.getValue());
-					else
-						query.like(entry.getKey(), entry.getValue());
-				}
-			});
-		}
-
-		List<SysResource> list = super.list(query);
-		return BeanConverter.convert(SysResourceDTO.class, list);
 	}
 
 	/**
@@ -204,7 +148,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
 	}
 
-	@Cacheable(value = KtfCache.SysResource, key = "caches[0].name+'_list_'+#id", unless = "#result == null")
+	@Cacheable(value = KtfCache.SysResource, key = "caches[0].name+'.list.'+#userId", unless = "#result == null")
 	@KtfTrace("根据用户ID查询对应的资源列表")
 	@Override
 	public List<ResourceVo> selectUserResourceListByUserId(Long userId) {
@@ -213,10 +157,59 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 			return selectMenuList(null);
 		}
 		// 用户菜单列表
-		List<Long>			menuIdList	= sysUserService.selectResourceIdListByUserId(userId);
-		List<ResourceVo>	menuList	= selectMenuList(menuIdList);
+		List<SysMenu>		sysMenus	= sysResourceExMapper.selectResourceListByUserId(userId);
+		List<ResourceVo>	menuList	= CollectionKit.newArrayList();
+
+		ResourceVo			pMenu		= null;
+		for (SysMenu child : sysMenus) {
+			if (pMenu == null || pMenu.getId().longValue() != child.getPid().longValue()) {
+				pMenu = new ResourceVo();
+				pMenu.setId(child.getPid());
+				pMenu.setParentId(child.getCatalogPid());
+				pMenu.setName(child.getCatalog());
+				pMenu.setIcon(child.getCatalogIcon());
+				pMenu.setResourceType(CommonEnum.MenuType.CATALOG.getValue());
+				pMenu.setUrl("");
+				pMenu.setList(CollectionKit.newArrayList());
+
+				ResourceVo menu = new ResourceVo();
+				menu.setId(child.getId());
+				menu.setParentId(child.getPid());
+				menu.setName(child.getName());
+				menu.setIcon(child.getIcon());
+				menu.setResourceType(CommonEnum.MenuType.MENU.getValue());
+				menu.setUrl(child.getUrl());
+				pMenu.getList().add(menu);
+
+				menuList.add(pMenu);
+			} else {
+				ResourceVo menu = new ResourceVo();
+				menu.setId(child.getId());
+				menu.setParentId(child.getPid());
+				menu.setName(child.getName());
+				menu.setIcon(child.getIcon());
+				menu.setResourceType(CommonEnum.MenuType.MENU.getValue());
+				menu.setUrl(child.getUrl());
+
+				pMenu.getList().add(menu);
+			}
+
+		}
 
 		return menuList;
+	}
+
+	/**
+	 * 指定列查询列表
+	 */
+	@KtfTrace("指定列查询列表用户角色")
+	@Override
+	public List<SysResourceDTO> list(Map<String, Object> params, String... columns) {
+		if (params != null)
+			params.remove(KtfConstant.URL_TIMESTAMP);
+		QueryWrapper<SysResource>	query	= Wrappers.<SysResource>query().select(columns).allEq(true, params, false);
+		List<SysResource>			list	= super.list(query);
+		return BeanConverter.convert(SysResourceDTO.class, list);
 	}
 
 	@KtfTrace("查询指定ParentId的菜单列表")
@@ -240,8 +233,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 	@Override
 	public List<SysResource> selectListByParentId(Long parentId) {
 		QueryWrapper<SysResource> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq(SysResource.DB_PARENT_ID, parentId).eq(SysResource.DB_STATUS, KtfStatus.ENABLED.code)
-				.orderByAsc(SysResource.DB_SEQ);
+		queryWrapper
+				.select(SysResource.DB_ID, SysResource.DB_PARENT_ID, SysResource.DB_NAME, SysResource.DB_URL,
+						SysResource.DB_ICON, SysResource.DB_RESOURCE_TYPE)
+				.eq(SysResource.DB_PARENT_ID, parentId).eq(SysResource.DB_STATUS, KtfStatus.ENABLED.code)
+				.eq(SysResource.DB_HIDDEN, 0).orderByAsc(SysResource.DB_SEQ);
 		return this.baseMapper.selectList(queryWrapper);
 	}
 
@@ -255,6 +251,8 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 		List<ResourceVo>	result		= BeanConverter.convert(ResourceVo.class, menuList);
 		// 递归获取子菜单
 		selectMenuTreeList(result, menuIdList);
+
+		//
 
 		return result;
 	}
@@ -289,6 +287,12 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 		List<SysResource> list = this.baseMapper.selectList(queryWrapper);
 
 		return BeanConverter.convert(ResourceVo.class, list);
+	}
+
+	@Cacheable(value = KtfCache.SysResource, key = "caches[0].name+'.ids.'+#userId", unless = "#result == null")
+	@Override
+	public List<Long> selectResourceIdListByUserId(Long userId) {
+		return sysResourceExMapper.selectResourceIdListByUserId(userId);
 	}
 
 }

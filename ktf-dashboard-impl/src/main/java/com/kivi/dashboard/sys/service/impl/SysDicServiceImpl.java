@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -23,6 +22,7 @@ import com.kivi.dashboard.sys.mapper.SysDicMapper;
 import com.kivi.dashboard.sys.service.ISysDicService;
 import com.kivi.db.page.PageParams;
 import com.kivi.framework.annotation.KtfTrace;
+import com.kivi.framework.cache.annotation.KtfCacheEvict;
 import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.converter.BeanConverter;
@@ -49,7 +49,7 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 	@Autowired
 	private SysDicExMapper sysDicExMapper;
 
-	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'_'+#varCode+#pVarCode", unless = "#result == null")
+	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'.'+#varCode+#pVarCode", unless = "#result == null")
 	@Override
 	public SysDic getByVarCode(String varCode, String pVarCode) {
 
@@ -58,20 +58,20 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 		return dic;
 	}
 
-	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'_'+#varName+#parentName", unless = "#result == null")
+	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'.'+#varName+#parentName", unless = "#result == null")
 	@Override
 	public SysDic getByVarName(String varName, String parentName) {
 		SysDic dic = sysDicExMapper.getByVarName(varName, parentName);
 		return dic;
 	}
 
-	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'_'+#pCode+#ppId", unless = "#result == null")
+	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'.'+#pCode+#ppId", unless = "#result == null")
 	@Override
 	public List<String> listVarCode(String pCode, Long ppId) {
 		return sysDicExMapper.listVarCode(pCode, ppId);
 	}
 
-	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'_'+#pVarCode", unless = "#result == null")
+	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'.'+#pVarCode", unless = "#result == null")
 	@Override
 	public List<String> listVarCode(String pVarCode) {
 		return sysDicExMapper.listVarCode(pVarCode, 0L);
@@ -80,7 +80,7 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 	/**
 	 * 根据ID查询数据字典
 	 */
-	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'_dto_'+#id", unless = "#result == null")
+	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'.dto.'+#id", unless = "#result == null")
 	@KtfTrace("根据ID查询数据字典")
 	@Override
 	public SysDicDTO getDTOById(Long id) {
@@ -108,7 +108,7 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 	/**
 	 * 修改
 	 */
-	@CacheEvict(value = KtfCache.SysDic)
+	@KtfCacheEvict(cacheNames = KtfCache.SysDic)
 	@KtfTrace("修改数据字典")
 	@Override
 	public Boolean updateById(SysDicDTO sysDicDTO) {
@@ -208,7 +208,7 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 
 	}
 
-	@CacheEvict(value = KtfCache.SysDic)
+	@KtfCacheEvict(cacheNames = KtfCache.SysDic)
 	@Override
 	public Boolean deleteWithChild(Long id) {
 		Boolean						result	= super.removeById(id);

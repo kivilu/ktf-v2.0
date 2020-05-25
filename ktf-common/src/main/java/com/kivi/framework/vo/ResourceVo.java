@@ -3,15 +3,14 @@ package com.kivi.framework.vo;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @ApiModel(value = "ResourceVo对象", description = "菜单")
 @Data
-@EqualsAndHashCode(callSuper = false)
 public class ResourceVo implements Serializable {
 	/**
 	* 
@@ -75,5 +74,15 @@ public class ResourceVo implements Serializable {
 	private Boolean				open;
 
 	private List<ResourceVo>	list;
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.id, this.parentId, this.icon, this.name, this.url, this.resourceType);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return (this.hashCode() == obj.hashCode());
+	}
 
 }

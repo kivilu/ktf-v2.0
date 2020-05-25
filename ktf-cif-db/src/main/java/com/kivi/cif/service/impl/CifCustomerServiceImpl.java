@@ -1,11 +1,9 @@
 package com.kivi.cif.service.impl;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -23,8 +21,8 @@ import com.kivi.cif.mapper.CifCustomerMapper;
 import com.kivi.cif.service.CifCustomerService;
 import com.kivi.db.page.PageParams;
 import com.kivi.framework.annotation.KtfTrace;
+import com.kivi.framework.cache.annotation.KtfCacheEvict;
 import com.kivi.framework.cache.constant.KtfCache;
-import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.util.kit.NumberKit;
 import com.kivi.framework.util.kit.ObjectKit;
@@ -48,7 +46,7 @@ public class CifCustomerServiceImpl extends ServiceImpl<CifCustomerMapper, CifCu
 	/**
 	 * 根据ID查询客户信息
 	 */
-	@Cacheable(key = "caches[0].name+'DTO_'+#id", unless = "#result == null")
+	@Cacheable(key = "caches[0].name+'.DTO.'+#id", unless = "#result == null")
 	@KtfTrace("根据ID查询客户信息")
 	@Override
 	public CifCustomerDTO getDTOById(Long id) {
@@ -60,10 +58,28 @@ public class CifCustomerServiceImpl extends ServiceImpl<CifCustomerMapper, CifCu
 		return dto;
 	}
 
-	@Cacheable(key = "caches[0].name+'_'+#id", unless = "#result == null")
+	@Cacheable(key = "caches[0].name+'.'+#id", unless = "#result == null")
 	@Override
 	public CifCustomer getById(Serializable id) {
 		return super.getById(id);
+	}
+
+	@Cacheable(key = "caches[0].name+'.'+#customerId", unless = "#result == null")
+	@Override
+	public CifCustomer getByCustomerId(String customerId) {
+		LambdaQueryWrapper<CifCustomer> queryWrapper = Wrappers.<CifCustomer>lambdaQuery();
+		queryWrapper.eq(CifCustomer::getCustomerId, customerId);
+
+		return super.getOne(queryWrapper, false);
+	}
+
+	@Cacheable(key = "caches[0].name+'.'+#regPhoneNumber", unless = "#result == null")
+	@Override
+	public CifCustomer getByPhoneNumber(String regPhoneNumber) {
+		LambdaQueryWrapper<CifCustomer> queryWrapper = Wrappers.<CifCustomer>lambdaQuery();
+		queryWrapper.eq(CifCustomer::getRegPhoneNumber, regPhoneNumber);
+
+		return super.getOne(queryWrapper, false);
 	}
 
 	/**
@@ -80,7 +96,7 @@ public class CifCustomerServiceImpl extends ServiceImpl<CifCustomerMapper, CifCu
 	/**
 	 * 修改
 	 */
-	@CacheEvict()
+	@KtfCacheEvict(cacheNames = KtfCache.CifCustomer)
 	@KtfTrace("修改客户信息")
 	@Override
 	public Boolean updateById(CifCustomerDTO cifCustomerDTO) {
@@ -88,60 +104,25 @@ public class CifCustomerServiceImpl extends ServiceImpl<CifCustomerMapper, CifCu
 		return super.updateById(entity);
 	}
 
-	/**
-	 * 查询列表
-	 */
-	@KtfTrace("查询列表客户信息")
+	@KtfCacheEvict(cacheNames = KtfCache.CifCustomer)
+	@KtfTrace("保存客户信息")
 	@Override
-	public List<CifCustomerDTO> list(CifCustomerDTO cifCustomerDTO) {
-		Map<String, Object> params = BeanConverter.beanToMap(cifCustomerDTO);
-		return this.list(params, new String[0]);
+	public boolean save(CifCustomer entity) {
+		return super.save(entity);
 	}
 
-	/**
-	 * 指定列查询列表
-	 */
-	@KtfTrace("指定列查询列表客户信息")
+	@KtfCacheEvict(cacheNames = KtfCache.CifCustomer)
+	@KtfTrace("修改客户信息")
 	@Override
-	public List<CifCustomerDTO> list(Map<String, Object> params, String... columns) {
-		if (params != null)
-			params.remove(KtfConstant.URL_TIMESTAMP);
-		QueryWrapper<CifCustomer>	query	= Wrappers.<CifCustomer>query().select(columns).allEq(true, params, false);
-		List<CifCustomer>			list	= super.list(query);
-		return BeanConverter.convert(CifCustomerDTO.class, list);
+	public boolean updateById(CifCustomer entity) {
+		return super.updateById(entity);
 	}
 
-	/**
-	 * 模糊查询
-	 */
-	@KtfTrace("模糊查询客户信息")
+	@KtfCacheEvict(cacheNames = KtfCache.CifCustomer)
+	@KtfTrace("修改客户信息")
 	@Override
-	public List<CifCustomerDTO> listLike(CifCustomerDTO applicationDTO) {
-		Map<String, Object> params = BeanConverter.beanToMap(applicationDTO);
-		return listLike(params, new String[0]);
-	}
-
-	/**
-	 * 指定列模糊查询
-	 */
-	@Override
-	public List<CifCustomerDTO> listLike(Map<String, Object> params, String... columns) {
-		if (params != null)
-			params.remove(KtfConstant.URL_TIMESTAMP);
-		QueryWrapper<CifCustomer> query = Wrappers.<CifCustomer>query().select(columns);
-		if (MapUtil.isNotEmpty(params)) {
-			params.entrySet().stream().forEach(entry -> {
-				if (ObjectKit.isNotEmpty(entry.getValue())) {
-					if (NumberKit.isNumberic(entry.getValue()))
-						query.eq(entry.getKey(), entry.getValue());
-					else
-						query.like(entry.getKey(), entry.getValue());
-				}
-			});
-		}
-
-		List<CifCustomer> list = super.list(query);
-		return BeanConverter.convert(CifCustomerDTO.class, list);
+	public boolean saveOrUpdate(CifCustomer entity) {
+		return super.saveOrUpdate(entity);
 	}
 
 	/**
@@ -178,15 +159,6 @@ public class CifCustomerServiceImpl extends ServiceImpl<CifCustomerMapper, CifCu
 
 		return pageVo;
 
-	}
-
-	@Cacheable(key = "caches[0].name+'_'+#regPhoneNumber", unless = "#result == null")
-	@Override
-	public CifCustomer getByPhoneNumber(String regPhoneNumber) {
-		LambdaQueryWrapper<CifCustomer> queryWrapper = Wrappers.<CifCustomer>lambdaQuery();
-		queryWrapper.eq(CifCustomer::getRegPhoneNumber, regPhoneNumber);
-
-		return super.getOne(queryWrapper);
 	}
 
 }

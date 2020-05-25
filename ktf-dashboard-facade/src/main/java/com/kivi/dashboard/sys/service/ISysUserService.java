@@ -47,31 +47,6 @@ public interface ISysUserService extends IService<SysUser> {
 	boolean updateByVo(UserVo userVo);
 
 	/**
-	 * 修改
-	 */
-	Boolean updateById(SysUserDTO sysUserDTO);
-
-	/**
-	 * 查询列表
-	 */
-	List<SysUserDTO> list(SysUserDTO sysUserDTO);
-
-	/**
-	 * 指定列查询列表
-	 */
-	List<SysUserDTO> list(Map<String, Object> params, String... columns);
-
-	/**
-	 * 模糊查询
-	 */
-	List<SysUserDTO> listLike(SysUserDTO applicationDTO);
-
-	/**
-	 * 指定列模糊查询
-	 */
-	List<SysUserDTO> listLike(Map<String, Object> params, String... columns);
-
-	/**
 	 * 分页查询
 	 */
 	PageInfoVO<SysUserDTO> page(Map<String, Object> params);
@@ -91,14 +66,6 @@ public interface ISysUserService extends IService<SysUser> {
 	 * @return
 	 */
 	UserVo selectByUserId(Long userId);
-
-	/**
-	 * 查询用户的所有菜单ID
-	 *
-	 * @param userId
-	 * @return
-	 */
-	List<Long> selectResourceIdListByUserId(Long userId);
 
 	/**
 	 * 获取用户权限列表

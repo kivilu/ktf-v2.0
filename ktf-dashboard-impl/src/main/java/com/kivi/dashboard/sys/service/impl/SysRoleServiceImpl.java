@@ -17,12 +17,14 @@ import com.kivi.dashboard.sys.dto.SysRoleDTO;
 import com.kivi.dashboard.sys.entity.SysRole;
 import com.kivi.dashboard.sys.mapper.SysRoleExMapper;
 import com.kivi.dashboard.sys.mapper.SysRoleMapper;
+import com.kivi.dashboard.sys.service.ISysResourceService;
 import com.kivi.dashboard.sys.service.ISysRoleResourceService;
 import com.kivi.dashboard.sys.service.ISysRoleService;
 import com.kivi.dashboard.sys.service.ISysUserRoleService;
-import com.kivi.dashboard.sys.service.ISysUserService;
 import com.kivi.db.page.PageParams;
 import com.kivi.framework.annotation.KtfTrace;
+import com.kivi.framework.cache.annotation.KtfCacheEvict;
+import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.exception.KtfException;
@@ -49,7 +51,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 	SysRoleExMapper					sysRoleExMapper;
 
 	@Autowired
-	private ISysUserService			sysUserService;
+	private ISysResourceService		sysResourceService;
 
 	@Autowired
 	private ISysRoleResourceService	roleResourceService;
@@ -80,6 +82,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 		return ret;
 	}
 
+	@KtfCacheEvict(cacheNames = { KtfCache.SysUser })
 	@Override
 	public Boolean saveByVo(SysRoleDTO sysRoleDTO) {
 		this.save(sysRoleDTO);
@@ -89,6 +92,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 		return roleResourceService.saveOrUpdateRoleResource(sysRoleDTO.getId(), sysRoleDTO.getResourceIdList());
 	}
 
+	@KtfCacheEvict(cacheNames = { KtfCache.SysUser })
 	@Override
 	public Boolean updateByVo(SysRoleDTO sysRoleDTO) {
 		this.updateById(sysRoleDTO);
@@ -101,6 +105,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 	/**
 	 * 修改
 	 */
+	@KtfCacheEvict(cacheNames = { KtfCache.SysUser })
 	@KtfTrace("修改角色")
 	@Override
 	public Boolean updateById(SysRoleDTO sysRoleDTO) {
@@ -209,6 +214,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 	 * 
 	 * @param roleIds
 	 */
+	@KtfCacheEvict(cacheNames = { KtfCache.SysUser })
 	@Override
 	public void deleteBatch(Long[] roleIds) {
 		// 删除角色
@@ -230,7 +236,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 			return;
 		}
 		// 查询用户所拥有的菜单列表
-		List<Long> resourceIdList = sysUserService.selectResourceIdListByUserId(role.getCreateUserId());
+		List<Long> resourceIdList = sysResourceService.selectResourceIdListByUserId(role.getCreateUserId());
 		// 判断是否越权
 		if (!resourceIdList.containsAll(role.getResourceIdList())) {
 			throw new KtfException("新增角色的权限，已超出你的权限范围");

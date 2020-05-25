@@ -39,8 +39,8 @@ import com.kivi.dashboard.sys.service.ISysUserRoleService;
 import com.kivi.dashboard.sys.service.ISysUserService;
 import com.kivi.db.page.PageParams;
 import com.kivi.framework.annotation.KtfTrace;
+import com.kivi.framework.cache.annotation.KtfCacheEvict;
 import com.kivi.framework.cache.constant.KtfCache;
-import com.kivi.framework.component.KtfKit;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.constant.enums.KtfGender;
 import com.kivi.framework.constant.enums.KtfIdentifyType;
@@ -95,6 +95,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	/**
 	 * 根据ID查询用户
 	 */
+	@Cacheable(cacheNames = KtfCache.SysUser, key = "caches[0].name+'.dto.'+#id", unless = "#result == null")
 	@KtfTrace("根据ID查询用户")
 	@Override
 	public SysUserDTO getDTOById(Long id) {
@@ -107,6 +108,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	/**
 	 * 新增用户
 	 */
+	@KtfCacheEvict(cacheNames = KtfCache.SysUser)
 	@KtfTrace("新增用户")
 	@Override
 	public Boolean save(SysUserDTO sysUserDTO) {
@@ -118,67 +120,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	/**
 	 * 修改
 	 */
+	@KtfCacheEvict(cacheNames = { KtfCache.SysUser, KtfCache.SysResource })
 	@KtfTrace("修改用户")
 	@Override
-	public Boolean updateById(SysUserDTO sysUserDTO) {
-		SysUser entity = BeanConverter.convert(SysUser.class, sysUserDTO);
+	public boolean updateById(SysUser entity) {
 		return super.updateById(entity);
-	}
-
-	/**
-	 * 查询列表
-	 */
-	@KtfTrace("查询列表用户")
-	@Override
-	public List<SysUserDTO> list(SysUserDTO sysUserDTO) {
-		Map<String, Object> params = BeanConverter.beanToMap(sysUserDTO);
-		return this.list(params, new String[0]);
-	}
-
-	/**
-	 * 指定列查询列表
-	 */
-	@KtfTrace("指定列查询列表用户")
-	@Override
-	public List<SysUserDTO> list(Map<String, Object> params, String... columns) {
-		if (params != null)
-			params.remove(KtfConstant.URL_TIMESTAMP);
-		QueryWrapper<SysUser>	query	= Wrappers.<SysUser>query().select(columns).allEq(true, params, false);
-		List<SysUser>			list	= super.list(query);
-		return BeanConverter.convert(SysUserDTO.class, list);
-	}
-
-	/**
-	 * 模糊查询
-	 */
-	@KtfTrace("模糊查询用户")
-	@Override
-	public List<SysUserDTO> listLike(SysUserDTO applicationDTO) {
-		Map<String, Object> params = BeanConverter.beanToMap(applicationDTO);
-		return listLike(params, new String[0]);
-	}
-
-	/**
-	 * 指定列模糊查询
-	 */
-	@Override
-	public List<SysUserDTO> listLike(Map<String, Object> params, String... columns) {
-		if (params != null)
-			params.remove(KtfConstant.URL_TIMESTAMP);
-		QueryWrapper<SysUser> query = Wrappers.<SysUser>query().select(columns);
-		if (MapUtil.isNotEmpty(params)) {
-			params.entrySet().stream().forEach(entry -> {
-				if (ObjectKit.isNotEmpty(entry.getValue())) {
-					if (NumberKit.isNumberic(entry.getValue()))
-						query.eq(entry.getKey(), entry.getValue());
-					else
-						query.like(entry.getKey(), entry.getValue());
-				}
-			});
-		}
-
-		List<SysUser> list = super.list(query);
-		return BeanConverter.convert(SysUserDTO.class, list);
 	}
 
 	/**
@@ -217,6 +163,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 	}
 
+	@Cacheable(cacheNames = KtfCache.SysUser, key = "caches[0].name+'.vo.'+#loginName", unless = "#result == null")
 	@Override
 	public UserVo selectByLoginName(String loginName) {
 		UserVo userVo = this.sysUserExMapper.selectByLoginName(loginName);
@@ -224,17 +171,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		return userVo;
 	}
 
+	@Cacheable(cacheNames = KtfCache.SysUser, key = "caches[0].name+'.vo.'+#userId", unless = "#result == null")
 	@Override
 	public UserVo selectByUserId(Long userId) {
 		return this.sysUserExMapper.selectByUserId(userId);
 	}
 
-	@Override
-	public List<Long> selectResourceIdListByUserId(Long userId) {
-		return sysUserExMapper.selectResourceIdListByUserId(userId);
-	}
-
-	@Cacheable(value = KtfCache.SysUser, key = "caches[0].name+'_pm_'+#id", unless = "#result == null")
+	@Cacheable(cacheNames = KtfCache.SysUser, key = "caches[0].name+'.pm.'+#userId", unless = "#result == null")
 	@Override
 	public Set<String> selectUserPermissions(long userId) {
 		List<String> permsList;
@@ -274,21 +217,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		return pageVo;
 	}
 
+	@KtfCacheEvict(cacheNames = { KtfCache.SysUser, KtfCache.SysResource })
 	@Override
 	public boolean saveByVo(UserVo userVo) {
 		ExecutorService	pool		= Executors.newFixedThreadPool(THREAD_COUNT);
 
-		CifCustomer		customer	= customerService.getByPhoneNumber(userVo.getPhone());
-		if (customer == null) {
-			customer = new CifCustomer();
-			customer.setCustomerId("kms" + KtfKit.me().nextId());
-			customer.setName(userVo.getName());
-			customer.setRegPhoneNumber(userVo.getPhone());
-			customer.setEmail(userVo.getEmail());
-			customer.setGender(KtfGender.valueOf(userVo.getSex()).text);
+		CifCustomer		customer	= new CifCustomer();
+		customer.setCustomerId(userVo.getLoginName());
+		customer.setName(userVo.getName());
+		customer.setRegPhoneNumber(userVo.getPhone());
+		customer.setEmail(userVo.getEmail());
+		customer.setGender(KtfGender.valueOf(userVo.getSex()).text);
+		CifCustomer entity = customerService.getByCustomerId(userVo.getLoginName());
+		if (entity == null) {
 			customer.setStatus(KtfStatus.ENABLED.text);
-			customerService.save(customer);
+		} else {
+			customer.setId(entity.getId());
 		}
+		customerService.saveOrUpdate(customer);
 
 		SysUser user = BeanConverter.convert(SysUser.class, userVo);
 		user.setCifId(customer.getId());
@@ -298,8 +244,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		user.setEnterpriseId(1L);
 		user.setDepartmentId(1L);
 		user.setJobId(1L);
-		// user.setStatus(KtfStatus.INIT.code); //非U盾登录，状态默认为初始状态
-		user.setStatus(KtfStatus.ENABLED.code); // U盾登录，状态默认为有效状态
+
+		// 非API用户，状态默认为初始状态， API用户，状态默认为有效状态
+		user.setStatus(
+				user.getUserType() == KmsUserType.API_USER.getCode() ? KtfStatus.ENABLED.code : KtfStatus.INIT.code);
 		this.save(user);
 
 		// 检查角色是否越权
@@ -310,6 +258,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			public void run() {
 				// 保存用户鉴权信息
 				CifCustomerAuths cifAuth = BeanConverter.convert(CifCustomerAuths.class, userVo);
+				cifAuth.setId(user.getId());
+				cifAuth.setApplicationId(user.getApplicationId());
+				cifAuth.setCifId(customer.getId());
 				cifAuth.setIdentityType(KtfIdentifyType.USERNAME.text);
 				cifAuth.setIdentifier(userVo.getLoginName());
 				cifAuth.setCredential(userVo.getPassword());
@@ -342,6 +293,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		return true;
 	}
 
+	@KtfCacheEvict(cacheNames = { KtfCache.SysUser, KtfCache.SysResource })
 	@Override
 	public boolean updateByVo(UserVo userVo) {
 		ExecutorService	pool	= Executors.newFixedThreadPool(THREAD_COUNT);
@@ -419,6 +371,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		}
 	}
 
+	@KtfCacheEvict(cacheNames = { KtfCache.SysUser, KtfCache.SysResource })
 	@Override
 	public Boolean deleteBatch(Long[] userIds) {
 		List<Long> ids = Arrays.asList(userIds);

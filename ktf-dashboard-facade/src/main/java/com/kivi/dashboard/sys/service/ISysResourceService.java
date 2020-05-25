@@ -35,9 +35,9 @@ public interface ISysResourceService extends IService<SysResource> {
 	Boolean updateById(SysResourceDTO sysResourceDTO);
 
 	/**
-	 * 查询列表
+	 * 分页查询
 	 */
-	List<SysResourceDTO> list(SysResourceDTO sysResourceDTO);
+	PageInfoVO<SysResourceDTO> page(Map<String, Object> params);
 
 	/**
 	 * 指定列查询列表
@@ -45,24 +45,17 @@ public interface ISysResourceService extends IService<SysResource> {
 	List<SysResourceDTO> list(Map<String, Object> params, String... columns);
 
 	/**
-	 * 模糊查询
-	 */
-	List<SysResourceDTO> listLike(SysResourceDTO applicationDTO);
-
-	/**
-	 * 指定列模糊查询
-	 */
-	List<SysResourceDTO> listLike(Map<String, Object> params, String... columns);
-
-	/**
-	 * 分页查询
-	 */
-	PageInfoVO<SysResourceDTO> page(Map<String, Object> params);
-
-	/**
 	 * 根据用户ID查询对应的资源列表
 	 */
 	List<ResourceVo> selectUserResourceListByUserId(Long userId);
+
+	/**
+	 * 查询用户的所有菜单ID
+	 *
+	 * @param userId
+	 * @return
+	 */
+	List<Long> selectResourceIdListByUserId(Long userId);
 
 	/**
 	 * 根据条件查询菜单列表

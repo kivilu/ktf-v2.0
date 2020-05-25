@@ -19,6 +19,9 @@ public class KtfWebProperties implements IKtfProperties {
 	private Boolean				enabled				= true;
 	private Boolean				kaptchaOpen			= false;
 	private Boolean				enableCsrf			= true;
+	private Boolean				enableUkey			= false;
+
+	private String				defaultPassword		= "11111111";
 	/**
 	 * Web请求默认超时时间
 	 */

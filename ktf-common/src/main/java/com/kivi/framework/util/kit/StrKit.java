@@ -437,6 +437,29 @@ public class StrKit {
 	 * 
 	 * <pre>
 	 * 
+	 * StrKit.contains(null, *)     = false
+	 * StrKit.contains(*, null)     = false
+	 * StrKit.contains("", "")      = true
+	 * StrKit.contains("abc", "")   = true
+	 * StrKit.contains("abc", "a")  = true
+	 * StrKit.contains("abc", "z")  = false
+	 * 
+	 * {@link StringUtils#contains(CharSequence, CharSequence)}
+	 * </pre>
+	 * 
+	 * @param str     被检测字符串
+	 * @param testStr 被测试是否包含的字符串
+	 * @return 是否包含
+	 */
+	public static boolean contains(String str, String searchStr) {
+		return StringUtils.contains(str, searchStr);
+	}
+
+	/**
+	 * 是否包含特定字符，忽略大小写，如果给定两个参数都为<code>null</code>，返回false
+	 * 
+	 * <pre>
+	 * 
 	 * {@link StringUtils#containsIgnoreCase(CharSequence, CharSequence)}
 	 * </pre>
 	 * 
@@ -444,8 +467,8 @@ public class StrKit {
 	 * @param testStr 被测试是否包含的字符串
 	 * @return 是否包含
 	 */
-	public static boolean containsIgnoreCase(String str, String testStr) {
-		return StringUtils.containsIgnoreCase(str, testStr);
+	public static boolean containsIgnoreCase(String str, String searchStr) {
+		return StringUtils.containsIgnoreCase(str, searchStr);
 	}
 
 	/**
@@ -621,8 +644,8 @@ public class StrKit {
 		return StringUtils.join(objs, conjunction);
 	}
 
-	public static String join(String conjunction, List<String> texts) {
-		return StringUtils.join(texts, conjunction);
+	public static String join(String conjunction, final List<?> list) {
+		return StringUtils.join(list, conjunction);
 	}
 
 	/**

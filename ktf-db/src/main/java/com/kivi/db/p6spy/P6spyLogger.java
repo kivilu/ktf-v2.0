@@ -38,7 +38,7 @@ public class P6spyLogger extends FormattedLogger {
 			String url) {
 		final String msg = strategy.formatMessage(connectionId, now, elapsed, category.toString(), prepared, sql, url);
 
-		if (StringUtils.isEmpty(msg)) {
+		if (StringUtils.isBlank(msg)) {
 			return;
 		}
 		if (Category.ERROR.equals(category)) {

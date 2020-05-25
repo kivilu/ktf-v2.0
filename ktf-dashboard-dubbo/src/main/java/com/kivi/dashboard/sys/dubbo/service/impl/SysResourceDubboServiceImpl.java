@@ -61,38 +61,12 @@ public class SysResourceDubboServiceImpl extends ServiceImpl<SysResourceMapper, 
 	}
 
 	/**
-	 * 查询列表
-	 */
-	@KtfTrace("查询列表资源")
-	@Override
-	public List<SysResourceDTO> list(SysResourceDTO sysResourceDTO) {
-		return sysResourceService.list(sysResourceDTO);
-	}
-
-	/**
 	 * 指定列查询列表
 	 */
 	@KtfTrace("指定列查询列表资源")
 	@Override
 	public List<SysResourceDTO> list(Map<String, Object> params, String... columns) {
 		return sysResourceService.list(params, columns);
-	}
-
-	/**
-	 * 模糊查询
-	 */
-	@KtfTrace("模糊查询资源")
-	@Override
-	public List<SysResourceDTO> listLike(SysResourceDTO sysResourceDTO) {
-		return sysResourceService.listLike(sysResourceDTO);
-	}
-
-	/**
-	 * 指定列模糊查询
-	 */
-	@Override
-	public List<SysResourceDTO> listLike(Map<String, Object> params, String... columns) {
-		return sysResourceService.listLike(params, columns);
 	}
 
 	/**
@@ -132,6 +106,11 @@ public class SysResourceDubboServiceImpl extends ServiceImpl<SysResourceMapper, 
 	@Override
 	public List<ResourceVo> selectNotButtonList() {
 		return sysResourceService.selectNotButtonList();
+	}
+
+	@Override
+	public List<Long> selectResourceIdListByUserId(Long userId) {
+		return sysResourceService.selectResourceIdListByUserId(userId);
 	}
 
 }

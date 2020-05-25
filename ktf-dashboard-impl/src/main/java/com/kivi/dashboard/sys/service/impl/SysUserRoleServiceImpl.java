@@ -22,6 +22,8 @@ import com.kivi.dashboard.sys.mapper.SysUserRoleMapper;
 import com.kivi.dashboard.sys.service.ISysUserRoleService;
 import com.kivi.db.page.PageParams;
 import com.kivi.framework.annotation.KtfTrace;
+import com.kivi.framework.cache.annotation.KtfCacheEvict;
+import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.util.kit.NumberKit;
@@ -69,6 +71,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
 	/**
 	 * 修改
 	 */
+	@KtfCacheEvict(cacheNames = { KtfCache.SysUser })
 	@KtfTrace("修改用户角色")
 	@Override
 	public Boolean updateById(SysUserRoleDTO sysUserRoleDTO) {
@@ -168,6 +171,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
 
 	}
 
+	@KtfCacheEvict(cacheNames = { KtfCache.SysUser })
 	@Override
 	public Boolean deleteBatchByRoleIds(Long[] roleIds) {
 		if (roleIds == null)
@@ -179,6 +183,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
 
 	}
 
+	@KtfCacheEvict(cacheNames = { KtfCache.SysUser })
 	@Override
 	public Boolean deleteBatchByUserIds(Long[] userIds) {
 		if (userIds == null)
@@ -201,6 +206,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
 		return list.stream().map(SysUserRole::getRoleId).collect(Collectors.toList());
 	}
 
+	@KtfCacheEvict(cacheNames = { KtfCache.SysUser })
 	@Override
 	public void saveOrUpdateUserRole(Long userId, List<Long> roleIdList) {
 		// 先删除用户与角色关系

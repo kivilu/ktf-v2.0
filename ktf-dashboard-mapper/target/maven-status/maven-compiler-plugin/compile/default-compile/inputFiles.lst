@@ -28,6 +28,7 @@ D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-mapper\src\main\java\com\kivi\da
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-mapper\src\main\java\com\kivi\dashboard\sys\entity\SysFile.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-mapper\src\main\java\com\kivi\dashboard\sys\dto\SysUserEnterpriseDTO.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-mapper\src\main\java\com\kivi\dashboard\sys\entity\SysIndustry.java
+D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-mapper\src\main\java\com\kivi\dashboard\sys\entity\SysMenu.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-mapper\src\main\java\com\kivi\dashboard\sys\dto\SysUserDTO.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-mapper\src\main\java\com\kivi\dashboard\sys\dto\SysSmsRecordDTO.java
 D:\git_repository\repo_ktf-v2\ktf\ktf-dashboard-mapper\src\main\java\com\kivi\dashboard\enterprise\mapper\EnterpriseDepartmentExMapper.java

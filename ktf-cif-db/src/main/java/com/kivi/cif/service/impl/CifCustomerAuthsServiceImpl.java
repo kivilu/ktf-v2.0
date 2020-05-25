@@ -1,13 +1,12 @@
 package com.kivi.cif.service.impl;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +23,7 @@ import com.kivi.cif.mapper.CifCustomerAuthsMapper;
 import com.kivi.cif.service.CifCustomerAuthsService;
 import com.kivi.db.page.PageParams;
 import com.kivi.framework.annotation.KtfTrace;
+import com.kivi.framework.cache.annotation.KtfCacheEvict;
 import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.converter.BeanConverter;
@@ -47,24 +47,23 @@ import com.vip.vjtools.vjkit.collection.MapUtil;
 public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMapper, CifCustomerAuths>
 		implements CifCustomerAuthsService {
 
-	@Cacheable(key = "caches[0].name+'_'+#bizCode+#identityType+#identifier+#userType", unless = "#result == null")
+	@Cacheable(key = "caches[0].name+'.'+#appid+#identityType+#identifier+#userType", unless = "#result == null")
 	@Override
-	public CifCustomerAuths
-			getCifCustomerAuths(String bizCode, String identityType, String identifier, String userType) {
+	public CifCustomerAuths getCifCustomerAuths(Long appid, String identityType, String identifier, String userType) {
 
 		LambdaQueryWrapper<CifCustomerAuths> queryWrapper = Wrappers.<CifCustomerAuths>lambdaQuery();
 		queryWrapper.eq(CifCustomerAuths::getIdentifier, identifier).eq(CifCustomerAuths::getIdentityType, identityType)
-				.eq(CifCustomerAuths::getBizCode, bizCode).eq(CifCustomerAuths::getUserType, userType);
+				.eq(CifCustomerAuths::getUserType, userType);
 
-		return super.getOne(queryWrapper);
+		return super.getOne(queryWrapper, false);
 	}
 
 	@Override
 	@Cacheable(
-			key = "caches[0].name+'_'+#cifAuthDTO.bizCode+#cifAuthDTO.identityType+#cifAuthDTO.identifier+#cifAuthDTO.userType",
+			key = "caches[0].name+'.'+#cifAuthDTO.applicationId+#cifAuthDTO.identityType+#cifAuthDTO.identifier+#cifAuthDTO.userType",
 			unless = "#result == null")
 	public CifCustomerAuths getCifCustomerAuths(final CifCustomerAuthsDTO cifAuthDTO) {
-		CifCustomerAuths entity = getCifCustomerAuths(cifAuthDTO.getBizCode(), cifAuthDTO.getIdentityType(),
+		CifCustomerAuths entity = getCifCustomerAuths(cifAuthDTO.getApplicationId(), cifAuthDTO.getIdentityType(),
 				cifAuthDTO.getIdentifier(), cifAuthDTO.getUserType());
 
 		return entity;
@@ -73,7 +72,7 @@ public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMap
 	/**
 	 * 根据ID查询客户验证
 	 */
-	@Cacheable(key = "caches[0].name+'DTO_'+#id", unless = "#result == null")
+	@Cacheable(key = "caches[0].name+'.DTO.'+#id", unless = "#result == null")
 	@KtfTrace("根据ID查询客户验证")
 	@Override
 	public CifCustomerAuthsDTO getDTOById(Long id) {
@@ -85,7 +84,7 @@ public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMap
 		return dto;
 	}
 
-	@Cacheable(key = "caches[0].name+'_'+#id", unless = "#result == null")
+	@Cacheable(key = "caches[0].name+'.'+#id", unless = "#result == null")
 	@Override
 	public CifCustomerAuths getById(Serializable id) {
 		return super.getById(id);
@@ -94,11 +93,10 @@ public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMap
 	/**
 	 * 新增客户验证
 	 */
+	@KtfCacheEvict(cacheNames = KtfCache.CifCustomerAuths)
 	@KtfTrace("新增客户验证")
 	@Override
-	public Boolean save(CifCustomerAuthsDTO cifCustomerAuthsDTO) {
-		CifCustomerAuths entity = BeanConverter.convert(CifCustomerAuths.class, cifCustomerAuthsDTO);
-
+	public boolean save(CifCustomerAuths entity) {
 		return super.save(entity);
 	}
 
@@ -106,18 +104,33 @@ public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMap
 	 * 修改
 	 */
 	@KtfTrace("修改客户验证")
-	@Caching(evict = { @CacheEvict() })
+	@KtfCacheEvict(cacheNames = KtfCache.CifCustomerAuths)
+	@Override
+	public boolean updateById(CifCustomerAuths entity) {
+		return super.updateById(entity);
+	}
 
+	/**
+	 * 修改
+	 */
+	@KtfTrace("修改客户验证")
+	@KtfCacheEvict(cacheNames = KtfCache.CifCustomerAuths)
 	@Override
 	public Boolean updateById(CifCustomerAuthsDTO cifCustomerAuthsDTO) {
 		CifCustomerAuths entity = BeanConverter.convert(CifCustomerAuths.class, cifCustomerAuthsDTO);
 		return super.updateById(entity);
 	}
 
-	@CacheEvict()
+	@KtfCacheEvict(cacheNames = KtfCache.CifCustomerAuths)
 	@Override
 	public boolean removeById(Serializable id) {
 		return super.removeById(id);
+	}
+
+	@KtfCacheEvict(cacheNames = KtfCache.CifCustomerAuths)
+	@Override
+	public boolean removeByIds(Collection<? extends Serializable> idList) {
+		return super.removeByIds(idList);
 	}
 
 	/**
@@ -213,6 +226,7 @@ public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMap
 
 	}
 
+	@KtfCacheEvict(cacheNames = KtfCache.CifCustomerAuths)
 	@Override
 	public Boolean updateByEntity(CifCustomerAuths condEntity, CifCustomerAuths updaeEntity) {
 		QueryWrapper<CifCustomerAuths> query = Wrappers.<CifCustomerAuths>query(condEntity);

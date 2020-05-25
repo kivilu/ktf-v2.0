@@ -36,17 +36,12 @@ public interface CifCustomerAuthsService extends IService<CifCustomerAuths> {
 	 * @param userType
 	 * @return
 	 */
-	CifCustomerAuths getCifCustomerAuths(String bizCode, String identityType, String identifier, String userType);
+	CifCustomerAuths getCifCustomerAuths(Long appid, String identityType, String identifier, String userType);
 
 	/**
 	 * 根据ID查询DTO
 	 */
 	CifCustomerAuthsDTO getDTOById(Long id);
-
-	/**
-	 * 新增
-	 */
-	Boolean save(CifCustomerAuthsDTO cifCustomerAuthsDTO);
 
 	/**
 	 * 修改

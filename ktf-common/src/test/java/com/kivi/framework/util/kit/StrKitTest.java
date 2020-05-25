@@ -3,6 +3,7 @@ package com.kivi.framework.util.kit;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Arrays;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
@@ -25,6 +26,15 @@ public class StrKitTest {
 
 		arrays = StringUtils.split("AAAA,BBBB", ",");
 		System.out.println(JSON.toJSONString(arrays, true));
+	}
+
+	@Test
+	public void testJoinList() {
+
+		Long[] arrays = { 1L, 2L };
+
+		System.out.println(StrKit.join(",", Arrays.asList(arrays)));
+
 	}
 
 }

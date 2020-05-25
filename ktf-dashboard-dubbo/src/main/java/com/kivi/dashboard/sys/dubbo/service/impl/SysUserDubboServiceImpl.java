@@ -55,43 +55,8 @@ public class SysUserDubboServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
 	 */
 	@KtfTrace("修改用户")
 	@Override
-	public Boolean updateById(SysUserDTO sysUserDTO) {
-		return iSysUserService.updateById(sysUserDTO);
-	}
-
-	/**
-	 * 查询列表
-	 */
-	@KtfTrace("查询列表用户")
-	@Override
-	public List<SysUserDTO> list(SysUserDTO sysUserDTO) {
-		return iSysUserService.list(sysUserDTO);
-	}
-
-	/**
-	 * 指定列查询列表
-	 */
-	@KtfTrace("指定列查询列表用户")
-	@Override
-	public List<SysUserDTO> list(Map<String, Object> params, String... columns) {
-		return iSysUserService.list(params, columns);
-	}
-
-	/**
-	 * 模糊查询
-	 */
-	@KtfTrace("模糊查询用户")
-	@Override
-	public List<SysUserDTO> listLike(SysUserDTO sysUserDTO) {
-		return iSysUserService.listLike(sysUserDTO);
-	}
-
-	/**
-	 * 指定列模糊查询
-	 */
-	@Override
-	public List<SysUserDTO> listLike(Map<String, Object> params, String... columns) {
-		return iSysUserService.listLike(params, columns);
+	public boolean updateById(SysUser sysUser) {
+		return iSysUserService.updateById(sysUser);
 	}
 
 	/**
@@ -112,11 +77,6 @@ public class SysUserDubboServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
 	@Override
 	public UserVo selectByUserId(Long userId) {
 		return this.iSysUserService.selectByUserId(userId);
-	}
-
-	@Override
-	public List<Long> selectResourceIdListByUserId(Long userId) {
-		return iSysUserService.selectResourceIdListByUserId(userId);
 	}
 
 	@Override

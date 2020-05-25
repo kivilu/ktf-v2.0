@@ -21,7 +21,7 @@ public class P6spyLogFormat implements MessageFormattingStrategy {
 			final String sql,
 			final String url) {
 
-		return StringUtils.isNotEmpty(sql)
+		return StringUtils.isBlank(sql)
 				? new StringBuilder().append(" Execute SQL：").append(sql.replaceAll("[\\s]+", StringPool.SPACE))
 						.toString()
 				: null;

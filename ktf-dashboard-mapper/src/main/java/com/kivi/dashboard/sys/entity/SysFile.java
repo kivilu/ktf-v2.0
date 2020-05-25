@@ -30,7 +30,7 @@ public class SysFile extends Model<SysFile> {
 
 	private static final long	serialVersionUID	= 1L;
 
-	@TableId(value = "id", type = IdType.ID_WORKER)
+	@TableId(value = "id", type = IdType.ASSIGN_ID)
 	private Long				id;
 	/**
 	 * 附件类型(哪个表的附件)

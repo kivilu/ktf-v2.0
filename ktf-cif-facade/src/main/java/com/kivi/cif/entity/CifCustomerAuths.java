@@ -49,11 +49,7 @@ public class CifCustomerAuths extends Model<CifCustomerAuths> {
 	 */
 	@TableField("user_type")
 	private String				userType;
-	/**
-	 * 业务代码
-	 */
-	@TableField("biz_code")
-	private String				bizCode;
+
 	/**
 	 * 登录类型，00：手机号，01：邮箱，02：用户名，03：微信，04：支付宝，05：微博
 	 */

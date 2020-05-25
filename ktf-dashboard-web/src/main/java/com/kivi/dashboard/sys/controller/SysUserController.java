@@ -6,9 +6,11 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,9 +33,11 @@ import com.kivi.framework.constant.enums.KtfStatus;
 import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.model.ResultMap;
 import com.kivi.framework.model.SelectNode;
+import com.kivi.framework.service.KtfTokenService;
 import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.UserVo;
 import com.kivi.framework.vo.page.PageInfoVO;
+import com.kivi.framework.web.properties.KtfWebProperties;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -53,6 +57,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/sys/user")
 @Slf4j
 public class SysUserController extends DashboardController {
+
+	@Autowired
+	private KtfWebProperties	ktfWebProperties;
+
+	@Autowired
+	private KtfTokenService		ktfTokenService;
 
 	/**
 	 * 所有用户列表
@@ -100,17 +110,20 @@ public class SysUserController extends DashboardController {
 	@PostMapping("/password")
 	@RequiresPermissions("sys/user/password")
 	public ResultMap password(@Valid @RequestBody PasswordForm form) {
+
 		CifCustomerAuths	userAuth	= customerAuthsService().getById(ShiroKit.getUser().getId());
 		String				password	= ShiroKit.md5(form.getPassword(),
 				userAuth.getIdentifier() + userAuth.getCredentialSalt());
 		if (!userAuth.getCredential().equals(password)) {
 			return ResultMap.error("原密码不正确");
 		}
-		String				newPassword	= ShiroKit.md5(form.getNewPassword(),
-				userAuth.getIdentifier() + userAuth.getCredentialSalt());
+
+		String				newSalt		= ShiroKit.getRandomSalt(16);
+		String				newPassword	= ShiroKit.md5(form.getNewPassword(), userAuth.getIdentifier() + newSalt);
 
 		CifCustomerAuths	updateAuth	= new CifCustomerAuths();
 		updateAuth.setId(userAuth.getId());
+		updateAuth.setCredentialSalt(newSalt);
 		updateAuth.setCredential(newPassword);
 		boolean ret = customerAuthsService().updateById(updateAuth);
 		if (!ret) {
@@ -125,12 +138,14 @@ public class SysUserController extends DashboardController {
 			sysUserService().updateById(entity);
 		}
 
+		// 注销token
+		ktfTokenService.evictJwt(userAuth.getId().toString());
+
 		return ResultMap.ok("密码修改成功");
 	}
 
 	@ApiOperation(value = "密码重置", notes = "密码重置")
 	@GetMapping("/passwordReset/{id}")
-	// @RequiresPermissions("sys/user/passwordReset")
 	public ResultMap passwordReset(@PathVariable("id") Long id) {
 		SysUser entity = new SysUser();
 		entity.setId(id);
@@ -140,7 +155,8 @@ public class SysUserController extends DashboardController {
 		SysUser				user	= sysUserService().getById(id);
 
 		String				salt	= ShiroKit.getRandomSalt(16);
-		String				pwd		= ShiroKit.md5("123456", user.getLoginName() + salt);
+		String				pwd		= ShiroKit.md5(DigestUtils.md5Hex(ktfWebProperties.getDefaultPassword()),
+				user.getLoginName() + salt);
 		CifCustomerAuths	cifAuth	= new CifCustomerAuths();
 		cifAuth.setId(id);
 		cifAuth.setCredential(pwd);
@@ -166,9 +182,11 @@ public class SysUserController extends DashboardController {
 			UserVo	user	= BeanConverter.convert(UserVo.class, sysUserDTO);
 			String	salt	= ShiroKit.getRandomSalt(16);
 			user.setSalt(salt);
-			if (StrKit.isBlank(user.getPassword()))
-				user.setPassword("123456");
+			if (StrKit.isBlank(user.getPassword())) {
+				user.setPassword(DigestUtils.md5Hex(ktfWebProperties.getDefaultPassword()));
+			}
 			String pwd = ShiroKit.md5(user.getPassword(), user.getLoginName() + salt);
+			log.trace("默认密码md5：{}\n分散因子：{}\ncredential：{}", user.getPassword(), user.getLoginName() + salt, pwd);
 			user.setPassword(pwd);
 			user.setCreateUserId(ShiroKit.getUser().getId());
 			sysUserService().saveByVo(user);
@@ -190,11 +208,7 @@ public class SysUserController extends DashboardController {
 			UserVo user = BeanConverter.convert(UserVo.class, sysUserDTO);
 
 			if (StringUtils.isNotBlank(user.getPassword())) {
-				String salt = ShiroKit.getRandomSalt(16);
-				user.setSalt(salt);
-				String pwd = ShiroKit.md5(user.getPassword(), user.getLoginName() + salt);
-				user.setPassword(pwd);
-			} else {
+				// 禁止通过本方法修改密码
 				user.setPassword(null);
 			}
 

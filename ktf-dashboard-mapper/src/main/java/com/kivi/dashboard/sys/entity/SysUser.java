@@ -33,7 +33,7 @@ public class SysUser extends Model<SysUser> {
 	/**
 	 * 主键id
 	 */
-	@TableId(value = "id", type = IdType.ID_WORKER)
+	@TableId(value = "id", type = IdType.ASSIGN_ID)
 	private Long				id;
 	/**
 	 * 客户ID

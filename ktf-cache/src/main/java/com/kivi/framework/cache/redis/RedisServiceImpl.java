@@ -41,7 +41,7 @@ public class RedisServiceImpl implements IRedisService {
 	}
 
 	@Override
-	public void delBatch(List<String> keys) {
+	public void delBatch(Set<String> keys) {
 		redisTemplate.delete(keys);
 	}
 

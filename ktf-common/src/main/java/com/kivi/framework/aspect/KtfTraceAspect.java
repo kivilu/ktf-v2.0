@@ -69,10 +69,11 @@ public class KtfTraceAspect {
 		Object result = point.proceed();
 
 		if (log.isTraceEnabled()) {
-			log.trace(">>>>>{}：{}.{}执行耗时：{}ms，返回值：{}", annotation.value(), className, methodName,
-					ClockUtil.elapsedTime(start),
+			log.trace("{}：{}.{}返回值：{}", annotation.value(), className, methodName,
 					JSON.toJSONString(result, SerializerFeature.WriteClassName, SerializerFeature.PrettyFormat));
 		}
+
+		log.debug(">>>>>{}：{}.{}执行耗时：{}ms", annotation.value(), className, methodName, ClockUtil.elapsedTime(start));
 
 		return result;
 	}

@@ -1,6 +1,7 @@
 package com.kivi.dashboard.service;
 
 import com.kivi.dashboard.sys.entity.SysLog;
+import com.kivi.framework.model.ResultMap;
 
 public interface SysLogSignService {
 
@@ -26,5 +27,5 @@ public interface SysLogSignService {
 	 * @param syslog
 	 * @return
 	 */
-	Boolean verify(SysLog syslog);
+	ResultMap verify(SysLog syslog);
 }

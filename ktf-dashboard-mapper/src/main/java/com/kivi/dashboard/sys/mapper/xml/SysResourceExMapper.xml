@@ -62,6 +62,70 @@
         </where>
         order by t.seq asc
     </select>
+   
+    
+    <!-- 查询用户的所有菜单ID -->
+    <select id="selectResourceIdListByUserId" resultType="long">
+		SELECT DISTINCT
+	    	rm.resource_id
+        FROM
+	    	ktf_sys_user_role ur
+        LEFT JOIN ktf_sys_role_resource rm ON ur.role_id = rm.role_id
+        WHERE
+	    	 ur.user_id = #{userId}
+	</select>
+    
+    
+    <!-- 查询用户的所有菜单ID -->
+    <select id="selectResourceListByUserId" resultType="com.kivi.dashboard.sys.entity.SysMenu">
+		SELECT DISTINCT
+		    a.catalog_pid,
+			a.catalog,
+			a.catalog_icon,
+			a.id,
+			a.pid,
+			a.`name`,
+			a.icon,
+			a.url
+		FROM
+			(
+				SELECT
+				    t1.parent_id AS catalog_pid,
+					t1.`name` AS catalog,
+					t1.icon AS catalog_icon,
+					t2.id AS id,
+					t2.parent_id AS pid,
+					t2.`name` AS `name`,
+					t2.resource_type,
+					t2.icon,
+					t2.url,
+					CONCAT(
+						t1.seq,
+						'-',
+						LPAD(t2.seq, 3, 0)
+					) AS seqs
+				FROM
+					ktf_sys_resource t1
+				LEFT JOIN ktf_sys_resource t2 ON t1.id = t2.parent_id
+				LEFT JOIN ktf_sys_resource t3 ON t2.id = t3.parent_id
+				WHERE
+					t1.hidden = 0
+				AND t2.hidden = 0
+				AND t3.hidden = 0
+				AND t3.id IN (
+					SELECT DISTINCT
+						rr.resource_id
+					FROM
+						ktf_sys_user_role ur
+					LEFT JOIN ktf_sys_role_resource rr ON ur.role_id = rr.role_id
+					WHERE
+						ur.user_id = #{userId}
+				)
+			) a
+		ORDER BY
+			a.seqs
+	</select>
+	
     
 
 </mapper>

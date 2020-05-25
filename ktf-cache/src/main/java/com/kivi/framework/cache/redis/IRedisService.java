@@ -29,7 +29,7 @@ public interface IRedisService {
 	 *
 	 * @param keys
 	 */
-	void delBatch(List<String> keys);
+	void delBatch(Set<String> keys);
 
 	/**
 	 * 实现命令：expire设置过期时间，单位秒
