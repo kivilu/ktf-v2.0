@@ -1,6 +1,0 @@
-com.kivi.dashboard.auth
-com.kivi.dashboard.base
-com.kivi.dashboard.enterprise.controller
-com.kivi.dashboard.kaptcha
-com.kivi.dashboard.service.impl
-com.kivi.dashboard.sys.controller
