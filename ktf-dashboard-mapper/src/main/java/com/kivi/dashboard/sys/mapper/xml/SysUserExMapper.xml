@@ -20,7 +20,7 @@
         <result column="gmt_update" property="gmtUpdate" />
         <result column="create_user_id" property="createUserId" />
     </resultMap>
-    
+
     <resultMap id="UserVoResultMap" type="com.kivi.framework.vo.UserVo">
         <result column="id" property="id"/>
         <result column="cif_id" property="cifId" />
@@ -37,17 +37,17 @@
         <result column="gmt_create" property="gmtCreate" />
         <!-- <result column="gmt_update" property="gmtUpdate" /> -->
         <result column="create_user_id" property="createUserId" />
-        
+
         <result column="sex" property="sex"/>
         <result column="phone" property="phone"/>
         <result column="email" property="email"/>
         <result column="name" property="name"/>
-        
+
         <result column="password" property="password"/>
         <result column="salt" property="salt"/>
         <result column="last_ip" property="lastIp" />
         <result column="last_time" property="lastTime" />
-        
+
         <result column="enterpriseName" property="enterpriseName"/>
         <result column="departmentName" property="departmentName"/>
         <result column="jobName" property="jobName"/>
@@ -60,7 +60,7 @@
             <result column="roleStatus" property="status"/>
         </collection>
     </resultMap>
-    
+
     <!-- 分页查询 -->
     <!-- 多表页面信息查询 -->
     <select id="selectSysUserPage" parameterType="map" resultType="map">
@@ -105,7 +105,7 @@
                 or t7.name like concat('%',#{params.name},'%'))
             </if>
             <if test="params.userType !=null">
-            	AND t.user_type in 
+            	AND t.user_type in
 				 <foreach item="item" index="index" collection="params.userType" open="(" separator="," close=")">
 		                 #{item}
 		         </foreach>
@@ -124,8 +124,8 @@
         GROUP BY t.id
         ORDER BY t7.`name`
     </select>
-    
-    
+
+
     <select id="selectByUserId" resultMap="UserVoResultMap" parameterType="java.lang.Long">
         SELECT DISTINCT
 			t.id,
@@ -219,8 +219,8 @@
             t.login_name=#{loginName}
         </where>
     </select>
-    
-	
+
+
 	<!-- 查询用户的所有权限 -->
     <select id="selectPerms" resultType="string">
 		SELECT
@@ -232,14 +232,14 @@
         WHERE
         	ur.user_id = #{userId}
 	</select>
-	
+
 	<select id="selectUserTree" resultType="Map">
-		SELECT 
-			t.id, 
+		SELECT
+			t.id,
 			t2.`name`
 		FROM
 			ktf_sys_user t
-		LEFT JOIN cif_customer t2 ON t.cif_id = t2.id 
+		LEFT JOIN cif_customer t2 ON t.cif_id = t2.id
 	</select>
 
 </mapper>

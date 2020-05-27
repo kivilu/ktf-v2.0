@@ -72,10 +72,14 @@ public class SysUserController extends DashboardController {
 	public ResultMap list(@RequestParam Map<String, Object> params) {
 		// 只有超级管理员，才能查看所有管理员列表
 		ShiroUser shiroUser = ShiroKit.getUser();
+
 		if (shiroUser.getId() != KtfConstant.SUPER_ADMIN) {
 			params.put("userId", ShiroKit.getUser().getId());
+			if (shiroUser.getUserType() == 0) {
+				Long enterpriseId = shiroUser.getEnterpriseId();
+				params.put("enterpriseId",enterpriseId);
+			}
 		}
-
 		KmsUserType userType = KmsUserType.valueOf(shiroUser.getUserType());
 		params.put("userType", userType.children());
 
@@ -254,7 +258,7 @@ public class SysUserController extends DashboardController {
 
 	/**
 	 * 用户选择树
-	 * 
+	 *
 	 * @return
 	 */
 	@ApiOperation(value = "用户选择树", notes = "用户选择树")
