@@ -19,6 +19,7 @@
         <result column="operation_sign" property="operationSign" />
         <result column="gmt_create" property="gmtCreate" />
         <result column="gmt_update" property="gmtUpdate" />
+        <result column="enterprise_id" property="enterpriseId" />
     </resultMap>
 
 </mapper>

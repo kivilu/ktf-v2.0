@@ -75,7 +75,7 @@ public class SysUserController extends DashboardController {
 
 		if (shiroUser.getId() != KtfConstant.SUPER_ADMIN) {
 			params.put("userId", ShiroKit.getUser().getId());
-			if (shiroUser.getUserType() == 0) {
+			if (shiroUser.getUserType() == 1) {
 				Long enterpriseId = shiroUser.getEnterpriseId();
 				params.put("enterpriseId",enterpriseId);
 			}

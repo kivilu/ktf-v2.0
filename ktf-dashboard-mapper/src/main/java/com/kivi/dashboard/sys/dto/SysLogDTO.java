@@ -66,6 +66,9 @@ public class SysLogDTO implements Serializable {
 
 	private LocalDateTime		gmtCreate;
 
+	@ApiModelProperty(value = "企业")
+	private Long				enterpriseId;
+
 	public static final String	ID					= "id";
 	public static final String	USER_NAME			= "userName";
 	public static final String	LOGIN_NAME			= "loginName";
@@ -79,5 +82,6 @@ public class SysLogDTO implements Serializable {
 	public static final String	CLIENT_IP			= "clientIp";
 	public static final String	RESULT				= "result";
 	public static final String	OPERATION_SIGN		= "operationSign";
+	public static final String	ENTERPRISE_ID		= "enterpriseId";
 
 }

@@ -2,6 +2,9 @@ package com.kivi.dashboard.sys.controller;
 
 import java.util.Map;
 
+import com.kivi.dashboard.shiro.ShiroKit;
+import com.kivi.dashboard.shiro.ShiroUser;
+import com.kivi.framework.constant.KtfConstant;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +41,10 @@ public class SysLogController extends DashboardController {
 	@RequiresPermissions("sys/log/page")
 	@GetMapping("/page")
 	public ResultMap page(@RequestParam(required = false) Map<String, Object> params) {
+		ShiroUser shiroUser = ShiroKit.getUser();
+		if (shiroUser.getId() != KtfConstant.SUPER_ADMIN) {
+			params.put("enterpriseId", ShiroKit.getUser().getEnterpriseId());
+		}
 		PageInfoVO<SysLogDTO> page = sysLogService().page(params);
 
 		return ResultMap.ok().put("page", page);
