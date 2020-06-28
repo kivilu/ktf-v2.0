@@ -29,8 +29,9 @@
         <result column="gmt_update" property="gmtUpdate" />
         <result column="create_user" property="createUser" />
         <result column="update_user" property="updateUser" />
+        <result column="key_number" property="keyNumber" />
     </resultMap>
-    
+
     <!-- 多表页面信息查询 -->
     <select id="selectEnterprisePage" parameterType="map" resultType="map">
         SELECT DISTINCT
@@ -45,6 +46,7 @@
 	        t.enterprise_type AS enterpriseType,
 	        t.telephone,
 	        t.email,
+	        t.key_number AS keyNumber,
 	        t.legal_person AS legalPerson,
 	        t.main_person AS mainPerson,
 	        t.main_person_mobile AS mainPersonMobile,
@@ -90,7 +92,7 @@
             </if>
         </where>
     </select>
-    
+
     <!-- 多表页面信息查询 -->
     <select id="selectEnterpriseList" parameterType="map" resultType="map">
         SELECT DISTINCT
@@ -105,6 +107,7 @@
 	        t.enterprise_type AS enterpriseType,
 	        t.telephone,
 	        t.email,
+            t.key_number AS keyNumber,
 	        t.legal_person AS legalPerson,
 	        t.main_person AS mainPerson,
 	        t.main_person_mobile AS mainPersonMobile,

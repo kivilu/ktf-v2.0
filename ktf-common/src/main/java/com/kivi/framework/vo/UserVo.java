@@ -80,6 +80,8 @@ public class UserVo implements Serializable {
 
 	private String				jobName;
 
+	private String				post;
+
 	/**
 	 * 密码加密盐
 	 */
@@ -93,7 +95,7 @@ public class UserVo implements Serializable {
 	 * 上次登录时间
 	 */
 	private LocalDateTime		lastTime;
-	
+
 	private LocalDateTime gmtCreate;
 
 	/**

@@ -134,6 +134,9 @@ public class Enterprise extends Model<Enterprise> {
 	 */
 	@TableField("status")
 	private Integer				status;
+
+	@TableField("key_number")
+	private Integer				keyNumber;
 	/**
 	 * 记录创建时间
 	 */
@@ -205,6 +208,8 @@ public class Enterprise extends Model<Enterprise> {
 	public static final String	CREATE_USER					= "createUser";
 	public static final String	DB_UPDATE_USER				= "update_user";
 	public static final String	UPDATE_USER					= "updateUser";
+	public static final String	DB_KEY_NUMBER			= "key_number";
+	public static final String	KEY_NUMBER				= "keyNumber";
 
 	@Override
 	protected Serializable pkVal() {

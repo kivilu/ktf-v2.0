@@ -1,11 +1,6 @@
 {
   "groups": [
     {
-      "name": "ktf.cif",
-      "type": "com.kivi.cif.properties.CifProperties",
-      "sourceType": "com.kivi.cif.properties.CifProperties"
-    },
-    {
       "name": "ktf.common",
       "type": "com.kivi.framework.properties.KtfCommonProperties",
       "sourceType": "com.kivi.framework.properties.KtfCommonProperties"
@@ -52,13 +47,6 @@
     }
   ],
   "properties": [
-    {
-      "name": "ktf.cif.dubbo-service-version",
-      "type": "java.lang.String",
-      "description": "dubbo service 版本号",
-      "sourceType": "com.kivi.cif.properties.CifProperties",
-      "defaultValue": "1.0.0"
-    },
     {
       "name": "ktf.common.bz-applicaton-code",
       "type": "java.lang.String",

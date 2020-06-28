@@ -82,6 +82,9 @@ public class EnterpriseDTO implements Serializable {
 	@ApiModelProperty(value = "地址")
 	private String				address;
 
+	@ApiModelProperty(value = "剩余密钥")
+	private Integer				keyNumber;
+
 	@ApiModelProperty(value = "数据是否同步(0:是,1:否)")
 	private Integer				isSync;
 
@@ -117,5 +120,6 @@ public class EnterpriseDTO implements Serializable {
 	public static final String	STATUS					= "status";
 	public static final String	CREATE_USER				= "createUser";
 	public static final String	UPDATE_USER				= "updateUser";
+	public static final String	KEY_NUMBER				= "keyNumber";
 
 }
