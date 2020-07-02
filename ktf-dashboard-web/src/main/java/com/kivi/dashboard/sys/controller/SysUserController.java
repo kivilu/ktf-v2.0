@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.kivi.dashboard.enterprise.dto.EnterpriseDTO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -93,7 +94,11 @@ public class SysUserController extends DashboardController {
 	 */
 	@GetMapping("/info")
 	public ResultMap info() {
-		return ResultMap.ok().put("user", ShiroKit.getUser());
+		ShiroUser user = ShiroKit.getUser();
+		EnterpriseDTO enterpriseDTO = enterpriseService().getDTOById(user.getEnterpriseId());
+		user.setEnterpriseName(enterpriseDTO.getEnterpriseName());
+		user.setPre(enterpriseDTO.getPrefix());
+		return ResultMap.ok().put("user", user);
 	}
 
 	@ApiOperation(value = "用户信息", notes = "用户信息")
