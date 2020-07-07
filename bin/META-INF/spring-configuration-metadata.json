@@ -44,6 +44,16 @@
       "name": "ktf.task.pool",
       "type": "com.kivi.framework.properties.KtfTaskPoolProperties",
       "sourceType": "com.kivi.framework.properties.KtfTaskPoolProperties"
+    },
+    {
+      "name": "ktf.web",
+      "type": "com.kivi.framework.web.properties.KtfWebProperties",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties"
+    },
+    {
+      "name": "ktf.web.jwt",
+      "type": "com.kivi.framework.web.properties.KtfJwtProperties",
+      "sourceType": "com.kivi.framework.web.properties.KtfJwtProperties"
     }
   ],
   "properties": [
@@ -195,6 +205,80 @@
       "type": "java.lang.Integer",
       "sourceType": "com.kivi.framework.properties.KtfTaskPoolProperties",
       "defaultValue": 11
+    },
+    {
+      "name": "ktf.web.allow-file-suffix",
+      "type": "java.lang.String",
+      "description": "允许的上传文件类型",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties",
+      "defaultValue": "pkm,vkd,gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks"
+    },
+    {
+      "name": "ktf.web.default-password",
+      "type": "java.lang.String",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties",
+      "defaultValue": "11111111"
+    },
+    {
+      "name": "ktf.web.enable-csrf",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "ktf.web.enable-ukey",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "ktf.web.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "ktf.web.jwt.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.web.properties.KtfJwtProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "ktf.web.jwt.exclude-path-patterns",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.kivi.framework.web.properties.KtfJwtProperties"
+    },
+    {
+      "name": "ktf.web.jwt.issuer",
+      "type": "java.lang.String",
+      "sourceType": "com.kivi.framework.web.properties.KtfJwtProperties",
+      "defaultValue": "kivi"
+    },
+    {
+      "name": "ktf.web.jwt.secret-seed",
+      "type": "java.lang.String",
+      "sourceType": "com.kivi.framework.web.properties.KtfJwtProperties",
+      "defaultValue": "kivi.jwt"
+    },
+    {
+      "name": "ktf.web.jwt.ttl",
+      "type": "java.lang.Integer",
+      "description": "JWT token有效时间，单位：小时",
+      "sourceType": "com.kivi.framework.web.properties.KtfJwtProperties",
+      "defaultValue": 24
+    },
+    {
+      "name": "ktf.web.kaptcha-open",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "ktf.web.web-request-timeout",
+      "type": "java.lang.Long",
+      "description": "Web请求默认超时时间",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties",
+      "defaultValue": 30000
     }
   ],
   "hints": []

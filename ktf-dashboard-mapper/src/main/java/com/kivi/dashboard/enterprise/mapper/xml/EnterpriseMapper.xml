@@ -30,6 +30,8 @@
         <result column="create_user" property="createUser" />
         <result column="update_user" property="updateUser" />
         <result column="key_number" property="keyNumber" />
+        <result column="service" property="service" />
+        <result column="matrix" property="matrix" />
     </resultMap>
 
 </mapper>

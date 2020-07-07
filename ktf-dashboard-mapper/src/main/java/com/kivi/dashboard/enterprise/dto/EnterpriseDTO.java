@@ -34,6 +34,12 @@ public class EnterpriseDTO implements Serializable {
 	@ApiModelProperty(value = "企业id前缀")
 	private String				prefix;
 
+	@ApiModelProperty(value = "软件盾")
+	private String				service;
+
+	@ApiModelProperty(value = "矩阵公钥")
+	private String				matrix;
+
 	@ApiModelProperty(value = "企业注册码(工商注册码-三证合一)")
 	private String				businessLicenseNumber;
 

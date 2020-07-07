@@ -30,6 +30,8 @@
         <result column="create_user" property="createUser" />
         <result column="update_user" property="updateUser" />
         <result column="key_number" property="keyNumber" />
+        <result column="service" property="service" />
+        <result column="matrix" property="matrix" />
     </resultMap>
 
     <!-- 多表页面信息查询 -->
@@ -38,6 +40,8 @@
 	        t.id,
 	        t.application_id AS applicationId,
 	        t.prefix,
+            t.service,
+            t.matrix,
 	        t.business_license_number AS businessLicenseNumber,
 	        t.enterprise_code AS enterpriseCode,
 	        t.enterprise_name AS enterpriseName,
@@ -99,6 +103,8 @@
 	        t.id,
 	        t.application_id AS applicationId,
 	        t.prefix,
+            t.service,
+            t.matrix,
 	        t.business_license_number AS businessLicenseNumber,
 	        t.enterprise_code AS enterpriseCode,
 	        t.enterprise_name AS enterpriseName,

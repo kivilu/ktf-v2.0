@@ -3,10 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="58b9ef18-70bb-4310-b50c-2786feed355b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ktf-dashboard-facade/src/main/java/com/kivi/dashboard/enums/KmsUserType.java" beforeDir="false" afterPath="$PROJECT_DIR$/ktf-dashboard-facade/src/main/java/com/kivi/dashboard/enums/KmsUserType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ktf-dashboard-impl/src/main/java/com/kivi/dashboard/sys/service/impl/SysResourceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ktf-dashboard-impl/src/main/java/com/kivi/dashboard/sys/service/impl/SysResourceServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ktf-dashboard-shiro/src/main/java/com/kivi/dashboard/shiro/ShiroUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/ktf-dashboard-shiro/src/main/java/com/kivi/dashboard/shiro/ShiroUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/sys/controller/SysUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/sys/controller/SysUserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/META-INF/spring-configuration-metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/bin/META-INF/spring-configuration-metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ktf-common/src/main/java/com/kivi/framework/model/SelectNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/ktf-common/src/main/java/com/kivi/framework/model/SelectNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/dto/EnterpriseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/dto/EnterpriseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/entity/Enterprise.java" beforeDir="false" afterPath="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/entity/Enterprise.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/xml/EnterpriseExMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/xml/EnterpriseExMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/xml/EnterpriseMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/xml/EnterpriseMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/enterprise/controller/EnterpriseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/enterprise/controller/EnterpriseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ktf-web/src/main/java/com/kivi/framework/web/intercepter/FileUploadTypeInterceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/ktf-web/src/main/java/com/kivi/framework/web/intercepter/FileUploadTypeInterceptor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ktf-web/src/main/java/com/kivi/framework/web/properties/KtfWebProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/ktf-web/src/main/java/com/kivi/framework/web/properties/KtfWebProperties.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/ktf-cif-facade/target/" />
@@ -38,49 +43,23 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/sys/controller/SysUserController.java">
+        <entry file="file://$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/enterprise/controller/EnterpriseController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2542">
-              <caret line="185" column="57" selection-start-line="185" selection-start-column="40" selection-end-line="185" selection-end-column="57" />
+            <state relative-caret-position="-1950">
+              <caret line="59" column="51" selection-start-line="59" selection-start-column="51" selection-end-line="59" selection-end-column="51" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#2155#2190#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/sys/controller/SysResourceController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="477">
-              <caret line="58" column="93" selection-start-line="58" selection-start-column="63" selection-end-line="58" selection-end-column="93" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ktf-dashboard-impl/src/main/java/com/kivi/dashboard/sys/service/impl/SysResourceServiceImpl.java">
+        <entry file="file://$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/sys/controller/SysUserController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1273">
-              <caret line="96" selection-start-line="96" selection-end-line="96" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ktf-dashboard-dubbo/src/main/java/com/kivi/dashboard/sys/dubbo/service/impl/SysResourceDubboServiceImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="83" column="28" selection-start-line="83" selection-start-column="28" selection-end-line="83" selection-end-column="28" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ktf-dashboard-impl/src/main/java/com/kivi/dashboard/sys/service/impl/SysUserServiceImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1377">
-              <caret line="167" column="18" selection-start-line="167" selection-start-column="18" selection-end-line="167" selection-end-column="18" />
+            <state relative-caret-position="146">
+              <caret line="87" selection-start-line="87" selection-end-line="87" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -92,14 +71,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>KtfTraceAspect</find>
-      <find>saveOrUpdate</find>
-      <find>sex</find>
-      <find>enterpriseId</find>
-      <find>CifCustomerMapper</find>
-      <find>CifCustomer</find>
-      <find>enterprise_id</find>
-      <find>SysUserMapper</find>
       <find>saveByVo</find>
       <find>selectSysUserPage</find>
       <find>sys/log/page</find>
@@ -122,6 +93,14 @@
       <find>selectByLoginName</find>
       <find>nav</find>
       <find>selectUserResourceListByUserId</find>
+      <find>getEnterpriseTree</find>
+      <find>/enterprise/getEnterpriseTree</find>
+      <find>select</find>
+      <find>/uploadFile</find>
+      <find>info</find>
+      <find>getDTOById</find>
+      <find>实例化IPKVKey对象o</find>
+      <find>FileUploadTypeInterceptor</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -147,20 +126,23 @@
         <option value="$PROJECT_DIR$/ktf-common/src/main/java/com/kivi/framework/vo/UserVo.java" />
         <option value="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/sys/dto/SysUserDTO.java" />
         <option value="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/sys/mapper/xml/SysUserExMapper.xml" />
-        <option value="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/entity/Enterprise.java" />
-        <option value="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/dto/EnterpriseDTO.java" />
         <option value="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/EnterpriseMapper.java" />
-        <option value="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/xml/EnterpriseMapper.xml" />
         <option value="$PROJECT_DIR$/ktf-dashboard-dubbo/src/main/java/com/kivi/dashboard/enterprise/dubbo/service/impl/EnterpriseDubboServiceImpl.java" />
         <option value="$PROJECT_DIR$/ktf-dashboard-facade/src/main/java/com/kivi/dashboard/enterprise/service/IEnterpriseService.java" />
         <option value="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/EnterpriseExMapper.java" />
         <option value="$PROJECT_DIR$/ktf-dashboard-impl/src/main/java/com/kivi/dashboard/enterprise/service/impl/EnterpriseServiceImpl.java" />
-        <option value="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/xml/EnterpriseExMapper.xml" />
-        <option value="$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/enterprise/controller/EnterpriseController.java" />
         <option value="$PROJECT_DIR$/ktf-dashboard-shiro/src/main/java/com/kivi/dashboard/shiro/ShiroUser.java" />
         <option value="$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/sys/controller/SysUserController.java" />
         <option value="$PROJECT_DIR$/ktf-dashboard-facade/src/main/java/com/kivi/dashboard/enums/KmsUserType.java" />
         <option value="$PROJECT_DIR$/ktf-dashboard-impl/src/main/java/com/kivi/dashboard/sys/service/impl/SysResourceServiceImpl.java" />
+        <option value="$PROJECT_DIR$/ktf-common/src/main/java/com/kivi/framework/model/SelectNode.java" />
+        <option value="$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/enterprise/controller/EnterpriseController.java" />
+        <option value="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/entity/Enterprise.java" />
+        <option value="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/xml/EnterpriseExMapper.xml" />
+        <option value="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/xml/EnterpriseMapper.xml" />
+        <option value="$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/dto/EnterpriseDTO.java" />
+        <option value="$PROJECT_DIR$/ktf-web/src/main/java/com/kivi/framework/web/intercepter/FileUploadTypeInterceptor.java" />
+        <option value="$PROJECT_DIR$/ktf-web/src/main/java/com/kivi/framework/web/properties/KtfWebProperties.java" />
       </list>
     </option>
   </component>
@@ -469,8 +451,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
+    <option name="x" value="854" />
+    <option name="y" value="211" />
     <option name="width" value="1036" />
     <option name="height" value="1083" />
   </component>
@@ -492,80 +474,47 @@
             <path>
               <item name="ktf" type="b2602c69:ProjectViewProjectNode" />
               <item name="ktf-v2.0" type="462c0819:PsiDirectoryNode" />
-              <item name="ktf-dashboard-mapper" type="462c0819:PsiDirectoryNode" />
+              <item name="ktf-dashboard-facade" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ktf" type="b2602c69:ProjectViewProjectNode" />
               <item name="ktf-v2.0" type="462c0819:PsiDirectoryNode" />
-              <item name="ktf-dashboard-mapper" type="462c0819:PsiDirectoryNode" />
+              <item name="ktf-dashboard-facade" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ktf" type="b2602c69:ProjectViewProjectNode" />
               <item name="ktf-v2.0" type="462c0819:PsiDirectoryNode" />
-              <item name="ktf-dashboard-mapper" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ktf" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ktf-v2.0" type="462c0819:PsiDirectoryNode" />
-              <item name="ktf-dashboard-mapper" type="462c0819:PsiDirectoryNode" />
+              <item name="ktf-dashboard-facade" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ktf" type="b2602c69:ProjectViewProjectNode" />
               <item name="ktf-v2.0" type="462c0819:PsiDirectoryNode" />
-              <item name="ktf-dashboard-mapper" type="462c0819:PsiDirectoryNode" />
+              <item name="ktf-dashboard-facade" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="dashboard" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ktf" type="b2602c69:ProjectViewProjectNode" />
               <item name="ktf-v2.0" type="462c0819:PsiDirectoryNode" />
-              <item name="ktf-dashboard-mapper" type="462c0819:PsiDirectoryNode" />
+              <item name="ktf-dashboard-facade" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="dashboard" type="462c0819:PsiDirectoryNode" />
-              <item name="enterprise" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ktf" type="b2602c69:ProjectViewProjectNode" />
               <item name="ktf-v2.0" type="462c0819:PsiDirectoryNode" />
-              <item name="ktf-dashboard-mapper" type="462c0819:PsiDirectoryNode" />
+              <item name="ktf-dashboard-facade" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="dashboard" type="462c0819:PsiDirectoryNode" />
-              <item name="sys" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ktf" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ktf-v2.0" type="462c0819:PsiDirectoryNode" />
-              <item name="ktf-dashboard-mapper" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="dashboard" type="462c0819:PsiDirectoryNode" />
-              <item name="sys" type="462c0819:PsiDirectoryNode" />
-              <item name="mapper" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ktf" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ktf-v2.0" type="462c0819:PsiDirectoryNode" />
-              <item name="ktf-dashboard-mapper" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="dashboard" type="462c0819:PsiDirectoryNode" />
-              <item name="sys" type="462c0819:PsiDirectoryNode" />
-              <item name="mapper" type="462c0819:PsiDirectoryNode" />
-              <item name="xml" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ktf" type="b2602c69:ProjectViewProjectNode" />
@@ -712,16 +661,25 @@
       <workItem from="1593524332247" duration="2564000" />
       <workItem from="1593533801966" duration="792000" />
       <workItem from="1593534768137" duration="1692000" />
+      <workItem from="1593752014930" duration="1928000" />
+      <workItem from="1594003926819" duration="2762000" />
+      <workItem from="1594018330312" duration="3578000" />
+      <workItem from="1594036325968" duration="238000" />
+      <workItem from="1594037759433" duration="635000" />
+      <workItem from="1594044284822" duration="1608000" />
+      <workItem from="1594099604891" duration="712000" />
+      <workItem from="1594101685707" duration="27000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="57623000" />
+    <option name="totallyTimeSpent" value="69111000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24413647" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23827292" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Web" order="2" side_tool="true" />
       <window_info id="Designer" order="3" />
@@ -729,7 +687,7 @@
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" weight="0.3601741" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" weight="0.4047878" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -748,7 +706,7 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="Maven" order="5" visible="true" weight="0.26492536" />
+      <window_info anchor="right" id="Maven" order="5" visible="true" weight="0.071428575" />
       <window_info anchor="right" id="Bean Validation" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
     </layout>
@@ -789,81 +747,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/enterprise/controller/EnterpriseJobController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="49" column="13" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/EnterpriseDepartmentExMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="15" column="17" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/EnterpriseDepartmentMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="13" column="17" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/EnterpriseJobMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="13" column="17" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-impl/src/main/java/com/kivi/dashboard/enterprise/service/impl/EnterpriseDepartmentServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="39" column="13" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/EnterpriseJobExMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/entity/Enterprise.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="138" column="19" selection-start-line="138" selection-start-column="19" selection-end-line="138" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/sys/mapper/SysUserEnterpriseExMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/sys/mapper/SysSmsTypeMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="13" column="17" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/sys/mapper/xml/SysUserTokenMapper.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/sys/mapper/xml/SysUserRoleMapper.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/sys/mapper/xml/SysUserEnterpriseMapper.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/sys/mapper/xml/SysSmsTypeMapper.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/sys/mapper/xml/SysUserEnterpriseExMapper.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="600">
@@ -913,13 +796,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-dubbo/src/main/java/com/kivi/dashboard/enterprise/dubbo/service/impl/EnterpriseDubboServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="654">
-          <caret line="113" column="8" selection-start-line="113" selection-start-column="8" selection-end-line="113" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://E:/Maven/repository/com/vip/vjtools/vjkit/1.0.8/vjkit-1.0.8.jar!/com/vip/vjtools/vjkit/number/NumberUtil.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -934,13 +810,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/EnterpriseExMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="687">
-          <caret line="37" selection-start-line="37" selection-end-line="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/EnterpriseMapper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
@@ -951,45 +820,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/base/DashboardController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="46" column="33" selection-start-line="46" selection-start-column="33" selection-end-line="46" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3152#3153#0" expanded="true" />
-            <element signature="e#3226#3227#0" expanded="true" />
-            <element signature="e#3404#3405#0" expanded="true" />
-            <element signature="e#3480#3481#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-facade/src/main/java/com/kivi/dashboard/enterprise/service/IEnterpriseService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2040">
-          <caret line="74" column="36" selection-start-line="74" selection-start-column="36" selection-end-line="74" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ktf-dashboard-impl/src/main/java/com/kivi/dashboard/enterprise/service/impl/EnterpriseServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1800">
           <caret line="82" column="40" selection-start-line="82" selection-start-column="40" selection-end-line="82" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/xml/EnterpriseMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="930">
-          <caret line="31" column="59" selection-start-line="31" selection-start-column="59" selection-end-line="31" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/xml/EnterpriseExMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2130">
-          <caret line="71" column="41" selection-start-line="71" selection-start-column="29" selection-end-line="71" selection-end-column="41" />
         </state>
       </provider>
     </entry>
@@ -1004,30 +838,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="503">
           <caret line="76" column="46" selection-start-line="76" selection-start-column="32" selection-end-line="76" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/enterprise/controller/EnterpriseController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="65" column="14" selection-start-line="65" selection-start-column="8" selection-end-line="65" selection-end-column="58" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/dto/EnterpriseDTO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="34" column="38" selection-start-line="34" selection-start-column="32" selection-end-line="34" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-shiro/src/main/java/com/kivi/dashboard/shiro/ShiroKit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="64" column="21" lean-forward="true" selection-start-line="64" selection-start-column="21" selection-end-line="64" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -1088,9 +898,23 @@
     <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/sys/mapper/xml/SysRoleExMapper.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/sys/controller/SysResourceController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="58" column="93" selection-start-line="58" selection-start-column="63" selection-end-line="58" selection-end-column="93" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-dubbo/src/main/java/com/kivi/dashboard/sys/dubbo/service/impl/SysResourceDubboServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1920">
+          <caret line="83" column="28" selection-start-line="83" selection-start-column="28" selection-end-line="83" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ktf-dashboard-impl/src/main/java/com/kivi/dashboard/sys/service/impl/SysUserServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1377">
+        <state relative-caret-position="3360">
           <caret line="167" column="18" selection-start-line="167" selection-start-column="18" selection-end-line="167" selection-end-column="18" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1098,34 +922,192 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-dubbo/src/main/java/com/kivi/dashboard/sys/dubbo/service/impl/SysResourceDubboServiceImpl.java">
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-impl/src/main/java/com/kivi/dashboard/sys/service/impl/SysResourceServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="83" column="28" selection-start-line="83" selection-start-column="28" selection-end-line="83" selection-end-column="28" />
+        <state relative-caret-position="30">
+          <caret line="96" selection-start-line="96" selection-end-line="96" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/sys/controller/SysUserController.java">
+    <entry file="jar://E:/Maven/repository/com/vip/vjtools/vjkit/1.0.8/vjkit-1.0.8.jar!/com/vip/vjtools/vjkit/collection/ListUtil.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2542">
-          <caret line="185" column="57" selection-start-line="185" selection-start-column="40" selection-end-line="185" selection-end-column="57" />
+        <state relative-caret-position="-990">
+          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/xml/EnterpriseDepartmentExMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="24" column="9" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://E:/Maven/repository/com/baomidou/mybatis-plus-extension/3.3.1.tmp/mybatis-plus-extension-3.3.1.tmp-sources.jar!/com/baomidou/mybatisplus/extension/service/IService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-603">
+          <caret line="45" column="17" selection-start-line="45" selection-start-column="17" selection-end-line="45" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-dubbo/src/main/java/com/kivi/dashboard/enterprise/dubbo/service/impl/EnterpriseDubboServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2692">
+          <caret line="113" column="33" selection-start-line="113" selection-start-column="33" selection-end-line="113" selection-end-column="33" />
+          <folding>
+            <element signature="e#2680#2681#0" expanded="true" />
+            <element signature="e#2726#2727#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/sys/entity/SysFile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="87">
+          <caret line="28" column="13" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-common/src/main/java/com/kivi/framework/model/SelectNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="690">
+          <caret line="27" column="38" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/xml/EnterpriseJobExMapper.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/xml/EnterpriseExMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="33" column="52" selection-start-line="32" selection-start-column="8" selection-end-line="33" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/xml/EnterpriseMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="990">
+          <caret line="33" column="52" selection-start-line="33" selection-start-column="52" selection-end-line="33" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-facade/src/main/java/com/kivi/dashboard/enterprise/service/IEnterpriseJobService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="41" selection-start-column="41" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/sys/controller/SysResourceController.java">
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-facade/src/main/java/com/kivi/dashboard/enterprise/service/IEnterpriseService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="477">
-          <caret line="58" column="93" selection-start-line="58" selection-start-column="63" selection-end-line="58" selection-end-column="93" />
+        <state relative-caret-position="180">
+          <caret line="12" column="11" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ktf-dashboard-impl/src/main/java/com/kivi/dashboard/sys/service/impl/SysResourceServiceImpl.java">
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-shiro/src/main/java/com/kivi/dashboard/shiro/ShiroKit.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1273">
-          <caret line="96" selection-start-line="96" selection-end-line="96" />
+        <state relative-caret-position="210">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/EnterpriseExMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="960">
+          <caret line="37" selection-start-line="37" selection-end-line="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/EnterpriseJobExMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/base/DashboardController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="26" column="22" selection-start-line="26" selection-start-column="22" selection-end-line="26" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3152#3153#0" expanded="true" />
+            <element signature="e#3226#3227#0" expanded="true" />
+            <element signature="e#3404#3405#0" expanded="true" />
+            <element signature="e#3480#3481#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/entity/Enterprise.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6390">
+          <caret line="224" column="60" selection-start-line="224" selection-start-column="60" selection-end-line="224" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/dto/EnterpriseDTO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1020">
+          <caret line="40" column="38" selection-start-line="40" selection-start-column="32" selection-end-line="40" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/sys/controller/UpLoadController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1860">
+          <caret line="101" column="37" selection-start-line="101" selection-start-column="31" selection-end-line="101" selection-end-column="37" />
+          <folding>
+            <element signature="e#16119#16120#0" expanded="true" />
+            <element signature="e#16172#16173#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-mapper/src/main/java/com/kivi/dashboard/enterprise/mapper/EnterpriseDepartmentExMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="15" column="17" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-web/src/main/java/com/kivi/framework/web/properties/KtfWebProperties.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="32" column="32" selection-start-line="32" selection-start-column="32" selection-end-line="32" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-web/src/main/java/com/kivi/framework/web/intercepter/FileUploadTypeInterceptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1140">
+          <caret line="53" column="29" selection-start-line="53" selection-start-column="20" selection-end-line="53" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/enterprise/controller/EnterpriseController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1950">
+          <caret line="59" column="51" selection-start-line="59" selection-start-column="51" selection-end-line="59" selection-end-column="51" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2155#2190#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ktf-dashboard-web/src/main/java/com/kivi/dashboard/sys/controller/SysUserController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="146">
+          <caret line="87" selection-start-line="87" selection-end-line="87" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

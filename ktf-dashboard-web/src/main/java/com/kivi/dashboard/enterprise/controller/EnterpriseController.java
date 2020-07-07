@@ -221,6 +221,7 @@ public class EnterpriseController extends UpLoadController {
 				SelectNode selectNode = new SelectNode();
 				selectNode.setValue(map.get("id").toString());
 				selectNode.setLabel(map.get("enterpriseName").toString());
+				selectNode.setPrefix(map.get("prefix").toString());
 				return selectNode;
 			}).collect(Collectors.toList());
 			return ResultMap.ok().put("list", nodeList);

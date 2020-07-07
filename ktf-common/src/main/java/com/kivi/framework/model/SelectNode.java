@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  */
 public class SelectNode implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long	serialVersionUID	= 1L;
 
@@ -24,6 +24,8 @@ public class SelectNode implements Serializable {
 	 * label
 	 */
 	private String				label;
+
+	private String 				prefix;
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private List<SelectNode>	options;
@@ -42,6 +44,14 @@ public class SelectNode implements Serializable {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public String getPrefix() {
+		return prefix;
+	}
+
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
 	}
 
 	public List<SelectNode> getOptions() {

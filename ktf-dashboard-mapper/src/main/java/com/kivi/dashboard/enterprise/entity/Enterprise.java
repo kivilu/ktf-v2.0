@@ -44,6 +44,15 @@ public class Enterprise extends Model<Enterprise> {
 	 */
 	@TableField("prefix")
 	private String				prefix;
+
+	@TableField("matrix")
+	private String matrix;
+
+	@TableField("service")
+	private String service;
+
+
+
 	/**
 	 * 企业注册码(工商注册码-三证合一)
 	 */
@@ -210,6 +219,10 @@ public class Enterprise extends Model<Enterprise> {
 	public static final String	UPDATE_USER					= "updateUser";
 	public static final String	DB_KEY_NUMBER			= "key_number";
 	public static final String	KEY_NUMBER				= "keyNumber";
+	public static final String	DB_MATRIX		= "matrix";
+	public static final String	MATRIX			= "matrix";
+	public static final String	DB_SERVICE		= "service";
+	public static final String	SERVICE			= "service";
 
 	@Override
 	protected Serializable pkVal() {

@@ -30,7 +30,7 @@ public class KtfWebProperties implements IKtfProperties {
 	/**
 	 * 允许的上传文件类型
 	 */
-	private String				allowFileSuffix		= "gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks";
+	private String				allowFileSuffix		= "pkm,vkd,gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks";
 
 	@Override
 	public String prefix() {
