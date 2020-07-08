@@ -68,7 +68,7 @@ public interface IEnterpriseService extends IService<Enterprise> {
 
 	/**
 	 * 多表分页查询
-	 * 
+	 *
 	 * @param params
 	 * @return
 	 */
@@ -76,7 +76,7 @@ public interface IEnterpriseService extends IService<Enterprise> {
 
 	/**
 	 * 查找全部有效企业名称
-	 * 
+	 *
 	 * @return
 	 */
 	List<Map<String, Object>> selectNames();

@@ -74,6 +74,9 @@ public class SysUserDTO implements Serializable {
 	@ApiModelProperty(value = "用户职务")
 	private Long				jobId;
 
+	@ApiModelProperty(value = "职务")
+	private String				post;
+
 	@ApiModelProperty(value = "是否领导（0-是，1-否）")
 	private Integer				isLeader;
 
@@ -104,6 +107,7 @@ public class SysUserDTO implements Serializable {
 	public static final String	ENTERPRISE_ID		= "enterpriseId";
 	public static final String	DEPARTMENT_ID		= "departmentId";
 	public static final String	JOB_ID				= "jobId";
+	public static final String	POST				= "post";
 	public static final String	IS_LEADER			= "isLeader";
 	public static final String	CREATE_USER_ID		= "createUserId";
 

@@ -11,7 +11,7 @@ import lombok.Getter;
 
 /**
  * 用户类型，0-超级管理员、1- 系统管理员、2-业务管理员、3-密钥操作员、4-密钥审核员、5-审计管理员、6-审计员
- * 
+ *
  * @author xueqi
  *
  */
@@ -26,7 +26,7 @@ public enum KmsUserType {
 		AUDITOR(6, "密钥审核员"),
 		API_USER(7, "API用户");
 
-	private final static KmsUserType	ADMIN_SYS_CHILDREN[]	= { ADMIN_BIZ };
+	private final static KmsUserType	ADMIN_SYS_CHILDREN[]	= { ADMIN_BIZ , OPERATOR_KEY};
 	private final static KmsUserType	ADMIN_BIZ_CHILDREN[]	= { OPERATOR_KEY, REVIEWER_KEY };
 	private final static KmsUserType	ADMIN_AUDIT_CHILDREN[]	= { AUDITOR };
 

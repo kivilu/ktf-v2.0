@@ -241,7 +241,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 		user.setApplicationId(KtfConstant.BZ_APPLICATION_ID);
 		user.setLoginMode(KtfIdentifyType.USERNAME.text);
-		user.setEnterpriseId(1L);
+		user.setEnterpriseId(userVo.getEnterpriseId());
 		user.setDepartmentId(1L);
 		user.setJobId(1L);
 

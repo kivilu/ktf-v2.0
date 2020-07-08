@@ -38,9 +38,9 @@ public class FileUploadTypeInterceptor extends HandlerInterceptorAdapter {
 				// 判断是否为限制文件类型
 				if (!checkFile(filename)) {
 					log.error(
-							"只允许上传gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks格式文件");
+							"只允许上传gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks,pkm,vkd格式文件");
 					new KtfException(
-							"只允许上传gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks格式文件");
+							"只允许上传gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,pkm,pfx,vkd格式文件");
 					flag = false;
 				}
 			}
@@ -53,7 +53,7 @@ public class FileUploadTypeInterceptor extends HandlerInterceptorAdapter {
 	 */
 	private boolean checkFile(String fileName) {
 		// 设置允许上传文件类型
-		String				suffixList	= "gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks";
+		String				suffixList	= "pkm,vkd,gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks,";
 
 		KtfWebProperties	webProp		= SpringContextHolder.getBean(KtfWebProperties.class);
 		if (webProp != null)

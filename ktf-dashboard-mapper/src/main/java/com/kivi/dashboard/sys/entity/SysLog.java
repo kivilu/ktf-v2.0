@@ -109,6 +109,9 @@ public class SysLog extends Model<SysLog> {
 	@TableField("record_ids")
 	private String				recordIds;
 
+	@TableField("enterprise_id")
+	private Long				enterpriseId;
+
 	public static final String	DB_ID				= "id";
 	public static final String	ID					= "id";
 	public static final String	DB_USER_NAME		= "user_name";
@@ -139,6 +142,8 @@ public class SysLog extends Model<SysLog> {
 	public static final String	GMT_UPDATE			= "gmtUpdate";
 	public static final String	DB_OPERATION_SIGN	= "operation_sign";
 	public static final String	OPERATION_SIGN		= "operationSign";
+	public static final String	DB_ENTERPRISE_ID	= "enterprise_id";
+	public static final String	ENTERPRISE_ID		= "enterpriseId";
 
 	@Override
 	protected Serializable pkVal() {

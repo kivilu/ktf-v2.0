@@ -76,6 +76,7 @@ public class EnterpriseController extends UpLoadController {
 	public ResultMap save(@Valid @RequestBody EnterpriseDTO enterpriseDTO) {
 		try {
 			// enterpriseDTO.setCreateUser(ShiroKit.getUser().getLoginName());
+			enterpriseDTO.setKeyNumber(100);
 			Enterprise enterprise = enterpriseService().save(enterpriseDTO);
 			saveFile(enterprise.getId());
 			return ResultMap.ok("新增成功！");
@@ -157,7 +158,7 @@ public class EnterpriseController extends UpLoadController {
 		ShiroUser shiroUser = ShiroKit.getUser();
 		// 不是管理员
 		if (shiroUser.getUserType() != 0) {
-			params.put(EnterpriseDTO.ID, ShiroKit.getUser().getId());
+			params.put("enterpriseId", ShiroKit.getUser().getEnterpriseId());
 		}
 
 		PageInfoVO<Map<String, Object>> page = enterpriseService().selectByPage(params);
@@ -220,6 +221,7 @@ public class EnterpriseController extends UpLoadController {
 				SelectNode selectNode = new SelectNode();
 				selectNode.setValue(map.get("id").toString());
 				selectNode.setLabel(map.get("enterpriseName").toString());
+				selectNode.setPrefix(map.get("prefix").toString());
 				return selectNode;
 			}).collect(Collectors.toList());
 			return ResultMap.ok().put("list", nodeList);
