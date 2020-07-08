@@ -22,6 +22,9 @@ import com.kivi.dashboard.sys.service.ISysUserRoleService;
 import com.kivi.dashboard.sys.service.ISysUserService;
 import com.kivi.dashboard.sys.service.ISysUserTokenService;
 import com.kivi.dashboard.sys.service.SysApi3rdpartyService;
+import com.kivi.framework.constant.KtfConstant;
+import com.kivi.framework.crypto.sm3.SM3Kit;
+import com.kivi.framework.crypto.sm4.SM4Kit;
 import com.kivi.framework.web.controller.BaseController;
 
 public abstract class DashboardController extends BaseController {
@@ -110,6 +113,16 @@ public abstract class DashboardController extends BaseController {
 
 	protected SysApi3rdpartyService sysApi3rdpartyService() {
 		return (SysApi3rdpartyService) beanMap.get(SysApi3rdpartyService.class.getName());
+	}
+
+	protected String decryptData(String encData, String jwtToken) {
+		byte[]	hash	= SM3Kit.sm3(jwtToken);
+		byte[]	key		= new byte[16];
+		System.arraycopy(hash, 16, key, 0, 16);
+
+		byte[] data = SM4Kit.decryptEcbHex(encData, key);
+
+		return new String(data, KtfConstant.DEFAULT_CHARSET);
 	}
 
 }

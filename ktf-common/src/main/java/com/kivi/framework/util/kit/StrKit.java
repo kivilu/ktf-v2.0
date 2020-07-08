@@ -1,6 +1,5 @@
 package com.kivi.framework.util.kit;
 
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +9,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.kivi.framework.constant.KtfConstant;
 import com.vip.vjtools.vjkit.collection.ArrayUtil;
 import com.vip.vjtools.vjkit.number.NumberUtil;
 
@@ -83,7 +83,17 @@ public class StrKit {
 	 * @return
 	 */
 	public static byte[] toBytes(String str) {
-		return str.getBytes(Charset.forName("UTF-8"));
+		return str.getBytes(KtfConstant.DEFAULT_CHARSET);
+	}
+
+	/**
+	 * bytes--->String
+	 * 
+	 * @param data
+	 * @return
+	 */
+	public static String toString(byte[] data) {
+		return new String(data, KtfConstant.DEFAULT_CHARSET);
 	}
 
 	/**
