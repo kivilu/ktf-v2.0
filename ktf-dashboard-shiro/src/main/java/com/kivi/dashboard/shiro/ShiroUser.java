@@ -16,7 +16,7 @@ public class ShiroUser implements Serializable {
 	private static final long	serialVersionUID	= 1L;
 
 	private Long				id;
-	
+
 	private Long 				cifId;
 
 	private String				loginName;
@@ -40,7 +40,7 @@ public class ShiroUser implements Serializable {
 
 	// 所属职务Id
 	private Long				jobId;
-	
+
 	/**
 	 * 上次登录IP
 	 */
@@ -64,6 +64,12 @@ public class ShiroUser implements Serializable {
 	 * 用户拥有的角色集合
 	 */
 	private List<String>		roles;
+	/**
+	 *
+	 */
+	private String		pre;
+
+	private String enterpriseName;
 
 	@Override
 	public String toString() {

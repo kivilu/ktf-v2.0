@@ -44,6 +44,16 @@
       "name": "ktf.task.pool",
       "type": "com.kivi.framework.properties.KtfTaskPoolProperties",
       "sourceType": "com.kivi.framework.properties.KtfTaskPoolProperties"
+    },
+    {
+      "name": "ktf.web",
+      "type": "com.kivi.framework.web.properties.KtfWebProperties",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties"
+    },
+    {
+      "name": "ktf.web.jwt",
+      "type": "com.kivi.framework.web.properties.KtfJwtProperties",
+      "sourceType": "com.kivi.framework.web.properties.KtfJwtProperties"
     }
   ],
   "properties": [
@@ -87,56 +97,6 @@
       "sourceType": "com.kivi.framework.properties.KtfDashboardProperties"
     },
     {
-      "name": "ktf.dashboard.cas.callback-url",
-      "type": "java.lang.String",
-      "description": "Cas回调地址 示例：http:\/\/127.0.0.1:8080\/callback",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Cas"
-    },
-    {
-      "name": "ktf.dashboard.cas.cas-login-url",
-      "type": "java.lang.String",
-      "description": "Cas登录页面地址，示例：http:\/\/127.0.0.1:8000\/cas\/login",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Cas"
-    },
-    {
-      "name": "ktf.dashboard.cas.logout-url",
-      "type": "java.lang.String",
-      "description": "Cas退出页面地址 示例：http:\/\/127.0.0.1:8000\/cas\/logout",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Cas"
-    },
-    {
-      "name": "ktf.dashboard.cas.prefix-url",
-      "type": "java.lang.String",
-      "description": "CasServerUrlPrefix，示例： http:\/\/127.0.0.1:8000\/cas",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Cas"
-    },
-    {
-      "name": "ktf.dashboard.cas.salt",
-      "type": "java.lang.String",
-      "description": "cas密码盐，默认：12345678901234567890123456789012",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Cas"
-    },
-    {
-      "name": "ktf.dashboard.cas.service-url",
-      "type": "java.lang.String",
-      "description": "Dashboard服务地址，http:\/\/ 127.0.0.1:8080\/",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Cas"
-    },
-    {
-      "name": "ktf.dashboard.cookie.max-age",
-      "type": "java.lang.Integer",
-      "description": "Cookie最大存活时间，单位：秒，默认7天：604800",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Cookie",
-      "defaultValue": 0
-    },
-    {
-      "name": "ktf.dashboard.cookie.path",
-      "type": "java.lang.String",
-      "description": "Cookie路径，默认：\/ktf-dashboard",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Cookie",
-      "defaultValue": "\/ktf-dashboard"
-    },
-    {
       "name": "ktf.dashboard.dubbo-service-version",
       "type": "java.lang.String",
       "description": "dubbo service 版本号",
@@ -155,88 +115,6 @@
       "type": "com.kivi.framework.constant.enums.LoginType",
       "description": "登录方式支持：UserName,Ukey，默认：UserName",
       "sourceType": "com.kivi.framework.properties.KtfDashboardProperties"
-    },
-    {
-      "name": "ktf.dashboard.session.cache",
-      "type": "java.lang.String",
-      "description": "shiro的共享session缓存的名字，默认值：ktf-shiro-session-",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Session",
-      "defaultValue": "ktf-shiro-session-"
-    },
-    {
-      "name": "ktf.dashboard.session.enabled",
-      "type": "java.lang.Boolean",
-      "description": "是否启用",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Session",
-      "defaultValue": true
-    },
-    {
-      "name": "ktf.dashboard.session.expire-time",
-      "type": "java.lang.Integer",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Session",
-      "defaultValue": 1800
-    },
-    {
-      "name": "ktf.dashboard.shiro.anon-filter",
-      "type": "java.util.List<java.lang.String>",
-      "description": "shiro 开发资源列表",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Shiro"
-    },
-    {
-      "name": "ktf.dashboard.shiro.cache",
-      "type": "java.lang.String",
-      "description": "shiro的缓存名字，默认值：ktf-shiro-cache-",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Shiro",
-      "defaultValue": "ktf-shiro-cache-"
-    },
-    {
-      "name": "ktf.dashboard.shiro.login-url",
-      "type": "java.lang.String",
-      "description": "登录URL，默认：\/login",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Shiro",
-      "defaultValue": "\/login"
-    },
-    {
-      "name": "ktf.dashboard.shiro.success-url",
-      "type": "java.lang.String",
-      "description": "登录成功URL，默认：\/index",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Shiro",
-      "defaultValue": "\/index"
-    },
-    {
-      "name": "ktf.dashboard.shiro.unauthorized-url",
-      "type": "java.lang.String",
-      "description": "未登录URL，默认：\/unauth",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Shiro",
-      "defaultValue": "\/unauth"
-    },
-    {
-      "name": "ktf.dashboard.upload.fdfs-file-server",
-      "type": "java.lang.String",
-      "description": "FastDFS文件上传服务器名称",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Upload",
-      "defaultValue": ""
-    },
-    {
-      "name": "ktf.dashboard.upload.file-prefix",
-      "type": "java.lang.String",
-      "description": "文件上传路径前缀",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Upload",
-      "defaultValue": "\/tmp\/file-upload"
-    },
-    {
-      "name": "ktf.dashboard.upload.file-server",
-      "type": "java.lang.String",
-      "description": "文件上传服务器名称",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Upload",
-      "defaultValue": ""
-    },
-    {
-      "name": "ktf.dashboard.upload.qr-code-dir",
-      "type": "java.lang.String",
-      "description": "二维码文件本地路径",
-      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties$Upload",
-      "defaultValue": "\/tmp\/file-download\/qr"
     },
     {
       "name": "ktf.swagger.authorization-enabled",
@@ -327,6 +205,80 @@
       "type": "java.lang.Integer",
       "sourceType": "com.kivi.framework.properties.KtfTaskPoolProperties",
       "defaultValue": 11
+    },
+    {
+      "name": "ktf.web.allow-file-suffix",
+      "type": "java.lang.String",
+      "description": "允许的上传文件类型",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties",
+      "defaultValue": "pkm,vkd,gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks"
+    },
+    {
+      "name": "ktf.web.default-password",
+      "type": "java.lang.String",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties",
+      "defaultValue": "11111111"
+    },
+    {
+      "name": "ktf.web.enable-csrf",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "ktf.web.enable-ukey",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "ktf.web.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "ktf.web.jwt.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.web.properties.KtfJwtProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "ktf.web.jwt.exclude-path-patterns",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.kivi.framework.web.properties.KtfJwtProperties"
+    },
+    {
+      "name": "ktf.web.jwt.issuer",
+      "type": "java.lang.String",
+      "sourceType": "com.kivi.framework.web.properties.KtfJwtProperties",
+      "defaultValue": "kivi"
+    },
+    {
+      "name": "ktf.web.jwt.secret-seed",
+      "type": "java.lang.String",
+      "sourceType": "com.kivi.framework.web.properties.KtfJwtProperties",
+      "defaultValue": "kivi.jwt"
+    },
+    {
+      "name": "ktf.web.jwt.ttl",
+      "type": "java.lang.Integer",
+      "description": "JWT token有效时间，单位：小时",
+      "sourceType": "com.kivi.framework.web.properties.KtfJwtProperties",
+      "defaultValue": 24
+    },
+    {
+      "name": "ktf.web.kaptcha-open",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "ktf.web.web-request-timeout",
+      "type": "java.lang.Long",
+      "description": "Web请求默认超时时间",
+      "sourceType": "com.kivi.framework.web.properties.KtfWebProperties",
+      "defaultValue": 30000
     }
   ],
   "hints": []

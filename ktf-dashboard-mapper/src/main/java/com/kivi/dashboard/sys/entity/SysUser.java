@@ -106,6 +106,9 @@ public class SysUser extends Model<SysUser> {
 	@TableField("create_user_id")
 	private Long				createUserId;
 
+	@TableField("post")
+	private String				post;
+
 	public static final String	DB_ID				= "id";
 	public static final String	ID					= "id";
 	public static final String	DB_CIF_ID			= "cif_id";
@@ -136,6 +139,8 @@ public class SysUser extends Model<SysUser> {
 	public static final String	GMT_UPDATE			= "gmtUpdate";
 	public static final String	DB_CREATE_USER_ID	= "create_user_id";
 	public static final String	CREATE_USER_ID		= "createUserId";
+	public static final String	DB_POST	= "post";
+	public static final String	POST		= "post";
 
 	@Override
 	protected Serializable pkVal() {

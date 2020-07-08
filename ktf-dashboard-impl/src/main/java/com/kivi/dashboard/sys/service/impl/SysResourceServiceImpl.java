@@ -153,9 +153,9 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 	@Override
 	public List<ResourceVo> selectUserResourceListByUserId(Long userId) {
 		// 系统管理员，拥有最高权限
-		if (userId == KtfConstant.SUPER_ADMIN) {
-			return selectMenuList(null);
-		}
+//		if (userId == KtfConstant.SUPER_ADMIN) {
+//			return selectMenuList(null);
+//		}
 		// 用户菜单列表
 		List<SysMenu>		sysMenus	= sysResourceExMapper.selectResourceListByUserId(userId);
 		List<ResourceVo>	menuList	= CollectionKit.newArrayList();
