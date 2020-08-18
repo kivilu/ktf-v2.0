@@ -10,9 +10,11 @@ import org.bouncycastle.jce.interfaces.ECPublicKey;
  *
  */
 public interface Sm2PublicKey extends ECPublicKey {
-    ECPublicKeyParameters getPublicKeyParameters();
+	ECPublicKeyParameters getPublicKeyParameters();
 
-    byte[] getWithId();
+	byte[] getWithId();
 
-    void setWithId( byte[] withId );
+	void setWithId(byte[] withId);
+
+	byte[] getData();
 }

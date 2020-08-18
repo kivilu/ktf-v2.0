@@ -5,7 +5,7 @@ import java.security.PublicKey;
 
 import org.springframework.util.StringUtils;
 
-import com.kivi.framework.crypto.util.KeyPairUtil;
+import com.kivi.framework.crypto.util.CertUtil;
 
 public class KeyPairResult extends KeyPairDO {
 	/**
@@ -35,7 +35,7 @@ public class KeyPairResult extends KeyPairDO {
 	@Override
 	public String getPub_pem() {
 		if (StringUtils.isEmpty(pub_pem)) {
-			pub_pem = KeyPairUtil.convertPublicKeyToPemString(pub);
+			pub_pem = CertUtil.convertPublicKeyToPemString(pub);
 		}
 		return pub_pem;
 	}
@@ -48,7 +48,7 @@ public class KeyPairResult extends KeyPairDO {
 	@Override
 	public String getPri_pem() {
 		if (StringUtils.isEmpty(pri_pem)) {
-			pri_pem = KeyPairUtil.convertPrivateKeyToPemString(pri);
+			pri_pem = CertUtil.convertPrivateKeyToPemString(pri);
 		}
 		return pri_pem;
 	}
