@@ -3,6 +3,8 @@ package com.kivi.framework.crypto.enums;
 import java.util.Arrays;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.kivi.framework.util.kit.StrKit;
 
 import lombok.Getter;
@@ -26,6 +28,14 @@ public enum AlgSM4 {
 
 	public boolean zeroPadding() {
 		return alg.endsWith("ZeroPadding");
+	}
+
+	public boolean isNoPadding() {
+		return alg.endsWith("NoPadding");
+	}
+
+	public boolean isCbc() {
+		return StringUtils.contains(alg, "CBC");
 	}
 
 	public Padding padding() {

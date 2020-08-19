@@ -53,12 +53,12 @@ class SM4Test {
 
 		String	plain	= "测试sm4";
 
-		byte[]	enc		= SM4Kit.encrypt(AlgSM4.SM4_ECB_PKCS7, StrKit.toBytes(plain), key);
+		byte[]	enc		= SM4Kit.encrypt(StrKit.toBytes(plain), key);
 		String	hexEnc	= ByteStringKit.toHex(enc);
 		System.out.println("sm4加密:" + hexEnc);
 		assertEquals("CD7EE4EDFA6A01A828E076F713EADAED", hexEnc);
 
-		byte[]	data	= SM4Kit.decrypt(AlgSM4.SM4_ECB_PKCS7, enc, key);
+		byte[]	data	= SM4Kit.decrypt(enc, key);
 		String	result	= new String(data, KtfConstant.DEFAULT_CHARSET);
 		System.out.println("sm4解密:" + result);
 		assertEquals(plain, result);
@@ -86,12 +86,12 @@ class SM4Test {
 
 	@Test
 	void testSM4_CBC_NoPadding() {
-		byte[] enc = SM4Kit.sm4Encrypt(AlgSM4.SM4_CBC_NoPadding, ByteStringKit.fromHex(CBC_PLAINTEXT),
+		byte[] enc = SM4Kit.encrypt(AlgSM4.SM4_CBC_NoPadding, ByteStringKit.fromHex(CBC_PLAINTEXT),
 				ByteStringKit.fromHex(KEY), ByteStringKit.fromHex(CBC_IV));
 		System.out.println("CIPHERTEXT:" + ByteStringKit.toHex(enc));
 		assertEquals(CBC_CIPHERTEXT, ByteStringKit.toHex(enc));
 
-		byte[] data = SM4Kit.sm4Decrypt(AlgSM4.SM4_CBC_NoPadding, ByteStringKit.fromHex(CBC_CIPHERTEXT),
+		byte[] data = SM4Kit.decrypt(AlgSM4.SM4_CBC_NoPadding, ByteStringKit.fromHex(CBC_CIPHERTEXT),
 				ByteStringKit.fromHex(KEY), ByteStringKit.fromHex(CBC_IV));
 		System.out.println("PLAINTEXT:" + ByteStringKit.toHex(data));
 		assertEquals(CBC_PLAINTEXT, ByteStringKit.toHex(data));
@@ -112,12 +112,12 @@ class SM4Test {
 
 	@Test
 	void testSM4_SM4_CBC_PKCS7() {
-		byte[]	enc		= SM4Kit.sm4Encrypt(AlgSM4.SM4_CBC_PKCS7, ByteStringKit.fromHex(ECB_PLAINTEXT),
+		byte[]	enc		= SM4Kit.encrypt(AlgSM4.SM4_CBC_PKCS7, ByteStringKit.fromHex(ECB_PLAINTEXT),
 				ByteStringKit.fromHex(KEY), ByteStringKit.fromHex(CBC_IV));
 		String	hexEnc	= ByteStringKit.toHex(enc);
 		System.out.println("CIPHERTEXT:" + hexEnc);
 
-		byte[]	data	= SM4Kit.sm4Decrypt(AlgSM4.SM4_CBC_PKCS7, enc, ByteStringKit.fromHex(KEY),
+		byte[]	data	= SM4Kit.decrypt(AlgSM4.SM4_CBC_PKCS7, enc, ByteStringKit.fromHex(KEY),
 				ByteStringKit.fromHex(CBC_IV));
 		String	result	= ByteStringKit.toHex(data);
 		System.out.println("PLAINTEXT:" + result);
@@ -139,12 +139,12 @@ class SM4Test {
 
 	@Test
 	void testSM4_SM4_CBC_PKCS5() {
-		byte[]	enc		= SM4Kit.sm4Encrypt(AlgSM4.SM4_CBC_PKCS5, ByteStringKit.fromHex(ECB_PLAINTEXT),
+		byte[]	enc		= SM4Kit.encrypt(AlgSM4.SM4_CBC_PKCS5, ByteStringKit.fromHex(ECB_PLAINTEXT),
 				ByteStringKit.fromHex(KEY), ByteStringKit.fromHex(CBC_IV));
 		String	hexEnc	= ByteStringKit.toHex(enc);
 		System.out.println("CIPHERTEXT:" + hexEnc);
 
-		byte[]	data	= SM4Kit.sm4Decrypt(AlgSM4.SM4_CBC_PKCS5, enc, ByteStringKit.fromHex(KEY),
+		byte[]	data	= SM4Kit.decrypt(AlgSM4.SM4_CBC_PKCS5, enc, ByteStringKit.fromHex(KEY),
 				ByteStringKit.fromHex(CBC_IV));
 		String	result	= ByteStringKit.toHex(data);
 		System.out.println("PLAINTEXT:" + result);

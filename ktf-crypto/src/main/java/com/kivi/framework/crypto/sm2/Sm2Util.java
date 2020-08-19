@@ -17,6 +17,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1Sequence;
@@ -91,17 +92,16 @@ public class Sm2Util {
 		}
 	}
 
-	public static Sm2PublicKey sm2PublicKey(byte[] pubKeyXY) {
-		if (pubKeyXY.length != 64 && pubKeyXY.length != 65)
+	public static Sm2PublicKey sm2PublicKeyXY(String pubKeyXY) {
+		if (pubKeyXY.length() != 128 && pubKeyXY.length() != 130)
 			throw new KtfException(KtfError.E_CRYPTO, "SM2公钥数据长度不正确");
-		int		pos		= pubKeyXY.length == 64 ? 0 : 1;
-		byte[]	xbytes	= new byte[32];
-		byte[]	ybytes	= new byte[32];
-		System.arraycopy(pubKeyXY, pos, xbytes, 0, xbytes.length);
-		System.arraycopy(pubKeyXY, pos + xbytes.length, ybytes, 0, ybytes.length);
+		int			pos		= pubKeyXY.length() == 128 ? 0 : 2;
 
-		BigInteger	x	= new BigInteger(ybytes);
-		BigInteger	y	= new BigInteger(xbytes);
+		String		hexX	= StringUtils.substring(pubKeyXY, pos, 64);
+		String		hexY	= StringUtils.substring(pubKeyXY, pos + 64);
+
+		BigInteger	x		= new BigInteger(hexX, 16);
+		BigInteger	y		= new BigInteger(hexY, 16);
 
 		return sm2PublicKey(x, y);
 	}
@@ -133,7 +133,7 @@ public class Sm2Util {
 		}
 	}
 
-	public static Sm2PublicKey sm2PublicKey(String pemPubKey) {
+	public static Sm2PublicKey sm2PublicKeyPem(String pemPubKey) {
 		return sm2PublicKey(new ByteArrayInputStream(StrKit.toBytes(pemPubKey)));
 	}
 
@@ -152,8 +152,8 @@ public class Sm2Util {
 		}
 	}
 
-	public static Sm2PrivateKey sm2PrivateKey(byte[] priKeyD) {
-		BigInteger d = new BigInteger(priKeyD);
+	public static Sm2PrivateKey sm2PrivateKeyD(String hexD) {
+		BigInteger d = new BigInteger(hexD, 16);
 		return sm2PrivateKey(d);
 	}
 
@@ -165,7 +165,7 @@ public class Sm2Util {
 		return new Sm2PrivateKeyImpl(privateKey);
 	}
 
-	public static Sm2PrivateKey sm2PrivateKey(String pemPriKey) {
+	public static Sm2PrivateKey sm2PrivateKeyPem(String pemPriKey) {
 		return sm2PrivateKey(new ByteArrayInputStream(StrKit.toBytes(pemPriKey)));
 	}
 
@@ -194,7 +194,14 @@ public class Sm2Util {
 	 * @return
 	 */
 	public static byte[] sm2Decrypt(byte[] data, PrivateKey key) {
-		return sm2DecryptOld(changeC1C3C2ToC1C2C3(data), key);
+		byte[] xdata = null;
+		if (data.length == 128) {
+			xdata		= new byte[129];
+			xdata[0]	= 0x04;
+			System.arraycopy(data, 0, xdata, 1, data.length);
+		} else
+			xdata = data;
+		return sm2DecryptOld(changeC1C3C2ToC1C2C3(xdata), key);
 	}
 
 	/**
@@ -269,11 +276,9 @@ public class Sm2Util {
 	 */
 	public static byte[] signWithNoHash(byte[] msg, Sm2PrivateKey privateKey) {
 		try {
-			Signature signature = Signature.getInstance(AlgSign.SM2_NO.getAlg());
-			signature.initSign(privateKey);
-			signature.update(msg);
-			byte[] sig = signature.sign();
-			return rsAsn1ToPlainByteArray(sig);
+			SM2Signer			signer	= new SM2Signer();
+			SM2Signer.Signature	sig		= signer.signNoHash(msg, privateKey.getD());
+			return sig.toBytes();
 		} catch (Exception e) {
 			throw new KtfException(KtfError.E_CRYPTO, "SM2签名异常", e);
 		}
@@ -343,10 +348,8 @@ public class Sm2Util {
 
 	public static boolean verifyWithNoHash(byte[] msg, byte[] rs, Sm2PublicKey publicKey) {
 		try {
-			Signature verifier = Signature.getInstance(AlgSign.SM2_NO.getAlg(), ProviderInstance.getBCProvider());
-			verifier.initVerify(publicKey);
-			verifier.update(msg, 0, msg.length);
-			return verifier.verify(rs);
+			SM2Signer signer = new SM2Signer();
+			return signer.verifyNoHash(msg, new SM2Signer.Signature(rs), publicKey.getQ());
 		} catch (Exception e) {
 			throw new KtfException(KtfError.E_CRYPTO, "SM2验签异常", e);
 		}
