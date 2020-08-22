@@ -33,7 +33,6 @@ import com.kivi.framework.model.SelectTreeNode;
 import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.vip.vjtools.vjkit.collection.ListUtil;
-import com.vip.vjtools.vjkit.number.NumberUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -57,16 +56,8 @@ public class SysDicController extends DashboardController {
 	@ApiOperation(value = "数据字典信息", notes = "数据字典信息")
 	@GetMapping("/info/{id}")
 	@RequiresPermissions("sys/dic/info")
-	public ResultMap info(@PathVariable("id") String id) {
-		SysDicDTO dto = sysDicService().getDTOById(NumberUtil.toLongObject(id, -1L));
-		if (dto != null) {
-			SysDicDTO pDto = sysDicService().getDTOById(dto.getParentId());
-			if (pDto != null) {
-				dto.setParentName(pDto.getVarName());
-			} else {
-				dto.setParentName("顶级");
-			}
-		}
+	public ResultMap info(@PathVariable("id") Long id) {
+		SysDicDTO dto = sysDicService().getDTOById(id);
 
 		return ResultMap.ok().put("dic", dto);
 	}
@@ -245,6 +236,26 @@ public class SysDicController extends DashboardController {
 		PageInfoVO<SysDicDTO> page = sysDicService().page(params);
 
 		return ResultMap.ok().put("page", page);
+	}
+
+	@ApiOperation(value = "seftTestPreset", notes = "获取自检预置数据")
+	@RequiresPermissions("sys/dic/seftTestPreset")
+	@GetMapping("/seftTestPreset")
+	public ResultMap getSeftTestPreset() {
+		Map<String, Object> params = new HashMap<>();
+		params.put(SysDicDTO.VAR_CODE, "SELF_TEST_PRESET");
+		List<SysDicDTO> list = sysDicService().getChildren(params);
+		return ResultMap.ok().put("data", list);
+	}
+
+	@ApiOperation(value = "getChildren", notes = "查询下级数据")
+	@RequiresPermissions("sys/dic/getChildren")
+	@GetMapping("/getChildren/{id}")
+	public ResultMap getChildren(@PathVariable("id") Long id) {
+		Map<String, Object> params = new HashMap<>();
+		params.put(SysDicDTO.ID, id);
+		List<SysDicDTO> list = sysDicService().getChildren(params);
+		return ResultMap.ok().put("data", list);
 	}
 
 }

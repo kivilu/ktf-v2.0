@@ -1,5 +1,6 @@
 package com.kivi.dashboard.sys.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,16 +66,12 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 		return dic;
 	}
 
-	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'.'+#pCode+#ppId", unless = "#result == null")
-	@Override
-	public List<String> listVarCode(String pCode, Long ppId) {
-		return sysDicExMapper.listVarCode(pCode, ppId);
-	}
-
 	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'.'+#pVarCode", unless = "#result == null")
 	@Override
-	public List<String> listVarCode(String pVarCode) {
-		return sysDicExMapper.listVarCode(pVarCode, 0L);
+	public List<SysDicDTO> listByVarCode(String pVarCode) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("pVarCode", pVarCode);
+		return sysDicExMapper.listByVarCode(params);
 	}
 
 	/**
@@ -218,6 +215,13 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 		result = super.remove(wrapper);
 
 		return result;
+	}
+
+	@Override
+	public List<SysDicDTO> getChildren(Map<String, Object> params) {
+		params.put("hasSelf", false);
+		
+		return sysDicExMapper.getChildren(params);
 	}
 
 }

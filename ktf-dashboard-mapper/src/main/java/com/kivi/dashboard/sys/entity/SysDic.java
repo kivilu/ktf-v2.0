@@ -50,6 +50,11 @@ public class SysDic extends Model<SysDic> {
     @TableField("var_name")
     private String varName;
     /**
+     * 变量值
+     */
+    @TableField("var_value")
+    private String varValue;
+    /**
      * 数据是否同步(0:是,1:否)
      */
     @TableField("is_sync")
@@ -84,6 +89,8 @@ public class SysDic extends Model<SysDic> {
 	public static final String VAR_CODE = "varCode";
     public static final String DB_VAR_NAME = "var_name";
 	public static final String VAR_NAME = "varName";
+	public static final String DB_VAR_VALUE = "var_value";
+	public static final String VAR_VALUE = "varName";
     public static final String DB_IS_SYNC = "is_sync";
 	public static final String IS_SYNC = "isSync";
     public static final String DB_GMT_CREATE = "gmt_create";

@@ -93,8 +93,8 @@ public class UserVo implements Serializable {
 	 * 上次登录时间
 	 */
 	private LocalDateTime		lastTime;
-	
-	private LocalDateTime gmtCreate;
+
+	private LocalDateTime		gmtCreate;
 
 	/**
 	 * 角色Id列表

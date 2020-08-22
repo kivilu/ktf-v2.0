@@ -1,5 +1,6 @@
 package com.kivi.dashboard.sys.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,6 +32,7 @@ import com.kivi.dashboard.sys.entity.SysUser;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.constant.enums.KtfStatus;
 import com.kivi.framework.converter.BeanConverter;
+import com.kivi.framework.dto.JwtUserDTO;
 import com.kivi.framework.model.ResultMap;
 import com.kivi.framework.model.SelectNode;
 import com.kivi.framework.service.KtfTokenService;
@@ -240,15 +242,28 @@ public class SysUserController extends DashboardController {
 				return ResultMap.error("当前用户不能删除");
 			}
 
-			Boolean b = sysUserService().deleteBatch(ids);
-			if (b) {
-				return ResultMap.ok("删除成功！");
+			JwtUserDTO	jwt	= super.getJwtUser();
+			Boolean		b	= false;
+			if (KmsUserType.SYSTEM.getCode() == jwt.getUserType()) {
+				b = sysUserService().deleteBatch(ids);
 			} else {
-				return ResultMap.ok("删除失败！");
+				List<SysUser> entityList = Arrays.asList(ids).stream().map(id -> {
+					SysUser entity = new SysUser();
+					entity.setId(id);
+					entity.setStatus(KtfStatus.LOCKED.code);
+					return entity;
+				}).collect(Collectors.toList());
+				b = sysUserService().updateBatchById(entityList);
+			}
+
+			if (b) {
+				return ResultMap.ok("操作成功！");
+			} else {
+				return ResultMap.ok("操作失败！");
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			return ResultMap.error("批量删除失败，请联系管理员");
+			return ResultMap.error("操作失败，请联系管理员");
 		}
 	}
 

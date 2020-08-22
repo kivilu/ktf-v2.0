@@ -77,7 +77,7 @@ public class FastJsonConverter {
 		List<MediaType> supportedMediaTypes = new ArrayList<>();
 		supportedMediaTypes.add(MediaType.parseMediaType("text/html;charset=UTF-8"));
 		supportedMediaTypes.add(MediaType.APPLICATION_JSON);
-		supportedMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
+		// supportedMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
 		fastJsonConverter.setSupportedMediaTypes(supportedMediaTypes);
 
 		return fastJsonConverter;

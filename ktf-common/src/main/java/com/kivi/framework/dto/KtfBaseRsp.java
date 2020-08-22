@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.kivi.framework.constant.KtfError;
 import com.kivi.framework.exception.KtfException;
 
 import io.swagger.annotations.ApiModel;
@@ -33,8 +34,14 @@ public class KtfBaseRsp<T> implements Serializable {
 	@Size(max = 8, message = "版本号长度最大为8")
 	private String				version				= "1.0.0";
 
-	@ApiModelProperty(hidden = true)
-	private String				bizSeqId;
+	@ApiModelProperty(
+			position = 2,
+			value = "业务请求流水号 ",
+			required = true,
+			dataType = "String",
+			notes = "业务请求流水号 ",
+			example = "")
+	private String				oriBizSeqId;
 
 	@ApiModelProperty(
 			position = 3,
@@ -43,7 +50,7 @@ public class KtfBaseRsp<T> implements Serializable {
 			dataType = "String",
 			notes = "请求响应码，200：成功；其他：失败",
 			example = "200")
-	private int					rspCode;
+	private int					code;
 
 	@ApiModelProperty(
 			position = 4,
@@ -54,7 +61,7 @@ public class KtfBaseRsp<T> implements Serializable {
 			example = "成功")
 	@NotEmpty
 	@Size(max = 128, message = "请求响应码说明长度最大为128")
-	private String				rspDesc;
+	private String				msg;
 
 	@ApiModelProperty(
 			position = 5,
@@ -63,11 +70,77 @@ public class KtfBaseRsp<T> implements Serializable {
 			dataType = "String",
 			notes = "响应数据体",
 			example = "")
-	private T					rspBody;
+	private T					data;
 
-	public void setException(KtfException e) {
-		this.rspCode	= e.getCode();
-		this.rspDesc	= e.getTips();
+	public KtfBaseRsp() {
+		this.code	= KtfError.SUCCESS;
+		this.msg	= "success";
+	}
+
+	public static <T> KtfBaseRsp<T> ok() {
+		return ok(null, null);
+	}
+
+	public static <T> KtfBaseRsp<T> ok(KtfBaseReq<?> req) {
+		return ok(null, req);
+	}
+
+	public static <T> KtfBaseRsp<T> ok(String msg) {
+		return ok(msg, null);
+	}
+
+	public static <T> KtfBaseRsp<T> ok(String msg, KtfBaseReq<?> req) {
+		KtfBaseRsp<T> r = new KtfBaseRsp<>();
+
+		if (msg != null)
+			r.msg = msg;
+
+		if (req != null) {
+			r.version		= req.getVersion();
+			r.oriBizSeqId	= req.getBizSeqId();
+		}
+
+		return r;
+	}
+
+	public static <T> KtfBaseRsp<T> error(int code, String msg, KtfBaseReq<?> req) {
+		KtfBaseRsp<T> r = new KtfBaseRsp<>();
+		r.code	= code;
+		r.msg	= msg;
+		if (req != null) {
+			r.version		= req.getVersion();
+			r.oriBizSeqId	= req.getBizSeqId();
+		}
+
+		return r;
+	}
+
+	public static <T> KtfBaseRsp<T> error(int code, String msg) {
+		return error(code, msg, null);
+	}
+
+	public static <T> KtfBaseRsp<T> error(String msg) {
+		return error(KtfError.E_UNDEFINED, msg, null);
+	}
+
+	public static <T> KtfBaseRsp<T> error(String msg, KtfBaseReq<?> req) {
+		return error(KtfError.E_UNDEFINED, msg, req);
+	}
+
+	public static <T> KtfBaseRsp<T> error(KtfException e) {
+		return error(e.getCode(), e.getTips(), null);
+	}
+
+	public static <T> KtfBaseRsp<T> error(KtfException e, KtfBaseReq<?> req) {
+		return error(e.getCode(), e.getTips(), req);
+	}
+
+	public static <T> KtfBaseRsp<T> error() {
+		return error(KtfError.E_UNDEFINED, "未知异常，请联系管理员", null);
+	}
+
+	public static <T> KtfBaseRsp<T> error(KtfBaseReq<?> req) {
+		return error(KtfError.E_UNDEFINED, "未知异常，请联系管理员", req);
 	}
 
 }

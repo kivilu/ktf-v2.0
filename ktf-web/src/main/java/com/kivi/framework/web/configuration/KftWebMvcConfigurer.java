@@ -3,6 +3,7 @@ package com.kivi.framework.web.configuration;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.codec.Charsets;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
@@ -12,6 +13,8 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
@@ -21,7 +24,10 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -34,8 +40,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.kivi.framework.spring.validator.KtfValidatorCollection;
-import com.kivi.framework.web.csrf.CookieCsrfTokenRepository;
 import com.kivi.framework.web.csrf.CsrfInterceptor;
+import com.kivi.framework.web.intercepter.CommonIntercepter;
 import com.kivi.framework.web.intercepter.FileUploadTypeInterceptor;
 import com.kivi.framework.web.intercepter.JwtAuthInterceptor;
 import com.kivi.framework.web.intercepter.SwaggerInterceptor;
@@ -51,6 +57,9 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 
 	@Autowired
 	private FileUploadTypeInterceptor	fileUploadTypeInterceptor;
+
+	@Autowired
+	private CommonIntercepter			commonIntercepter;
 
 	@Autowired(required = false)
 	private CsrfInterceptor				csrfInterceptor;
@@ -72,16 +81,38 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 		registry.addResourceHandler("static/**").addResourceLocations("classpath:/static/");
 	}
 
+	/**
+	 * 添加拦截器
+	 */
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		// 注册自定义拦截器，添加拦截路径和排除拦截路径
+
+		// 添加文件上传类型拦截器
+		registry.addInterceptor(commonIntercepter).addPathPatterns("/**");
+		registry.addInterceptor(fileUploadTypeInterceptor).addPathPatterns("/**");
+		// registry.addInterceptor(csrfInterceptor).addPathPatterns("/login");
+
+		registry.addInterceptor(swaggerInterceptor).addPathPatterns("/swagger-ui.html", "/doc.html");
+
+		if (jwtAuthInterceptor != null) {
+			registry.addInterceptor(jwtAuthInterceptor).excludePathPatterns(ktfJwtProperties.getExcludePathPatterns())
+					.addPathPatterns("/**");
+		}
+
+		super.addInterceptors(registry);
+	}
+
 	@Override
 	public Validator getValidator() {
 		return new SpringValidatorAdapter(new KtfValidatorCollection());
 	}
 
-	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowCredentials(true).allowedHeaders("*").allowedOrigins("*")
-				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS").maxAge(3600);
-	}
+//	@Override
+//	public void addCorsMappings(CorsRegistry registry) {
+//		registry.addMapping("/**").allowCredentials(true).allowedHeaders("*").allowedOrigins("*")
+//				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS").maxAge(3600);
+//	}
 
 	@Override
 	public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -121,27 +152,6 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 	}
 
 	/**
-	 * 添加拦截器
-	 */
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		// 注册自定义拦截器，添加拦截路径和排除拦截路径
-
-		// 添加文件上传类型拦截器
-		registry.addInterceptor(fileUploadTypeInterceptor).addPathPatterns("/**");
-		registry.addInterceptor(csrfInterceptor).addPathPatterns("/login");
-
-		registry.addInterceptor(swaggerInterceptor).addPathPatterns("/swagger-ui.html", "/doc.html");
-
-		if (jwtAuthInterceptor != null) {
-			registry.addInterceptor(jwtAuthInterceptor).excludePathPatterns(ktfJwtProperties.getExcludePathPatterns())
-					.addPathPatterns("/**");
-		}
-
-		super.addInterceptors(registry);
-	}
-
-	/**
 	 * Jackson全局转化long类型为String，解决jackson序列化时long类型缺失精度问题
 	 * 
 	 * @return Jackson2ObjectMapperBuilderCustomizer 注入的对象
@@ -174,14 +184,69 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 	}
 
 	@Bean
-	public CookieCsrfTokenRepository cookieCsrfTokenRepository() {
-		return new CookieCsrfTokenRepository();
+	public FilterRegistrationBean<CorsFilter> corsRegistrationBean() {
+		// 对响应头进行CORS授权
+		MyCorsRegistration corsRegistration = new MyCorsRegistration("/**");
+		corsRegistration.allowedOrigins("*")
+				.allowedMethods(HttpMethod.GET.name(), HttpMethod.HEAD.name(), HttpMethod.POST.name(),
+						HttpMethod.PUT.name(), HttpMethod.OPTIONS.name())
+				.allowedHeaders("Accept", "Origin", "X-Requested-With", "Content-Type", "Last-Modified", "device",
+						"x-access-token", "Cookie")
+				.exposedHeaders(HttpHeaders.SET_COOKIE).allowCredentials(true)
+				.maxAge(TimeUnit.HOURS.toSeconds(ktfJwtProperties.getTtl()));
+
+		// 注册CORS过滤器
+		UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource();
+		configurationSource.registerCorsConfiguration("/**", corsRegistration.getCorsConfiguration());
+		CorsFilter corsFilter = new CorsFilter(configurationSource);
+		return new FilterRegistrationBean<>(corsFilter);
 	}
 
-	@Bean
-	public CsrfInterceptor CsrfInterceptor(@Autowired CookieCsrfTokenRepository cookieCsrfTokenRepository) {
-		return new CsrfInterceptor(cookieCsrfTokenRepository);
+	private class MyCorsRegistration extends CorsRegistration {
+
+		public MyCorsRegistration(String pathPattern) {
+			super(pathPattern);
+		}
+
+		@Override
+		public CorsConfiguration getCorsConfiguration() {
+			return super.getCorsConfiguration();
+		}
 	}
+
+	/*
+	 * private CorsConfiguration corsConfig() { CorsConfiguration corsConfiguration
+	 * = new CorsConfiguration();
+	 * 
+	 * 
+	 * 请求常用的三种配置，代表允许所有，当时你也可以自定义属性（比如header只能带什么，只能是post方式等等）
+	 * 
+	 * corsConfiguration.addAllowedOrigin("*");
+	 * corsConfiguration.addAllowedHeader("*");
+	 * corsConfiguration.addAllowedMethod("*");
+	 * corsConfiguration.setAllowCredentials(true);
+	 * corsConfiguration.setMaxAge(3600L); return corsConfiguration; }
+	 * 
+	 * @Bean public CorsFilter corsFilter() { UrlBasedCorsConfigurationSource source
+	 * = new UrlBasedCorsConfigurationSource();
+	 * source.registerCorsConfiguration("/**", corsConfig()); return new
+	 * CorsFilter(source); }
+	 */
+
+	@Bean
+	public CommonIntercepter commonIntercepter() {
+		return new CommonIntercepter();
+	}
+
+//	@Bean
+//	public CookieCsrfTokenRepository cookieCsrfTokenRepository() {
+//		return new CookieCsrfTokenRepository();
+//	}
+//
+//	@Bean
+//	public CsrfInterceptor CsrfInterceptor(@Autowired CookieCsrfTokenRepository cookieCsrfTokenRepository) {
+//		return new CsrfInterceptor(cookieCsrfTokenRepository);
+//	}
 
 	@Bean
 	public FileUploadTypeInterceptor fileUploadTypeInterceptor() {

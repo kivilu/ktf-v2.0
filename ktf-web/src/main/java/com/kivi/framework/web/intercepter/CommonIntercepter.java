@@ -6,33 +6,37 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class CommonIntercepter implements HandlerInterceptor {
 
-    @Override
-    public boolean preHandle( HttpServletRequest request,
-            HttpServletResponse response, Object handler ) throws Exception {
-        if (log.isTraceEnabled()) {
-            log.trace("=====>http request parameter:{}", request.getParameterMap());
-        }
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
 
-        return true;
-    }
+//		response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));// 支持跨域请求
+//		response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
+//		response.setHeader("Access-Control-Allow-Credentials", "true");// 是否支持cookie跨域
+//		response.setHeader("Access-Control-Allow-Headers",
+//				"Authorization,Origin, X-Requested-With, Content-Type, Accept,x-access-token");// Origin,
+//																								// X-Requested-With,
+		// Content-Type,
+		// Accept,Access-Token
 
-    @Override
-    public void postHandle( HttpServletRequest request,
-            HttpServletResponse response, Object handler,
-            ModelAndView modelAndView ) throws Exception {
-        request.setAttribute("ctx", request.getContextPath());
-    }
+		return true;
+	}
 
-    @Override
-    public void afterCompletion( HttpServletRequest request,
-            HttpServletResponse response, Object handler, Exception ex )
-            throws Exception {
+	@Override
+	public void postHandle(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Object handler,
+			ModelAndView modelAndView) throws Exception {
+		request.setAttribute("ctx", request.getContextPath());
+	}
 
-    }
+	@Override
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+			throws Exception {
+
+	}
 
 }

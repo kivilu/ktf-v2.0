@@ -54,9 +54,9 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2019-10-28
  */
 
-@Api(value = "系统证书管理接口", tags = { "系统证书管理接口" })
-@RestController
-@RequestMapping("/sys/cert")
+//@Api(value = "系统证书管理接口", tags = { "系统证书管理接口" })
+//@RestController
+//@RequestMapping("/sys/cert")
 @Slf4j
 public class SysCertsController extends UpLoadController {
 
@@ -149,7 +149,7 @@ public class SysCertsController extends UpLoadController {
 		CifCerts entity = new CifCerts();
 		entity.setIdentifier(cifCertsDTO.getIdentifier());
 		entity.setType(cifCertsDTO.getType());
-		entity.setPasswdBase64(cifCertsDTO.getPasswdBase64());
+		//entity.setPasswdBase64(cifCertsDTO.getPasswdBase64());
 
 		if (uploadFileUrl == null)
 			return entity;

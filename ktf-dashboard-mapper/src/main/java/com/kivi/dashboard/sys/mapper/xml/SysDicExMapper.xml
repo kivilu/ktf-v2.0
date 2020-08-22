@@ -15,13 +15,22 @@
         <result column="update_user" property="updateUser" />
     </resultMap>
     
+    <resultMap id="DtoResultMap" type="com.kivi.dashboard.sys.dto.SysDicDTO">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="var_code" property="varCode" />
+        <result column="var_name" property="varName" />
+        <result column="var_value" property="varValue" />
+        <result column="has_children" property="hasChildren" />
+    </resultMap>
+    
     
     <select id="getByVarCode" resultMap="BaseResultMap" >
     	SELECT
 			d.*
 		FROM
 			ktf_sys_dic d
-		LEFT JOIN (
+		RIGHT JOIN (
 			SELECT
 				d1.id
 			FROM
@@ -30,8 +39,7 @@
 				d1.var_code = #{pVarCode}
 		) A ON d.parent_id = A.id
 		WHERE
-			d.parent_id = A.id
-		AND d.var_code = #{varCode}
+			d.var_code = #{varCode}
     </select>
     
     <select id="getByVarName" resultMap="BaseResultMap" >
@@ -39,7 +47,7 @@
 			d.*
 		FROM
 			ktf_sys_dic d
-		LEFT JOIN (
+		RIGHT JOIN (
 			SELECT
 				d1.id
 			FROM
@@ -51,21 +59,61 @@
 			d.var_name = #{varName}
     </select>
     
-    <select id="listVarCode" resultType="String">
+    <select id="listByVarCode" parameterType="map" resultMap="DtoResultMap">
 	    SELECT
-				d.var_code
+			d.id,
+			d.parent_id,
+			d.var_code,
+			d.var_name,
+			d.var_value,
+  			(SELECT count(1) FROM ktf_sys_dic WHERE parent_id=d.id) > 0 AS has_children
 		FROM
-				ktf_sys_dic d
-		LEFT JOIN (
+			ktf_sys_dic d
+		RIGHT JOIN (
 			SELECT
 				d1.id
 			FROM
 				ktf_sys_dic d1
-			WHERE
-				d1.parent_id = #{ppId}
-			AND d1.var_code = #{pVarCode}
+			<where>
+				<if test="pId != null">
+					d1.parent_id = #{pId}
+				</if>
+				<if test="pVarCode != null and pVarCode != ''">
+					AND d1.var_code = #{pVarCode}
+				</if>
+			</where>
 		) A ON d.parent_id = A.id
-		 WHERE d.parent_id = A.id 
+		<where>
+			<if test="varCode != null and varCode != ''">
+				d.var_code = #{varCode}
+			</if>
+		</where>
+    </select>
+    
+    <!-- 查询子节点 -->
+    <select id="getChildren" parameterType="map" resultMap="DtoResultMap">
+	    SELECT
+			t.id,
+			t.parent_id,
+			t.var_code,
+			t.var_name,
+			t.var_value
+		FROM
+			ktf_sys_dic t
+		<where>
+		    <if test="id!=null">
+		    	FIND_IN_SET(t.id, sys_dic_getChildren(#{id}))
+		    </if>
+		    <if test="varCode!=null and varCode != ''">
+		    	AND FIND_IN_SET(t.id, sys_dic_getChildren((SELECT id FROM ktf_sys_dic WHERE var_code=#{varCode})))
+		    </if>
+		    <if test="id!=null and !hasSelf">
+		    	AND t.id != #{id}
+		    </if>
+		    <if test="varCode!=null and !hasSelf">
+		    	AND t.var_code != #{varCode}
+		    </if>
+		</where>
     </select>
 
 </mapper>

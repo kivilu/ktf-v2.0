@@ -34,6 +34,12 @@ public interface ISysDicService extends IService<SysDic> {
 	 * @return
 	 */
 	SysDic getByVarName(String varName, String pVarName);
+	
+	/**
+	 * 根据父级查询孩子数据
+	 * @return
+	 */
+	List<SysDicDTO> getChildren(Map<String, Object> params);
 
 	/**
 	 * 根据代码查询子变量
@@ -41,16 +47,7 @@ public interface ISysDicService extends IService<SysDic> {
 	 * @param pCode 上级变量代码
 	 * @return
 	 */
-	List<String> listVarCode(String pCode);
-
-	/**
-	 * 根据代码查询子变量
-	 * 
-	 * @param pCode 上级变量代码
-	 * @param ppId  上级变量的上级ID
-	 * @return
-	 */
-	List<String> listVarCode(String pCode, Long ppId);
+	List<SysDicDTO> listByVarCode(String pCode);
 
 	/**
 	 * 根据ID查询DTO

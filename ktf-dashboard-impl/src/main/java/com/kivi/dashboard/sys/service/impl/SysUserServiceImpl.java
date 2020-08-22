@@ -2,6 +2,7 @@ package com.kivi.dashboard.sys.service.impl;
 
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -384,6 +385,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		// 删除监管用户与企业关系
 		sysUserEnterpriseService.deleteBatchByUserIds(userIds);
 		return true;
+	}
+
+	@KtfCacheEvict(cacheNames = { KtfCache.SysUser, KtfCache.SysResource })
+	@Override
+	public boolean updateBatchById(Collection<SysUser> entityList) {
+		return super.updateBatchById(entityList);
 	}
 
 	@Override

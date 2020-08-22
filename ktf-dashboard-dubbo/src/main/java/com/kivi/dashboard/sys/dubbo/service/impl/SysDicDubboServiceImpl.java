@@ -43,13 +43,8 @@ public class SysDicDubboServiceImpl extends ServiceImpl<SysDicMapper, SysDic> im
 	}
 
 	@Override
-	public List<String> listVarCode(String pCode, Long ppId) {
-		return sysDicService.listVarCode(pCode, ppId);
-	}
-
-	@Override
-	public List<String> listVarCode(String pVarCode) {
-		return sysDicService.listVarCode(pVarCode);
+	public List<SysDicDTO> listByVarCode(String pVarCode) {
+		return sysDicService.listByVarCode(pVarCode);
 	}
 
 	/**
@@ -127,6 +122,11 @@ public class SysDicDubboServiceImpl extends ServiceImpl<SysDicMapper, SysDic> im
 	@Override
 	public Boolean deleteWithChild(Long id) {
 		return sysDicService.deleteWithChild(id);
+	}
+
+	@Override
+	public List<SysDicDTO> getChildren(Map<String, Object> params) {
+		return sysDicService.getChildren(params);
 	}
 
 }

@@ -38,12 +38,12 @@ public class KtfAsyncResult<T> extends DeferredResult<T> {
 		if (result instanceof KtfBaseRsp) {
 			@SuppressWarnings("unchecked")
 			KtfBaseRsp<T> ktfBaseRsp = (KtfBaseRsp<T>) result;
-			if (ktfBaseRsp.getBizSeqId() == null) {
-				ktfBaseRsp.setBizSeqId(this.ktfMsgId.toString());
+			if (ktfBaseRsp.getOriBizSeqId() == null) {
+				ktfBaseRsp.setOriBizSeqId(this.ktfMsgId.toString());
 			}
 
-			if (ktfBaseRsp.getRspCode() == KtfError.SUCCESS) {
-				ktfBaseRsp.setRspDesc("成功");
+			if (ktfBaseRsp.getCode() == KtfError.SUCCESS) {
+				ktfBaseRsp.setMsg("成功");
 			}
 
 		}

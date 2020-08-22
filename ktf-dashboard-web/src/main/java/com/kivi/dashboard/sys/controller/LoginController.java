@@ -4,11 +4,14 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.google.code.kaptcha.Producer;
 import com.kivi.cif.entity.CifCustomerAuths;
@@ -37,6 +41,7 @@ import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.model.ResultMap;
 import com.kivi.framework.properties.KtfDashboardProperties;
 import com.kivi.framework.service.KtfTokenService;
+import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.UserVo;
 import com.kivi.framework.web.constant.WebConst;
 import com.kivi.framework.web.jwt.JwtKit;
@@ -102,6 +107,19 @@ public class LoginController extends DashboardController {
 		}
 	}
 
+	@ApiOperation(value = "获取nonce", notes = "获取nonce")
+	@GetMapping("/nonce")
+	public ResultMap nonce(HttpSession session) {
+		String	seesionId	= session.getId();
+		String	nonce		= UUID.randomUUID().toString();
+
+		log.trace("seesionId：{}，nonce:{}", seesionId, nonce);
+
+		redisService.set(StrKit.join("nonce-", seesionId), nonce, 10);
+
+		return ResultMap.ok().put("data", nonce);
+	}
+
 	/**
 	 * 登录
 	 * 
@@ -109,8 +127,12 @@ public class LoginController extends DashboardController {
 	 */
 	@ApiOperation(value = "登录", notes = "登录")
 	@PostMapping("/sys/login")
-	public Object login(@Valid @RequestBody LoginForm form) throws Exception {
+	public Object login(@Valid @RequestBody LoginForm form, HttpSession session) throws Exception {
 		log.info("POST请求登录");
+		String	seesionId	= session.getId();
+		String	nonce		= (String) redisService.get(StrKit.join("nonce-", seesionId));
+
+		log.trace("seesionId：{}，nonce:{}", seesionId, nonce);
 
 		if (ktfDashboardProperties.getEnableKaptcha()) {
 			String validateCode = (String) redisService.get(form.getUuid());
@@ -129,6 +151,7 @@ public class LoginController extends DashboardController {
 			return ResultMap.error(KtfError.E_UNAUTHORIZED, "账号或密码不正确");
 		}
 
+		form.setUuid(form.getUuid() + nonce);
 		if (!ktfAuthentication.auth(form, userVo)) {
 			log.error("密码不正确");
 			return ResultMap.error(KtfError.E_UNAUTHORIZED, "账号或密码不正确");
@@ -175,21 +198,20 @@ public class LoginController extends DashboardController {
 	 */
 	@ApiOperation(value = "退出", notes = "退出")
 	@PostMapping("/sys/logout")
-	public ResultMap logout() throws Exception {
-		// 生成一个token
+	public ResultMap logout(HttpSession session, SessionStatus sessionStatus) throws Exception {
+
+		// 删除token
 		ShiroUser shiroUser = ShiroKit.getUser();
 		ktfTokenService.evictJwt(shiroUser.getId().toString());
-		/*
-		 * JwtUserKit jwtUser =
-		 * JwtUserKit.builder().id(shiroUser.getId()).identifier(shiroUser.getLoginName(
-		 * )) .name(shiroUser.getName()).build();
-		 * 
-		 * String token = JwtKit.create(jwtUser, shiroUser.getId().toString(),
-		 * DateTime.now().plusSeconds(expire()).toDate()); // 修改token SysUserToken
-		 * tokenEntity = new SysUserToken();
-		 * tokenEntity.setUserId(ShiroKit.getUser().getId());
-		 * tokenEntity.setToken(token); sysUserTokenService().updateById(tokenEntity);
-		 */
+
+		// session 清除
+		// 清除session
+		Enumeration<String> enumeration = session.getAttributeNames();
+		while (enumeration.hasMoreElements()) {
+			String key = enumeration.nextElement().toString();
+			session.removeAttribute(key);
+		}
+
 		return ResultMap.ok();
 	}
 

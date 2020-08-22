@@ -12,14 +12,14 @@ public class BeanConverterTest {
 	public void testCopyProperties() {
 		KtfBaseReq<Integer>	srcDto	= new KtfBaseReq<>();
 		KtfBaseReq<Integer>	dstDto	= new KtfBaseReq<>();
-		srcDto.setReqBody(1);
-		dstDto.setReqBody(2);
+		srcDto.setData(1);
+		dstDto.setData(2);
 
 		BeanConverter.copyProperties(srcDto, dstDto);
 		System.out.println("srcDto:" + srcDto);
 		System.out.println("dstDto:" + dstDto);
 
-		assertEquals(1, dstDto.getReqBody());
+		assertEquals(1, dstDto.getData());
 	}
 
 	@Test

@@ -1,9 +1,11 @@
 package com.kivi.dashboard.sys.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.kivi.dashboard.sys.dto.SysDicDTO;
 import com.kivi.dashboard.sys.entity.SysDic;
 
 /**
@@ -41,5 +43,13 @@ public interface SysDicExMapper {
 	 * @param ppId     上上级变量的ID
 	 * @return
 	 */
-	List<String> listVarCode(@Param("pVarCode") String pVarCode, @Param("ppId") Long ppId);
+	List<SysDicDTO> listByVarCode(Map<String, Object> params);
+	
+	/**
+	 * 查询子节点
+	 * 
+	 * @param parentId
+	 * @return
+	 */
+	List<SysDicDTO> getChildren(Map<String, Object> params);
 }

@@ -82,8 +82,8 @@ public class CifCerts extends Model<CifCerts> {
 	 */
 	@TableField("data_base64")
 	private String				dataBase64;
-	@TableField("passwd_base64")
-	private String				passwdBase64;
+	//@TableField("passwd_base64")
+	//private String				passwdBase64;
 	/**
 	 * 状态，0启用 1停用
 	 */
@@ -124,8 +124,8 @@ public class CifCerts extends Model<CifCerts> {
 	public static final String	EXT					= "ext";
 	public static final String	DB_DATA_BASE64		= "data_base64";
 	public static final String	DATA_BASE64			= "dataBase64";
-	public static final String	DB_PASSWD_BASE64	= "passwd_base64";
-	public static final String	PASSWD_BASE64		= "passwdBase64";
+	//public static final String	DB_PASSWD_BASE64	= "passwd_base64";
+	//public static final String	PASSWD_BASE64		= "passwdBase64";
 	public static final String	DB_STATE			= "state";
 	public static final String	STATE				= "state";
 	public static final String	DB_GMT_CREATE		= "gmt_create";

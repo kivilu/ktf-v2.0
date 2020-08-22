@@ -120,7 +120,7 @@ public abstract class DashboardController extends BaseController {
 		byte[]	key		= new byte[16];
 		System.arraycopy(hash, 16, key, 0, 16);
 
-		byte[] data = SM4Kit.decryptEcbHex(encData, key);
+		byte[] data = SM4Kit.decryptHex(encData, key);
 
 		return new String(data, KtfConstant.DEFAULT_CHARSET);
 	}
