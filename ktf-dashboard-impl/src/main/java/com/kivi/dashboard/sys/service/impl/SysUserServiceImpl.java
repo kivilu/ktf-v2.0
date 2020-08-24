@@ -167,7 +167,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Cacheable(cacheNames = KtfCache.SysUser, key = "caches[0].name+'.vo.'+#loginName", unless = "#result == null")
 	@Override
 	public UserVo selectByLoginName(String loginName) {
-		UserVo userVo = this.sysUserExMapper.selectByLoginName(loginName);
+		List<Integer>	statusArr	= Arrays.asList(KtfStatus.ENABLED.code, KtfStatus.INIT.code);
+		UserVo			userVo		= this.sysUserExMapper.selectByLoginName(loginName, statusArr);
 
 		return userVo;
 	}

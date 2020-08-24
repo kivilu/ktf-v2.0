@@ -51,19 +51,25 @@ public class SysRoleController extends DashboardController {
 	@GetMapping("/info/{id}")
 	@RequiresPermissions("sys/role/info")
 	public ResultMap info(@PathVariable("id") String id) {
-		SysRoleDTO	role			= sysRoleService().getDTOById(NumberUtil.toLongObject(id, -1L));
+		SysRoleDTO					role				= sysRoleService().getDTOById(NumberUtil.toLongObject(id, -1L));
 
 		// 查询角色对应的菜单
-		List<Long>	resourceIdList	= sysRoleResourceService().selectResourceIdListByRoleId(role.getId());
-		role.setResourceIdList(resourceIdList);
+		// List<Long> resourceIdList =
+		// sysRoleResourceService().selectResourceIdListByRoleId(role.getId());
+		// role.setResourceIdList(resourceIdList);
+
 		List<SysRoleResourceDTO>	roleResourceList	= sysRoleResourceService()
 				.selectResourceNodeListByRoleId(role.getId());
+
 		List<TreeNode>				treeNodeList		= roleResourceList.stream().map(roleResource -> {
 															TreeNode treeNode = new TreeNode();
 															treeNode.setId(roleResource.getResourceId().toString());
 															treeNode.setLabel(roleResource.getResource().getName());
+															treeNode.setType(
+																	roleResource.getResource().getResourceType());
 															return treeNode;
-														}).collect(Collectors.toList());
+														})
+				.collect(Collectors.toList());
 
 		role.setResourceNodeList(treeNodeList);
 		return ResultMap.ok().put("role", role);

@@ -6,6 +6,7 @@ import java.util.Map;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.kivi.dashboard.sys.dto.SysResourceDTO;
 import com.kivi.dashboard.sys.entity.SysResource;
+import com.kivi.framework.constant.enums.CommonEnum.MenuType;
 import com.kivi.framework.vo.ResourceVo;
 import com.kivi.framework.vo.page.PageInfoVO;
 
@@ -47,7 +48,7 @@ public interface ISysResourceService extends IService<SysResource> {
 	/**
 	 * 根据用户ID查询对应的资源列表
 	 */
-	List<ResourceVo> selectUserResourceListByUserId(Long userId);
+	List<ResourceVo> selectUserResourceListByUserId(Long userId, MenuType... types);
 
 	/**
 	 * 查询用户的所有菜单ID
@@ -64,6 +65,14 @@ public interface ISysResourceService extends IService<SysResource> {
 	 * @return
 	 */
 	List<ResourceVo> selectResourceList(Map<String, Object> params);
+
+	/**
+	 * 查询菜单树数据
+	 * 
+	 * @param params
+	 * @return
+	 */
+	List<ResourceVo> selectMenuTreeList(Map<String, Object> params);
 
 	/**
 	 * 查询不是按钮类型的菜单

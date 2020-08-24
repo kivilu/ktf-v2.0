@@ -2,9 +2,12 @@ package com.kivi.dashboard.sys.service.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,7 +21,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.dashboard.sys.dto.SysResourceDTO;
-import com.kivi.dashboard.sys.entity.SysMenu;
 import com.kivi.dashboard.sys.entity.SysResource;
 import com.kivi.dashboard.sys.mapper.SysResourceExMapper;
 import com.kivi.dashboard.sys.mapper.SysResourceMapper;
@@ -29,7 +31,9 @@ import com.kivi.framework.cache.annotation.KtfCacheEvict;
 import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.constant.enums.CommonEnum;
+import com.kivi.framework.constant.enums.CommonEnum.MenuType;
 import com.kivi.framework.constant.enums.KtfStatus;
+import com.kivi.framework.constant.enums.KtfYesNo;
 import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.util.kit.CollectionKit;
 import com.kivi.framework.util.kit.NumberKit;
@@ -148,55 +152,63 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
 	}
 
-	@Cacheable(value = KtfCache.SysResource, key = "caches[0].name+'.list.'+#userId", unless = "#result == null")
+	@Cacheable(
+			value = KtfCache.SysResource,
+			key = "caches[0].name+'.list.'+#userId+#types?.hashCode()",
+			unless = "#result == null")
 	@KtfTrace("根据用户ID查询对应的资源列表")
 	@Override
-	public List<ResourceVo> selectUserResourceListByUserId(Long userId) {
+	public List<ResourceVo> selectUserResourceListByUserId(Long userId, MenuType... types) {
 		// 系统管理员，拥有最高权限
 		if (userId == KtfConstant.SUPER_ADMIN) {
 			return selectMenuList(null);
 		}
 		// 用户菜单列表
-		List<SysMenu>		sysMenus	= sysResourceExMapper.selectResourceListByUserId(userId);
-		List<ResourceVo>	menuList	= CollectionKit.newArrayList();
+		Map<String, Object> params = new HashMap<>();
 
-		ResourceVo			pMenu		= null;
-		for (SysMenu child : sysMenus) {
-			if (pMenu == null || pMenu.getId().longValue() != child.getPid().longValue()) {
-				pMenu = new ResourceVo();
-				pMenu.setId(child.getPid());
-				pMenu.setParentId(child.getCatalogPid());
-				pMenu.setName(child.getCatalog());
-				pMenu.setIcon(child.getCatalogIcon());
-				pMenu.setResourceType(CommonEnum.MenuType.CATALOG.getValue());
-				pMenu.setUrl("");
-				pMenu.setList(CollectionKit.newArrayList());
+		if (userId != null && KtfConstant.SUPER_ADMIN != userId.longValue())
+			params.put("userId", userId);
 
-				ResourceVo menu = new ResourceVo();
-				menu.setId(child.getId());
-				menu.setParentId(child.getPid());
-				menu.setName(child.getName());
-				menu.setIcon(child.getIcon());
-				menu.setResourceType(CommonEnum.MenuType.MENU.getValue());
-				menu.setUrl(child.getUrl());
+		if (types != null && types.length > 0)
+			params.put("resourceTypes",
+					Arrays.asList(types).stream().map(MenuType::getValue).collect(Collectors.toList()));
+
+		params.put(SysResourceDTO.STATUS, KtfStatus.ENABLED.code);
+		params.put(SysResourceDTO.HIDDEN, KtfYesNo.NO.bool);
+		List<SysResourceDTO>	sysMenus	= sysResourceExMapper.selectResourceListByUserId(params);
+
+		Map<Long, ResourceVo>	menuMap		= new HashMap<>();
+		List<ResourceVo>		menuList	= sysMenus.stream()
+				.filter(dto -> dto.getResourceType() == MenuType.CATALOG.getValue()).map(dto -> {
+														ResourceVo pMenu = new ResourceVo();
+														pMenu.setId(dto.getId());
+														pMenu.setParentId(dto.getParentId());
+														pMenu.setName(dto.getName());
+														pMenu.setIcon(dto.getIcon());
+														pMenu.setResourceType(CommonEnum.MenuType.CATALOG.getValue());
+														pMenu.setUrl("");
+														pMenu.setList(CollectionKit.newArrayList());
+
+														menuMap.put(pMenu.getId(), pMenu);
+
+														return pMenu;
+													})
+				.collect(Collectors.toList());
+
+		sysMenus.stream().filter(dto -> dto.getResourceType() == MenuType.MENU.getValue()).forEach(child -> {
+			ResourceVo menu = new ResourceVo();
+			menu.setId(child.getId());
+			menu.setParentId(child.getParentId());
+			menu.setName(child.getName());
+			menu.setIcon(child.getIcon());
+			menu.setResourceType(CommonEnum.MenuType.MENU.getValue());
+			menu.setUrl(child.getUrl());
+			ResourceVo pMenu = menuMap.get(child.getParentId());
+			if (pMenu != null)
 				pMenu.getList().add(menu);
+		});
 
-				menuList.add(pMenu);
-			} else {
-				ResourceVo menu = new ResourceVo();
-				menu.setId(child.getId());
-				menu.setParentId(child.getPid());
-				menu.setName(child.getName());
-				menu.setIcon(child.getIcon());
-				menu.setResourceType(CommonEnum.MenuType.MENU.getValue());
-				menu.setUrl(child.getUrl());
-
-				pMenu.getList().add(menu);
-			}
-
-		}
-
-		return menuList;
+		return menuList.stream().filter(menu -> !menu.getList().isEmpty()).collect(Collectors.toList());
 	}
 
 	/**
@@ -277,6 +289,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 	@Override
 	public List<ResourceVo> selectResourceList(Map<String, Object> params) {
 		return this.sysResourceExMapper.selectResourceList(params);
+	}
+
+	@Override
+	public List<ResourceVo> selectMenuTreeList(Map<String, Object> params) {
+		return this.sysResourceExMapper.selectMenuTreeList(params);
 	}
 
 	@Override

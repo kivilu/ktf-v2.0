@@ -24,8 +24,11 @@ import com.kivi.dashboard.shiro.ShiroKit;
 import com.kivi.dashboard.sys.dto.SysResourceDTO;
 import com.kivi.dashboard.sys.entity.SysResource;
 import com.kivi.framework.constant.enums.CommonEnum;
+import com.kivi.framework.constant.enums.CommonEnum.MenuType;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.model.ResultMap;
+import com.kivi.framework.util.kit.NumberKit;
+import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.ResourceVo;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.vip.vjtools.vjkit.number.NumberUtil;
@@ -56,7 +59,8 @@ public class SysResourceController extends DashboardController {
 	@GetMapping("/nav")
 	public ResultMap nav() {
 		Long				userId		= ShiroKit.getUser().getId();
-		List<ResourceVo>	menuList	= sysResourceService().selectUserResourceListByUserId(userId);
+		List<ResourceVo>	menuList	= sysResourceService().selectUserResourceListByUserId(userId, MenuType.CATALOG,
+				MenuType.MENU);
 		Set<String>			permissions	= sysUserService().selectUserPermissions(userId);
 		return ResultMap.ok().put("menuList", menuList).put("permissions", permissions);
 	}
@@ -170,8 +174,23 @@ public class SysResourceController extends DashboardController {
 	@ApiOperation(value = "查询菜单列表", notes = "查询菜单列表")
 	@RequiresPermissions("sys/menu/list")
 	@GetMapping("/list")
-	public ResultMap list() {
+	public ResultMap listAll() {
 		List<ResourceVo> list = sysResourceService().selectResourceList(Maps.newHashMap());
+		return ResultMap.ok().put("list", list);
+	}
+
+	/**
+	 * 查询列表
+	 */
+	@ApiOperation(value = "查询菜单列表", notes = "查询菜单列表")
+	@RequiresPermissions("sys/menu/list")
+	@GetMapping("/list/{status}")
+	public ResultMap menuTree(@PathVariable("status") String status) {
+		Map<String, Object> params = Maps.newHashMap();
+		if (!StrKit.equalsIgnoreCase("all", status))
+			params.put("status", NumberKit.toInt(status));
+
+		List<ResourceVo> list = sysResourceService().selectMenuTreeList(params);
 		return ResultMap.ok().put("list", list);
 	}
 

@@ -110,6 +110,12 @@
 		                 #{item}
 		         </foreach>
             </if>
+            <if test=" params.statusArr != null ">
+                and t.status IN 
+				<foreach item="item" index="index" collection="params.statusArr" open="(" separator="," close=")">
+		                 #{item}
+		         </foreach>
+            </if>
             <if test=" params.enterpriseId != null and params.enterpriseId !=''">
                 and t.enterprise_id = #{params.enterpriseId}
             </if>
@@ -217,6 +223,12 @@
 		LEFT JOIN cif_customer_auths t9 ON t.id = t9.id
         <where>
             t.login_name=#{loginName}
+            <if test="statusArr !=null">
+            AND  t.`status` IN 
+            <foreach item="item" index="index" collection="statusArr" open="(" separator="," close=")">  
+      				#{item}  
+     			</foreach>  
+            </if>
         </where>
     </select>
     

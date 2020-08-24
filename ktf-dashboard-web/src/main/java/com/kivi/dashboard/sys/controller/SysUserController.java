@@ -36,6 +36,7 @@ import com.kivi.framework.dto.JwtUserDTO;
 import com.kivi.framework.model.ResultMap;
 import com.kivi.framework.model.SelectNode;
 import com.kivi.framework.service.KtfTokenService;
+import com.kivi.framework.util.kit.CollectionKit;
 import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.UserVo;
 import com.kivi.framework.vo.page.PageInfoVO;
@@ -80,6 +81,9 @@ public class SysUserController extends DashboardController {
 
 		KmsUserType userType = KmsUserType.valueOf(shiroUser.getUserType());
 		params.put("userType", userType.children());
+
+		params.put("statusArr",
+				CollectionKit.newArrayList(KtfStatus.ENABLED.code, KtfStatus.LOCKED.code, KtfStatus.INIT.code));
 
 		PageInfoVO<Map<String, Object>> page = sysUserService().selectDataGrid(params);
 

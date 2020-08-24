@@ -21,6 +21,19 @@
         <result column="update_user" property="updateUser" />
     </resultMap>
     
+    <resultMap id="DtoResultMap" type="com.kivi.dashboard.sys.dto.SysResourceDTO">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="name" property="name" />
+        <result column="url" property="url" />
+        <result column="description" property="description" />
+        <result column="icon" property="icon" />
+        <result column="seq" property="seq" />
+        <result column="resource_type" property="resourceType" />
+        <result column="hidden" property="hidden" />
+        <result column="status" property="status" />
+    </resultMap>
+    
     
     <resultMap id="ResouceVoResultMap" type="com.kivi.framework.vo.ResourceVo">
         <id column="id" property="id" />
@@ -43,21 +56,56 @@
     
     <select id="selectResourceList" parameterType="map" resultMap="ResouceVoResultMap">
         SELECT
-	        t.*,
+	        t.id,
+	        t.parent_id,
+	        t.name,
+	        t.icon,
+	        t.resource_type,
+	        t.seq,
+	        t.url,
+	        t.status,
 	        t2.`name` AS parent_name
         FROM
         	ktf_sys_resource t
         LEFT JOIN
         	ktf_sys_resource t2 ON t.parent_id = t2.id
         <where>
-            <if test="id!=null and id!=''">
+            <if test="id!=null">
                 t.id=#{id}
             </if>
+            <if test="status!=null">
+                AND t.status=#{status}
+            </if>
             <if test="parentId!=null and parentId!=''">
-                and t.parent_id=#{parentId}
+                AND t.parent_id=#{parentId}
             </if>
             <if test="resourceType!=null and resourceType!=''">
-                and t.resource_type=#{resourceType}
+                AND t.resource_type=#{resourceType}
+            </if>
+        </where>
+        order by t.seq asc
+    </select>
+    
+    <select id="selectMenuTreeList" parameterType="map" resultMap="ResouceVoResultMap">
+        SELECT
+	        t.id,
+	        t.parent_id,
+	        t.name,
+	        t.resource_type
+        FROM
+        	ktf_sys_resource t
+        <where>
+            <if test="id!=null">
+                t.id=#{id}
+            </if>
+            <if test="status!=null">
+                AND t.status=#{status}
+            </if>
+            <if test="parentId!=null and parentId!=''">
+                AND t.parent_id=#{parentId}
+            </if>
+            <if test="resourceType!=null and resourceType!=''">
+                AND t.resource_type=#{resourceType}
             </if>
         </where>
         order by t.seq asc
@@ -77,8 +125,47 @@
     
     
     <!-- 查询用户的所有菜单ID -->
-    <select id="selectResourceListByUserId" resultType="com.kivi.dashboard.sys.entity.SysMenu">
-		SELECT DISTINCT
+    <select id="selectResourceListByUserId" resultMap="DtoResultMap">
+	   SELECT
+			r.id,
+			r.parent_id,
+			r.`name`,
+			r.resource_type,
+			r.url,
+			r.icon
+		FROM
+			ktf_sys_resource r
+		<where>
+			<if test="params.userId!=null">
+				r.id IN (
+					SELECT
+						rr.resource_id
+					FROM
+						ktf_sys_user_role ur
+					LEFT JOIN ktf_sys_role_resource rr ON ur.role_id = rr.role_id
+					WHERE
+						ur.user_id = #{params.userId}
+				)
+			</if>
+			<if test="params.resourceTypes!=null">
+                AND r.resource_type IN 
+                <foreach item="item" index="index" collection="params.resourceTypes" open="(" separator="," close=")">  
+      				#{item}  
+     			</foreach>  
+            </if>
+			<if test="params.status!=null">
+				AND r.`status` = #{params.status}
+			</if>
+			<if test="params.hidden!=null">
+				AND r.hidden = #{params.hidden}
+			</if>
+		</where>
+		ORDER BY
+			r.parent_id,
+			r.seq
+	</select>
+	
+	<!-- SELECT DISTINCT
 		    a.catalog_pid,
 			a.catalog,
 			a.catalog_icon,
@@ -123,8 +210,7 @@
 				)
 			) a
 		ORDER BY
-			a.seqs
-	</select>
+			a.seqs -->
 	
     
 

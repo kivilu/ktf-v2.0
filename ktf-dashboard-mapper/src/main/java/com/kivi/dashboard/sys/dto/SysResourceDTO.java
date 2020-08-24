@@ -81,6 +81,7 @@ public class SysResourceDTO implements Serializable {
 	public static final String	SEQ					= "seq";
 	public static final String	RESOURCE_TYPE		= "resourceType";
 	public static final String	STATUS				= "status";
+	public static final String	HIDDEN				= "hidden";
 	public static final String	CREATE_USER			= "createUser";
 	public static final String	UPDATE_USER			= "updateUser";
 

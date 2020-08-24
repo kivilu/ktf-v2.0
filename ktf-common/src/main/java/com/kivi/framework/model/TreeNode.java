@@ -6,9 +6,12 @@ import java.util.List;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import lombok.Data;
+
 /**
  * @Description vue 树形控件对象
  */
+@Data
 public class TreeNode implements Serializable {
 
 	/**
@@ -26,32 +29,10 @@ public class TreeNode implements Serializable {
 	 */
 	private String				label;
 
+	private Integer				type;
+
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private List<TreeNode>		children;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	public List<TreeNode> getChildren() {
-		return children;
-	}
-
-	public void setChildren(List<TreeNode> children) {
-		this.children = children;
-	}
 
 	@Override
 	public String toString() {

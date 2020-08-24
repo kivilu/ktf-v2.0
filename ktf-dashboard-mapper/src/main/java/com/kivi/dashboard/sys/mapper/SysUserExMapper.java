@@ -39,7 +39,7 @@ public interface SysUserExMapper {
 	 * @param loginName
 	 * @return
 	 */
-	UserVo selectByLoginName(@Param("loginName") String loginName);
+	UserVo selectByLoginName(@Param("loginName") String loginName, @Param("statusArr") List<Integer> statusArr);
 
 	/**
 	 * 查询用户的所有权限

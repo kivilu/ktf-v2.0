@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.kivi.dashboard.sys.entity.SysMenu;
+import com.kivi.dashboard.sys.dto.SysResourceDTO;
 import com.kivi.framework.vo.ResourceVo;
 
 /**
@@ -26,6 +26,14 @@ public interface SysResourceExMapper {
 	 */
 	List<ResourceVo> selectResourceList(Map<String, Object> params);
 
+	/**
+	 * 查询菜单树数据
+	 * 
+	 * @param params
+	 * @return
+	 */
+	List<ResourceVo> selectMenuTreeList(Map<String, Object> params);
+
 	/*
 	 * 查询用户的所有菜单ID
 	 * 
@@ -42,5 +50,5 @@ public interface SysResourceExMapper {
 	 * 
 	 * @return
 	 */
-	List<SysMenu> selectResourceListByUserId(@Param("userId") Long userId);
+	List<SysResourceDTO> selectResourceListByUserId(@Param("params") Map<String, Object> params);
 }

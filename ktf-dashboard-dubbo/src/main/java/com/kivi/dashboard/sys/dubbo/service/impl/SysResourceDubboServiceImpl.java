@@ -12,6 +12,7 @@ import com.kivi.dashboard.sys.entity.SysResource;
 import com.kivi.dashboard.sys.mapper.SysResourceMapper;
 import com.kivi.dashboard.sys.service.ISysResourceService;
 import com.kivi.framework.annotation.KtfTrace;
+import com.kivi.framework.constant.enums.CommonEnum.MenuType;
 import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.properties.KtfDashboardProperties;
 import com.kivi.framework.vo.ResourceVo;
@@ -81,8 +82,8 @@ public class SysResourceDubboServiceImpl extends ServiceImpl<SysResourceMapper, 
 
 	@KtfTrace("根据用户ID查询对应的资源列表")
 	@Override
-	public List<ResourceVo> selectUserResourceListByUserId(Long userId) {
-		return sysResourceService.selectUserResourceListByUserId(userId);
+	public List<ResourceVo> selectUserResourceListByUserId(Long userId, MenuType... types) {
+		return sysResourceService.selectUserResourceListByUserId(userId, types);
 	}
 
 	@KtfTrace("查询指定ParentId的菜单列表")
@@ -111,6 +112,11 @@ public class SysResourceDubboServiceImpl extends ServiceImpl<SysResourceMapper, 
 	@Override
 	public List<Long> selectResourceIdListByUserId(Long userId) {
 		return sysResourceService.selectResourceIdListByUserId(userId);
+	}
+
+	@Override
+	public List<ResourceVo> selectMenuTreeList(Map<String, Object> params) {
+		return sysResourceService.selectMenuTreeList(params);
 	}
 
 }

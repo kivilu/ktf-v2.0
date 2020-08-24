@@ -20,10 +20,30 @@
         <association property="resource" javaType="com.kivi.dashboard.sys.dto.SysResourceDTO">
             <id column="resourceId" property="id"/>
             <result column="resourceName" property="name"/>
+            <result column="resource_type" property="resourceType"/>
         </association>
     </resultMap>
     
-     <select id="selectResourceNodeListByRoleId"  resultMap="RoleResouceDTOResultMap">
+    <select id="selectResourceNodeListByRoleId"  resultMap="RoleResouceDTOResultMap">
+        SELECT
+			t.id,
+			t.role_id,
+			t.resource_id,
+			t2.id AS roleId,
+			t2.`name` AS roleName,
+			t3.id AS resourceId,
+			t3.`name` AS resourceName,
+			t3.resource_type
+		FROM
+			ktf_sys_role_resource t
+		INNER JOIN ktf_sys_role t2 ON t.role_id = t2.id
+		INNER JOIN ktf_sys_resource t3 ON t.resource_id = t3.id
+		WHERE
+			t.role_id = #{roleId}
+		ORDER BY t3.resource_type
+    </select>
+    
+    <!--  <select id="selectResourceNodeListByRoleId"  resultMap="RoleResouceDTOResultMap">
         SELECT
 	        t.id,
 	        t.role_id,
@@ -39,6 +59,6 @@
         WHERE
             t.role_id = #{roleId}
             AND t3.id NOT IN ( SELECT t.parent_id FROM ktf_sys_resource t WHERE t.role_id = #{roleId} )
-    </select>
+    </select> -->
 
 </mapper>
