@@ -216,12 +216,12 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 	 */
 	@KtfTrace("指定列查询列表用户角色")
 	@Override
-	public List<SysResourceDTO> list(Map<String, Object> params, String... columns) {
+	public List<SysResource> list(Map<String, Object> params, String... columns) {
 		if (params != null)
 			params.remove(KtfConstant.URL_TIMESTAMP);
 		QueryWrapper<SysResource>	query	= Wrappers.<SysResource>query().select(columns).allEq(true, params, false);
 		List<SysResource>			list	= super.list(query);
-		return BeanConverter.convert(SysResourceDTO.class, list);
+		return list;
 	}
 
 	@KtfTrace("查询指定ParentId的菜单列表")

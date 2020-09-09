@@ -2,8 +2,9 @@ package com.kivi.dashboard.shiro;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,6 @@ import com.kivi.framework.constant.KtfError;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.service.KtfTokenService;
 import com.kivi.framework.util.kit.DateTimeKit;
-import com.kivi.framework.vo.ResourceVo;
 import com.kivi.framework.vo.RoleVo;
 import com.kivi.framework.vo.UserVo;
 import com.kivi.framework.web.jwt.JwtKit;
@@ -56,20 +56,10 @@ public class ShiroUserKit {
 			su.setLastIp(userVo.getLastIp());
 			su.setLastTime(DateTimeKit.toDate(userVo.getLastTime()));
 			List<RoleVo>	rvList	= userVo.getRoles();
-			List<String>	urlSet	= new ArrayList<>();
-			List<String>	roles	= new ArrayList<>();
+			Set<String>		urlSet	= shiroUserService.getUserPermissions(userVo.getId());
+			List<String>	roles	= null;
 			if (rvList != null && !rvList.isEmpty()) {
-				for (RoleVo rv : rvList) {
-					roles.add(rv.getName());
-					List<ResourceVo> rList = shiroUserService.getRoleById(rv.getId()).getPermissions();
-					if (rList != null && !rList.isEmpty()) {
-						for (ResourceVo r : rList) {
-							if (StringUtils.isNotBlank(r.getUrl())) {
-								urlSet.add(r.getUrl());
-							}
-						}
-					}
-				}
+				roles = rvList.stream().map(RoleVo::getName).collect(Collectors.toList());
 			}
 			su.setRoles(roles);
 			su.setUrlSet(urlSet);

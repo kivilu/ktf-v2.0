@@ -41,11 +41,6 @@ public interface ISysResourceService extends IService<SysResource> {
 	PageInfoVO<SysResourceDTO> page(Map<String, Object> params);
 
 	/**
-	 * 指定列查询列表
-	 */
-	List<SysResourceDTO> list(Map<String, Object> params, String... columns);
-
-	/**
 	 * 根据用户ID查询对应的资源列表
 	 */
 	List<ResourceVo> selectUserResourceListByUserId(Long userId, MenuType... types);
@@ -97,5 +92,7 @@ public interface ISysResourceService extends IService<SysResource> {
 	 * @return
 	 */
 	List<SysResource> selectListByParentId(Long parentId);
+
+	List<SysResource> list(Map<String, Object> params, String... columns);
 
 }

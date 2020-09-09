@@ -47,6 +47,16 @@ public interface ISysUserService extends IService<SysUser> {
 	boolean updateByVo(UserVo userVo);
 
 	/**
+	 * 更新用户状态
+	 * 
+	 * @param userId
+	 * @param fromStatus
+	 * @param toStatus
+	 * @return
+	 */
+	boolean updateStatus(Long userId, Integer fromStatus, Integer toStatus);
+
+	/**
 	 * 分页查询
 	 */
 	PageInfoVO<SysUserDTO> page(Map<String, Object> params);

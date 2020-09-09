@@ -110,4 +110,9 @@ public class SysUserDubboServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
 		return iSysUserService.selectUserTree();
 	}
 
+	@Override
+	public boolean updateStatus(Long userId, Integer fromStatus, Integer toStatus) {
+		return iSysUserService.updateStatus(userId, fromStatus, toStatus);
+	}
+
 }

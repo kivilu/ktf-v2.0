@@ -66,7 +66,7 @@ public class SysResourceDubboServiceImpl extends ServiceImpl<SysResourceMapper, 
 	 */
 	@KtfTrace("指定列查询列表资源")
 	@Override
-	public List<SysResourceDTO> list(Map<String, Object> params, String... columns) {
+	public List<SysResource> list(Map<String, Object> params, String... columns) {
 		return sysResourceService.list(params, columns);
 	}
 

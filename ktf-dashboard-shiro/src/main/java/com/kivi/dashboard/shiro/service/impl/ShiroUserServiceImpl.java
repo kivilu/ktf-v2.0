@@ -1,12 +1,15 @@
 package com.kivi.dashboard.shiro.service.impl;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.kivi.dashboard.shiro.service.ShiroUserService;
 import com.kivi.dashboard.sys.service.ISysRoleService;
 import com.kivi.dashboard.sys.service.ISysUserEnterpriseService;
 import com.kivi.dashboard.sys.service.ISysUserService;
-import com.kivi.framework.vo.RoleVo;
 import com.kivi.framework.vo.UserVo;
 
 public class ShiroUserServiceImpl implements ShiroUserService {
@@ -27,10 +30,10 @@ public class ShiroUserServiceImpl implements ShiroUserService {
 		return userService.selectByLoginName(loginName);
 	}
 
-	@Override
-	public RoleVo getRoleById(Long roleId) {
-		return roleService.selectByRoleId(roleId);
-	}
+//	@Override
+//	public SysRole getRoleById(Long roleId) {
+//		return roleService.getById(roleId);
+//	}
 
 	@Override
 	public List<Long> getEnterpriseIdByUserId(Long userId) {
@@ -40,6 +43,12 @@ public class ShiroUserServiceImpl implements ShiroUserService {
 	@Override
 	public UserVo getUserById(Long userId) {
 		return userService.selectByUserId(userId);
+	}
+
+	@Override
+	public Set<String> getUserPermissions(Long userId) {
+		Set<String> urls = userService.selectUserPermissions(userId);
+		return urls.stream().filter(url -> StringUtils.isNoneBlank(url)).collect(Collectors.toSet());
 	}
 
 }

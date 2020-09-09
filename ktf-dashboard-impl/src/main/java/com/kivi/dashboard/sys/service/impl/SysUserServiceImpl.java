@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -28,8 +29,8 @@ import com.kivi.cif.entity.CifCustomerAuths;
 import com.kivi.cif.service.CifCustomerAuthsService;
 import com.kivi.cif.service.CifCustomerService;
 import com.kivi.dashboard.enums.KmsUserType;
-import com.kivi.dashboard.sys.dto.SysResourceDTO;
 import com.kivi.dashboard.sys.dto.SysUserDTO;
+import com.kivi.dashboard.sys.entity.SysResource;
 import com.kivi.dashboard.sys.entity.SysUser;
 import com.kivi.dashboard.sys.mapper.SysUserExMapper;
 import com.kivi.dashboard.sys.mapper.SysUserMapper;
@@ -185,8 +186,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		List<String> permsList;
 		// 系统管理员，拥有最高权限
 		if (userId == KtfConstant.SUPER_ADMIN) {
-			List<SysResourceDTO> menuList = sysResourceService.list(Maps.newHashMap(), SysResourceDTO.URL);
-			permsList = menuList.stream().map(SysResourceDTO::getUrl).collect(Collectors.toList());
+			List<SysResource> menuList = sysResourceService.list(Maps.newHashMap(), SysResource.DB_URL);
+			permsList = menuList.stream().map(SysResource::getUrl).collect(Collectors.toList());
 		} else {
 			permsList = this.sysUserExMapper.selectPerms(userId);
 		}
@@ -397,6 +398,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Override
 	public List<Map<String, Object>> selectUserTree() {
 		return sysUserExMapper.selectUserTree();
+	}
+
+	@Override
+	public boolean updateStatus(Long userId, Integer fromStatus, Integer toStatus) {
+		LambdaUpdateWrapper<SysUser> updateWrapper = Wrappers.<SysUser>lambdaUpdate();
+		updateWrapper.eq(SysUser::getStatus, fromStatus).eq(SysUser::getId, userId);
+
+		SysUser entity = new SysUser();
+		entity.setStatus(toStatus);
+
+		return super.update(entity, updateWrapper);
 	}
 
 }

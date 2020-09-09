@@ -634,16 +634,6 @@ public class StrKit {
 	}
 
 	/**
-	 * 连接成字符串
-	 * 
-	 * @param objs
-	 * @return
-	 */
-	public static String join(Object... objs) {
-		return StringUtils.join(objs);
-	}
-
-	/**
 	 * 以 conjunction 为分隔符将多个对象转换为字符串
 	 * 
 	 * @param conjunction 分隔符

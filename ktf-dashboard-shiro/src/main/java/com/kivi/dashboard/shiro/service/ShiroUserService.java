@@ -1,8 +1,8 @@
 package com.kivi.dashboard.shiro.service;
 
 import java.util.List;
+import java.util.Set;
 
-import com.kivi.framework.vo.RoleVo;
 import com.kivi.framework.vo.UserVo;
 
 public interface ShiroUserService {
@@ -29,7 +29,15 @@ public interface ShiroUserService {
 	 * @param roleId
 	 * @return
 	 */
-	RoleVo getRoleById(Long roleId);
+	// SysRole getRoleById(Long roleId);
+
+	/**
+	 * 查询用户权限
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	Set<String> getUserPermissions(Long userId);
 
 	/**
 	 * 根据ID查找所属企业ID

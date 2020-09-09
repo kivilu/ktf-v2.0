@@ -61,6 +61,11 @@ public class SysLog extends Model<SysLog> {
 	@TableField("operation")
 	private String				operation;
 	/**
+	 * 请求URI
+	 */
+	@TableField("uri")
+	private String				uri;
+	/**
 	 * 类名
 	 */
 	@TableField("class_name")

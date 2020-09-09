@@ -4,13 +4,11 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.kivi.dashboard.sys.entity.SysRoleResource">
-        <id column="id" property="id" />
         <result column="role_id" property="roleId" />
         <result column="resource_id" property="resourceId" />
     </resultMap>
     
     <resultMap id="RoleResouceDTOResultMap" type="com.kivi.dashboard.sys.dto.SysRoleResourceDTO">
-        <result column="id" property="id"/>
         <result column="role_id" property="roleId"/>
         <result column="resource_id" property="resourceId"/>
         <association property="role" javaType="com.kivi.dashboard.sys.dto.SysRoleDTO">
@@ -26,7 +24,6 @@
     
     <select id="selectResourceNodeListByRoleId"  resultMap="RoleResouceDTOResultMap">
         SELECT
-			t.id,
 			t.role_id,
 			t.resource_id,
 			t2.id AS roleId,

@@ -3,6 +3,7 @@ package com.kivi.dashboard.shiro;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.kivi.framework.util.JacksonUtils;
 
@@ -16,8 +17,8 @@ public class ShiroUser implements Serializable {
 	private static final long	serialVersionUID	= 1L;
 
 	private Long				id;
-	
-	private Long 				cifId;
+
+	private Long				cifId;
 
 	private String				loginName;
 
@@ -40,7 +41,7 @@ public class ShiroUser implements Serializable {
 
 	// 所属职务Id
 	private Long				jobId;
-	
+
 	/**
 	 * 上次登录IP
 	 */
@@ -58,7 +59,7 @@ public class ShiroUser implements Serializable {
 	/**
 	 * 用户拥有的权限集合
 	 */
-	private List<String>		urlSet;
+	private Set<String>			urlSet;
 
 	/**
 	 * 用户拥有的角色集合

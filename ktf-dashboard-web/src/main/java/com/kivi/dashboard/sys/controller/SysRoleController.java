@@ -16,17 +16,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.collect.Maps;
 import com.kivi.dashboard.base.DashboardController;
 import com.kivi.dashboard.shiro.ShiroKit;
 //import com.kivi.dashboard.shiro.ShiroKit;
 import com.kivi.dashboard.sys.dto.SysRoleDTO;
 import com.kivi.dashboard.sys.dto.SysRoleResourceDTO;
+import com.kivi.dashboard.sys.entity.SysResource;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.model.ResultMap;
 import com.kivi.framework.model.TreeNode;
 import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.page.PageInfoVO;
-import com.vip.vjtools.vjkit.number.NumberUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -50,26 +51,36 @@ public class SysRoleController extends DashboardController {
 	@ApiOperation(value = "角色信息", notes = "角色信息")
 	@GetMapping("/info/{id}")
 	@RequiresPermissions("sys/role/info")
-	public ResultMap info(@PathVariable("id") String id) {
-		SysRoleDTO					role				= sysRoleService().getDTOById(NumberUtil.toLongObject(id, -1L));
+	public ResultMap info(@PathVariable("id") Long id) {
+		SysRoleDTO		role			= sysRoleService().getDTOById(id);
 
 		// 查询角色对应的菜单
 		// List<Long> resourceIdList =
 		// sysRoleResourceService().selectResourceIdListByRoleId(role.getId());
 		// role.setResourceIdList(resourceIdList);
+		List<TreeNode>	treeNodeList	= null;
+		if (id == KtfConstant.SUPER_ADMIN) {
+			List<SysResource> resources = sysResourceService().list(Maps.newHashMap(), SysResource.DB_ID,
+					SysResource.DB_NAME, SysResource.DB_RESOURCE_TYPE);
+			treeNodeList = resources.stream().map(r -> {
+				TreeNode treeNode = new TreeNode();
+				treeNode.setId(r.getId().toString());
+				treeNode.setLabel(r.getName());
+				treeNode.setType(r.getResourceType());
+				return treeNode;
+			}).collect(Collectors.toList());
+		} else {
+			List<SysRoleResourceDTO> roleResourceList = sysRoleResourceService()
+					.selectResourceNodeListByRoleId(role.getId());
 
-		List<SysRoleResourceDTO>	roleResourceList	= sysRoleResourceService()
-				.selectResourceNodeListByRoleId(role.getId());
-
-		List<TreeNode>				treeNodeList		= roleResourceList.stream().map(roleResource -> {
-															TreeNode treeNode = new TreeNode();
-															treeNode.setId(roleResource.getResourceId().toString());
-															treeNode.setLabel(roleResource.getResource().getName());
-															treeNode.setType(
-																	roleResource.getResource().getResourceType());
-															return treeNode;
-														})
-				.collect(Collectors.toList());
+			treeNodeList = roleResourceList.stream().map(roleResource -> {
+				TreeNode treeNode = new TreeNode();
+				treeNode.setId(roleResource.getResourceId().toString());
+				treeNode.setLabel(roleResource.getResource().getName());
+				treeNode.setType(roleResource.getResource().getResourceType());
+				return treeNode;
+			}).collect(Collectors.toList());
+		}
 
 		role.setResourceNodeList(treeNodeList);
 		return ResultMap.ok().put("role", role);

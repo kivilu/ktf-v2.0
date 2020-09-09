@@ -75,6 +75,7 @@ public interface ISysRoleService extends IService<SysRole> {
 	 * @param roleId
 	 * @return
 	 */
+	@Deprecated
 	RoleVo selectByRoleId(Long roleId);
 
 	/**

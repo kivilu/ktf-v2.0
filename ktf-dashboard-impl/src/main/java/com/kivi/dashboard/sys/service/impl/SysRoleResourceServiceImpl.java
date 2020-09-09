@@ -1,10 +1,10 @@
 package com.kivi.dashboard.sys.service.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -194,6 +194,10 @@ public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMappe
 
 	@Override
 	public Boolean saveOrUpdateRoleResource(Long roleId, List<Long> resourceIdList) {
+		// 超级用户无需保存角色和菜单的关系
+		if (roleId.longValue() == KtfConstant.SUPER_ADMIN)
+			return true;
+
 		// 先删除角色与菜单关系
 		Map<String, Object> params = new HashMap<>();
 		params.put(SysRoleResource.DB_ROLE_ID, roleId);
@@ -202,13 +206,13 @@ public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMappe
 			return false;
 		}
 		// 保存角色与菜单关系
-		List<SysRoleResource> list = new ArrayList<>(resourceIdList.size());
-		for (Long resourceId : resourceIdList) {
+		Set<SysRoleResource> list = resourceIdList.stream().map(rid -> {
 			SysRoleResource sysRoleResource = new SysRoleResource();
 			sysRoleResource.setRoleId(roleId);
-			sysRoleResource.setResourceId(resourceId);
-			list.add(sysRoleResource);
-		}
+			sysRoleResource.setResourceId(rid);
+			return sysRoleResource;
+		}).collect(Collectors.toSet());
+
 		return this.saveBatch(list);
 
 	}

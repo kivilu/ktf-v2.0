@@ -235,7 +235,7 @@
 	
 	<!-- 查询用户的所有权限 -->
     <select id="selectPerms" resultType="string">
-		SELECT
+		SELECT DISTINCT
         	m.url
         FROM
             ktf_sys_user_role ur
