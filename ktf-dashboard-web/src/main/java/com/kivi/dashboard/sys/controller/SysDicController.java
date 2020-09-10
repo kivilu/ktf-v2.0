@@ -27,6 +27,7 @@ import com.kivi.dashboard.base.DashboardController;
 //import com.kivi.dashboard.shiro.ShiroKit;
 import com.kivi.dashboard.sys.dto.SysDicDTO;
 import com.kivi.dashboard.sys.entity.SysDic;
+import com.kivi.framework.annotation.KtfTrace;
 import com.kivi.framework.model.ResultMap;
 import com.kivi.framework.model.SelectNode;
 import com.kivi.framework.model.SelectTreeNode;
@@ -256,6 +257,15 @@ public class SysDicController extends DashboardController {
 		params.put(SysDicDTO.ID, id);
 		List<SysDicDTO> list = sysDicService().getChildren(params);
 		return ResultMap.ok().put("data", list);
+	}
+
+	@ApiOperation(value = "获取系统运行配置", notes = "获取系统运行配置")
+	@RequiresPermissions("sys/dic/getSettings")
+	@GetMapping("/getSettings")
+	@KtfTrace("获取系统运行配置")
+	public ResultMap getSettings() {
+		Map<String, Object> map = sysDicService().getSettings("VUE_SETTINGS");
+		return ResultMap.ok().put("data", map);
 	}
 
 }

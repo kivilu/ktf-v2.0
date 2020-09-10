@@ -129,4 +129,9 @@ public class SysDicDubboServiceImpl extends ServiceImpl<SysDicMapper, SysDic> im
 		return sysDicService.getChildren(params);
 	}
 
+	@Override
+	public Map<String, Object> getSettings(String varCode) {
+		return sysDicService.getSettings(varCode);
+	}
+
 }

@@ -18,6 +18,11 @@ import com.kivi.framework.vo.page.PageInfoVO;
  */
 public interface ISysDicService extends IService<SysDic> {
 
+	/*
+	 * 获取运行配置
+	 */
+	Map<String, Object> getSettings(String varCode);
+
 	/**
 	 * 根据Code获取变量
 	 * 
@@ -34,9 +39,10 @@ public interface ISysDicService extends IService<SysDic> {
 	 * @return
 	 */
 	SysDic getByVarName(String varName, String pVarName);
-	
+
 	/**
 	 * 根据父级查询孩子数据
+	 * 
 	 * @return
 	 */
 	List<SysDicDTO> getChildren(Map<String, Object> params);

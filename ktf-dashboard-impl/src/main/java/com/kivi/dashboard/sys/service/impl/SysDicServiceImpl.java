@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -220,8 +221,18 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 	@Override
 	public List<SysDicDTO> getChildren(Map<String, Object> params) {
 		params.put("hasSelf", false);
-		
+
 		return sysDicExMapper.getChildren(params);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> getSettings(String varCode) {
+		LambdaQueryWrapper<SysDic> wrapper = Wrappers.<SysDic>lambdaQuery().select(SysDic::getVarValue);
+		wrapper.eq(SysDic::getParentId, 0).eq(SysDic::getVarCode, varCode);
+		SysDic entity = super.getOne(wrapper, false);
+
+		return JSON.parseObject(entity.getVarValue(), Map.class);
 	}
 
 }
