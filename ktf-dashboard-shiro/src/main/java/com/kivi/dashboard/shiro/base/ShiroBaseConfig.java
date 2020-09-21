@@ -40,12 +40,13 @@ public abstract class ShiroBaseConfig {
 		filterChainDefinitionMap.put("/doc.html", "anon");
 
 		// 其他的
-		filterChainDefinitionMap.put("/druid/**", "anon");
+		// filterChainDefinitionMap.put("/druid/**", "anon");
 		filterChainDefinitionMap.put("/actuator/**", "anon");
 		filterChainDefinitionMap.put("/ws/**", "anon");
 		filterChainDefinitionMap.put("/qr/**", "anon");
 		filterChainDefinitionMap.put("/nonce", "anon");
 		filterChainDefinitionMap.put("/**/nonce", "anon");
+		filterChainDefinitionMap.put("/login/settings", "anon");
 		filterChainDefinitionMap.put("/sys/login", "anon");
 
 		List<String> anonList = ktfProperties().getShiro().getAnonFilter();

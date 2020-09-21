@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -41,6 +42,7 @@ import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.model.ResultMap;
 import com.kivi.framework.properties.KtfDashboardProperties;
 import com.kivi.framework.service.KtfTokenService;
+import com.kivi.framework.util.kit.CollectionKit;
 import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.UserVo;
 import com.kivi.framework.web.constant.WebConst;
@@ -79,10 +81,16 @@ public class LoginController extends DashboardController {
 	@Reference(check = false, version = CifProperties.DUBBO_VERSION)
 	private CifCustomerAuthsService	customerAuthsService;
 
-	@GetMapping("/captcha/status")
-	public Boolean isKaptcha() {
+	@GetMapping("/login/settings")
+	public ResultMap loginSettings() {
+		Map<String, Object> map = CollectionKit.newHashMap();
+		map.put("kaptcha", ktfDashboardProperties.getEnableKaptcha());
+		map.put("loginType", ktfDashboardProperties.getLoginType().getCode());
 
-		return ktfDashboardProperties.getEnableKaptcha();
+		Map<String, Object> dbMap = sysDicService().getSettings("LOGIN_SETTINGS");
+		map.putAll(dbMap);
+
+		return ResultMap.ok().put("data", map);
 	}
 
 	@GetMapping("captcha.jpg")
