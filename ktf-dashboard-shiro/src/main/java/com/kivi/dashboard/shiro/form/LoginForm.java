@@ -17,7 +17,7 @@ public class LoginForm {
 	/**
 	 * 密码
 	 */
-	// @NotBlank(message = "密码不能为空")
+	@NotBlank(message = "密码不能为空")
 	private String	password;
 	/**
 	 * 验证码
@@ -26,7 +26,7 @@ public class LoginForm {
 	/**
 	 * 请求唯一ID
 	 */
-	@NotBlank(message = "uuid不能为空")
+	// @NotBlank(message = "uuid不能为空")
 	private String	uuid;
 
 	/**
@@ -38,5 +38,5 @@ public class LoginForm {
 	/**
 	 * 记住
 	 */
-	private Integer	rememberMe;
+	// private Integer rememberMe;
 }

@@ -65,7 +65,7 @@ public class KtfConstant {
 	public static final String	PAGE_ORDER_KEY		= "order";
 
 	public static final String	URL_TIMESTAMP		= "t";
-	
-	public static final String WEEKDAYS[]= {"星期一","星期二","星期三","星期四","星期五","星期六","星期日"};
+
+	public static final String	WEEKDAYS[]			= { "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日" };
 
 }

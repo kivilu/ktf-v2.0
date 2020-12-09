@@ -3,7 +3,7 @@ package com.kivi.dashboard.sys.dubbo.service.impl;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -25,7 +25,7 @@ import com.kivi.framework.vo.page.PageInfoVO;
  * @since 2019-09-18
  */
 
-@Service(version = KtfDashboardProperties.DUBBO_VERSION)
+@DubboService(version = KtfDashboardProperties.DUBBO_VERSION)
 public class SysApplicationDubboServiceImpl extends ServiceImpl<SysApplicationMapper, SysApplication>
 		implements ISysApplicationService {
 

@@ -1,18 +1,18 @@
 package com.kivi.dashboard.shiro;
 
-import java.util.List;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
 import com.kivi.framework.util.JacksonUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @Descriptin shiro工具类
  */
+@Slf4j
 public class ShiroKit {
 
 	private static final String	NAMES_DELIMETER		= ",";
@@ -34,9 +34,9 @@ public class ShiroKit {
 	 * @param saltSource  密码盐
 	 * @return
 	 */
-	public static String md5(String credentials, String saltSource) {
-		return new SimpleHash(HASH_ALGORITHM_NAME, credentials, saltSource, HASH_ITERATIONS).toHex();
-	}
+//	public static String md5(String credentials, String saltSource) {
+//		return new SimpleHash(HASH_ALGORITHM_NAME, credentials, saltSource, HASH_ITERATIONS).toHex();
+//	}
 
 	/**
 	 * 获取随机盐值
@@ -67,8 +67,8 @@ public class ShiroKit {
 			return null;
 		} else {
 			String userText = getSubject().getPrincipals().getPrimaryPrincipal().toString();
-			return JacksonUtils.toObject(userText,
-					ShiroUser.class);
+			log.trace("getSubject(): {}", userText);
+			return JacksonUtils.toObject(userText, ShiroUser.class);
 
 		}
 	}
@@ -241,8 +241,9 @@ public class ShiroKit {
 	 *
 	 * @return
 	 */
-	public static List<Long> getEnterpriseIdByUser() {
-		return getUser().getEnterpriseIdList();
-	}
+	/*
+	 * public static List<Long> getEnterpriseIdByUser() { return
+	 * getUser().getEnterpriseIdList(); }
+	 */
 
 }

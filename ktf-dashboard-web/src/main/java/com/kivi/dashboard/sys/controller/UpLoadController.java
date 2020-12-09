@@ -5,13 +5,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.codec.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -82,7 +82,7 @@ public abstract class UpLoadController extends DashboardController {
 			fileName	= HttpKit.encodeURL(fileName, "UTF-8");
 			status		= HttpStatus.OK;
 		} else {
-			fileName	= new String(fileName.getBytes(Charsets.UTF_8), Charsets.ISO_8859_1);
+			fileName	= new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
 			status		= HttpStatus.CREATED;
 		}
 		HttpHeaders headers = new HttpHeaders();

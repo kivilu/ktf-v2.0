@@ -41,6 +41,11 @@ public class KtfDashboardProperties implements IKtfProperties {
 	private WebAuthEnum			auth				= WebAuthEnum.jwt;
 
 	/**
+	 * 系统预留菜单最大ID，默认：90
+	 */
+	private Integer				maxReserveMenuId	= 90;
+
+	/**
 	 * shiro相关配置信息
 	 */
 	private Shiro				shiro				= new Shiro();

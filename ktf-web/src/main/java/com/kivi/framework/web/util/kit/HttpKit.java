@@ -20,6 +20,9 @@ public class HttpKit {
 	}
 
 	public static String getRemoteAddress(HttpServletRequest request) {
+		if (request == null)
+			return null;
+
 		String ip = request.getHeader("X-Forwarded-For");
 		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
 			ip = request.getHeader("X-Real-IP");

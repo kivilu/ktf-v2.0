@@ -3,6 +3,7 @@ package com.kivi.dashboard.shiro.jwt;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -20,6 +21,7 @@ import com.alibaba.fastjson.JSON;
 import com.kivi.dashboard.shiro.ShiroUser;
 import com.kivi.dashboard.shiro.ShiroUserKit;
 import com.kivi.dashboard.shiro.service.ShiroUserService;
+import com.kivi.framework.constant.enums.KtfStatus;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.vo.UserVo;
 
@@ -58,8 +60,6 @@ public class JwtRealm extends AuthorizingRealm {
 		String						accessToken			= (String) token.getCredentials();
 
 		try {
-			// shiroUserService.verifyAccessToken(userId.toString(), accessToken);
-
 			// 通过UserId从数据库中查找 UserVo对象
 			UserVo userVo = shiroUserService.getUserById(userId);
 			// 账号不存在
@@ -67,7 +67,7 @@ public class JwtRealm extends AuthorizingRealm {
 				throw new IncorrectCredentialsException("账号不存在");
 			}
 			// 账号未启用
-			if (userVo.getStatus() == 1) {
+			if (userVo.getStatus() == KtfStatus.DISABLED.code) {
 				throw new LockedAccountException("账号未启用");
 			}
 			ShiroUser su = shiroUserKit.userVoToShiroUser(userVo);
@@ -101,7 +101,8 @@ public class JwtRealm extends AuthorizingRealm {
 				ShiroUser.class);
 		SimpleAuthorizationInfo	info		= new SimpleAuthorizationInfo();
 		Set<String>				roles		= new HashSet<>();
-		List<String>			roleList	= shiroUser.getRoles();
+		List<String>			roleList	= shiroUser.getRoleIds().stream().map(id -> id.toString())
+				.collect(Collectors.toList());
 		roles.addAll(roleList);
 		info.setRoles(roles);
 		info.addStringPermissions(shiroUser.getUrlSet());

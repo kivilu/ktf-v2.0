@@ -1,9 +1,8 @@
 package com.kivi.dashboard.shiro;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +11,6 @@ import com.kivi.framework.component.SpringContextHolder;
 import com.kivi.framework.constant.KtfError;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.service.KtfTokenService;
-import com.kivi.framework.util.kit.DateTimeKit;
-import com.kivi.framework.vo.ResourceVo;
-import com.kivi.framework.vo.RoleVo;
 import com.kivi.framework.vo.UserVo;
 import com.kivi.framework.web.jwt.JwtKit;
 import com.vip.vjtools.vjkit.collection.ListUtil;
@@ -52,39 +48,30 @@ public class ShiroUserKit {
 			su.setLoginName(userVo.getLoginName());
 			su.setUserType(userVo.getUserType());
 			su.setStatus(userVo.getStatus());
-			su.setIsLeader(userVo.getIsLeader());
-			su.setLastIp(userVo.getLastIp());
-			su.setLastTime(DateTimeKit.toDate(userVo.getLastTime()));
-			List<RoleVo>	rvList	= userVo.getRoles();
-			List<String>	urlSet	= new ArrayList<>();
-			List<String>	roles	= new ArrayList<>();
-			if (rvList != null && !rvList.isEmpty()) {
-				for (RoleVo rv : rvList) {
-					roles.add(rv.getName());
-					List<ResourceVo> rList = shiroUserService.getRoleById(rv.getId()).getPermissions();
-					if (rList != null && !rList.isEmpty()) {
-						for (ResourceVo r : rList) {
-							if (StringUtils.isNotBlank(r.getUrl())) {
-								urlSet.add(r.getUrl());
-							}
-						}
-					}
-				}
-			}
-			su.setRoles(roles);
+			List<Long>	roleIds	= userVo.getRoleIds();
+			Set<String>	urlSet	= shiroUserService.getPermissions(roleIds);
+
+			su.setRoleIds(roleIds);
 			su.setUrlSet(urlSet);
-			List<Long>	enterpriseIdList	= new ArrayList<>();
-			List<Long>	enterpriseIds		= shiroUserService.getEnterpriseIdByUserId(userVo.getId());
-			if (enterpriseIds != null && enterpriseIds.size() > 0) {
-				enterpriseIdList.addAll(enterpriseIds);
-			}
-			if (userVo.getEnterpriseId() != null) {
-				enterpriseIdList.add(userVo.getEnterpriseId());
-			}
-			su.setEnterpriseIdList(removeDuplicate(enterpriseIdList));
-			su.setEnterpriseId(userVo.getEnterpriseId());
-			su.setDepartmentId(userVo.getDepartmentId());
-			su.setJobId(userVo.getJobId());
+			/*
+			 * List<String> roles = new ArrayList<>(); if (rvList != null &&
+			 * !rvList.isEmpty()) { for (RoleVo rv : rvList) { roles.add(rv.getName());
+			 * List<ResourceVo> rList =
+			 * shiroUserService.getRoleById(rv.getId()).getPermissions(); if (rList != null
+			 * && !rList.isEmpty()) { for (ResourceVo r : rList) { if
+			 * (StringUtils.isNotBlank(r.getUrl())) { urlSet.add(r.getUrl()); } } } } }
+			 * su.setRoles(roles);
+			 */
+			/*
+			 * List<Long> enterpriseIdList = new ArrayList<>(); List<Long> enterpriseIds =
+			 * shiroUserService.getEnterpriseIdByUserId(userVo.getId()); if (enterpriseIds
+			 * != null && enterpriseIds.size() > 0) {
+			 * enterpriseIdList.addAll(enterpriseIds); } if (userVo.getEnterpriseId() !=
+			 * null) { enterpriseIdList.add(userVo.getEnterpriseId()); }
+			 * su.setEnterpriseIdList(removeDuplicate(enterpriseIdList));
+			 * su.setEnterpriseId(userVo.getEnterpriseId());
+			 * su.setDepartmentId(userVo.getDepartmentId()); su.setJobId(userVo.getJobId());
+			 */
 			return su;
 		}
 	}

@@ -3,6 +3,7 @@ package com.kivi.cif.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import com.kivi.framework.crypto.enums.AlgDigest;
 import com.kivi.framework.properties.IKtfProperties;
 
 import lombok.Data;
@@ -20,6 +21,16 @@ public class CifProperties implements IKtfProperties {
 	 * dubbo service 版本号
 	 */
 	private String				dubboServiceVersion	= "1.0.0";
+
+	/**
+	 * 摘要算法
+	 */
+	private AlgDigest			algDigest			= AlgDigest.MD5;
+
+	/**
+	 * 用户默认密码
+	 */
+	private String				defaultPassword		= "11111111";
 
 	@Override
 	public String prefix() {

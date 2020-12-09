@@ -5,11 +5,10 @@ import lombok.Data;
 @Data
 public class SysLogEx {
 
-	private long	startTime;
+	private final long		startTime;
+	private final SysLog	sysLog;
 
-	private long	totalMillis;
-
-	private SysLog	sysLog;
+	private long			totalMillis;
 
 	public SysLogEx() {
 		this.startTime	= System.currentTimeMillis();

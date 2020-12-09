@@ -1,45 +1,48 @@
 package com.kivi.dashboard.shiro.service.impl;
 
 import java.util.List;
+import java.util.Set;
 
+import com.kivi.dashboard.permission.service.SysResourceService;
+import com.kivi.dashboard.permission.service.SysUserOrgService;
+import com.kivi.dashboard.permission.service.SysUserService;
 import com.kivi.dashboard.shiro.service.ShiroUserService;
-import com.kivi.dashboard.sys.service.ISysRoleService;
-import com.kivi.dashboard.sys.service.ISysUserEnterpriseService;
-import com.kivi.dashboard.sys.service.ISysUserService;
-import com.kivi.framework.vo.RoleVo;
 import com.kivi.framework.vo.UserVo;
 
 public class ShiroUserServiceImpl implements ShiroUserService {
 
-	private final ISysUserService			userService;
-	private final ISysRoleService			roleService;
-	private final ISysUserEnterpriseService	userEnterpriseService;
+	private final SysUserService		userService;
+	private final SysResourceService	resourceService;
+	private final SysUserOrgService		userOrgService;
 
-	public ShiroUserServiceImpl(ISysUserService userService, ISysRoleService roleService,
-			ISysUserEnterpriseService userEnterpriseService) {
-		this.userService			= userService;
-		this.roleService			= roleService;
-		this.userEnterpriseService	= userEnterpriseService;
+	public ShiroUserServiceImpl(SysUserService userService, SysResourceService resourceService,
+			SysUserOrgService userOrgService) {
+		this.userService		= userService;
+		this.resourceService	= resourceService;
+		this.userOrgService		= userOrgService;
 	}
 
 	@Override
 	public UserVo getUserByLoginName(String loginName) {
-		return userService.selectByLoginName(loginName);
-	}
-
-	@Override
-	public RoleVo getRoleById(Long roleId) {
-		return roleService.selectByRoleId(roleId);
-	}
-
-	@Override
-	public List<Long> getEnterpriseIdByUserId(Long userId) {
-		return userEnterpriseService.selectEnterpriseIdByUserId(userId);
+		return userService.getUserVo(loginName);
 	}
 
 	@Override
 	public UserVo getUserById(Long userId) {
-		return userService.selectByUserId(userId);
+		return userService.getUserVo(userId);
 	}
+
+	@Override
+	public Set<String> getPermissions(List<Long> roleIds) {
+		return resourceService.getPermissions(roleIds);
+	}
+
+	/*
+	 * @Override public RoleVo getRoleById(Long roleId) { return
+	 * roleService.selectByRoleId(roleId); }
+	 * 
+	 * @Override public List<Long> getEnterpriseIdByUserId(Long userId) { return
+	 * userEnterpriseService.selectEnterpriseIdByUserId(userId); }
+	 */
 
 }

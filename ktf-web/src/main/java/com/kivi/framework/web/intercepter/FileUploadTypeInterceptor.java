@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.kivi.framework.component.SpringContextHolder;
 import com.kivi.framework.exception.KtfException;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Descriptin 上传文件类型拦截器
  */
 @Slf4j
-public class FileUploadTypeInterceptor extends HandlerInterceptorAdapter {
+public class FileUploadTypeInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {

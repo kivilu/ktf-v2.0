@@ -70,6 +70,12 @@ public class SysLog extends Model<SysLog> {
 	 */
 	@TableField("method")
 	private String				method;
+
+	/**
+	 * 请求URI
+	 */
+	@TableField("uri")
+	private String				uri;
 	/**
 	 * 请求参数
 	 */

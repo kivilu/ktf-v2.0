@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.kivi.framework.constant.KtfConstant;
 import com.vip.vjtools.vjkit.collection.ArrayUtil;
 import com.vip.vjtools.vjkit.number.NumberUtil;
+import com.vip.vjtools.vjkit.number.RandomUtil;
 
 /**
  * 本工具类主要是对org.apache.commons.lang3.StringUtils类的封装，目的是为了兼容之前的代码
@@ -699,6 +700,10 @@ public class StrKit {
 		else
 			return StringUtils.join(StringUtils.substring(str, 0, 4), MASK, StringUtils.substring(str, length - 4));
 
+	}
+
+	public static String random(int num) {
+		return RandomUtil.randomStringFixLength(num);
 	}
 
 }

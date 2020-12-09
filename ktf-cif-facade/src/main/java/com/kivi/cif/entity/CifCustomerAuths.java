@@ -42,8 +42,8 @@ public class CifCustomerAuths extends Model<CifCustomerAuths> {
 	/**
 	 * 应用ID
 	 */
-	@TableField("application_id")
-	private Long				applicationId;
+	@TableField("app_id")
+	private Long				appId;
 	/**
 	 * 用户类型：01-房东，02-承租人，03-用户，04-服务员
 	 */

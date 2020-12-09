@@ -46,6 +46,7 @@ public abstract class ShiroBaseConfig {
 		filterChainDefinitionMap.put("/qr/**", "anon");
 		filterChainDefinitionMap.put("/test/**", "anon");
 		filterChainDefinitionMap.put("/sys/login", "anon");
+		filterChainDefinitionMap.put("/login", "anon");
 
 		List<String> anonList = ktfProperties().getShiro().getAnonFilter();
 		if (CollectionKit.isNotEmpty(anonList)) {

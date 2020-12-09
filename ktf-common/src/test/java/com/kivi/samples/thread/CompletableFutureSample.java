@@ -76,6 +76,7 @@ public class CompletableFutureSample {
 													System.out.println("u:" + u);
 													System.out.println("e:" + e);
 												});
+
 		// allOf如果阻塞结束则表示所有任务都执行结束了
 		CompletableFuture.allOf(future0, futureA, futureB, futureAB, futureC, futureD, futureE, futureF).get();
 

@@ -6,27 +6,26 @@ import java.util.Optional;
 import lombok.Getter;
 
 /**
- * 用户类型：00-任意，01-管理员，02：用户，03：操作员，04：审核员
+ * 用户类型：0：超级管理员，1：企业用户，2：监管用户，3：个人用户，
  * 
  * @author Eric
  *
  */
 @Getter
 public enum UserType {
-	ANYONE(0, "00"), // 任意
-		ADMIN(1, "01"), // 管理员
-		USER(2, "02"), // 用户
-		OPERATOR(3, "03"), // 操作员
-		REVIEWER(4, "04");// 审核员
+	SYS(0, "00", "系统用户"),
+		ENT(1, "01", "企业用户"),
+		SVN(2, "02", "监管用户"),
+		USR(3, "03", "个人用户");
 
-	private final static UserType[]	userRoles	= { USER };
+	public final int	value;
+	public final String	code;
+	public final String	desc;
 
-	public final Integer			value;
-	public final String				code;
-
-	private UserType(Integer value, String code) {
+	private UserType(int value, String code, String desc) {
 		this.code	= code;
 		this.value	= value;
+		this.desc	= desc;
 	}
 
 	public static UserType userType(String code) {
@@ -47,9 +46,7 @@ public enum UserType {
 		return b.byteValue();
 	}
 
-	public boolean isUser() {
-		Optional<UserType> op = Arrays.stream(userRoles).filter(s -> s.code.equals(this.code)).findFirst();
-
-		return op.isPresent();
+	public static boolean isSYS(int value) {
+		return value == SYS.value;
 	}
 }

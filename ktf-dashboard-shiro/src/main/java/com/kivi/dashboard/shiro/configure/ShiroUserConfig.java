@@ -1,17 +1,17 @@
 package com.kivi.dashboard.shiro.configure;
 
-import org.apache.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.kivi.dashboard.permission.service.SysResourceService;
+import com.kivi.dashboard.permission.service.SysUserOrgService;
+import com.kivi.dashboard.permission.service.SysUserService;
 import com.kivi.dashboard.shiro.service.ShiroUserService;
 import com.kivi.dashboard.shiro.service.impl.ShiroUserServiceImpl;
-import com.kivi.dashboard.sys.service.ISysRoleService;
-import com.kivi.dashboard.sys.service.ISysUserEnterpriseService;
-import com.kivi.dashboard.sys.service.ISysUserService;
 import com.kivi.framework.properties.KtfDashboardProperties;
 
 /**
@@ -22,18 +22,18 @@ import com.kivi.framework.properties.KtfDashboardProperties;
 public class ShiroUserConfig {
 
 	@Autowired(required = false)
-	private ISysUserService				userService;
+	private SysUserService		userService;
 	@Autowired(required = false)
-	private ISysRoleService				roleService;
+	private SysResourceService	resourceService;
 	@Autowired(required = false)
-	private ISysUserEnterpriseService	userEnterpriseService;
+	private SysUserOrgService	userEnterpriseService;
 
-	@Reference(version = KtfDashboardProperties.DUBBO_VERSION, check = false)
-	private ISysUserService				dubboUserService;
-	@Reference(version = KtfDashboardProperties.DUBBO_VERSION, check = false)
-	private ISysRoleService				dubboRoleService;
-	@Reference(version = KtfDashboardProperties.DUBBO_VERSION, check = false)
-	private ISysUserEnterpriseService	dubboUserEnterpriseService;
+	@DubboReference(version = KtfDashboardProperties.DUBBO_VERSION, check = false)
+	private SysUserService		dubboUserService;
+	@DubboReference(version = KtfDashboardProperties.DUBBO_VERSION, check = false)
+	private SysResourceService	dubboResourceService;
+	@DubboReference(version = KtfDashboardProperties.DUBBO_VERSION, check = false)
+	private SysUserOrgService	dubboUserEnterpriseService;
 
 	/*
 	 * @ConditionalOnProperty( prefix = KtfDashboardProperties.PREFIX, value =
@@ -43,7 +43,7 @@ public class ShiroUserConfig {
 	@Bean("shiroUserService")
 	public ShiroUserService shiroUserService() {
 
-		return new ShiroUserServiceImpl(userService, roleService, userEnterpriseService);
+		return new ShiroUserServiceImpl(userService, resourceService, userEnterpriseService);
 	}
 
 	/*
@@ -54,7 +54,7 @@ public class ShiroUserConfig {
 	@Bean("shiroUserServiceDubbo")
 	public ShiroUserService shiroUserServiceDubbo() {
 
-		return new ShiroUserServiceImpl(dubboUserService, dubboRoleService, dubboUserEnterpriseService);
+		return new ShiroUserServiceImpl(dubboUserService, dubboResourceService, dubboUserEnterpriseService);
 	}
 
 }

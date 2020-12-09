@@ -1,7 +1,6 @@
 package com.kivi.dashboard.sys.dto;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -32,36 +31,26 @@ public class SysDicDTO implements Serializable {
 	@ApiModelProperty(value = "父变量ID")
 	private Long				parentId;
 
-	@ApiModelProperty(value = "变量代码")
-	private String				varCode;
-
 	@ApiModelProperty(value = "变量名称")
 	private String				varName;
 
-	@ApiModelProperty(value = "父变量名称")
-	private String				parentName;
+	@ApiModelProperty(value = "变量代码")
+	private String				varCode;
 
-	@ApiModelProperty(value = "数据是否同步(0:是,1:否)")
-	private Integer				isSync;
+	@ApiModelProperty(value = "变量值")
+	private String				varValue;
 
-	@ApiModelProperty(value = "记录创建者（用户）")
-	private String				createUser;
+	@ApiModelProperty(value = "数据类型：string，boolean，number，array，json")
+	private String				type;
 
-	@ApiModelProperty(value = "记录最后修改者（用户）")
-	private String				updateUser;
-
-	private LocalDateTime		gmtCreate;
-	/**
-	 * 记录修改时间
-	 */
-	private LocalDateTime		gmtUpdate;
+	@ApiModelProperty(value = "状态（0-正常，1-禁用）")
+	private Integer				status;
 
 	public static final String	ID					= "id";
 	public static final String	PARENT_ID			= "parentId";
 	public static final String	VAR_CODE			= "varCode";
 	public static final String	VAR_NAME			= "varName";
-	public static final String	IS_SYNC				= "isSync";
-	public static final String	CREATE_USER			= "createUser";
-	public static final String	UPDATE_USER			= "updateUser";
+	public static final String	TYPE				= "type";
+	public static final String	STATUS				= "status";
 
 }

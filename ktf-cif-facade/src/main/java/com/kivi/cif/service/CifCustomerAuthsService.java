@@ -1,12 +1,9 @@
 package com.kivi.cif.service;
 
-import java.util.List;
-import java.util.Map;
-
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.kivi.cif.dto.CifCustomerAuthsDTO;
 import com.kivi.cif.entity.CifCustomerAuths;
-import com.kivi.framework.vo.page.PageInfoVO;
+import com.kivi.framework.vo.UserVo;
 
 /**
  * <p>
@@ -19,13 +16,26 @@ import com.kivi.framework.vo.page.PageInfoVO;
 public interface CifCustomerAuthsService extends IService<CifCustomerAuths> {
 
 	/**
+	 * 验证用户的有效性
+	 * 
+	 * @param userVo
+	 * @return
+	 */
+	Boolean authUser(UserVo userVo);
+
+	/**
+	 * 根据ID查询DTO
+	 */
+	CifCustomerAuthsDTO getDto(Long id);
+
+	/**
 	 * 根据唯一键查询记录
 	 * 
 	 * @see CifCustomerAuthsDao.getCifCustomerAuths
 	 * @param cifAuthDTO
 	 * @return
 	 */
-	public CifCustomerAuths getCifCustomerAuths(final CifCustomerAuthsDTO cifAuthDTO);
+	CifCustomerAuths getCifCustomerAuths(final CifCustomerAuthsDTO cifAuthDTO);
 
 	/**
 	 * 根据唯一键查询记录
@@ -39,14 +49,14 @@ public interface CifCustomerAuthsService extends IService<CifCustomerAuths> {
 	CifCustomerAuths getCifCustomerAuths(Long appid, String identityType, String identifier, String userType);
 
 	/**
-	 * 根据ID查询DTO
+	 * 修改
 	 */
-	CifCustomerAuthsDTO getDTOById(Long id);
+	Long save(CifCustomerAuthsDTO dto);
 
 	/**
 	 * 修改
 	 */
-	Boolean updateById(CifCustomerAuthsDTO cifCustomerAuthsDTO);
+	Boolean updateById(CifCustomerAuthsDTO dto);
 
 	/**
 	 * 更新
@@ -58,27 +68,12 @@ public interface CifCustomerAuthsService extends IService<CifCustomerAuths> {
 	Boolean updateByEntity(CifCustomerAuths condEntity, CifCustomerAuths updaeEntity);
 
 	/**
-	 * 查询列表
+	 * 修改用户密码
+	 * 
+	 * @param userVo      用户信息， id和password属性必须
+	 * @param newPassword 新密码，若未null，则修改为默认密码
+	 * @return
 	 */
-	List<CifCustomerAuthsDTO> list(CifCustomerAuthsDTO cifCustomerAuthsDTO);
+	Boolean updateCredential(UserVo userVo, String newPassword);
 
-	/**
-	 * 指定列查询列表
-	 */
-	List<CifCustomerAuthsDTO> list(Map<String, Object> params, String... columns);
-
-	/**
-	 * 模糊查询
-	 */
-	List<CifCustomerAuthsDTO> listLike(CifCustomerAuthsDTO cifCustomerAuthsDTO);
-
-	/**
-	 * 指定列模糊查询
-	 */
-	List<CifCustomerAuthsDTO> listLike(Map<String, Object> params, String... columns);
-
-	/**
-	 * 分页查询
-	 */
-	PageInfoVO<CifCustomerAuthsDTO> page(Map<String, Object> params);
 }

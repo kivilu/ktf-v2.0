@@ -3,6 +3,7 @@ package com.kivi.dashboard.shiro;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -85,7 +86,8 @@ public class ShiroDBRealm extends AuthorizingRealm {
 				ShiroUser.class);
 		SimpleAuthorizationInfo	info		= new SimpleAuthorizationInfo();
 		Set<String>				roles		= new HashSet<>();
-		List<String>			roleList	= shiroUser.getRoles();
+		List<String>			roleList	= shiroUser.getRoleIds().stream().map(id -> id.toString())
+				.collect(Collectors.toList());
 		roles.addAll(roleList);
 		info.setRoles(roles);
 		info.addStringPermissions(shiroUser.getUrlSet());

@@ -3,14 +3,11 @@ package com.kivi.dashboard.sys.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,19 +18,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.kivi.dashboard.base.DashboardController;
+import com.kivi.dashboard.enums.DicEnum;
 //import com.kivi.dashboard.shiro.ShiroKit;
 import com.kivi.dashboard.sys.dto.SysDicDTO;
 import com.kivi.dashboard.sys.entity.SysDic;
+import com.kivi.framework.annotation.KtfTrace;
 import com.kivi.framework.model.ResultMap;
-import com.kivi.framework.model.SelectNode;
-import com.kivi.framework.model.SelectTreeNode;
-import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.vip.vjtools.vjkit.collection.ListUtil;
-import com.vip.vjtools.vjkit.number.NumberUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -57,18 +50,10 @@ public class SysDicController extends DashboardController {
 	@ApiOperation(value = "数据字典信息", notes = "数据字典信息")
 	@GetMapping("/info/{id}")
 	@RequiresPermissions("sys/dic/info")
-	public ResultMap info(@PathVariable("id") String id) {
-		SysDicDTO dto = sysDicService().getDTOById(NumberUtil.toLongObject(id, -1L));
-		if (dto != null) {
-			SysDicDTO pDto = sysDicService().getDTOById(dto.getParentId());
-			if (pDto != null) {
-				dto.setParentName(pDto.getVarName());
-			} else {
-				dto.setParentName("顶级");
-			}
-		}
+	public ResultMap info(@PathVariable("id") Long id) {
+		SysDicDTO dto = sysDicService().getDto(id);
 
-		return ResultMap.ok().put("dic", dto);
+		return ResultMap.ok().data(dto);
 	}
 
 	/**
@@ -121,7 +106,7 @@ public class SysDicController extends DashboardController {
 	@RequiresPermissions("sys/dic/delete")
 	public ResultMap delete(@PathVariable("id") Long id) {
 		try {
-			Boolean b = sysDicService().deleteWithChild(id);
+			Boolean b = sysDicService().removeWithChildren(id);
 			if (b) {
 				return ResultMap.ok("删除成功！");
 			} else {
@@ -162,89 +147,35 @@ public class SysDicController extends DashboardController {
 		}
 	}
 
-	/**
-	 * 查询列表
-	 */
-	@ApiOperation(value = "查询列表", notes = "查询列表")
-	@RequiresPermissions("sys/dic/list")
-	@GetMapping("/list")
-	public ResultMap
-			list(@RequestParam(required = false) String dicName, @RequestParam(required = false) String dicCode) {
-
-		Map<String, Object> par = new HashMap<>();
-		if (StringUtils.isNotBlank(dicName)) {
-			par.put(SysDicDTO.VAR_NAME, StringUtils.deleteWhitespace(dicName));
-		}
-		if (StringUtils.isNotBlank(dicCode)) {
-			par.put(SysDicDTO.VAR_CODE, StringUtils.deleteWhitespace(dicCode));
-		}
-
-		List<SysDicDTO> list = sysDicService().list(par, StrKit.emptyArray());
-		return ResultMap.ok().put("list", list);
+	@ApiOperation(value = "获取系统运行配置", notes = "获取系统运行配置")
+	@RequiresPermissions("sys/dic/getSettings")
+	@GetMapping("/getSettings")
+	@KtfTrace("获取系统运行配置")
+	public ResultMap getSettings() {
+		Map<String, Object> map = sysDicService().getSettings(DicEnum.STS_VUE.getCode());
+		return ResultMap.ok().data(map);
 	}
 
 	/**
-	 * 选择字典（添加、修改）
-	 *
-	 * @return
+	 * 查询顶级字典数据
 	 */
-	@ApiOperation(value = "选择字典（添加、修改）", notes = "选择字典（添加、修改）")
-	@GetMapping("/select/{parentId}")
-	public ResultMap select(@PathVariable("parentId") Long parentId) {
-		Map<String, Object> params = Maps.newHashMap();
-		if (parentId != null && 0 != parentId) {
-			params.put(SysDicDTO.PARENT_ID, parentId);
-		}
-		List<SysDicDTO>			dicList			= sysDicService().list(params, SysDic.DB_ID, SysDic.DB_PARENT_ID,
-				SysDic.DB_VAR_CODE, SysDic.DB_VAR_NAME);
-		List<SelectTreeNode>	treeNodeList	= Lists.newArrayList();
-		if (!dicList.isEmpty()) {
-			dicList.forEach(dic -> {
-				SelectTreeNode selectTreeNode = new SelectTreeNode();
-				selectTreeNode.setId(dic.getId().toString());
-				selectTreeNode.setParentId(dic.getParentId().toString());
-				selectTreeNode.setName(dic.getVarName());
-				selectTreeNode.setCode(dic.getVarCode());
-				treeNodeList.add(selectTreeNode);
-			});
-		}
-		treeNodeList.add(SelectTreeNode.createParent());
-		return ResultMap.ok().put("dicList", treeNodeList);
+	@ApiOperation(value = "查询顶级字典数据", notes = "查询顶级字典数据")
+	@RequiresPermissions("sys/dic/tops")
+	@GetMapping("/tops")
+	public ResultMap list(@RequestParam(required = false) Map<String, Object> params) {
+		PageInfoVO<SysDicDTO> page = sysDicService().tops(params);
+		return ResultMap.ok().data(page);
 	}
 
 	/**
-	 * 获取数据字典select树
-	 *
-	 * @return
+	 * 根据ID查询所属字典数据
 	 */
-	@GetMapping("/selectNode/{pid}")
-	public Object selectTree(@PathVariable("parentId") Long parentId) {
-		List<SelectNode>	tree	= new ArrayList<>();
-		Map<String, Object>	params	= new HashMap<>();
-		params.put(SysDicDTO.PARENT_ID, parentId);
-		List<SysDicDTO> list = sysDicService().list(params, SysDic.DB_ID, SysDic.DB_VAR_NAME);
-		if (ListUtil.isNotEmpty(list)) {
-			list.stream().map(dicDTO -> {
-				SelectNode selectNode = new SelectNode();
-				selectNode.setLabel(dicDTO.getVarName());
-				selectNode.setValue(dicDTO.getId().toString());
-				return selectNode;
-			}).collect(Collectors.toList());
-
-		}
-		return ResultMap.ok().put("list", tree);
-	}
-
-	/**
-	 * 分页查询
-	 */
-	@ApiOperation(value = "分页查询数据字典", notes = "分页查询数据字典")
-	@RequiresPermissions("sys/dic/page")
-	@GetMapping("/page")
-	public ResultMap page(@RequestParam(required = false) Map<String, Object> params) {
-		PageInfoVO<SysDicDTO> page = sysDicService().page(params);
-
-		return ResultMap.ok().put("page", page);
+	@ApiOperation(value = "根据ID查询所属字典数据", notes = "根据ID查询所属字典数据")
+	@GetMapping("/getChildren/{id}")
+	@RequiresPermissions("sys/dic/getChildren")
+	public ResultMap getChildren(@PathVariable("id") Long id) {
+		List<SysDicDTO> list = sysDicService().getChildren(id);
+		return ResultMap.ok().data(list);
 	}
 
 }

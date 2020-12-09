@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kivi.dashboard.org.mapper.OrgTitleExMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kivi.dashboard.org.dto.OrgTitleDTO">
+        <id column="id" property="id" />
+        <result column="corp_id" property="corpId" />
+        <result column="dept_id" property="deptId" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="status" property="status" />
+        <result column="dept_name" property="deptName" />
+    </resultMap>
+    
+    <!-- 自定义查询 -->
+    <select id="selectDTO" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+			title.id,
+			title.`code`,
+			title.`name`,
+			title.`status`,
+			dept.`name` AS dept_name
+		FROM
+			ktf_org_title title
+		LEFT JOIN ktf_org_dept dept ON title.dept_id = dept.id
+        <where>
+            <if test="params.id!=null">
+                 title.id=#{params.id}
+            </if>
+            <if test="params.deptId !=null">
+                and title.dept_id=#{params.deptId}
+            </if>
+            <if test="params.corpId !=null">
+                and title.corp_id=#{params.corpId}
+            </if>
+            <if test="params.name !=null and params.name!=''">
+                and t.name like '%${params.name}%'
+            </if>
+        </where>
+        order by t.create_time desc
+    </select>
+
+</mapper>

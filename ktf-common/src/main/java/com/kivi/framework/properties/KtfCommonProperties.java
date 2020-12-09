@@ -17,6 +17,11 @@ public class KtfCommonProperties implements IKtfProperties {
 	private String				componentScan		= "com.kivi";
 
 	/**
+	 * 业务应用ID
+	 */
+	private Long				appId				= 1L;
+
+	/**
 	 * 业务应用代码
 	 */
 	private String				bzApplicatonCode	= "BZ-default";

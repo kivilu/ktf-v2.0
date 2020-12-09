@@ -39,6 +39,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 		HttpServletRequest	httpServletRequest	= (HttpServletRequest) request;
 		HttpServletResponse	httpServletResponse	= (HttpServletResponse) response;
 
+		log.trace("请求URL:{}", httpServletRequest.getRequestURI());
+
 		// 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态
 		if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
 			setHeader(httpServletRequest, httpServletResponse);
@@ -140,6 +142,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 		try { // 处理登录失败的异常
 			log.error("登录失败的异常", throwable);
 			String json = ResultMap.error(KtfError.E_UNAUTHORIZED, "用户尚未登录，请登录").toString();
+			httpServletResponse.setStatus(KtfError.E_UNAUTHORIZED);
 			httpServletResponse.setHeader("Content-Type", "application/json;charset=UTF-8");
 			httpServletResponse.getWriter().print(json);
 		} catch (IOException e1) {

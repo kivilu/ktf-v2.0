@@ -14,6 +14,7 @@ import lombok.EqualsAndHashCode;
 /**
  * @description：UserVo
  */
+@Deprecated
 @ApiModel(value = "RoleVo对象", description = "角色")
 @Data
 @EqualsAndHashCode(callSuper = false)
