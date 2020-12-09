@@ -62,8 +62,8 @@ public class DubboCifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAut
 	}
 
 	@Override
-	public Boolean authUser(UserVo userVo) {
-		return cifCustomerAuthsService.authUser(userVo);
+	public Boolean auth(UserVo userVo) {
+		return cifCustomerAuthsService.auth(userVo);
 	}
 
 	@Override

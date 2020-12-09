@@ -11,9 +11,7 @@
   
   <properties>
   	<!-- <mybatis-plus.version>3.2.0</mybatis-plus.version> -->
-  	<mybatis-plus.version>3.3.1.tmp</mybatis-plus.version>
-  	<p6spy.version>3.8.5</p6spy.version>
-  	<mybatis-typehandlers-jsr310.version>1.0.2</mybatis-typehandlers-jsr310.version>
+  	
   </properties>
   
   <dependencies>

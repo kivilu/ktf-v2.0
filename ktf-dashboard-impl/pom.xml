@@ -14,6 +14,12 @@
        		<artifactId>ktf-dashboard-facade</artifactId>
        		<version>${ktf.version}</version>
   		</dependency>
+  		
+  		<dependency>
+       		<groupId>com.kivi</groupId>
+       		<artifactId>ktf-dashboard-mapper</artifactId>
+       		<version>${ktf.version}</version>
+  		</dependency>
 
   		<dependency>
        		<groupId>com.kivi</groupId>

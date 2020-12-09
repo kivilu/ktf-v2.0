@@ -45,6 +45,9 @@ public abstract class ShiroBaseConfig {
 		filterChainDefinitionMap.put("/ws/**", "anon");
 		filterChainDefinitionMap.put("/qr/**", "anon");
 		filterChainDefinitionMap.put("/test/**", "anon");
+		filterChainDefinitionMap.put("/nonce", "anon");
+		filterChainDefinitionMap.put("/**/nonce", "anon");
+		filterChainDefinitionMap.put("/login/settings", "anon");
 		filterChainDefinitionMap.put("/sys/login", "anon");
 		filterChainDefinitionMap.put("/login", "anon");
 

@@ -58,7 +58,7 @@ public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMap
 
 	@KtfTrace("验证用户凭据")
 	@Override
-	public Boolean authUser(UserVo userVo) {
+	public Boolean auth(UserVo userVo) {
 		CifCustomerAuths entity = super.getById(userVo.getId());
 		if (entity == null)
 			return false;
@@ -74,7 +74,7 @@ public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMap
 			log.info("重置用户{}的认证凭据", userVo.getId());
 		} else {
 			log.info("修改用户{}的认证凭据", userVo.getId());
-			if (!this.authUser(userVo)) {
+			if (!this.auth(userVo)) {
 				log.error("用户{}验证凭据未通过", userVo.getId());
 				return false;
 			}

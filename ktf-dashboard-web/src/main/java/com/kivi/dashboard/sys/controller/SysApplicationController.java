@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import com.kivi.dashboard.base.DashboardController;
 //import com.kivi.dashboard.shiro.ShiroKit;
 import com.kivi.dashboard.sys.dto.SysApplicationDTO;
 import com.kivi.framework.model.ResultMap;
+import com.kivi.framework.properties.KtfSwaggerProperties;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.vip.vjtools.vjkit.number.NumberUtil;
 
@@ -35,7 +37,11 @@ import lombok.extern.slf4j.Slf4j;
  * @author Auto-generator
  * @since 2019-09-18
  */
-
+@ConditionalOnProperty(
+		prefix = KtfSwaggerProperties.PREFIX,
+		value = "enable-sys-api",
+		havingValue = "true",
+		matchIfMissing = false)
 @Api(value = "系统应用", tags = { "系统应用" })
 @RestController
 @RequestMapping("/sys/application")

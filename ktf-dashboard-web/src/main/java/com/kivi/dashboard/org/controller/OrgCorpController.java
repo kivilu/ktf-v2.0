@@ -11,6 +11,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,7 @@ import com.kivi.dashboard.sys.controller.UpLoadController;
 import com.kivi.dashboard.sys.dto.SysFileDTO;
 import com.kivi.dashboard.sys.entity.SysFile;
 import com.kivi.framework.model.ResultMap;
+import com.kivi.framework.properties.KtfSwaggerProperties;
 import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.vip.vjtools.vjkit.collection.ListUtil;
@@ -44,6 +46,11 @@ import lombok.extern.slf4j.Slf4j;
  * @author Auto-generator
  * @since 2019-09-18
  */
+@ConditionalOnProperty(
+		prefix = KtfSwaggerProperties.PREFIX,
+		value = "enable-org-api",
+		havingValue = "true",
+		matchIfMissing = false)
 @Api(value = "企业管理接接口", tags = { "企业管理接口" })
 @RestController
 @RequestMapping("/org/corp")

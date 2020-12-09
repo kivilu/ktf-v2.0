@@ -1,4 +1,4 @@
-package com.kivi.cif.auth;
+package com.kivi.dashboard.auth;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -7,16 +7,16 @@ import org.springframework.context.annotation.Configuration;
 import com.kivi.framework.properties.KtfDashboardProperties;
 
 @Configuration
-public class CifAuthenticationConfig {
+public class KtfAuthenticationConfig {
 
 	@ConditionalOnProperty(
 			prefix = KtfDashboardProperties.PREFIX,
 			value = "login-type",
 			havingValue = "USERNAME",
-			matchIfMissing = true)
+			matchIfMissing = false)
 	@Bean
-	CifAuthentication CifAuthentication() {
-		return new CifSimpleAuthentication();
+	KtfAuthentication ktfAuthentication() {
+		return new KtfDefaultAuthentication();
 	}
 
 }

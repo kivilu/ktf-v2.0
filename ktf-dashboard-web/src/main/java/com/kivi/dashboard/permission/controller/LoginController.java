@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,20 +24,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.code.kaptcha.Producer;
 import com.kivi.cif.entity.CifCustomerAuths;
+import com.kivi.dashboard.auth.KtfAuthentication;
 import com.kivi.dashboard.base.DashboardController;
 import com.kivi.dashboard.org.entity.OrgCorp;
 import com.kivi.dashboard.shiro.ShiroKit;
 import com.kivi.dashboard.shiro.ShiroUser;
-import com.kivi.dashboard.shiro.form.LoginForm;
-import com.kivi.framework.annotation.KtfTrace;
 import com.kivi.framework.cache.redis.IRedisService;
 import com.kivi.framework.constant.KtfError;
 import com.kivi.framework.constant.enums.KtfStatus;
 import com.kivi.framework.constant.enums.UserType;
 import com.kivi.framework.exception.KtfException;
+import com.kivi.framework.form.LoginForm;
 import com.kivi.framework.model.ResultMap;
 import com.kivi.framework.properties.KtfDashboardProperties;
 import com.kivi.framework.service.KtfTokenService;
+import com.kivi.framework.util.kit.CollectionKit;
+import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.UserVo;
 import com.kivi.framework.web.constant.WebConst;
 import com.kivi.framework.web.jwt.JwtKit;
@@ -61,6 +65,9 @@ public class LoginController extends DashboardController {
 	@Autowired(required = false)
 	private IRedisService			redisService;
 
+	@Autowired
+	private KtfAuthentication		ktfAuthentication;
+
 	// 30分钟过期
 	@Autowired
 	private KtfDashboardProperties	ktfDashboardProperties;
@@ -72,6 +79,18 @@ public class LoginController extends DashboardController {
 	public Boolean isKaptcha() {
 
 		return ktfDashboardProperties.getEnableKaptcha();
+	}
+
+	@GetMapping("/login/settings")
+	public ResultMap loginSettings() {
+		Map<String, Object> map = CollectionKit.newHashMap();
+		map.put("kaptcha", ktfDashboardProperties.getEnableKaptcha());
+		map.put("loginType", ktfDashboardProperties.getLoginType().getCode());
+
+		Map<String, Object> dbMap = sysDicService().getSettings("LOGIN_SETTINGS");
+		map.putAll(dbMap);
+
+		return ResultMap.ok().put("data", map);
 	}
 
 	@GetMapping("captcha.jpg")
@@ -96,6 +115,19 @@ public class LoginController extends DashboardController {
 		}
 	}
 
+	@ApiOperation(value = "获取nonce", notes = "获取nonce")
+	@GetMapping("/nonce")
+	public ResultMap nonce(HttpSession session) {
+		String	seesionId	= session.getId();
+		String	nonce		= UUID.randomUUID().toString();
+
+		log.trace("seesionId：{}，nonce:{}", seesionId, nonce);
+
+		redisService.set(StrKit.join("nonce-", seesionId), nonce, 10);
+
+		return ResultMap.ok().put("data", nonce);
+	}
+
 	/**
 	 * 登录
 	 * 
@@ -103,9 +135,14 @@ public class LoginController extends DashboardController {
 	 */
 	@ApiOperation(value = "登录", notes = "登录")
 	@PostMapping("/login")
-	@KtfTrace("login")
-	public ResultMap login(@Valid @RequestBody LoginForm form) throws Exception {
+	// @KtfTrace("login")
+	public ResultMap login(@Valid @RequestBody LoginForm form, HttpSession session) throws Exception {
 		log.info("login请求登录");
+
+		String	seesionId	= session.getId();
+		String	nonce		= (String) redisService.get(StrKit.join("nonce-", seesionId));
+
+		log.trace("seesionId：{}，nonce:{}", seesionId, nonce);
 
 		if (ktfDashboardProperties.getEnableKaptcha()) {
 			String validateCode = (String) redisService.get(form.getUuid());
@@ -124,8 +161,8 @@ public class LoginController extends DashboardController {
 			return ResultMap.error(KtfError.E_UNAUTHORIZED, "账号或密码不正确");
 		}
 
-		userVo.setPassword(form.getPassword());
-		if (!customerAuthsService().authUser(userVo)) {
+		form.setUuid(form.getUuid() + nonce);
+		if (!ktfAuthentication.auth(form, userVo)) {
 			log.error("密码不正确");
 			return ResultMap.error(KtfError.E_UNAUTHORIZED, "账号或密码不正确");
 		}

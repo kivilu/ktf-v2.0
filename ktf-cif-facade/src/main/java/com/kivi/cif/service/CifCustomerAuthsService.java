@@ -21,7 +21,7 @@ public interface CifCustomerAuthsService extends IService<CifCustomerAuths> {
 	 * @param userVo
 	 * @return
 	 */
-	Boolean authUser(UserVo userVo);
+	Boolean auth(UserVo userVo);
 
 	/**
 	 * 根据ID查询DTO

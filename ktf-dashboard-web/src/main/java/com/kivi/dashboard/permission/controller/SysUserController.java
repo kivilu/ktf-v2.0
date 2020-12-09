@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,14 +23,15 @@ import com.kivi.dashboard.permission.dto.SysUserDTO;
 import com.kivi.dashboard.permission.entity.SysUser;
 import com.kivi.dashboard.shiro.ShiroKit;
 import com.kivi.dashboard.shiro.ShiroUser;
-import com.kivi.dashboard.shiro.form.PasswordForm;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.constant.KtfError;
 import com.kivi.framework.constant.enums.KtfIdentifyType;
 import com.kivi.framework.constant.enums.KtfStatus;
 import com.kivi.framework.constant.enums.UserType;
 import com.kivi.framework.dto.JwtUserDTO;
+import com.kivi.framework.form.PasswordForm;
 import com.kivi.framework.model.ResultMap;
+import com.kivi.framework.properties.KtfSwaggerProperties;
 import com.kivi.framework.service.KtfTokenService;
 import com.kivi.framework.vo.PasswordResetVO;
 import com.kivi.framework.vo.UserVo;
@@ -47,7 +49,11 @@ import lombok.extern.slf4j.Slf4j;
  * @author Auto-generator
  * @since 2019-09-18
  */
-
+@ConditionalOnProperty(
+		prefix = KtfSwaggerProperties.PREFIX,
+		value = "enable-permission-api",
+		havingValue = "true",
+		matchIfMissing = false)
 @Api(value = "用户管理", tags = { "用户管理" })
 @RestController
 @RequestMapping("/permission/user")

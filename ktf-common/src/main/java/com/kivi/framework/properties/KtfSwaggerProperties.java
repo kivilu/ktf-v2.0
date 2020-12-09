@@ -25,6 +25,11 @@ public class KtfSwaggerProperties implements IKtfProperties {
 	private Boolean				authorizationEnabled	= true;
 	private String				license					= "MIT 协议";
 	private String				licenseUrl				= "http://www.opensource.org/licenses/MIT";
+	private Boolean				enableOrgApi			= false;
+	private Boolean				enableSysApi			= false;
+	private Boolean				enableDicApi			= false;
+	private Boolean				enablePermissionApi		= false;
+	private Boolean				enableRegionApi			= false;
 
 	/**
 	 * 禁用swagger时的重定向地址

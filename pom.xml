@@ -36,6 +36,10 @@
   		<!-- zxing -->
         <zxing.core.version>3.3.1</zxing.core.version>
         
+        <mybatis-plus.version>3.3.1.tmp</mybatis-plus.version>
+  		<p6spy.version>3.8.5</p6spy.version>
+  		<mybatis-typehandlers-jsr310.version>1.0.2</mybatis-typehandlers-jsr310.version>
+        
         <fst.version>2.57</fst.version>
         
 		<ktf.version>2.0.2</ktf.version>
