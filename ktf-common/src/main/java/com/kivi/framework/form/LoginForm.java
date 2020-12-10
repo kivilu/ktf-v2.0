@@ -1,5 +1,7 @@
 package com.kivi.framework.form;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import lombok.Data;
 
 /**
@@ -10,6 +12,7 @@ public class LoginForm {
 	/**
 	 * 用户名
 	 */
+	@NotBlank(message = "用户名不能为空")
 	private String	userName;
 	/**
 	 * 密码

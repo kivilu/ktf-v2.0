@@ -108,7 +108,7 @@ public class SysDicController extends DashboardController {
 	 * 删除
 	 */
 	@ApiOperation(value = "删除数据字典", notes = "删除数据字典")
-	@PostMapping("/delete/{id}")
+	@GetMapping("/delete/{id}")
 	@RequiresPermissions("sys/dic/delete")
 	public ResultMap delete(@PathVariable("id") Long id) {
 		try {
@@ -180,7 +180,7 @@ public class SysDicController extends DashboardController {
 	@GetMapping("/getChildren/{id}")
 	@RequiresPermissions("sys/dic/getChildren")
 	public ResultMap getChildren(@PathVariable("id") Long id) {
-		List<SysDicDTO> list = sysDicService().getChildren(id);
+		List<SysDicDTO> list = sysDicService().getChildren(id, false);
 		return ResultMap.ok().data(list);
 	}
 

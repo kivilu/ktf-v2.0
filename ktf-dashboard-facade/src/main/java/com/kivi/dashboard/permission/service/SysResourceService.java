@@ -36,6 +36,13 @@ public interface SysResourceService extends IService<SysResource> {
 	Boolean updateById(SysResourceDTO dto);
 
 	/**
+	 * 
+	 * @param params
+	 * @return
+	 */
+	List<SysResourceDTO> selectMenutList(Map<String, Object> params);
+
+	/**
 	 * 根据用户ID和资源类型查询
 	 * 
 	 * @param userId 用户ID
@@ -58,7 +65,7 @@ public interface SysResourceService extends IService<SysResource> {
 	 * @param id
 	 * @return
 	 */
-	List<SysResourceDTO> getChildren(Long id);
+	List<SysResourceDTO> getChildren(Long id, Boolean recursion);
 
 	/**
 	 * 分页查询

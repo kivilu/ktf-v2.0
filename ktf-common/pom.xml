@@ -71,10 +71,10 @@
         </dependency>
 		
 		<!-- validation-api -->
-  		<dependency>
+  		<!-- <dependency>
 			<groupId>javax.validation</groupId>
     		<artifactId>validation-api</artifactId>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>javax.persistence</groupId>
 			<artifactId>javax.persistence-api</artifactId>
@@ -82,7 +82,6 @@
 		<dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-validator</artifactId>
-		    <version>6.0.16.Final</version>
         </dependency>
   		<!-- /validation-api-->
   		

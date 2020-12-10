@@ -2,9 +2,10 @@ package com.kivi.framework.vo;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.kivi.framework.constant.enums.UserType;
 
@@ -26,7 +27,11 @@ public class PasswordResetVO implements Serializable {
 	@Size(max = 32, message = "登录账号不能为空")
 	private String				identifier;
 
-	@ApiModelProperty(position = 2, value = "用户密码，md5(12345)", required = true, dataType = "String",
+	@ApiModelProperty(
+			position = 2,
+			value = "用户密码，md5(12345)",
+			required = true,
+			dataType = "String",
 			example = "827ccb0eea8a706c4c34a16891f84e7b")
 	@NotBlank
 	@Size(max = 32, message = "用户密码摘要不能为空")
@@ -36,8 +41,12 @@ public class PasswordResetVO implements Serializable {
 	@Size(max = 6, message = "验证码长度为6")
 	private String				smsCode;
 
-	@ApiModelProperty(position = 4, value = "用户类型", required = true,
-			dataType = "com.kivi.framework.constant.enums.UserType", example = "ADMIN")
+	@ApiModelProperty(
+			position = 4,
+			value = "用户类型",
+			required = true,
+			dataType = "com.kivi.framework.constant.enums.UserType",
+			example = "ADMIN")
 	@NotNull(message = "UserType不能为空")
 	private UserType			userType;
 

@@ -103,7 +103,7 @@ public class OrgTitleController extends DashboardController {
 	 * 删除
 	 */
 	@ApiOperation(value = "删除企业职务配置", notes = "删除企业职务配置")
-	@PostMapping("/delete/{id}")
+	@GetMapping("/delete/{id}")
 	@RequiresPermissions("org/title/delete")
 	public ResultMap delete(@PathVariable("id") Long id) {
 		try {

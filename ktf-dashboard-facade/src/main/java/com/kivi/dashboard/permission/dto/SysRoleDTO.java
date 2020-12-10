@@ -35,6 +35,8 @@ public class SysRoleDTO implements Serializable {
 	@ApiModelProperty(value = "角色描述")
 	private String				description;
 
+	private Integer				status;
+
 	@ApiModelProperty(value = "角色资源列表")
 	private List<Long>			resourceIds;
 

@@ -103,8 +103,8 @@ public class SysResourceController extends DashboardController {
 	 * 修改
 	 */
 	@ApiOperation(value = "修改资源", notes = "修改资源")
-	@RequiresPermissions("permission/menu/update")
 	@PostMapping("/update")
+	@RequiresPermissions("permission/menu/update")
 	public ResultMap updateById(@RequestBody SysResourceDTO dto) {
 		try {
 			// 数据校验
@@ -125,7 +125,7 @@ public class SysResourceController extends DashboardController {
 	 * 删除
 	 */
 	@ApiOperation(value = "批量删除资源", notes = "删除资源")
-	@PostMapping("/delete/{menuId}")
+	@GetMapping("/delete/{menuId}")
 	@RequiresPermissions("permission/menu/delete")
 	public ResultMap delete(@PathVariable("menuId") Long menuId) {
 		try {
@@ -169,10 +169,10 @@ public class SysResourceController extends DashboardController {
 	 * 根据ID查询所属字典数据
 	 */
 	@ApiOperation(value = "根据ID查询所属菜单", notes = "根据ID查询所属菜单")
-	@GetMapping("/getChildren/{id}")
+	@GetMapping("/getChildren/{id}/{isMenu}")
 	@RequiresPermissions("permission/menu/getChildren")
-	public ResultMap getChildren(@PathVariable("id") Long id) {
-		List<SysResourceDTO> list = sysResourceService().getChildren(id);
+	public ResultMap getChildren(@PathVariable("id") Long id, @PathVariable("isMenu") Boolean isMenu) {
+		List<SysResourceDTO> list = sysResourceService().getChildren(id, isMenu);
 		return ResultMap.ok().data(list);
 	}
 
@@ -191,15 +191,14 @@ public class SysResourceController extends DashboardController {
 	/**
 	 * 查询列表
 	 */
-	/*
-	 * @ApiOperation(value = "查询菜单列表", notes = "查询菜单列表")
-	 * 
-	 * @RequiresPermissions("permission/menu/list")
-	 * 
-	 * @GetMapping("/list") public ResultMap list() { List<ResourceVo> list =
-	 * sysResourceService().selectResourceList(Maps.newHashMap()); return
-	 * ResultMap.ok().put("list", list); }
-	 */
+
+	@ApiOperation(value = "查询菜单列表", notes = "查询菜单列表")
+	@RequiresPermissions("permission/menu/list")
+	@GetMapping("/list")
+	public ResultMap list(@RequestParam Map<String, Object> params) {
+		List<SysResourceDTO> list = sysResourceService().selectMenutList(params);
+		return ResultMap.ok().data(list);
+	}
 
 	/**
 	 * 选择菜单(添加、修改菜单)
@@ -224,7 +223,8 @@ public class SysResourceController extends DashboardController {
 		if (StringUtils.isBlank(sysResource.getName())) {
 			throw new KtfException("菜单名称不能为空");
 		}
-		if (sysResource.getParentId() == null) {
+		if (sysResource.getResourceType() != CommonEnum.MenuType.CATALOG.getValue()
+				&& sysResource.getParentId() == null) {
 			throw new KtfException("上级菜单不能为空");
 		}
 		// 菜单
@@ -235,7 +235,7 @@ public class SysResourceController extends DashboardController {
 		}
 		// 上级菜单类型
 		int parentType = CommonEnum.MenuType.CATALOG.getValue();
-		if (sysResource.getParentId() != 0) {
+		if (sysResource.getParentId() != null && sysResource.getParentId() != 0) {
 			SysResource parentMenu = sysResourceService().getById(sysResource.getParentId());
 			parentType = parentMenu.getResourceType();
 		}

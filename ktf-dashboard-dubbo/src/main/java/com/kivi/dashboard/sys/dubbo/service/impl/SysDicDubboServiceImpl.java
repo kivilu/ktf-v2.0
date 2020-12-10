@@ -74,8 +74,8 @@ public class SysDicDubboServiceImpl extends ServiceImpl<SysDicMapper, SysDic> im
 	}
 
 	@Override
-	public List<SysDicDTO> getChildren(Long id) {
-		return sysDicService.getChildren(id);
+	public List<SysDicDTO> getChildren(Long id, Boolean recursion) {
+		return sysDicService.getChildren(id, recursion);
 	}
 
 	@Override

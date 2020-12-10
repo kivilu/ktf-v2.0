@@ -11,6 +11,7 @@ import com.kivi.cif.entity.CifCustomerAuths;
 import com.kivi.cif.mapper.CifCustomerAuthsMapper;
 import com.kivi.cif.properties.CifProperties;
 import com.kivi.cif.service.CifCustomerAuthsService;
+import com.kivi.framework.form.LoginForm;
 import com.kivi.framework.vo.UserVo;
 
 @DubboService(version = CifProperties.DUBBO_VERSION)
@@ -62,8 +63,8 @@ public class DubboCifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAut
 	}
 
 	@Override
-	public Boolean auth(UserVo userVo) {
-		return cifCustomerAuthsService.auth(userVo);
+	public Boolean auth(LoginForm form, UserVo userVo) {
+		return cifCustomerAuthsService.auth(form, userVo);
 	}
 
 	@Override

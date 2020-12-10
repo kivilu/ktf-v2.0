@@ -156,7 +156,7 @@ public class SysApi3rdpartyController extends UpLoadController {
 	 * 删除
 	 */
 	@ApiOperation(value = "删除第三方API接口账号信息", notes = "删除第三方API接口账号信息")
-	@PostMapping("/delete/{id}")
+	@GetMapping("/delete/{id}")
 	@RequiresPermissions("sys/api3rdparty/delete")
 	public ResultMap delete(@PathVariable("id") Long id) {
 		try {

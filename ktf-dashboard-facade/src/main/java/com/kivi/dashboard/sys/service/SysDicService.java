@@ -64,7 +64,7 @@ public interface SysDicService extends IService<SysDic> {
 	 * @param id
 	 * @return
 	 */
-	List<SysDicDTO> getChildren(Long id);
+	List<SysDicDTO> getChildren(Long id, Boolean recursion);
 
 	/**
 	 * 指定列查询列表

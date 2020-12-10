@@ -118,7 +118,7 @@ public class SysRegionController extends DashboardController {
 	 * 删除
 	 */
 	@ApiOperation(value = "删除地区信息", notes = "删除地区信息")
-	@PostMapping("/delete/{id}")
+	@GetMapping("/delete/{id}")
 	@RequiresPermissions("sys/region/delete")
 	public ResultMap delete(@PathVariable("id") Long id) {
 		try {

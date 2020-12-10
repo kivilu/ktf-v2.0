@@ -106,7 +106,7 @@ public class SysRoleController extends DashboardController {
 	 * 删除
 	 */
 	@ApiOperation(value = "删除角色", notes = "删除角色")
-	@PostMapping("/delete/{id}")
+	@GetMapping("/delete/{id}")
 	@RequiresPermissions("permission/role/delete")
 	public ResultMap delete(@PathVariable("id") Long id) {
 		try {

@@ -109,7 +109,7 @@ public class OrgCorpController extends UpLoadController {
 	 * 删除
 	 */
 	@ApiOperation(value = "批量删除企业信息", notes = "删除企业信息")
-	@PostMapping("/delete/{id}")
+	@GetMapping("/delete/{id}")
 	@RequiresPermissions("org/corp/delete")
 	public ResultMap delete(@PathVariable("id") Long id) {
 		try {

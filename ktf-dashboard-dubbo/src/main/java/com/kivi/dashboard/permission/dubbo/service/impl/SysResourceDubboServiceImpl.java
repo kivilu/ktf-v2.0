@@ -67,8 +67,8 @@ public class SysResourceDubboServiceImpl extends ServiceImpl<SysResourceMapper, 
 	}
 
 	@Override
-	public List<SysResourceDTO> getChildren(Long id) {
-		return sysResourceService.getChildren(id);
+	public List<SysResourceDTO> getChildren(Long id, Boolean isMenu) {
+		return sysResourceService.getChildren(id, isMenu);
 	}
 
 	@Override
@@ -79,6 +79,11 @@ public class SysResourceDubboServiceImpl extends ServiceImpl<SysResourceMapper, 
 	@Override
 	public Set<String> getPermissions(List<Long> roleIds) {
 		return sysResourceService.getPermissions(roleIds);
+	}
+
+	@Override
+	public List<SysResourceDTO> selectMenutList(Map<String, Object> params) {
+		return sysResourceService.selectMenutList(params);
 	}
 
 }

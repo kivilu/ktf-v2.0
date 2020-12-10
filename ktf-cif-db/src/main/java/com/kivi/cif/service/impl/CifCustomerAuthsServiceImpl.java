@@ -29,6 +29,7 @@ import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.crypto.enums.AlgDigest;
 import com.kivi.framework.crypto.util.DigestUtil;
 import com.kivi.framework.exception.KtfException;
+import com.kivi.framework.form.LoginForm;
 import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.UserVo;
 
@@ -58,12 +59,14 @@ public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMap
 
 	@KtfTrace("验证用户凭据")
 	@Override
-	public Boolean auth(UserVo userVo) {
+	public Boolean auth(LoginForm form, UserVo userVo) {
 		CifCustomerAuths entity = super.getById(userVo.getId());
 		if (entity == null)
 			return false;
 
-		return cifAuthentication.verifyPass(userVo.getPassword(), entity.getCredentialSalt(), entity.getCredential());
+		userVo.setPassword(entity.getCredential());
+		userVo.setSalt(entity.getCredentialSalt());
+		return cifAuthentication.auth(form, userVo);
 	}
 
 	@KtfCacheEvict(cacheNames = KtfCache.CifCustomerAuths)
@@ -74,10 +77,10 @@ public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMap
 			log.info("重置用户{}的认证凭据", userVo.getId());
 		} else {
 			log.info("修改用户{}的认证凭据", userVo.getId());
-			if (!this.auth(userVo)) {
-				log.error("用户{}验证凭据未通过", userVo.getId());
-				return false;
-			}
+			/*
+			 * if (!this.auth(userVo)) { log.error("用户{}验证凭据未通过", userVo.getId()); return
+			 * false; }
+			 */
 		}
 
 		if (StrKit.isBlank(newPassword)) {

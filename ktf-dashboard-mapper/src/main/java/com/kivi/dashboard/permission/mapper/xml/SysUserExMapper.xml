@@ -123,7 +123,7 @@
         	ktf_sys_user U
         LEFT JOIN ktf_org_corp CP ON U.org_id = CP.id
         LEFT JOIN ktf_org_dept dept ON U.dept_id = dept.id
-        LEFT JOIN ktf_org_title title ON U.job_id = title.id
+        LEFT JOIN ktf_org_title title ON U.title_id = title.id
         LEFT JOIN cif_customer C ON U.cif_id = C.id
         <where>
             <if test="params.keyword != null and params.keyword != '' ">

@@ -2,20 +2,13 @@ package com.kivi.dashboard.shiro.jwt;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.Filter;
 
-import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler;
-import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.servlet.SimpleCookie;
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -24,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.kivi.dashboard.shiro.base.ShiroBaseConfig;
 import com.kivi.dashboard.shiro.cache.ShiroRedisCacheManager;
-import com.kivi.dashboard.shiro.cache.ShiroRedisSessionDAO;
 import com.kivi.dashboard.shiro.configure.ShiroRedisConfig;
 import com.kivi.framework.properties.KtfDashboardProperties;
 import com.kivi.framework.properties.KtfDashboardProperties.Cookie;
@@ -45,8 +37,8 @@ public class ShiroJwtConfig extends ShiroBaseConfig {
 	@Autowired
 	private KtfDashboardProperties	ktfDashboardProperties;
 
-	@Autowired
-	private ShiroRedisSessionDAO	shiroRedisSessionDAO;
+	// @Autowired
+	// private ShiroRedisSessionDAO shiroRedisSessionDAO;
 
 	@Autowired
 	public ShiroRedisCacheManager	redisCacheManager;
@@ -82,11 +74,11 @@ public class ShiroJwtConfig extends ShiroBaseConfig {
 		// 设置realm.
 		securityManager.setRealm(jwtRealm());
 		// 注入Session管理器
-		securityManager.setSessionManager(sessionManager());
+		// securityManager.setSessionManager(sessionManager());
 		// 注入缓存管理器
 		securityManager.setCacheManager(redisCacheManager);
 		// 注入记住我管理器
-		securityManager.setRememberMeManager(rememberMeManager());
+		// securityManager.setRememberMeManager(rememberMeManager());
 		return securityManager;
 	}
 
@@ -111,59 +103,58 @@ public class ShiroJwtConfig extends ShiroBaseConfig {
 	 *
 	 * @return
 	 */
-	@Bean
-	public SimpleCookie rememberMeCookie() {
-		SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
-		// 记住我cookie生效时间1小时 ,单位秒
-		simpleCookie.setMaxAge(shiroCookie().getMaxAge());
-		simpleCookie.setPath(shiroCookie().getPath());
-		simpleCookie.setHttpOnly(true);
-		return simpleCookie;
-	}
+//	@Bean
+//	public SimpleCookie rememberMeCookie() {
+//		SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+//		// 记住我cookie生效时间1小时 ,单位秒
+//		simpleCookie.setMaxAge(shiroCookie().getMaxAge());
+//		simpleCookie.setPath(shiroCookie().getPath());
+//		simpleCookie.setHttpOnly(true);
+//		return simpleCookie;
+//	}
 
 	/**
 	 * cookie管理对象;
 	 *
 	 * @return
 	 */
-	@Bean
-	public CookieRememberMeManager rememberMeManager() {
-		CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
-		cookieRememberMeManager.setCookie(rememberMeCookie());
-		cookieRememberMeManager.setCipherKey(Base64.decode("5aaC5qKm5oqA5pyvAAAAAA=="));
-		return cookieRememberMeManager;
-	}
+//	@Bean
+//	public CookieRememberMeManager rememberMeManager() {
+//		CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+//		cookieRememberMeManager.setCookie(rememberMeCookie());
+//		cookieRememberMeManager.setCipherKey(Base64.decode("5aaC5qKm5oqA5pyvAAAAAA=="));
+//		return cookieRememberMeManager;
+//	}
 
-	@Bean(name = "sessionManager")
-	public SessionManager sessionManager() {
-		DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-		// 会话超时时间，单位：毫秒
-		sessionManager.setGlobalSessionTimeout(TimeUnit.SECONDS.toMillis(shiroCookie().getMaxAge()));
-		sessionManager.setSessionDAO(shiroRedisSessionDAO);
-		// 去掉shiro登录时url里的JSESSIONID
-		sessionManager.setSessionIdUrlRewritingEnabled(false);
-		// 删除失效的session
-		sessionManager.setDeleteInvalidSessions(true);
-
-		// 会话验证
-		sessionManager.setSessionValidationScheduler(getExecutorServiceSessionValidationScheduler());
-		sessionManager.setSessionValidationSchedulerEnabled(true);
-
-		// 设置cookie
-		sessionManager.setSessionIdCookieEnabled(true);
-		sessionManager.getSessionIdCookie().setName("session-z-id");
-		sessionManager.getSessionIdCookie().setPath(shiroCookie().getPath());
-		sessionManager.getSessionIdCookie().setMaxAge(shiroCookie().getMaxAge());
-		sessionManager.getSessionIdCookie().setHttpOnly(true);
-		return sessionManager;
-	}
-
-	@Bean(name = "sessionValidationScheduler")
-	public ExecutorServiceSessionValidationScheduler getExecutorServiceSessionValidationScheduler() {
-		ExecutorServiceSessionValidationScheduler sessionValidationScheduler = new ExecutorServiceSessionValidationScheduler();
-		sessionValidationScheduler.setInterval(TimeUnit.SECONDS.toMillis(shiroCookie().getMaxAge()));
-		return sessionValidationScheduler;
-	}
+	/*
+	 * @Bean(name = "sessionManager") public SessionManager sessionManager() {
+	 * DefaultWebSessionManager sessionManager = new DefaultWebSessionManager(); //
+	 * 会话超时时间，单位：毫秒
+	 * sessionManager.setGlobalSessionTimeout(TimeUnit.SECONDS.toMillis(shiroCookie(
+	 * ).getMaxAge())); sessionManager.setSessionDAO(shiroRedisSessionDAO); //
+	 * 去掉shiro登录时url里的JSESSIONID
+	 * sessionManager.setSessionIdUrlRewritingEnabled(false); // 删除失效的session
+	 * sessionManager.setDeleteInvalidSessions(true);
+	 * 
+	 * // 会话验证 sessionManager.setSessionValidationScheduler(
+	 * getExecutorServiceSessionValidationScheduler());
+	 * sessionManager.setSessionValidationSchedulerEnabled(true);
+	 * 
+	 * // 设置cookie sessionManager.setSessionIdCookieEnabled(true);
+	 * sessionManager.getSessionIdCookie().setName("session-z-id");
+	 * sessionManager.getSessionIdCookie().setPath(shiroCookie().getPath());
+	 * sessionManager.getSessionIdCookie().setMaxAge(shiroCookie().getMaxAge());
+	 * sessionManager.getSessionIdCookie().setHttpOnly(true); return sessionManager;
+	 * }
+	 * 
+	 * @Bean(name = "sessionValidationScheduler") public
+	 * ExecutorServiceSessionValidationScheduler
+	 * getExecutorServiceSessionValidationScheduler() {
+	 * ExecutorServiceSessionValidationScheduler sessionValidationScheduler = new
+	 * ExecutorServiceSessionValidationScheduler();
+	 * sessionValidationScheduler.setInterval(TimeUnit.SECONDS.toMillis(shiroCookie(
+	 * ).getMaxAge())); return sessionValidationScheduler; }
+	 */
 
 	/**
 	 * 开启shiro aop注解支持. 使用代理方式; 所以需要开启代码支持;

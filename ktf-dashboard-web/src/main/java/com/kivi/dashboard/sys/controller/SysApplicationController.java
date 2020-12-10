@@ -102,7 +102,7 @@ public class SysApplicationController extends DashboardController {
 	 * 删除
 	 */
 	@ApiOperation(value = "删除系统应用", notes = "删除系统应用")
-	@PostMapping("/delete/{id}")
+	@GetMapping("/delete/{id}")
 	@RequiresPermissions("sys/application/delete")
 	public ResultMap delete(@PathVariable("id") Long id) {
 		try {

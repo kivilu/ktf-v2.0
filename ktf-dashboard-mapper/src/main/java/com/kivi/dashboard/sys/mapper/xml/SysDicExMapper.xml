@@ -11,6 +11,7 @@
         <result column="var_value" property="varValue" />
         <result column="type" property="type" />
         <result column="status" property="status" />
+        <result column="has_children" property="hasChildren"/>
     </resultMap>
     
     <select id="getDto" resultMap="BaseResultMap" >
@@ -44,7 +45,8 @@
 			t.var_name,
 			t.var_value,
 		    t.type,
-		    t.`status`
+		    t.`status`,
+		    if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, true, false) as has_children 
 		FROM
 			ktf_sys_dic t
 		<where>
@@ -70,11 +72,15 @@
 			t.var_name,
 			t.var_value,
 		    t.type,
-		    t.`status`
+		    t.`status`,
+		    if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, true, false) as has_children 
 		FROM
 			ktf_sys_dic t
 		<where>
-		    <if test="id!=null">
+			<if test="!recursion"> 
+				t.parent_id = #{id}
+			</if>
+		    <if test="recursion and id!=null">
 		    	FIND_IN_SET(t.id, sys_dic_getChildren(#{id}))
 		    </if>
 		    <if test="varCode!=null and varCode != ''">
@@ -98,7 +104,8 @@
 			t.var_name,
 			t.var_value,
 		    t.type,
-		    t.`status`
+		    t.`status`,
+		    if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, true, false) as has_children 
 		FROM
 			ktf_sys_dic t
 		<where>

@@ -46,6 +46,9 @@ public class SysDicDTO implements Serializable {
 	@ApiModelProperty(value = "状态（0-正常，1-禁用）")
 	private Integer				status;
 
+	@ApiModelProperty(value = "是否有子项")
+	private Boolean				hasChildren;
+
 	public static final String	ID					= "id";
 	public static final String	PARENT_ID			= "parentId";
 	public static final String	VAR_CODE			= "varCode";

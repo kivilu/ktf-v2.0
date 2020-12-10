@@ -36,15 +36,11 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 	 */
 	@Override
 	protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-		HttpServletRequest	httpServletRequest	= (HttpServletRequest) request;
-		HttpServletResponse	httpServletResponse	= (HttpServletResponse) response;
-
-		log.trace("请求URL:{}", httpServletRequest.getRequestURI());
+		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
 		// 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态
 		if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
-			setHeader(httpServletRequest, httpServletResponse);
-			return false;
+			return true;
 		}
 
 		return super.preHandle(request, response);

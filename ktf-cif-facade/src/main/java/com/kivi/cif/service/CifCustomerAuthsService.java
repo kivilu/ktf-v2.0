@@ -3,6 +3,7 @@ package com.kivi.cif.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.kivi.cif.dto.CifCustomerAuthsDTO;
 import com.kivi.cif.entity.CifCustomerAuths;
+import com.kivi.framework.form.LoginForm;
 import com.kivi.framework.vo.UserVo;
 
 /**
@@ -21,7 +22,7 @@ public interface CifCustomerAuthsService extends IService<CifCustomerAuths> {
 	 * @param userVo
 	 * @return
 	 */
-	Boolean auth(UserVo userVo);
+	Boolean auth(LoginForm form, UserVo userVo);
 
 	/**
 	 * 根据ID查询DTO

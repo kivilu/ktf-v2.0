@@ -35,8 +35,8 @@ import com.kivi.framework.constant.enums.KtfStatus;
 import com.kivi.framework.constant.enums.KtfYesNo;
 import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.util.kit.NumberKit;
+import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.page.PageInfoVO;
-import com.vip.vjtools.vjkit.collection.SetUtil;
 
 /**
  * <p>
@@ -122,6 +122,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 	@KtfTrace("根据用户ID和资源类型查询")
 	@Override
 	public List<SysResourceDTO> selectResources(Long userId, MenuType... types) {
+		// 系统管理员，拥有最高权限
 		Map<String, Object> params = new HashMap<>();
 
 		if (userId != null && KtfConstant.SUPER_ADMIN != userId.longValue())
@@ -140,11 +141,12 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 	}
 
 	@Override
-	public List<SysResourceDTO> getChildren(Long id) {
+	public List<SysResourceDTO> getChildren(Long id, Boolean recursion) {
 		Map<String, Object> params = new HashMap<>();
 		params.put(SysResourceDTO.ID, id);
 		params.put(SysResourceDTO.STATUS, KtfStatus.ENABLED.code);
 		params.put("hasSelf", false);
+		params.put("recursion", recursion);
 		return sysResourceExMapper.getChildren(params);
 	}
 
@@ -223,7 +225,15 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
 		List<String> urls = sysResourceExMapper.selectUrls(params);
 
-		return SetUtil.newHashSet(urls);
+		return urls.stream().filter(url -> StrKit.isNotBlank(url)).collect(Collectors.toSet());
+	}
+
+	@Override
+	public List<SysResourceDTO> selectMenutList(Map<String, Object> params) {
+		if (params == null) {
+			params = new HashMap<>();
+		}
+		return sysResourceExMapper.selectResourceList(params);
 	}
 
 }

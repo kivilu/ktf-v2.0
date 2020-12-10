@@ -15,7 +15,33 @@
         <result column="resource_type" property="resourceType" />
         <result column="hidden" property="hidden" />
         <result column="status" property="status" />
+        <result column="has_children" property="hasChildren"/>
     </resultMap>
+    
+    <select id="selectResourceList" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+	        t.id,
+	        t.parent_id,
+	        t.name,
+	        t.resource_type
+        FROM
+        	ktf_sys_resource t
+        <where>
+            <if test="id!=null">
+                t.id=#{id}
+            </if>
+            <if test="status!=null">
+                AND t.status=#{status}
+            </if>
+            <if test="parentId!=null and parentId!=''">
+                AND t.parent_id=#{parentId}
+            </if>
+            <if test="resourceType!=null and resourceType!=''">
+                AND t.resource_type=#{resourceType}
+            </if>
+        </where>
+        order by t.seq asc
+    </select>
     
     <!-- 资源条件查询 -->
      <select id="selectResources" parameterType="map" resultMap="BaseResultMap">
@@ -24,7 +50,11 @@
 			r.parent_id,
 			r.`name`,
 			r.url,
-			r.icon
+			r.icon,
+			r.seq,
+			r.resource_type,
+			r.status,
+			if ((SELECT count(1) FROM ktf_sys_resource r1 WHERE r1.parent_id= r.id) >0, true, false) as has_children 
 		FROM
 			ktf_sys_resource r
 		<where>
@@ -99,8 +129,9 @@
 		FROM
 			ktf_sys_resource r
 		<where>
+			r.url is not null
 			<if test="params.resourcetype!=null">
-			r.resource_type  = #{params.resourcetype}
+				AND r.resource_type  = #{params.resourcetype}
 			</if>
 			<if test="params.userId!=null">
 				AND  r.id IN (
@@ -131,11 +162,20 @@
 			r.parent_id,
 			r.`name`,
 			r.url,
-			r.icon
+			r.icon,
+			r.seq,
+			r.resource_type,
+			r.status,
+			if ((SELECT count(1) FROM ktf_sys_resource r1 WHERE r1.parent_id= r.id) >0, true, false) as has_children
 		FROM
 			ktf_sys_resource r
 		<where>
-		    FIND_IN_SET(r.id, sys_resource_getChildren(#{id}))
+			<if test="recursion">
+		    	FIND_IN_SET(r.id, sys_resource_getChildren(#{id}))
+		    </if>
+		    <if test="!recursion">
+		    	r.parent_id = #{id}
+		    </if>
 		    <if test="hasSelf">
 		    	AND r.id != #{id}
 		    </if>

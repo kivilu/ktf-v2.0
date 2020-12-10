@@ -18,6 +18,14 @@ import com.kivi.dashboard.permission.dto.SysResourceDTO;
  */
 public interface SysResourceExMapper {
 
+	/**
+	 * 查询菜单树数据
+	 * 
+	 * @param params
+	 * @return
+	 */
+	List<SysResourceDTO> selectResourceList(Map<String, Object> params);
+
 	/*
 	 * 资源条件查询
 	 * 
@@ -74,22 +82,5 @@ public interface SysResourceExMapper {
 	 * 删除没有父节点的资源，不包括parent_id=0的节点
 	 */
 	int deleteOrphan();
-
-	/**
-	 * 查询菜单
-	 * 
-	 * @param params
-	 * @return
-	 */
-	// List<ResourceVo> selectResourceList(Map<String, Object> params);
-
-	/*
-	 * 查询用户的所有菜单ID
-	 * 
-	 * @param userId
-	 * 
-	 * @return
-	 */
-	// List<Long> selectResourceIdListByUserId(@Param("userId") Long userId);
 
 }

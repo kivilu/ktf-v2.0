@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.code.kaptcha.Producer;
 import com.kivi.cif.entity.CifCustomerAuths;
-import com.kivi.dashboard.auth.KtfAuthentication;
 import com.kivi.dashboard.base.DashboardController;
 import com.kivi.dashboard.org.entity.OrgCorp;
 import com.kivi.dashboard.shiro.ShiroKit;
@@ -65,10 +64,6 @@ public class LoginController extends DashboardController {
 	@Autowired(required = false)
 	private IRedisService			redisService;
 
-	@Autowired
-	private KtfAuthentication		ktfAuthentication;
-
-	// 30分钟过期
 	@Autowired
 	private KtfDashboardProperties	ktfDashboardProperties;
 
@@ -162,7 +157,7 @@ public class LoginController extends DashboardController {
 		}
 
 		form.setUuid(form.getUuid() + nonce);
-		if (!ktfAuthentication.auth(form, userVo)) {
+		if (!customerAuthsService().auth(form, userVo)) {
 			log.error("密码不正确");
 			return ResultMap.error(KtfError.E_UNAUTHORIZED, "账号或密码不正确");
 		}

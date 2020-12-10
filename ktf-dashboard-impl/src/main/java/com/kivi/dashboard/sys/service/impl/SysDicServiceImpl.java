@@ -31,6 +31,7 @@ import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.constant.enums.KtfStatus;
 import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.util.kit.NumberKit;
+import com.kivi.framework.util.kit.ObjectKit;
 import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.page.PageInfoVO;
 
@@ -117,7 +118,7 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 		if (!params.containsKey(SysDicDTO.STATUS))
 			params.put(SysDicDTO.STATUS, KtfStatus.ENABLED.code);
 
-		if (!params.containsKey("keyword"))
+		if (!ObjectKit.isNotEmpty(params.get("keyword")))
 			params.put(SysDicDTO.PARENT_ID, ROOT_ID);
 
 		PageParams<SysDicDTO>	pageParams	= new PageParams<>(params);
@@ -159,6 +160,7 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 		return pageVo;
 	}
 
+	@Override
 	public List<SysDicDTO> list(Long pid) {
 		LambdaQueryWrapper<SysDic> query = Wrappers.<SysDic>lambdaQuery().select(SysDic::getId, SysDic::getParentId,
 				SysDic::getVarCode, SysDic::getVarName, SysDic::getVarValue, SysDic::getType, SysDic::getStatus);
@@ -210,11 +212,12 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 	}
 
 	@Override
-	public List<SysDicDTO> getChildren(Long id) {
+	public List<SysDicDTO> getChildren(Long id, Boolean recursion) {
 		Map<String, Object> params = new HashMap<>();
 		params.put(SysDicDTO.ID, id);
 		params.put(SysDicDTO.STATUS, KtfStatus.ENABLED.code);
 		params.put("hasSelf", false);
+		params.put("recursion", recursion);
 		List<SysDicDTO> list = sysDicExMapper.getChildren(params);
 
 		return list;

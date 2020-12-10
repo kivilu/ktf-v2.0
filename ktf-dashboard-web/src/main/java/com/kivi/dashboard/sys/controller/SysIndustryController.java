@@ -116,7 +116,7 @@ public class SysIndustryController extends DashboardController {
 	 * 删除
 	 */
 	@ApiOperation(value = "删除行业代码", notes = "删除行业代码")
-	@PostMapping("/delete/{id}")
+	@GetMapping("/delete/{id}")
 	@RequiresPermissions("sys/industry/delete")
 	public ResultMap delete(@PathVariable("id") Long id) {
 		try {

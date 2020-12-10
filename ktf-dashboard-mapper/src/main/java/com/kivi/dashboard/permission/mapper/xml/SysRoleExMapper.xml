@@ -20,7 +20,7 @@
         <result column="description" property="description"/>
         <result column="status" property="status"/>
         <collection property="resourceIds" ofType="java.lang.Long">
-            <result column="resourceId" property="id"/>
+            <result column="resource_id" property="id"/>
         </collection>
     </resultMap>
     
@@ -57,7 +57,7 @@
 	        t.seq,
 	        t.description,
 	        t.`status`,
-	        t3.id AS resourceId
+	        t2.id AS resource_id
         FROM
             ktf_sys_role t
         LEFT JOIN ktf_sys_role_resource t2 ON t.id = t2.role_id
@@ -66,7 +66,7 @@
         </where>
     </select>
     
-    <select id="selectRoles" resultMap="RoleDtoResultMap" parameterType="map">
+    <select id="selectRoles" resultMap="BaseResultMap" parameterType="map">
     	SELECT
 	        t.id,
 	        t.`name`,
