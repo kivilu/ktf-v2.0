@@ -42,6 +42,12 @@ public class OrgDeptDTO implements Serializable {
 	@ApiModelProperty(value = "部门状态（0-正常，1-禁用）")
 	private Integer				status;
 
+	@ApiModelProperty(value = "是否有子菜单")
+	private Boolean				hasChildren;
+
+	@ApiModelProperty(value = "是否叶子")
+	private Boolean				hasLeaf;
+
 	public static final String	ID					= "id";
 	public static final String	PARENT_ID			= "parentId";
 	public static final String	CORP_ID				= "corpId";

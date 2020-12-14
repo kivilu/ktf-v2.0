@@ -45,6 +45,11 @@ public interface SysUserService extends IService<SysUser> {
 	PageInfoVO<SysUserDTO> page(Map<String, Object> params);
 
 	/**
+	 * 分页查询简单信息
+	 */
+	PageInfoVO<SysUserDTO> pageSimple(Map<String, Object> params);
+
+	/**
 	 * 新增
 	 */
 	Boolean save(SysUserDTO dto);
@@ -65,15 +70,8 @@ public interface SysUserService extends IService<SysUser> {
 	Boolean deleteBatch(Long[] userIds);
 
 	/**
-	 * 获取用户权限列表
+	 * 检查用户名是否存在
 	 */
-	// Set<String> selectUserPermissions(long userId);
-
-	/**
-	 * 查找用户选择树
-	 * 
-	 * @return
-	 */
-	// List<Map<String, Object>> selectUserTree();
+	Boolean isUserExist(String userName);
 
 }

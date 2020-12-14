@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.kivi.dashboard.base.DashboardController;
 import com.kivi.dashboard.permission.dto.SysUserDTO;
 import com.kivi.dashboard.permission.entity.SysUser;
@@ -83,9 +81,10 @@ public class SysUserController extends DashboardController {
 	/**
 	 * 所有用户列表
 	 */
+	@ApiOperation(value = "用户分页查询", notes = "用户分页查询")
 	@GetMapping("/page")
 	@RequiresPermissions("permission/user/page")
-	public ResultMap page(@RequestParam Map<String, Object> params) {
+	public ResultMap page(@RequestParam(required = false) Map<String, Object> params) {
 		// 只有超级管理员，才能查看所有管理员列表
 		ShiroUser shiroUser = ShiroKit.getUser();
 
@@ -98,6 +97,25 @@ public class SysUserController extends DashboardController {
 		}
 
 		PageInfoVO<SysUserDTO> page = sysUserService().page(params);
+
+		return ResultMap.ok().data(page);
+	}
+
+	/**
+	 * 所有用户列表
+	 */
+	@ApiOperation(value = "简单用户分页查询", notes = "简单用户分页查询")
+	@GetMapping("/page/simple")
+	@RequiresPermissions("permission/user/page")
+	public ResultMap pageSimple(@RequestParam(required = false) Map<String, Object> params) {
+		// 只有超级管理员，才能查看所有管理员列表
+		ShiroUser shiroUser = ShiroKit.getUser();
+
+		if (shiroUser.getId() != KtfConstant.SUPER_ADMIN) {
+			params.put("userId", ShiroKit.getUser().getId());
+		}
+
+		PageInfoVO<SysUserDTO> page = sysUserService().pageSimple(params);
 
 		return ResultMap.ok().data(page);
 	}
@@ -162,9 +180,7 @@ public class SysUserController extends DashboardController {
 	@PostMapping("/save")
 	public ResultMap save(@Valid @RequestBody SysUserDTO dto) {
 		try {
-			LambdaQueryWrapper<SysUser> query = Wrappers.<SysUser>lambdaQuery().eq(SysUser::getLoginName,
-					dto.getLoginName());
-			if (sysUserService().count(query) > 0) {
+			if (sysUserService().isUserExist(dto.getLoginName())) {
 				return ResultMap.error(KtfError.E_CONFLICT, "登录名已存在");
 			}
 

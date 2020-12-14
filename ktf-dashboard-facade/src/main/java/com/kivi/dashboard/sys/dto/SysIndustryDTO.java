@@ -46,6 +46,12 @@ public class SysIndustryDTO implements Serializable {
 	@ApiModelProperty(value = "状态，0无效，1有效")
 	private Boolean				status;
 
+	@ApiModelProperty(value = "是否有子菜单")
+	private Boolean				hasChildren;
+
+	@ApiModelProperty(value = "是否叶子")
+	private Boolean				hasLeaf;
+
 	public static final String	ID					= "id";
 	public static final String	PID					= "pid";
 	public static final String	CODE				= "code";

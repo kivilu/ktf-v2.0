@@ -17,6 +17,9 @@
         <result column="phone" property="phone"/>
         <result column="email" property="email"/>
         <result column="status" property="status" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="gmt_update" property="gmtUpdate" />
+        <result column="last_time" property="lastTime" />
         <collection property="roleIds" ofType="com.kivi.dashboard.permission.dto.SysRoleDTO" javaType="ArrayList" column="id" select="selectRoles"/>
     </resultMap>
 
@@ -175,25 +178,37 @@
 	</select>
 
 
-	<!-- 查询用户的所有权限 -->
-    <!-- <select id="selectPerms" resultType="string">
-		SELECT
-        	m.url
+	<!-- 分页精简查询 -->
+    <select id="selectSimpleByPage" parameterType="map" resultMap="UserDtoResultMap">
+        SELECT DISTINCT
+	        U.id,
+	        U.login_name ,
+	        U.user_type ,
+	        C.email,
+	        U.`status`,
+	        CA.last_time	       
         FROM
-            ktf_sys_user_role ur
-        LEFT JOIN ktf_sys_role_resource rm ON ur.role_id = rm.role_id
-        LEFT JOIN ktf_sys_resource m ON rm.resource_id = m.id
-        WHERE
-        	ur.user_id = #{userId}
-	</select>
-
-	<select id="selectUserTree" resultType="Map">
-		SELECT
-			t.id,
-			t2.`name`
-		FROM
-			ktf_sys_user t
-		LEFT JOIN cif_customer t2 ON t.cif_id = t2.id
-	</select> -->
+        	ktf_sys_user U
+        LEFT JOIN cif_customer C ON U.cif_id = C.id
+        LEFT JOIN cif_customer_auths CA ON U.id = CA.id
+        <where>
+            <if test="params.keyword != null and params.keyword != '' ">
+                (U.login_name like concat('%',#{params.keyword},'%'))
+            </if>
+            <if test="params.userType !=null">
+            	AND U.user_type in
+				 <foreach item="item" index="index" collection="params.userType" open="(" separator="," close=")">
+		                 #{item}
+		         </foreach>
+            </if>
+            <if test="params.startTime != null">
+                AND U.gmt_create &gt;= concat(#{params.startTime},'00:00:00')
+            </if>
+            <if test="params.endTime !=null">
+                AND U.gmt_create &lt;= concat(#{params.endTime},"23:59:59")
+            </if>
+        </where>
+        ORDER BY CA.last_time
+    </select>
 
 </mapper>

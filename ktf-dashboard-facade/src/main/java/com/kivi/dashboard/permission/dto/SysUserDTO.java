@@ -85,6 +85,9 @@ public class SysUserDTO implements Serializable {
 
 	private LocalDateTime		gmtUpdate;
 
+	@ApiModelProperty(value = "上次登录时间")
+	private LocalDateTime		lastTime;
+
 	// 内部使用属性
 	@ApiModelProperty(hidden = true)
 	private Long				createUserId;

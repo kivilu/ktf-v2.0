@@ -49,6 +49,7 @@ import com.vip.vjtools.vjkit.collection.MapUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * @Description 登录退出Controller
@@ -131,7 +132,7 @@ public class LoginController extends DashboardController {
 	@ApiOperation(value = "登录", notes = "登录")
 	@PostMapping("/login")
 	// @KtfTrace("login")
-	public ResultMap login(@Valid @RequestBody LoginForm form, HttpSession session) throws Exception {
+	public ResultMap login(@Valid @RequestBody LoginForm form, @ApiIgnore HttpSession session) throws Exception {
 		log.info("login请求登录");
 
 		String	seesionId	= session.getId();
@@ -184,16 +185,14 @@ public class LoginController extends DashboardController {
 		}
 
 		// 生成token，并保存到数据库
-		ResultMap result = createToken(userVo);
+		ResultMap			result			= createToken(userVo);
 
 		// 保存登录时间和IP
-		CompletableFuture.supplyAsync(() -> {
-			CifCustomerAuths customerAuths = new CifCustomerAuths();
-			customerAuths.setId(userVo.getId());
-			customerAuths.setLastIp(HttpKit.getRemoteAddress());
-			customerAuths.setLastTime(LocalDateTime.now());
-			return customerAuthsService().updateById(customerAuths);
-		});
+		CifCustomerAuths	customerAuths	= new CifCustomerAuths();
+		customerAuths.setId(userVo.getId());
+		customerAuths.setLastIp(HttpKit.getRemoteAddress());
+		customerAuths.setLastTime(LocalDateTime.now());
+		CompletableFuture.runAsync(new SaveRunnable(customerAuths));
 
 		return result;
 	}
@@ -239,5 +238,19 @@ public class LoginController extends DashboardController {
 
 	private int expire() {
 		return ktfDashboardProperties.getSession().getExpireTime();
+	}
+
+	class SaveRunnable implements Runnable {
+		private final CifCustomerAuths customerAuths;
+
+		public SaveRunnable(CifCustomerAuths customerAuths) {
+			this.customerAuths = customerAuths;
+		}
+
+		@Override
+		public void run() {
+			customerAuthsService().updateById(customerAuths);
+
+		}
 	}
 }

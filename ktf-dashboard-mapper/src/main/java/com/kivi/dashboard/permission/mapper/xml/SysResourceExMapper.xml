@@ -16,6 +16,7 @@
         <result column="hidden" property="hidden" />
         <result column="status" property="status" />
         <result column="has_children" property="hasChildren"/>
+        <result column="is_leaf" property="isLeaf"/>
     </resultMap>
     
     <select id="selectResourceList" parameterType="map" resultMap="BaseResultMap">
@@ -54,7 +55,8 @@
 			r.seq,
 			r.resource_type,
 			r.status,
-			if ((SELECT count(1) FROM ktf_sys_resource r1 WHERE r1.parent_id= r.id) >0, true, false) as has_children 
+			if ((SELECT count(1) FROM ktf_sys_resource r1 WHERE r1.parent_id= r.id) >0, true, false) as has_children,
+			if ((SELECT count(1) FROM ktf_sys_resource r1 WHERE r1.parent_id= r.id) >0, false, true) as is_leaf
 		FROM
 			ktf_sys_resource r
 		<where>
@@ -166,7 +168,8 @@
 			r.seq,
 			r.resource_type,
 			r.status,
-			if ((SELECT count(1) FROM ktf_sys_resource r1 WHERE r1.parent_id= r.id) >0, true, false) as has_children
+			if ((SELECT count(1) FROM ktf_sys_resource r1 WHERE r1.parent_id= r.id) >0, true, false) as has_children,
+			if ((SELECT count(1) FROM ktf_sys_resource r1 WHERE r1.parent_id= r.id) >0, false, true) as is_leaf
 		FROM
 			ktf_sys_resource r
 		<where>

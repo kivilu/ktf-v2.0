@@ -13,7 +13,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.cif.dto.CifCustomerAuthsDTO;
@@ -115,6 +117,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 	}
 
+	@Override
+	public PageInfoVO<SysUserDTO> pageSimple(Map<String, Object> params) {
+		PageParams<SysUserDTO>	pageParams	= new PageParams<>(params);
+		Page<SysUserDTO>		page		= new Page<>(pageParams.getCurrPage(), pageParams.getPageSize());
+
+		IPage<SysUserDTO>		iPage		= sysUserExMapper.selectSimpleByPage(page, pageParams.getRequestMap());
+		PageInfoVO<SysUserDTO>	pageVo		= new PageInfoVO<>();
+		pageVo.setCurPage(iPage.getCurrent());
+		pageVo.setTotal(iPage.getTotal());
+		pageVo.setPageSize(iPage.getSize());
+		pageVo.setPages(iPage.getPages());
+		pageVo.setRequestMap(params);
+		pageVo.setList(iPage.getRecords());
+		pageVo.compute();
+
+		return pageVo;
+	}
+
 	@Cacheable(cacheNames = KtfCache.SysUser, key = "caches[0].name+'.vo.'+#loginName", unless = "#result == null")
 	@Override
 	public UserVo getUserVo(String loginName) {
@@ -176,17 +196,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		sysUserRoleService.saveOrUpdateUserRole(userId, dto.getRoleIds());
 
 		// 保存用户与企业关系关系
-		sysUserOrgService.saveOrUpdateUserOrg(userId, dto.getOrgIds());
+		if (dto.getOrgIds() != null)
+			sysUserOrgService.saveOrUpdateUserOrg(userId, dto.getOrgIds());
 
 		// 创建用户
 		SysUser user = new SysUser();
 		user.setId(userId);
 		user.setCifId(cifAuth.getCifId());
 		user.setAppId(cifAuth.getAppId());
+		user.setLoginName(dto.getLoginName());
 		user.setLoginMode(dto.getLoginMode());
 		user.setOrgId(dto.getOrgId());
 		user.setDeptId(dto.getDeptId());
 		user.setTitleId(dto.getTitleId());
+		user.setUserType(dto.getUserType());
 		// 非API用户，状态默认为初始状态， API用户，状态默认为有效状态
 		user.setStatus(
 				user.getUserType() == KmsUserType.API_USER.getCode() ? KtfStatus.ENABLED.code : KtfStatus.INIT.code);
@@ -267,45 +290,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		return true;
 	}
 
-//	@Cacheable(cacheNames = KtfCache.SysUser, key = "caches[0].name+'.vo.'+#userId", unless = "#result == null")
-//	@Override
-//	public UserVo selectByUserId(Long userId) {
-//
-//		return this.sysUserExMapper.selectByUserId(userId);
-//	}
+	@Override
+	public Boolean isUserExist(String userName) {
+		LambdaQueryWrapper<SysUser> query = Wrappers.<SysUser>lambdaQuery();
+		query.eq(SysUser::getLoginName, userName);
 
-	/*
-	 * @Cacheable(cacheNames = KtfCache.SysUser, key =
-	 * "caches[0].name+'.pm.'+#userId", unless = "#result == null")
-	 * 
-	 * @Override public Set<String> selectUserPermissions(long userId) {
-	 * List<String> permsList; // 系统管理员，拥有最高权限 if (userId ==
-	 * KtfConstant.SUPER_ADMIN) { permsList =
-	 * sysResourceService.selectUrlsByUserId(userId); } else { permsList =
-	 * this.sysUserExMapper.selectPerms(userId); } // 用户权限列表 Set<String> permsSet =
-	 * permsList.stream().map(perm -> StringUtils.split(perm, ",")) .flatMap(perm ->
-	 * Arrays.stream(perm)).collect(Collectors.toSet());
-	 * 
-	 * Set<String> permsSet = new HashSet<>(); for (String perms : permsList) { if
-	 * (StringUtils.isBlank(perms)) { continue; }
-	 * permsSet.addAll(Arrays.asList(perms.trim().split(","))); }
-	 * 
-	 * return permsSet; }
-	 */
-
-	/*
-	 * @Override public List<Map<String, Object>> selectUserTree() { return
-	 * sysUserExMapper.selectUserTree(); }
-	 */
-
-	/*
-	 * private Long getRoleId(Integer userType) { return userType.longValue();
-	 * 
-	 * KmsUserType type = KmsUserType.valueOf(userType); String role =
-	 * sysDicService.getByVarName(type.name(), "用户类型角色映射").getVarCode(); return
-	 * Long.parseLong(role);
-	 * 
-	 * }
-	 */
+		return super.getOne(query) != null;
+	}
 
 }

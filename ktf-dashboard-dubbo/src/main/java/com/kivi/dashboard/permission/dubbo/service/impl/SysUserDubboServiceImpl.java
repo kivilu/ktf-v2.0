@@ -69,4 +69,14 @@ public class SysUserDubboServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
 		return sysUserService.save(dto);
 	}
 
+	@Override
+	public PageInfoVO<SysUserDTO> pageSimple(Map<String, Object> params) {
+		return sysUserService.pageSimple(params);
+	}
+
+	@Override
+	public Boolean isUserExist(String userName) {
+		return sysUserService.isUserExist(userName);
+	}
+
 }

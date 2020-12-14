@@ -44,18 +44,12 @@ public interface SysUserExMapper {
 	IPage<SysUserDTO> selectByPage(IPage<SysUserDTO> page, @Param("params") Map<String, Object> params);
 
 	/**
-	 * 查找用户树
-	 * 
-	 * @return
-	 */
-	// List<Map<String, Object>> selectUserTree();
-
-	/**
-	 * 查询用户的所有权限
+	 * 分页查询简单信息
 	 *
-	 * @param userId
+	 * @param page
+	 * @param params
 	 * @return
 	 */
-	// List<String> selectPerms(@Param("userId") Long userId);
+	IPage<SysUserDTO> selectSimpleByPage(IPage<SysUserDTO> page, @Param("params") Map<String, Object> params);
 
 }
