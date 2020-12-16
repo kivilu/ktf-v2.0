@@ -35,6 +35,7 @@ import com.kivi.framework.annotation.KtfTrace;
 import com.kivi.framework.cache.annotation.KtfCacheEvict;
 import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.constant.KtfConstant;
+import com.kivi.framework.constant.KtfError;
 import com.kivi.framework.constant.enums.KtfGender;
 import com.kivi.framework.constant.enums.KtfStatus;
 import com.kivi.framework.constant.enums.UserType;
@@ -163,7 +164,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@KtfCacheEvict(cacheNames = KtfCache.SysUser)
 	@KtfTrace("新增用户")
 	@Override
-	public Boolean save(SysUserDTO dto) {
+	public Long save(SysUserDTO dto) {
 		// 检查角色是否越权
 		checkRole(dto);
 
@@ -214,9 +215,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		user.setStatus(
 				user.getUserType() == KmsUserType.API_USER.getCode() ? KtfStatus.ENABLED.code : KtfStatus.INIT.code);
 		user.setCreateUserId(dto.getCreateUserId());
-		this.save(user);
+		if (!this.save(user)) {
+			throw new KtfException(KtfError.E_REGIST_FAILURE, "创建用户失败");
+		}
 
-		return true;
+		return userId;
 	}
 
 	/**
@@ -263,7 +266,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			return;
 		}
 		// 如果不是超级管理员，则需要判断用户的角色是否自己创建
-		if (dto.getCreateUserId() == KtfConstant.SUPER_ADMIN) {
+		if (dto.getCreateUserId() == null || dto.getCreateUserId() == KtfConstant.SUPER_ADMIN) {
 			return;
 		}
 		// 查询用户创建的角色列表

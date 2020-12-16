@@ -52,7 +52,7 @@ import lombok.extern.slf4j.Slf4j;
 		value = "enable-permission-api",
 		havingValue = "true",
 		matchIfMissing = false)
-@Api(value = "用户管理", tags = { "用户管理" })
+@Api(value = "SYS用户管理", tags = { "SYS用户管理" })
 @RestController
 @RequestMapping("/permission/user")
 @Slf4j
@@ -188,8 +188,8 @@ public class SysUserController extends DashboardController {
 			dto.setLoginMode(KtfIdentifyType.USERNAME.text);
 			dto.setCreateUserId(jwtUser.getId());
 
-			Boolean b = sysUserService().save(dto);
-			if (b)
+			Long userId = sysUserService().save(dto);
+			if (userId != null)
 				return ResultMap.ok("添加成功");
 			else
 				return ResultMap.error("添加失败");

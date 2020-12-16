@@ -52,7 +52,7 @@ public interface SysUserService extends IService<SysUser> {
 	/**
 	 * 新增
 	 */
-	Boolean save(SysUserDTO dto);
+	Long save(SysUserDTO dto);
 
 	/**
 	 * 更新用户

@@ -90,7 +90,7 @@ public class LoginController extends DashboardController {
 	}
 
 	@GetMapping("captcha.jpg")
-	public void kaptcha(HttpServletResponse response, String uuid) {
+	public void kaptcha(@ApiIgnore HttpServletResponse response, String uuid) {
 		log.info("前台请求的UUID:" + uuid);
 		if (StringUtils.isBlank(uuid)) {
 			throw new RuntimeException("uuid不能为空");
@@ -113,7 +113,7 @@ public class LoginController extends DashboardController {
 
 	@ApiOperation(value = "获取nonce", notes = "获取nonce")
 	@GetMapping("/nonce")
-	public ResultMap nonce(HttpSession session) {
+	public ResultMap nonce(@ApiIgnore HttpSession session) {
 		String	seesionId	= session.getId();
 		String	nonce		= UUID.randomUUID().toString();
 

@@ -47,7 +47,7 @@ import lombok.extern.slf4j.Slf4j;
 		value = "enable-permission-api",
 		havingValue = "true",
 		matchIfMissing = false)
-@Api(value = "资源管理接口", tags = { "资源管理接口" })
+@Api(value = "SYS资源管理接口", tags = { "SYS资源管理接口" })
 @RestController
 @RequestMapping("/permission/menu")
 @Slf4j

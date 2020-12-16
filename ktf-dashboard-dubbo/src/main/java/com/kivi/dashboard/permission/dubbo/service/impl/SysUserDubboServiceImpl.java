@@ -65,7 +65,7 @@ public class SysUserDubboServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
 	}
 
 	@Override
-	public Boolean save(SysUserDTO dto) {
+	public Long save(SysUserDTO dto) {
 		return sysUserService.save(dto);
 	}
 

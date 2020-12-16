@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 		value = "enable-permission-api",
 		havingValue = "true",
 		matchIfMissing = false)
-@Api(value = "角色管理接口", tags = { " 角色管理接口" })
+@Api(value = "SYS角色管理接口", tags = { "SYS角色管理接口" })
 @RestController
 @RequestMapping("/permission/role")
 @Slf4j
