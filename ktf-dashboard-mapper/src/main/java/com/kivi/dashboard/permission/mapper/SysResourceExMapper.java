@@ -55,6 +55,14 @@ public interface SysResourceExMapper {
 	List<String> selectUrls(@Param("params") Map<String, Object> params);
 
 	/**
+	 * 查询资源ID
+	 * 
+	 * @param params
+	 * @return
+	 */
+	List<Long> selectResourceIds(@Param("params") Map<String, Object> params);
+
+	/**
 	 * 查询子节点
 	 * 
 	 * @param parentId

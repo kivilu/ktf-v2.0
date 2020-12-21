@@ -19,6 +19,28 @@
         <result column="is_leaf" property="isLeaf"/>
     </resultMap>
     
+    <select id="selectResourceIds" parameterType="map" resultType="Long">
+        SELECT
+	        t.id
+        FROM
+        	ktf_sys_resource t
+        <where>
+            <if test="params.id!=null">
+                t.id=#{params.id}
+            </if>
+            <if test="params.status!=null">
+                AND t.status=#{params.status}
+            </if>
+            <if test="params.parentId!=null">
+                AND t.parent_id=#{params.parentId}
+            </if>
+            <if test="params.resourceType!=null">
+                AND t.resource_type=#{params.resourceType}
+            </if>
+        </where>
+        order by t.seq asc
+    </select>
+    
     <select id="selectResourceList" parameterType="map" resultMap="BaseResultMap">
         SELECT
 	        t.id,
@@ -34,10 +56,10 @@
             <if test="status!=null">
                 AND t.status=#{status}
             </if>
-            <if test="parentId!=null and parentId!=''">
+            <if test="parentId!=null">
                 AND t.parent_id=#{parentId}
             </if>
-            <if test="resourceType!=null and resourceType!=''">
+            <if test="resourceType!=null">
                 AND t.resource_type=#{resourceType}
             </if>
         </where>

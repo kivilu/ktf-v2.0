@@ -25,9 +25,6 @@ public class SysRoleResourceDTO implements Serializable {
 
 	private static final long	serialVersionUID	= 1L;
 
-	@ApiModelProperty(value = "主键id")
-	private Long				id;
-
 	@ApiModelProperty(value = "角色id")
 	private Long				roleId;
 

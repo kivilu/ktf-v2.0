@@ -32,6 +32,8 @@ import com.kivi.framework.vo.page.PageInfoVO;
 import com.vip.vjtools.vjkit.collection.ListUtil;
 import com.vip.vjtools.vjkit.collection.MapUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * <p>
  * 角色资源 服务实现类
@@ -43,6 +45,7 @@ import com.vip.vjtools.vjkit.collection.MapUtil;
 @Primary
 @Service
 @Transactional(rollbackFor = Exception.class)
+@Slf4j
 public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMapper, SysRoleResource>
 		implements SysRoleResourceService {
 	@Autowired
@@ -55,8 +58,7 @@ public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMappe
 	@Override
 	public SysRoleResourceDTO getDTOById(Long id) {
 		SysRoleResource		entity	= super.getById(id);
-		SysRoleResourceDTO	dto		= BeanConverter.convert(SysRoleResourceDTO.class, entity, BeanConverter.long2String,
-				BeanConverter.integer2String);
+		SysRoleResourceDTO	dto		= BeanConverter.convert(SysRoleResourceDTO.class, entity);
 		return dto;
 	}
 
@@ -194,6 +196,10 @@ public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMappe
 
 	@Override
 	public Boolean saveOrUpdateRoleResource(Long roleId, List<Long> resourceIdList) {
+		if (roleId.longValue() == KtfConstant.SUPER_ADMIN) {
+			log.info("角色是超级管理员，无需保存角色和资源对应关系");
+			return true;
+		}
 		// 先删除角色与菜单关系
 		Map<String, Object> params = new HashMap<>();
 		params.put(SysRoleResource.DB_ROLE_ID, roleId);

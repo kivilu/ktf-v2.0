@@ -55,8 +55,8 @@
 			ktf_sys_user U
 		LEFT JOIN cif_customer C ON U.cif_id = C.id
         <where>
-        	<if test="params.userId != null">
-            	U.id=#{params.userId}
+        	<if test="params.id != null">
+            	U.id=#{params.id}
             </if>
             <if test="params.loginName != null and params.loginName !=''">
             	AND U.login_name=#{params.loginName}

@@ -2,6 +2,7 @@ package com.kivi.dashboard.permission.service.impl;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.dashboard.permission.dto.SysRoleDTO;
 import com.kivi.dashboard.permission.entity.SysRole;
+import com.kivi.dashboard.permission.mapper.SysResourceExMapper;
 import com.kivi.dashboard.permission.mapper.SysRoleExMapper;
 import com.kivi.dashboard.permission.mapper.SysRoleMapper;
 import com.kivi.dashboard.permission.service.SysRoleResourceService;
@@ -44,6 +46,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 	SysRoleExMapper					sysRoleExMapper;
 
 	@Autowired
+	SysResourceExMapper				sysResourceExMapper;
+
+	@Autowired
 	private SysRoleResourceService	roleResourceService;
 	@Autowired
 	private SysUserRoleService		userRoleService;
@@ -54,7 +59,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 	@KtfTrace("根据ID查询角色")
 	@Override
 	public SysRoleDTO getDto(Long id) {
-		return sysRoleExMapper.selectByRoleId(id);
+		SysRoleDTO result = sysRoleExMapper.selectByRoleId(id);
+		if (id.longValue() == KtfConstant.SUPER_ADMIN) {
+			List<Long> resourceIds = sysResourceExMapper.selectResourceIds(new HashMap<String, Object>());
+			result.setResourceIds(resourceIds);
+		}
+
+		return result;
 	}
 
 	/**

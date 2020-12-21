@@ -57,7 +57,7 @@
 	        t.seq,
 	        t.description,
 	        t.`status`,
-	        t2.id AS resource_id
+	        t2.resource_id
         FROM
             ktf_sys_role t
         LEFT JOIN ktf_sys_role_resource t2 ON t.id = t2.role_id

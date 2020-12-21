@@ -157,8 +157,10 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 			params = new HashMap<>();
 		}
 
-		if (!params.containsKey(SysResourceDTO.NAME)) {
+		if (!params.containsKey(SysResourceDTO.RESOURCE_TYPE)) {
 			params.put("resourceTypes", ArrayUtils.toArray(MenuType.CATALOG.getValue()));
+		} else {
+			params.put("resourceTypes", ArrayUtils.toArray(params.get(SysResourceDTO.RESOURCE_TYPE)));
 		}
 
 		if (!params.containsKey(SysResourceDTO.STATUS))
@@ -180,7 +182,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 		pageVo.setRequestMap(params);
 
 		List<SysResourceDTO> menus = iPage.getRecords();
-		if (!params.containsKey(SysResourceDTO.NAME)) {
+		if (params.containsKey(SysResourceDTO.NAME)) {
 			List<SysResourceDTO>	matches		= menus.stream()
 					.filter(dto -> dto.getResourceType() == MenuType.CATALOG.getValue()).collect(Collectors.toList());
 			Set<Long>				ids			= matches.stream().map(SysResourceDTO::getId)
