@@ -157,7 +157,7 @@
 			<if test="params.resourcetype!=null">
 				AND r.resource_type  = #{params.resourcetype}
 			</if>
-			<if test="params.userId!=null">
+			<if test="params.roleIds!=null">
 				AND  r.id IN (
 					SELECT
 						rr.resource_id

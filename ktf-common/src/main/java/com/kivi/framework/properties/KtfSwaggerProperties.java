@@ -14,65 +14,66 @@ import lombok.Data;
 @Configuration(KtfSwaggerProperties.BEAN_NAME)
 @ConfigurationProperties(prefix = KtfSwaggerProperties.PREFIX)
 public class KtfSwaggerProperties implements IKtfProperties {
-	public static final String	BEAN_NAME				= "ktfSwaggerProperties";
-	public static final String	PREFIX					= "ktf.swagger";
+    public static final String BEAN_NAME = "ktfSwaggerProperties";
+    public static final String PREFIX = "ktf.swagger";
 
-	private Boolean				enabled					= true;
-	private String				title					= "系统API服务";
-	private String				description				= "系统API接口文档简要描述";
-	private String				version					= "1.0.0";
-	private String				termsOfServiceUrl;
-	private Boolean				authorizationEnabled	= true;
-	private String				license					= "MIT 协议";
-	private String				licenseUrl				= "http://www.opensource.org/licenses/MIT";
-	private Boolean				enableOrgApi			= false;
-	private Boolean				enableSysApi			= false;
-	private Boolean				enableDicApi			= false;
-	private Boolean				enablePermissionApi		= false;
-	private Boolean				enableRegionApi			= false;
+    private Boolean enabled = true;
+    private String title = "系统API服务";
+    private String description = "系统API接口文档简要描述";
+    private String version = "1.0.0";
+    private String termsOfServiceUrl;
+    private Boolean authorizationEnabled = true;
+    private String license = "MIT 协议";
+    private String licenseUrl = "http://www.opensource.org/licenses/MIT";
+    private Boolean enableOrgApi = false;
+    private Boolean enableSysApi = false;
+    private Boolean enableDicApi = false;
+    private Boolean enablePermissionApi = false;
+    private Boolean enableRegionApi = false;
+    private Boolean enableLoginApi = true;
 
-	/**
-	 * 禁用swagger时的重定向地址
-	 */
-	private String				redirectUri				= "/";
+    /**
+     * 禁用swagger时的重定向地址
+     */
+    private String redirectUri = "/";
 
-	/**
-	 * 开放接口的列表
-	 */
-	private List<String>		pathFilters				= CollectionKit.newArrayList();
+    /**
+     * 开放接口的列表
+     */
+    private List<String> pathFilters = CollectionKit.newArrayList();
 
-	public String getTitleUTF8() {
-		String utf8 = title;
+    public String getTitleUTF8() {
+        String utf8 = title;
 
-		try {
-			utf8 = new String(title.getBytes("iso-8859-1"), "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        try {
+            utf8 = new String(title.getBytes("iso-8859-1"), "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
-		return utf8;
-	}
+        return utf8;
+    }
 
-	public String getDescriptionUTF8() {
-		String utf8 = description;
+    public String getDescriptionUTF8() {
+        String utf8 = description;
 
-		try {
-			utf8 = new String(description.getBytes("iso-8859-1"), "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        try {
+            utf8 = new String(description.getBytes("iso-8859-1"), "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
-		return utf8;
-	}
+        return utf8;
+    }
 
-	@Override
-	public String prefix() {
-		return PREFIX;
-	}
+    @Override
+    public String prefix() {
+        return PREFIX;
+    }
 
-	@Override
-	public String beanName() {
-		return BEAN_NAME;
-	}
+    @Override
+    public String beanName() {
+        return BEAN_NAME;
+    }
 
 }

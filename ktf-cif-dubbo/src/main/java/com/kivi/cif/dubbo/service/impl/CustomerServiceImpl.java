@@ -61,7 +61,7 @@ public class CustomerServiceImpl implements CustomerService {
 				// 创建客户信息
 				customer = BeanConverter.convert(CifCustomer.class, dto);
 				customer.setId(cifAuthDTO.getId());
-				customer.setCustomerId(StrKit.join("", "SL", cifAuthDTO.getId()));
+				customer.setCustomerId(StrKit.join("SL", cifAuthDTO.getId()));
 				customer.setRegPhoneNumber(cifAuthDTO.getIdentifier());// 注册手机号
 				customer.setCertNo(null);
 				customer.setCertType(null);

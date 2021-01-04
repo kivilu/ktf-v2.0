@@ -2,6 +2,7 @@ package com.kivi.framework.form;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -9,34 +10,25 @@ import lombok.Data;
  */
 @Data
 public class LoginForm {
-	/**
-	 * 用户名
-	 */
-	@NotBlank(message = "用户名不能为空")
-	private String	userName;
-	/**
-	 * 密码
-	 */
-	// @NotBlank(message = "密码不能为空")
-	private String	password;
-	/**
-	 * 验证码
-	 */
-	private String	captcha;
-	/**
-	 * 请求唯一ID
-	 */
-	// @NotBlank(message = "uuid不能为空")
-	private String	uuid;
+    @ApiModelProperty(value = "用户名", required = true)
+    @NotBlank(message = "用户名不能为空")
+    private String userName;
 
-	/**
-	 * 签名信息
-	 */
-	// @NotBlank(message = "签名信息不能为空")
-	private String	sign;
+    @ApiModelProperty(value = "密码")
+    private String password;
 
-	/**
-	 * 记住
-	 */
-	// private Integer rememberMe;
+    @ApiModelProperty(value = "验证码")
+    private String captcha;
+
+    @ApiModelProperty(value = "请求唯一ID")
+    private String uuid;
+
+    @ApiModelProperty(value = "签名信息")
+    private String sign;
+
+    @ApiModelProperty(value = "公钥证书文件内容base64（非公钥）")
+    private String cert;
+
+    @ApiModelProperty(value = "校验类型  0：CA签名 1：CPK签名 9：密码")
+    private Integer type;
 }

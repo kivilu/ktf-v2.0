@@ -16,60 +16,60 @@ import com.kivi.framework.vo.UserVo;
 
 @DubboService(version = CifProperties.DUBBO_VERSION)
 public class DubboCifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMapper, CifCustomerAuths>
-		implements CifCustomerAuthsService {
+    implements CifCustomerAuthsService {
 
-	@Autowired
-	private CifCustomerAuthsService cifCustomerAuthsService;
+    @Autowired
+    private CifCustomerAuthsService cifCustomerAuthsService;
 
-	@Override
-	public CifCustomerAuths getCifCustomerAuths(CifCustomerAuthsDTO cifAuthDTO) {
-		return cifCustomerAuthsService.getCifCustomerAuths(cifAuthDTO);
-	}
+    @Override
+    public CifCustomerAuths getCifCustomerAuths(CifCustomerAuthsDTO cifAuthDTO) {
+        return cifCustomerAuthsService.getCifCustomerAuths(cifAuthDTO);
+    }
 
-	@Override
-	public CifCustomerAuths
-			getCifCustomerAuths(Long applicationId, String identityType, String identifier, String userType) {
-		return cifCustomerAuthsService.getCifCustomerAuths(applicationId, identityType, identifier, userType);
-	}
+    @Override
+    public CifCustomerAuths getCifCustomerAuths(Long applicationId, String identityType, String identifier,
+        String userType) {
+        return cifCustomerAuthsService.getCifCustomerAuths(applicationId, identityType, identifier, userType);
+    }
 
-	@Override
-	public CifCustomerAuthsDTO getDto(Long id) {
-		return cifCustomerAuthsService.getDto(id);
-	}
+    @Override
+    public CifCustomerAuthsDTO getDto(Long id) {
+        return cifCustomerAuthsService.getDto(id);
+    }
 
-	@Override
-	public CifCustomerAuths getById(Serializable id) {
-		return cifCustomerAuthsService.getById(id);
-	}
+    @Override
+    public CifCustomerAuths getById(Serializable id) {
+        return cifCustomerAuthsService.getById(id);
+    }
 
-	@Override
-	public boolean save(CifCustomerAuths cifCustomerAuths) {
-		return cifCustomerAuthsService.save(cifCustomerAuths);
-	}
+    @Override
+    public boolean save(CifCustomerAuths cifCustomerAuths) {
+        return cifCustomerAuthsService.save(cifCustomerAuths);
+    }
 
-	@Override
-	public Boolean updateById(CifCustomerAuthsDTO cifCustomerAuthsDTO) {
-		return cifCustomerAuthsService.updateById(cifCustomerAuthsDTO);
-	}
+    @Override
+    public Boolean updateById(CifCustomerAuthsDTO cifCustomerAuthsDTO) {
+        return cifCustomerAuthsService.updateById(cifCustomerAuthsDTO);
+    }
 
-	@Override
-	public Boolean updateByEntity(CifCustomerAuths condEntity, CifCustomerAuths updaeEntity) {
-		return cifCustomerAuthsService.updateByEntity(condEntity, updaeEntity);
-	}
+    @Override
+    public Boolean updateByEntity(CifCustomerAuths condEntity, CifCustomerAuths updaeEntity) {
+        return cifCustomerAuthsService.updateByEntity(condEntity, updaeEntity);
+    }
 
-	@Override
-	public Long save(CifCustomerAuthsDTO dto) {
-		return cifCustomerAuthsService.save(dto);
-	}
+    @Override
+    public Long save(CifCustomerAuthsDTO dto) {
+        return cifCustomerAuthsService.save(dto);
+    }
 
-	@Override
-	public Boolean auth(LoginForm form, UserVo userVo) {
-		return cifCustomerAuthsService.auth(form, userVo);
-	}
+    @Override
+    public Integer auth(LoginForm form, UserVo userVo) {
+        return cifCustomerAuthsService.auth(form, userVo);
+    }
 
-	@Override
-	public Boolean updateCredential(UserVo userVo, String newPassword) {
-		return cifCustomerAuthsService.updateCredential(userVo, newPassword);
-	}
+    @Override
+    public Boolean updateCredential(UserVo userVo, String newPassword) {
+        return cifCustomerAuthsService.updateCredential(userVo, newPassword);
+    }
 
 }

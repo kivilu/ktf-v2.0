@@ -52,190 +52,185 @@ import com.kivi.framework.vo.page.PageInfoVO;
 @Transactional(rollbackFor = Exception.class)
 public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysResource> implements SysResourceService {
 
-	@Autowired
-	private SysResourceExMapper sysResourceExMapper;
+    @Autowired
+    private SysResourceExMapper sysResourceExMapper;
 
-	/**
-	 * 根据ID查询资源
-	 */
-	@Cacheable(value = KtfCache.SysResource, key = "caches[0].name+'.dto.'+#id", unless = "#result == null")
-	@KtfTrace("根据ID查询资源")
-	@Override
-	public SysResourceDTO getDto(Long id) {
-		SysResource		entity	= super.getById(id);
-		SysResourceDTO	dto		= BeanConverter.convert(SysResourceDTO.class, entity);
-		return dto;
-	}
+    /**
+     * 根据ID查询资源
+     */
+    @Cacheable(value = KtfCache.SysResource, key = "caches[0].name+'.dto.'+#id", unless = "#result == null")
+    @KtfTrace("根据ID查询资源")
+    @Override
+    public SysResourceDTO getDto(Long id) {
+        SysResource entity = super.getById(id);
+        SysResourceDTO dto = BeanConverter.convert(SysResourceDTO.class, entity);
+        return dto;
+    }
 
-	/**
-	 * 新增资源
-	 */
-	@KtfCacheEvict(cacheNames = { KtfCache.SysResource, KtfCache.SysUser })
-	@KtfTrace("新增资源")
-	@Override
-	public Boolean save(SysResourceDTO dto) {
-		SysResource entity = BeanConverter.convert(SysResource.class, dto);
+    /**
+     * 新增资源
+     */
+    @KtfCacheEvict(cacheNames = {KtfCache.SysResource, KtfCache.SysUser})
+    @KtfTrace("新增资源")
+    @Override
+    public Boolean save(SysResourceDTO dto) {
+        SysResource entity = BeanConverter.convert(SysResource.class, dto);
 
-		return super.save(entity);
-	}
+        return super.save(entity);
+    }
 
-	/**
-	 * 修改
-	 */
-	@KtfCacheEvict(cacheNames = { KtfCache.SysResource, KtfCache.SysUser })
-	@KtfTrace("修改资源")
-	@Override
-	public Boolean updateById(SysResourceDTO dto) {
-		SysResource entity = BeanConverter.convert(SysResource.class, dto);
-		return super.updateById(entity);
-	}
+    /**
+     * 修改
+     */
+    @KtfCacheEvict(cacheNames = {KtfCache.SysResource, KtfCache.SysUser})
+    @KtfTrace("修改资源")
+    @Override
+    public Boolean updateById(SysResourceDTO dto) {
+        SysResource entity = BeanConverter.convert(SysResource.class, dto);
+        return super.updateById(entity);
+    }
 
-	/**
-	 * 根据ID删除资源
-	 */
-	@KtfCacheEvict(cacheNames = { KtfCache.SysResource, KtfCache.SysUser })
-	@KtfTrace("删除资源")
-	@Override
-	public boolean removeById(Serializable id) {
-		sysResourceExMapper.deleteWithChildren(NumberKit.toLong(id));
-		return true;
-	}
+    /**
+     * 根据ID删除资源
+     */
+    @KtfCacheEvict(cacheNames = {KtfCache.SysResource, KtfCache.SysUser})
+    @KtfTrace("删除资源")
+    @Override
+    public boolean removeById(Serializable id) {
+        sysResourceExMapper.deleteWithChildren(NumberKit.toLong(id));
+        return true;
+    }
 
-	/**
-	 * 根据IDs删除资源
-	 */
-	@Transactional(propagation = Propagation.REQUIRED)
-	@KtfCacheEvict(cacheNames = { KtfCache.SysResource, KtfCache.SysUser })
-	@KtfTrace("删除资源")
-	@Override
-	public boolean removeByIds(Collection<? extends Serializable> idList) {
-		super.removeByIds(idList);
-		sysResourceExMapper.deleteOrphan();
+    /**
+     * 根据IDs删除资源
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    @KtfCacheEvict(cacheNames = {KtfCache.SysResource, KtfCache.SysUser})
+    @KtfTrace("删除资源")
+    @Override
+    public boolean removeByIds(Collection<? extends Serializable> idList) {
+        super.removeByIds(idList);
+        sysResourceExMapper.deleteOrphan();
 
-		return true;
-	}
+        return true;
+    }
 
-	@Cacheable(
-			value = KtfCache.SysResource,
-			key = "caches[0].name+'.list.'+#userId+#types?.hashCode()",
-			unless = "#result == null")
-	@KtfTrace("根据用户ID和资源类型查询")
-	@Override
-	public List<SysResourceDTO> selectResources(Long userId, MenuType... types) {
-		// 系统管理员，拥有最高权限
-		Map<String, Object> params = new HashMap<>();
+    @Cacheable(value = KtfCache.SysResource, key = "caches[0].name+'.list.'+#userId+#types?.hashCode()",
+        unless = "#result == null")
+    @KtfTrace("根据用户ID和资源类型查询")
+    @Override
+    public List<SysResourceDTO> selectResources(Long userId, MenuType... types) {
+        // 系统管理员，拥有最高权限
+        Map<String, Object> params = new HashMap<>();
 
-		if (userId != null && KtfConstant.SUPER_ADMIN != userId.longValue())
-			params.put("userId", userId);
+        if (userId != null && KtfConstant.SUPER_ADMIN != userId.longValue())
+            params.put("userId", userId);
 
-		if (types != null && types.length > 0)
-			params.put("resourceTypes",
-					Arrays.asList(types).stream().map(MenuType::getValue).collect(Collectors.toList()));
+        if (types != null && types.length > 0)
+            params.put("resourceTypes",
+                Arrays.asList(types).stream().map(MenuType::getValue).collect(Collectors.toList()));
 
-		params.put(SysResourceDTO.STATUS, KtfStatus.ENABLED.code);
-		params.put(SysResourceDTO.HIDDEN, KtfYesNo.NO.bool);
+        params.put(SysResourceDTO.STATUS, KtfStatus.ENABLED.code);
+        params.put(SysResourceDTO.HIDDEN, KtfYesNo.NO.bool);
 
-		List<SysResourceDTO> list = sysResourceExMapper.selectByUserId(params);
+        List<SysResourceDTO> list = sysResourceExMapper.selectByUserId(params);
 
-		return list;
-	}
+        return list;
+    }
 
-	@Override
-	public List<SysResourceDTO> getChildren(Long id, Boolean recursion) {
-		Map<String, Object> params = new HashMap<>();
-		params.put(SysResourceDTO.ID, id);
-		params.put(SysResourceDTO.STATUS, KtfStatus.ENABLED.code);
-		params.put("hasSelf", false);
-		params.put("recursion", recursion);
-		return sysResourceExMapper.getChildren(params);
-	}
+    @Override
+    public List<SysResourceDTO> getChildren(Long id, Boolean recursion) {
+        Map<String, Object> params = new HashMap<>();
+        params.put(SysResourceDTO.ID, id);
+        params.put(SysResourceDTO.STATUS, KtfStatus.ENABLED.code);
+        params.put("hasSelf", false);
+        params.put("recursion", recursion);
+        return sysResourceExMapper.getChildren(params);
+    }
 
-	@Override
-	@KtfTrace("查询顶级菜单")
-	public PageInfoVO<SysResourceDTO> tops(Map<String, Object> params) {
-		if (params == null) {
-			params = new HashMap<>();
-		}
+    @Override
+    @KtfTrace("查询顶级菜单")
+    public PageInfoVO<SysResourceDTO> tops(Map<String, Object> params) {
+        if (params == null) {
+            params = new HashMap<>();
+        }
 
-		if (!params.containsKey(SysResourceDTO.RESOURCE_TYPE)) {
-			params.put("resourceTypes", ArrayUtils.toArray(MenuType.CATALOG.getValue()));
-		} else {
-			params.put("resourceTypes", ArrayUtils.toArray(params.get(SysResourceDTO.RESOURCE_TYPE)));
-		}
+        if (!params.containsKey(SysResourceDTO.RESOURCE_TYPE)) {
+            params.put("resourceTypes", ArrayUtils.toArray(MenuType.CATALOG.getValue()));
+        } else {
+            params.put("resourceTypes", ArrayUtils.toArray(params.get(SysResourceDTO.RESOURCE_TYPE)));
+        }
 
-		if (!params.containsKey(SysResourceDTO.STATUS))
-			params.put(SysResourceDTO.STATUS, KtfStatus.ENABLED.code);
+        if (!params.containsKey(SysResourceDTO.STATUS))
+            params.put(SysResourceDTO.STATUS, KtfStatus.ENABLED.code);
 
-		if (!params.containsKey(SysResourceDTO.HIDDEN))
-			params.put(SysResourceDTO.HIDDEN, KtfYesNo.NO.code);
+        if (!params.containsKey(SysResourceDTO.HIDDEN))
+            params.put(SysResourceDTO.HIDDEN, KtfYesNo.NO.code);
 
-		PageParams<SysResourceDTO>	pageParams	= new PageParams<>(params);
-		Page<SysResourceDTO>		page		= new Page<>(pageParams.getCurrPage(), pageParams.getPageSize());
+        PageParams<SysResourceDTO> pageParams = new PageParams<>(params);
+        Page<SysResourceDTO> page = new Page<>(pageParams.getCurrPage(), pageParams.getPageSize());
 
-		IPage<SysResourceDTO>		iPage		= sysResourceExMapper.selectResources(page, pageParams.getRequestMap());
+        IPage<SysResourceDTO> iPage = sysResourceExMapper.selectResources(page, pageParams.getRequestMap());
 
-		PageInfoVO<SysResourceDTO>	pageVo		= new PageInfoVO<>();
-		pageVo.setCurPage(iPage.getCurrent());
-		pageVo.setTotal(iPage.getTotal());
-		pageVo.setPageSize(iPage.getSize());
-		pageVo.setPages(iPage.getPages());
-		pageVo.setRequestMap(params);
+        PageInfoVO<SysResourceDTO> pageVo = new PageInfoVO<>();
+        pageVo.setCurPage(iPage.getCurrent());
+        pageVo.setTotal(iPage.getTotal());
+        pageVo.setPageSize(iPage.getSize());
+        pageVo.setPages(iPage.getPages());
+        pageVo.setRequestMap(params);
 
-		List<SysResourceDTO> menus = iPage.getRecords();
-		if (params.containsKey(SysResourceDTO.NAME)) {
-			List<SysResourceDTO>	matches		= menus.stream()
-					.filter(dto -> dto.getResourceType() == MenuType.CATALOG.getValue()).collect(Collectors.toList());
-			Set<Long>				ids			= matches.stream().map(SysResourceDTO::getId)
-					.collect(Collectors.toSet());
+        List<SysResourceDTO> menus = iPage.getRecords();
+        if (params.containsKey(SysResourceDTO.NAME)) {
+            List<SysResourceDTO> matches = menus.stream()
+                .filter(dto -> dto.getResourceType() == MenuType.CATALOG.getValue()).collect(Collectors.toList());
+            Set<Long> ids = matches.stream().map(SysResourceDTO::getId).collect(Collectors.toSet());
 
-			List<Long>				nomatches	= menus.stream()
-					.filter(dic -> dic.getResourceType() != MenuType.CATALOG.getValue())
-					.map(SysResourceDTO::getParentId).collect(Collectors.toList());
+            List<Long> nomatches = menus.stream().filter(dic -> dic.getResourceType() != MenuType.CATALOG.getValue())
+                .map(SysResourceDTO::getParentId).collect(Collectors.toList());
 
-			Map<String, Object>		map			= new HashMap<>();
-			nomatches.stream().forEach(id -> {
-				map.put(SysResourceDTO.ID, id);
-				map.put(SysResourceDTO.RESOURCE_TYPE, MenuType.CATALOG.getValue());
-				List<SysResourceDTO> parents = sysResourceExMapper.getParents(map);
-				matches.addAll(parents.stream().filter(dto -> !ids.contains(dto.getId())).collect(Collectors.toList()));
-				ids.addAll(parents.stream().map(SysResourceDTO::getId).collect(Collectors.toSet()));
-			});
-			pageVo.setList(matches);
+            Map<String, Object> map = new HashMap<>();
+            nomatches.stream().forEach(id -> {
+                map.put(SysResourceDTO.ID, id);
+                map.put(SysResourceDTO.RESOURCE_TYPE, MenuType.CATALOG.getValue());
+                List<SysResourceDTO> parents = sysResourceExMapper.getParents(map);
+                matches.addAll(parents.stream().filter(dto -> !ids.contains(dto.getId())).collect(Collectors.toList()));
+                ids.addAll(parents.stream().map(SysResourceDTO::getId).collect(Collectors.toSet()));
+            });
+            pageVo.setList(matches);
 
-		} else {
-			pageVo.setList(menus);
-		}
+        } else {
+            pageVo.setList(menus);
+        }
 
-		pageVo.compute();
+        pageVo.compute();
 
-		return pageVo;
+        return pageVo;
 
-	}
+    }
 
-	@Cacheable(
-			value = KtfCache.SysResource,
-			key = "caches[0].name+'.urls.'+#roleIds.hashCode()",
-			unless = "#result == null")
-	@Override
-	public Set<String> getPermissions(List<Long> roleIds) {
-		Map<String, Object> params = new HashMap<>();
+    @Cacheable(value = KtfCache.SysResource, key = "caches[0].name+'.urls.'+#roleIds?.hashCode()",
+        unless = "#result == null")
+    @Override
+    public Set<String> getPermissions(List<Long> roleIds) {
+        Map<String, Object> params = new HashMap<>();
 
-		params.put(SysResourceDTO.RESOURCE_TYPE, MenuType.BUTTON.getValue());
-		params.put(SysResourceDTO.STATUS, KtfStatus.ENABLED.code);
-		params.put(SysResourceDTO.HIDDEN, KtfYesNo.NO.code);
-		params.put("roleIds", roleIds);
+        params.put(SysResourceDTO.RESOURCE_TYPE, MenuType.BUTTON.getValue());
+        params.put(SysResourceDTO.STATUS, KtfStatus.ENABLED.code);
+        params.put(SysResourceDTO.HIDDEN, KtfYesNo.NO.code);
+        if (roleIds != null)
+            params.put("roleIds", roleIds);
 
-		List<String> urls = sysResourceExMapper.selectUrls(params);
+        List<String> urls = sysResourceExMapper.selectUrls(params);
 
-		return urls.stream().filter(url -> StrKit.isNotBlank(url)).collect(Collectors.toSet());
-	}
+        return urls.stream().filter(url -> StrKit.isNotBlank(url)).collect(Collectors.toSet());
+    }
 
-	@Override
-	public List<SysResourceDTO> selectMenutList(Map<String, Object> params) {
-		if (params == null) {
-			params = new HashMap<>();
-		}
-		return sysResourceExMapper.selectResourceList(params);
-	}
+    @Override
+    public List<SysResourceDTO> selectMenutList(Map<String, Object> params) {
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        return sysResourceExMapper.selectResourceList(params);
+    }
 
 }

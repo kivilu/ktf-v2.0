@@ -11,21 +11,21 @@ import com.kivi.framework.vo.UserVo;
  */
 public interface CifAuthentication {
 
-	/**
-	 * 用户验证
-	 * 
-	 * @param form    登录Form
-	 * @param cifAuth 客户auth对象
-	 * @return true—验证通过， false—验证未通过
-	 */
-	boolean auth(LoginForm form, UserVo userVo);
+    /**
+     * 用户验证
+     * 
+     * @param form 登录Form
+     * @param cifAuth 客户auth对象
+     * @return true—验证通过， false—验证未通过
+     */
+    Integer auth(LoginForm form, UserVo userVo);
 
-	/**
-	 * 生成认证凭据
-	 * 
-	 * @param credential
-	 * @param salt
-	 * @return
-	 */
-	String credential(String credential, String salt);
+    /**
+     * 生成认证凭据
+     * 
+     * @param credential
+     * @param salt
+     * @return
+     */
+    String credential(String credential, String salt);
 }

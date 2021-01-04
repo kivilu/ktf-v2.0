@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +37,7 @@ import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.form.LoginForm;
 import com.kivi.framework.model.ResultMap;
 import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSwaggerProperties;
 import com.kivi.framework.service.KtfTokenService;
 import com.kivi.framework.util.kit.CollectionKit;
 import com.kivi.framework.util.kit.StrKit;
@@ -54,203 +56,206 @@ import springfox.documentation.annotations.ApiIgnore;
 /**
  * @Description 登录退出Controller
  */
-@Api(value = "登录退出", tags = { " 登录退出" })
+@ConditionalOnProperty(prefix = KtfSwaggerProperties.PREFIX, value = "enable-login-api", havingValue = "true",
+    matchIfMissing = true)
+@Api(value = "登录退出", tags = {" 登录退出"})
 @RestController
 @Slf4j
 public class LoginController extends DashboardController {
 
-	@Autowired
-	private Producer				producer;
+    @Autowired
+    private Producer producer;
 
-	@Autowired(required = false)
-	private IRedisService			redisService;
+    @Autowired(required = false)
+    private IRedisService redisService;
 
-	@Autowired
-	private KtfDashboardProperties	ktfDashboardProperties;
+    @Autowired
+    private KtfDashboardProperties ktfDashboardProperties;
 
-	@Autowired
-	private KtfTokenService			ktfTokenService;
+    @Autowired
+    private KtfTokenService ktfTokenService;
 
-	@GetMapping("/captcha/status")
-	public Boolean isKaptcha() {
+    @GetMapping("/captcha/status")
+    public Boolean isKaptcha() {
 
-		return ktfDashboardProperties.getEnableKaptcha();
-	}
+        return ktfDashboardProperties.getEnableKaptcha();
+    }
 
-	@GetMapping("/login/settings")
-	public ResultMap loginSettings() {
-		Map<String, Object> map = CollectionKit.newHashMap();
-		map.put("kaptcha", ktfDashboardProperties.getEnableKaptcha());
-		map.put("loginType", ktfDashboardProperties.getLoginType().getCode());
+    @GetMapping("/login/settings")
+    public ResultMap loginSettings() {
+        Map<String, Object> map = CollectionKit.newHashMap();
+        map.put("kaptcha", ktfDashboardProperties.getEnableKaptcha());
+        map.put("loginType", ktfDashboardProperties.getLoginType().getCode());
 
-		Map<String, Object> dbMap = sysDicService().getSettings("LOGIN_SETTINGS");
-		map.putAll(dbMap);
+        Map<String, Object> dbMap = sysDicService().getSettings("LOGIN_SETTINGS");
+        map.putAll(dbMap);
 
-		return ResultMap.ok().put("data", map);
-	}
+        return ResultMap.ok().put("data", map);
+    }
 
-	@GetMapping("captcha.jpg")
-	public void kaptcha(@ApiIgnore HttpServletResponse response, String uuid) {
-		log.info("前台请求的UUID:" + uuid);
-		if (StringUtils.isBlank(uuid)) {
-			throw new RuntimeException("uuid不能为空");
-		}
-		// 生成文字验证码
-		String code = producer.createText();
-		redisService.set(uuid, code, expire());
+    @GetMapping("captcha.jpg")
+    public void kaptcha(@ApiIgnore HttpServletResponse response, String uuid) {
+        log.info("前台请求的UUID:" + uuid);
+        if (StringUtils.isBlank(uuid)) {
+            throw new RuntimeException("uuid不能为空");
+        }
+        // 生成文字验证码
+        String code = producer.createText();
+        redisService.set(uuid, code, expire());
 
-		response.setHeader("Cache-Control", "no-store,no-cache");
-		response.setContentType("image/png");
+        response.setHeader("Cache-Control", "no-store,no-cache");
+        response.setContentType("image/png");
 
-		BufferedImage image = producer.createImage(code);
-		try (ServletOutputStream outputStream = response.getOutputStream()) {
-			ImageIO.write(image, "png", outputStream);
-		} catch (IOException e) {
-			log.error("返回客户端图片异常", e);
-			throw new KtfException("返回客户端图片异常", e);
-		}
-	}
+        BufferedImage image = producer.createImage(code);
+        try (ServletOutputStream outputStream = response.getOutputStream()) {
+            ImageIO.write(image, "png", outputStream);
+        } catch (IOException e) {
+            log.error("返回客户端图片异常", e);
+            throw new KtfException("返回客户端图片异常", e);
+        }
+    }
 
-	@ApiOperation(value = "获取nonce", notes = "获取nonce")
-	@GetMapping("/nonce")
-	public ResultMap nonce(@ApiIgnore HttpSession session) {
-		String	seesionId	= session.getId();
-		String	nonce		= UUID.randomUUID().toString();
+    @ApiOperation(value = "获取nonce", notes = "获取nonce")
+    @GetMapping("/nonce")
+    public ResultMap nonce(@ApiIgnore HttpSession session) {
+        String seesionId = session.getId();
+        String nonce = UUID.randomUUID().toString();
 
-		log.trace("seesionId：{}，nonce:{}", seesionId, nonce);
+        log.trace("seesionId：{}，nonce:{}", seesionId, nonce);
 
-		redisService.set(StrKit.join("nonce-", seesionId), nonce, 10);
+        redisService.set(StrKit.join("nonce-", seesionId), nonce, 10);
 
-		return ResultMap.ok().put("data", nonce);
-	}
+        return ResultMap.ok().put("data", nonce);
+    }
 
-	/**
-	 * 登录
-	 * 
-	 * @throws Exception
-	 */
-	@ApiOperation(value = "登录", notes = "登录")
-	@PostMapping("/login")
-	// @KtfTrace("login")
-	public ResultMap login(@Valid @RequestBody LoginForm form, @ApiIgnore HttpSession session) throws Exception {
-		log.info("login请求登录");
+    /**
+     * 登录
+     * 
+     * @throws Exception
+     */
+    @ApiOperation(value = "登录", notes = "登录")
+    @PostMapping("/login")
+    // @KtfTrace("login")
+    public ResultMap login(@Valid @RequestBody LoginForm form, @ApiIgnore HttpSession session) throws Exception {
+        log.info("login请求登录");
 
-		String	seesionId	= session.getId();
-		String	nonce		= (String) redisService.get(StrKit.join("nonce-", seesionId));
+        String seesionId = session.getId();
+        String nonce = (String)redisService.get(StrKit.join("nonce-", seesionId));
 
-		log.trace("seesionId：{}，nonce:{}", seesionId, nonce);
+        log.trace("seesionId：{}，nonce:{}", seesionId, nonce);
 
-		if (ktfDashboardProperties.getEnableKaptcha()) {
-			String validateCode = (String) redisService.get(form.getUuid());
-			log.info("session中的图形码字符串:{}", validateCode);
+        if (ktfDashboardProperties.getEnableKaptcha()) {
+            String validateCode = (String)redisService.get(form.getUuid());
+            log.info("session中的图形码字符串:{}", validateCode);
 
-			// 比对
-			if (StringUtils.isBlank(validateCode) || StringUtils.isBlank(form.getCaptcha())
-					|| !StringUtils.equalsIgnoreCase(validateCode, form.getCaptcha())) {
-				return ResultMap.error("验证码错误");
-			}
-		}
+            // 比对
+            if (StringUtils.isBlank(validateCode) || StringUtils.isBlank(form.getCaptcha())
+                || !StringUtils.equalsIgnoreCase(validateCode, form.getCaptcha())) {
+                return ResultMap.error("验证码错误");
+            }
+        }
 
-		UserVo userVo = sysUserService().getUserVo(form.getUserName());
-		if (null == userVo) {
-			log.error("账号{}不存在", form.getUserName());
-			return ResultMap.error(KtfError.E_UNAUTHORIZED, "账号或密码不正确");
-		}
+        UserVo userVo = sysUserService().getUserVo(form.getUserName());
+        if (null == userVo) {
+            log.error("账号{}不存在", form.getUserName());
+            return ResultMap.error(KtfError.E_UNAUTHORIZED, "登录验证未通过");
+        }
 
-		form.setUuid(form.getUuid() + nonce);
-		if (!customerAuthsService().auth(form, userVo)) {
-			log.error("密码不正确");
-			return ResultMap.error(KtfError.E_UNAUTHORIZED, "账号或密码不正确");
-		}
+        form.setUuid(form.getUuid() + nonce);
+        Integer authType = customerAuthsService().auth(form, userVo);
+        userVo.setAuthType(authType);
 
-		// 当企业不存在或者企业被禁用不允许登录
-		if (userVo.getUserType() != UserType.SYS.value) {
-			OrgCorp orgCorp = orgCorpService().getById(userVo.getOrgId());
-			if (null != orgCorp && orgCorp.getStatus() == KtfStatus.DISABLED.code) {
-				return ResultMap.error("企业被禁用，该账户不允许登录");
-			} else if (null == orgCorp) {
-				return ResultMap.error("企业不存在，该账户不允许登录");
-			}
-		}
+        // 当企业不存在或者企业被禁用不允许登录
+        if (userVo.getUserType() != UserType.SYS.value) {
+            OrgCorp orgCorp = orgCorpService().getById(userVo.getOrgId());
+            if (null != orgCorp && orgCorp.getStatus() == KtfStatus.DISABLED.code) {
+                return ResultMap.error("企业被禁用，该账户不允许登录");
+            } else if (null == orgCorp) {
+                return ResultMap.error("企业不存在，该账户不允许登录");
+            }
+        }
 
-		if (ktfDashboardProperties.getEnableKaptcha()) {
-			// 清除验证码
-			redisService.del(form.getUuid());
-		}
+        if (ktfDashboardProperties.getEnableKaptcha()) {
+            // 清除验证码
+            redisService.del(form.getUuid());
+        }
 
-		// 判断用户状态
-		if (KtfStatus.LOCKED.code == userVo.getStatus()) {
-			// 用户已被禁用
-			return ResultMap.error(KtfError.E_LOCKED, "用户已被禁用");
-		}
+        // 判断用户状态
+        if (KtfStatus.LOCKED.code == userVo.getStatus()) {
+            // 用户已被禁用
+            return ResultMap.error(KtfError.E_LOCKED, "用户已被禁用");
+        }
 
-		// 生成token，并保存到数据库
-		ResultMap			result			= createToken(userVo);
+        // 生成token，并保存到数据库
+        ResultMap result = createToken(userVo);
 
-		// 保存登录时间和IP
-		CifCustomerAuths	customerAuths	= new CifCustomerAuths();
-		customerAuths.setId(userVo.getId());
-		customerAuths.setLastIp(HttpKit.getRemoteAddress());
-		customerAuths.setLastTime(LocalDateTime.now());
-		CompletableFuture.runAsync(new SaveRunnable(customerAuths));
+        // 保存登录时间和IP
+        CifCustomerAuths customerAuths = new CifCustomerAuths();
+        customerAuths.setId(userVo.getId());
+        customerAuths.setLastIp(HttpKit.getRemoteAddress());
+        customerAuths.setLastTime(LocalDateTime.now());
+        CompletableFuture.runAsync(new SaveRunnable(customerAuths));
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * 退出
-	 */
-	@ApiOperation(value = "退出", notes = "退出")
-	@PostMapping("/logout")
-	public ResultMap logout() throws Exception {
-		// 生成一个token
-		ShiroUser shiroUser = ShiroKit.getUser();
-		ktfTokenService.evictJwt(shiroUser.getId().toString());
-		return ResultMap.ok();
-	}
+    /**
+     * 退出
+     */
+    @ApiOperation(value = "退出", notes = "退出")
+    @PostMapping("/logout")
+    public ResultMap logout() throws Exception {
+        // 生成一个token
+        ShiroUser shiroUser = ShiroKit.getUser();
+        ktfTokenService.evictJwt(shiroUser.getId().toString());
+        return ResultMap.ok();
+    }
 
-	public ResultMap createToken(UserVo userVo) throws Exception {
+    public ResultMap createToken(UserVo userVo) throws Exception {
 
-		// 从缓存中获取
-		// 生成一个token
-		String		token		= ktfTokenService.token(userVo.getId(), userVo.getCifId(), userVo.getUserType(),
-				userVo.getLoginMode());
+        // 从缓存中获取
+        // 生成一个token
+        String token =
+            ktfTokenService.token(userVo.getId(), userVo.getCifId(), userVo.getUserType(), userVo.getLoginMode());
 
-		// 过期时间
-		DateTime	now			= DateTime.now();
-		Date		expireTime	= now.plusSeconds(expire()).toDate();
-		JwtUserKit	jwtUser		= JwtUserKit.builder().id(userVo.getId()).identifier(userVo.getLoginName())
-				.userType(userVo.getUserType()).build();
+        // 过期时间
+        DateTime now = DateTime.now();
+        Date expireTime = now.plusSeconds(expire()).toDate();
+        JwtUserKit jwtUser = JwtUserKit.builder().id(userVo.getId()).identifier(userVo.getLoginName())
+            .userType(userVo.getUserType()).authType(userVo.getAuthType()).build();
 
-		String		jwtToken	= JwtKit.create(jwtUser, token, expireTime);
+        String jwtToken = JwtKit.create(jwtUser, token, expireTime);
 
-		// 缓存Jwt Toen
-		ktfTokenService.cacheJwt(jwtUser.getId().toString(), token, jwtToken, expire());
+        // 缓存Jwt Toen
+        if (userVo.getUserType().intValue() == UserType.SRV.value)
+            ktfTokenService.cacheJwt(jwtUser.getId().toString(), token, jwtToken, -1);
+        else
+            ktfTokenService.cacheJwt(jwtUser.getId().toString(), token, jwtToken, expire());
 
-		ResultMap			r	= KtfStatus.ENABLED.code == userVo.getStatus() ? ResultMap.ok()
-				: ResultMap.error(KtfError.ACCEPTED, "首次访问");
+        ResultMap r =
+            KtfStatus.ENABLED.code == userVo.getStatus() ? ResultMap.ok() : ResultMap.error(KtfError.ACCEPTED, "首次访问");
 
-		Map<String, Object>	map	= MapUtil.newHashMap("token", jwtToken);
-		map.put(WebConst.AUTH_TOKEN_EXPIRE, expire());
-		r.data(map);
-		return r;
-	}
+        Map<String, Object> map = MapUtil.newHashMap("token", jwtToken);
+        map.put(WebConst.AUTH_TOKEN_EXPIRE, expire());
+        r.data(map);
+        return r;
+    }
 
-	private int expire() {
-		return ktfDashboardProperties.getSession().getExpireTime();
-	}
+    private int expire() {
+        return ktfDashboardProperties.getSession().getExpireTime();
+    }
 
-	class SaveRunnable implements Runnable {
-		private final CifCustomerAuths customerAuths;
+    class SaveRunnable implements Runnable {
+        private final CifCustomerAuths customerAuths;
 
-		public SaveRunnable(CifCustomerAuths customerAuths) {
-			this.customerAuths = customerAuths;
-		}
+        public SaveRunnable(CifCustomerAuths customerAuths) {
+            this.customerAuths = customerAuths;
+        }
 
-		@Override
-		public void run() {
-			customerAuthsService().updateById(customerAuths);
+        @Override
+        public void run() {
+            customerAuthsService().updateById(customerAuths);
 
-		}
-	}
+        }
+    }
 }
