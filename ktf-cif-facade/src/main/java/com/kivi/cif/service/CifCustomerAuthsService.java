@@ -76,6 +76,14 @@ public interface CifCustomerAuthsService extends IService<CifCustomerAuths> {
      * @param newPassword 新密码，若未null，则修改为默认密码
      * @return
      */
-    Boolean updateCredential(UserVo userVo, String newPassword);
+    Boolean updateCredential(UserVo userVo, String newPassword) throws KtfException;
+
+    /**
+     * 重置用户密码
+     * 
+     * @param userVo 用户信息
+     * @return
+     */
+    Boolean resetCredential(UserVo userVo) throws KtfException;
 
 }

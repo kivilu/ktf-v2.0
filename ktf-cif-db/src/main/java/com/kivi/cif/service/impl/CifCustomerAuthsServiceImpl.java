@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.cif.auth.CifAuthentication;
 import com.kivi.cif.dto.CifCustomerAuthsDTO;
 import com.kivi.cif.entity.CifCustomerAuths;
+import com.kivi.cif.enums.CifAuthType;
 import com.kivi.cif.mapper.CifCustomerAuthsMapper;
 import com.kivi.cif.properties.CifProperties;
 import com.kivi.cif.service.CifCustomerAuthsService;
@@ -63,7 +64,7 @@ public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMap
         CifCustomerAuths entity = super.getById(userVo.getId());
         if (entity == null) {
             log.error("用户{}验证凭据不存在", userVo.getId());
-            throw new KtfException(KtfError.E_UNAUTHORIZED, "登录验证未通过");
+            throw new KtfException(KtfError.E_UNAUTHORIZED, "用户身份校验未通过");
         }
 
         userVo.setPassword(entity.getCredential());
@@ -74,21 +75,35 @@ public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMap
     @KtfCacheEvict(cacheNames = KtfCache.CifCustomerAuths)
     @KtfTrace("修改用户认证凭据")
     @Override
-    public Boolean updateCredential(UserVo userVo, String newPassword) {
-        if (StrKit.isBlank(userVo.getPassword()) && StrKit.isBlank(newPassword)) {
-            log.info("重置用户{}的认证凭据", userVo.getId());
-        } else {
-            log.info("修改用户{}的认证凭据", userVo.getId());
-            /*
-             * if (!this.auth(userVo)) { log.error("用户{}验证凭据未通过", userVo.getId()); return
-             * false; }
-             */
-        }
+    public Boolean updateCredential(UserVo userVo, String newPassword) throws KtfException {
+        log.info("修改用户{}的认证凭据", userVo.getId());
+
+        LoginForm form = new LoginForm();
+        form.setUserName(userVo.getLoginName());
+        form.setPassword(userVo.getPassword());
+        form.setType(CifAuthType.PASS.code);
+        this.auth(form, userVo);
 
         if (StrKit.isBlank(newPassword)) {
             newPassword = DigestUtil.hashBase64(AlgDigest.SM3, cifProperties.getDefaultPassword());
         }
 
+        String salt = StrKit.random(16);
+        CifCustomerAuths cifAuth = new CifCustomerAuths();
+        cifAuth.setId(userVo.getId());
+        cifAuth.setCredential(cifAuthentication.credential(newPassword, salt));
+        cifAuth.setCredentialSalt(salt);
+
+        return super.updateById(cifAuth);
+    }
+
+    @KtfCacheEvict(cacheNames = KtfCache.CifCustomerAuths)
+    @KtfTrace("重置用户认证凭据")
+    @Override
+    public Boolean resetCredential(UserVo userVo) throws KtfException {
+        log.info("重置用户{}的认证凭据", userVo.getId());
+
+        String newPassword = DigestUtil.hashBase64(AlgDigest.SM3, cifProperties.getDefaultPassword());
         String salt = StrKit.random(16);
         CifCustomerAuths cifAuth = new CifCustomerAuths();
         cifAuth.setId(userVo.getId());
@@ -219,91 +234,5 @@ public class CifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAuthsMap
     public boolean removeByIds(Collection<? extends Serializable> idList) {
         return super.removeByIds(idList);
     }
-
-    /**
-     * 查询列表
-     */
-    /*
-     * @KtfTrace("查询列表客户验证")
-     * 
-     * @Override public List<CifCustomerAuthsDTO> list(CifCustomerAuthsDTO
-     * cifCustomerAuthsDTO) { Map<String, Object> params =
-     * BeanConverter.beanToMap(cifCustomerAuthsDTO); return this.list(params, new
-     * String[0]); }
-     */
-
-    /**
-     * 指定列查询列表
-     */
-    /*
-     * @KtfTrace("指定列查询列表客户验证")
-     * 
-     * @Override public List<CifCustomerAuthsDTO> list(Map<String, Object> params,
-     * String... columns) { if (params != null)
-     * params.remove(KtfConstant.URL_TIMESTAMP); QueryWrapper<CifCustomerAuths>
-     * query = Wrappers.<CifCustomerAuths>query().select(columns).allEq(true,
-     * params, false); List<CifCustomerAuths> list = super.list(query); return
-     * BeanConverter.convert(CifCustomerAuthsDTO.class, list); }
-     */
-
-    /**
-     * 模糊查询
-     */
-    /*
-     * @KtfTrace("模糊查询客户验证")
-     * 
-     * @Override public List<CifCustomerAuthsDTO> listLike(CifCustomerAuthsDTO
-     * applicationDTO) { Map<String, Object> params =
-     * BeanConverter.beanToMap(applicationDTO); return listLike(params, new
-     * String[0]); }
-     */
-
-    /**
-     * 指定列模糊查询
-     */
-    /*
-     * @Override public List<CifCustomerAuthsDTO> listLike(Map<String, Object>
-     * params, String... columns) { if (params != null)
-     * params.remove(KtfConstant.URL_TIMESTAMP); QueryWrapper<CifCustomerAuths>
-     * query = Wrappers.<CifCustomerAuths>query().select(columns); if
-     * (MapUtil.isNotEmpty(params)) { params.entrySet().stream().forEach(entry -> {
-     * if (ObjectKit.isNotEmpty(entry.getValue())) { if
-     * (NumberKit.isNumberic(entry.getValue())) query.eq(entry.getKey(),
-     * entry.getValue()); else query.like(entry.getKey(), entry.getValue()); } }); }
-     * 
-     * List<CifCustomerAuths> list = super.list(query); return
-     * BeanConverter.convert(CifCustomerAuthsDTO.class, list); }
-     */
-    /**
-     * 分页查询
-     */
-    /*
-     * @Override
-     * 
-     * @KtfTrace("分页查询客户验证") public PageInfoVO<CifCustomerAuthsDTO> page(Map<String,
-     * Object> params) { PageParams<CifCustomerAuthsDTO> pageParams = new
-     * PageParams<>(params); Page<CifCustomerAuths> page = new
-     * Page<>(pageParams.getCurrPage(), pageParams.getPageSize());
-     * 
-     * QueryWrapper<CifCustomerAuths> query = Wrappers.<CifCustomerAuths>query(); if
-     * (MapUtil.isNotEmpty(pageParams.getRequestMap())) {
-     * pageParams.getRequestMap().entrySet().stream().forEach(entry -> { if
-     * (ObjectKit.isNotEmpty(entry.getValue())) { if
-     * (NumberKit.isNumberic(entry.getValue())) query.eq(entry.getKey(),
-     * entry.getValue()); else query.like(entry.getKey(), entry.getValue()); } }); }
-     * 
-     * IPage<CifCustomerAuths> iPage = super.page(page, query);
-     * 
-     * PageInfoVO<CifCustomerAuthsDTO> pageVo = new PageInfoVO<>();
-     * pageVo.setCurPage(iPage.getCurrent()); pageVo.setTotal(iPage.getTotal());
-     * pageVo.setPageSize(iPage.getSize()); pageVo.setPages(iPage.getPages());
-     * pageVo.setRequestMap(params);
-     * pageVo.setList(BeanConverter.convert(CifCustomerAuthsDTO.class,
-     * iPage.getRecords())); pageVo.compute();
-     * 
-     * return pageVo;
-     * 
-     * }
-     */
 
 }

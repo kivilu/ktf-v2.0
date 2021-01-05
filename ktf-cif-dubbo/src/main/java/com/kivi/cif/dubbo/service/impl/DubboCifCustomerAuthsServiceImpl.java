@@ -11,6 +11,7 @@ import com.kivi.cif.entity.CifCustomerAuths;
 import com.kivi.cif.mapper.CifCustomerAuthsMapper;
 import com.kivi.cif.properties.CifProperties;
 import com.kivi.cif.service.CifCustomerAuthsService;
+import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.form.LoginForm;
 import com.kivi.framework.vo.UserVo;
 
@@ -68,8 +69,13 @@ public class DubboCifCustomerAuthsServiceImpl extends ServiceImpl<CifCustomerAut
     }
 
     @Override
-    public Boolean updateCredential(UserVo userVo, String newPassword) {
+    public Boolean updateCredential(UserVo userVo, String newPassword) throws KtfException {
         return cifCustomerAuthsService.updateCredential(userVo, newPassword);
+    }
+
+    @Override
+    public Boolean resetCredential(UserVo userVo) throws KtfException {
+        return cifCustomerAuthsService.resetCredential(userVo);
     }
 
 }

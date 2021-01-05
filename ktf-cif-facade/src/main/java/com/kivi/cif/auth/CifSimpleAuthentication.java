@@ -27,7 +27,7 @@ public class CifSimpleAuthentication implements CifAuthentication {
         if (!StrKit.equalsNotNull(authCredential, userVo.getPassword())) {
             log.trace("用户{}密码期望值：{}，实际值：{}", form.getUserName(), userVo.getPassword(), authCredential);
             log.error("用户{}密码认证不通过", form.getUserName());
-            throw new KtfException(KtfError.E_UNAUTHORIZED, "登录验证未通过");
+            throw new KtfException(KtfError.E_UNAUTHORIZED, "用户身份校验未通过");
         }
 
         return form.getType() == null ? KtfConstant.DEFAUT_AUTH_TYPE : form.getType();
