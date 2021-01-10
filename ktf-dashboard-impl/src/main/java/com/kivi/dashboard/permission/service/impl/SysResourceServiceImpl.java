@@ -164,8 +164,8 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         if (!params.containsKey(SysResourceDTO.STATUS))
             params.put(SysResourceDTO.STATUS, KtfStatus.ENABLED.code);
 
-        if (!params.containsKey(SysResourceDTO.HIDDEN))
-            params.put(SysResourceDTO.HIDDEN, KtfYesNo.NO.code);
+        // if (!params.containsKey(SysResourceDTO.HIDDEN))
+        // params.put(SysResourceDTO.HIDDEN, KtfYesNo.NO.code);
 
         PageParams<SysResourceDTO> pageParams = new PageParams<>(params);
         Page<SysResourceDTO> page = new Page<>(pageParams.getCurrPage(), pageParams.getPageSize());

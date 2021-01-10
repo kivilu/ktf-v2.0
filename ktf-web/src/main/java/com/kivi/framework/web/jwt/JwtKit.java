@@ -16,49 +16,52 @@ import com.kivi.framework.util.kit.DateTimeKit;
 
 public class JwtKit {
 
-	/**
-	 * 创建jwt
-	 * 
-	 * @param identifier 用户标识
-	 * @return
-	 * @throws Exception
-	 */
-	public static String create(JwtUserKit jwtUser, String token, Date expiresAt) throws Exception {
-		Builder builder = JWT.create().withIssuer("kTF").withAudience(jwtUser.audience()).withExpiresAt(expiresAt)
-				.withIssuedAt(DateTimeKit.now());
+    /**
+     * 创建jwt
+     * 
+     * @param identifier 用户标识
+     * @return
+     * @throws Exception
+     */
+    public static String create(JwtUserKit jwtUser, String token, Date expiresAt) throws Exception {
+        Builder builder =
+            JWT.create().withIssuer("kTF").withAudience(jwtUser.audience()).withIssuedAt(DateTimeKit.now());
 
-		return builder.sign(Algorithm.HMAC256(token));
-	}
+        if (expiresAt != null)
+            builder = builder.withExpiresAt(expiresAt);
 
-	public static boolean verify(String jwt, String token) {
-		JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(token)).build();
+        return builder.sign(Algorithm.HMAC256(token));
+    }
 
-		try {
-			jwtVerifier.verify(jwt);
-		} catch (TokenExpiredException e) {
-			throw new KtfException(KtfError.E_UNAUTHORIZED, "登录状态已过期，请重新登录", e);
-		} catch (JWTVerificationException e) {
-			throw new KtfException(KtfError.E_UNAUTHORIZED, "Token验证失败，请重新登录", e);
-		}
+    public static boolean verify(String jwt, String token) {
+        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(token)).build();
 
-		return true;
-	}
+        try {
+            jwtVerifier.verify(jwt);
+        } catch (TokenExpiredException e) {
+            throw new KtfException(KtfError.E_UNAUTHORIZED, "登录状态已过期，请重新登录", e);
+        } catch (JWTVerificationException e) {
+            throw new KtfException(KtfError.E_UNAUTHORIZED, "Token验证失败，请重新登录", e);
+        }
 
-	/**
-	 * 解密Jwt，并获取用户标识
-	 * 
-	 * @param jwt
-	 * @return
-	 * @throws Exception
-	 */
-	public static JwtUserDTO getJwtUser(String jwt) throws Exception {
-		List<String> auds = JWT.decode(jwt).getAudience();
+        return true;
+    }
 
-		return JwtUserKit.audience(auds);
-	}
+    /**
+     * 解密Jwt，并获取用户标识
+     * 
+     * @param jwt
+     * @return
+     * @throws Exception
+     */
+    public static JwtUserDTO getJwtUser(String jwt) throws Exception {
+        List<String> auds = JWT.decode(jwt).getAudience();
 
-	public static void main(String[] args) {
+        return JwtUserKit.audience(auds);
+    }
 
-	}
+    public static void main(String[] args) {
+
+    }
 
 }

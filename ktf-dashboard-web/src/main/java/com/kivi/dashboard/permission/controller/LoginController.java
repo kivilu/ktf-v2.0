@@ -219,18 +219,21 @@ public class LoginController extends DashboardController {
             ktfTokenService.token(userVo.getId(), userVo.getCifId(), userVo.getUserType(), userVo.getLoginMode());
 
         // 过期时间
-        DateTime now = DateTime.now();
-        Date expireTime = now.plusSeconds(expire()).toDate();
+
         JwtUserKit jwtUser = JwtUserKit.builder().id(userVo.getId()).identifier(userVo.getLoginName())
             .userType(userVo.getUserType()).authType(userVo.getAuthType()).build();
 
-        String jwtToken = JwtKit.create(jwtUser, token, expireTime);
-
-        // 缓存Jwt Toen
-        if (userVo.getUserType().intValue() == UserType.SRV.value)
+        // 创建Jwt Toen
+        String jwtToken = null;
+        if (userVo.getUserType().intValue() == UserType.SRV.value) {
+            jwtToken = JwtKit.create(jwtUser, token, null);
             ktfTokenService.cacheJwt(jwtUser.getId().toString(), token, jwtToken, -1);
-        else
+        } else {
+            DateTime now = DateTime.now();
+            Date expireTime = now.plusSeconds(expire()).toDate();
+            jwtToken = JwtKit.create(jwtUser, token, expireTime);
             ktfTokenService.cacheJwt(jwtUser.getId().toString(), token, jwtToken, expire());
+        }
 
         ResultMap r =
             KtfStatus.ENABLED.code == userVo.getStatus() ? ResultMap.ok() : ResultMap.error(KtfError.ACCEPTED, "首次访问");
