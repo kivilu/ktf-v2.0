@@ -31,4 +31,5 @@ public class LoginForm {
 
     @ApiModelProperty(value = "校验类型  0：CA签名 1：CPK签名 9：密码")
     private Integer type;
+
 }

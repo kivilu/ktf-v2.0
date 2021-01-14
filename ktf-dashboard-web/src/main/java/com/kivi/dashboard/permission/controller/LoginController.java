@@ -161,7 +161,12 @@ public class LoginController extends DashboardController {
             return ResultMap.error(KtfError.E_UNAUTHORIZED, "登录验证未通过");
         }
 
-        form.setUuid(form.getUuid() + nonce);
+        if (StrKit.isNotBlank(form.getUuid())) {
+            String newUuid = form.getUuid() + nonce;
+            form.setUuid(newUuid);
+            log.info("客户端请求uuid：{}，用于验证签名的组合uuid：{}.", form.getUuid(), newUuid);
+        }
+
         Integer authType = customerAuthsService().auth(form, userVo);
         userVo.setAuthType(authType);
 
