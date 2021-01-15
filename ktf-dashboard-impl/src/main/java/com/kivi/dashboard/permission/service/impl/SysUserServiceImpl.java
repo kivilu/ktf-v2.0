@@ -272,12 +272,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (dto.getCreateUserId() == null || dto.getCreateUserId() == KtfConstant.SUPER_ADMIN) {
             return;
         }
-        // 查询用户创建的角色列表
-        List<Long> roleIdList = sysUserRoleService.selectRoleIdListByUserId(dto.getCreateUserId());
 
-        // 判断是否越权
-        if (!roleIdList.containsAll(dto.getRoleIds())) {
-            throw new KtfException("新增用户所选角色，不是本人创建");
+        if (dto.getCheckRoleCreateId()) {
+            // 查询用户创建的角色列表
+            List<Long> roleIdList = sysUserRoleService.selectRoleIdListByUserId(dto.getCreateUserId());
+
+            // 判断是否越权
+            if (!roleIdList.containsAll(dto.getRoleIds())) {
+                throw new KtfException("用户所选角色由其他人创建，没有权限使用！");
+            }
         }
     }
 
