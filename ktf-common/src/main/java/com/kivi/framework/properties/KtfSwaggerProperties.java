@@ -4,14 +4,15 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import com.kivi.framework.util.kit.CollectionKit;
 
 import lombok.Data;
 
 @Data
-@Configuration(KtfSwaggerProperties.BEAN_NAME)
+// @Configuration(KtfSwaggerProperties.BEAN_NAME)
+@Component(KtfSwaggerProperties.BEAN_NAME)
 @ConfigurationProperties(prefix = KtfSwaggerProperties.PREFIX)
 public class KtfSwaggerProperties implements IKtfProperties {
     public static final String BEAN_NAME = "ktfSwaggerProperties";

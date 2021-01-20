@@ -20,7 +20,7 @@
   </build>
   
   <properties>
-  	<nacos.version>1.4.0</nacos.version>
+  	
   </properties>
   
   <dependencies>
@@ -69,9 +69,11 @@
         
         <!-- Dubbo Registry Nacos -->
         <dependency>
-            <groupId>com.alibaba.nacos</groupId>
-            <artifactId>nacos-client</artifactId>
+		    <groupId>com.alibaba.boot</groupId>
+		    <artifactId>nacos-config-spring-boot-starter</artifactId>
+		    <version>${nacos.version}</version>
         </dependency>
+       
 
         <dependency>
             <groupId>org.apache.dubbo</groupId>

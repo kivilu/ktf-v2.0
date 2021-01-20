@@ -29,6 +29,7 @@ import com.kivi.dashboard.base.DashboardController;
 import com.kivi.dashboard.org.entity.OrgCorp;
 import com.kivi.dashboard.shiro.ShiroKit;
 import com.kivi.dashboard.shiro.ShiroUser;
+import com.kivi.framework.annotation.KtfTrace;
 import com.kivi.framework.cache.redis.IRedisService;
 import com.kivi.framework.constant.KtfError;
 import com.kivi.framework.constant.enums.KtfStatus;
@@ -75,12 +76,14 @@ public class LoginController extends DashboardController {
     @Autowired
     private KtfTokenService ktfTokenService;
 
+    @KtfTrace("验证码启用状态")
     @GetMapping("/captcha/status")
     public Boolean isKaptcha() {
 
         return ktfDashboardProperties.getEnableKaptcha();
     }
 
+    @KtfTrace("登录选项")
     @GetMapping("/login/settings")
     public ResultMap loginSettings() {
         Map<String, Object> map = CollectionKit.newHashMap();

@@ -1,0 +1,33 @@
+{
+  "groups": [
+    {
+      "name": "ktf.cif",
+      "type": "com.kivi.cif.properties.CifProperties",
+      "sourceType": "com.kivi.cif.properties.CifProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "ktf.cif.dubbo-service-version",
+      "type": "java.lang.String",
+      "description": "dubbo service 版本号",
+      "sourceType": "com.kivi.cif.properties.CifProperties",
+      "defaultValue": "1.0.0"
+    },
+    {
+      "name": "ktf.cif.default-password",
+      "type": "java.lang.String",
+      "description": "默认密码",
+      "sourceType": "com.kivi.cif.properties.CifProperties",
+      "defaultValue": "11111111"
+    },
+    {
+      "name": "ktf.cif.alg-digest",
+      "type": "com.kivi.framework.crypto.enums.AlgDigest",
+      "description": "摘要算法",
+      "sourceType": "com.kivi.cif.properties.CifProperties",
+      "defaultValue": "MD5"
+    }
+  ],
+  "hints": []
+}
