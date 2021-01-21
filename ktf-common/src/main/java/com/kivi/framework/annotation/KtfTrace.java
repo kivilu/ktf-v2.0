@@ -7,12 +7,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Inherited
-@Retention( RetentionPolicy.RUNTIME )
-@Target( { ElementType.METHOD } )
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD})
 public @interface KtfTrace {
     /**
      * 业务的名称,例如:"修改菜单"
      */
     String value() default "";
+
+    /**
+     * 日志是否保存到数据库
+     * 
+     * @return
+     */
+    boolean writeDb() default false;
 
 }

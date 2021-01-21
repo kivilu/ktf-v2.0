@@ -28,54 +28,61 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class KtfTraceAspect {
 
-	@Pointcut(value = "@annotation(com.kivi.framework.annotation.KtfTrace)")
-	public void aopMethed() {
-	}
+    @Pointcut(value = "@annotation(com.kivi.framework.annotation.KtfTrace)")
+    public void aopMethed() {}
 
-	@Before(value = "aopMethed()")
-	public void beforMethedProceed(JoinPoint joinPoint) throws Throwable {
+    @Before(value = "aopMethed()")
+    public void beforMethedProceed(JoinPoint joinPoint) throws Throwable {
 
-	}
+    }
 
-	@Around("aopMethed()")
-	public Object methedProceed(ProceedingJoinPoint point) throws Throwable {
+    @Around("aopMethed()")
+    public Object methedProceed(ProceedingJoinPoint point) throws Throwable {
 
-		// 获取方法对象
-		long			start	= System.currentTimeMillis();
+        // 获取方法对象
+        long start = System.currentTimeMillis();
 
-		Signature		sig		= point.getSignature();
-		MethodSignature	msig	= null;
-		if (!(sig instanceof MethodSignature)) {
-			throw new IllegalArgumentException("该注解只能用于方法");
-		}
-		msig = (MethodSignature) sig;
-		Object		target			= point.getTarget();
-		String		className		= target.getClass().getName();
-		Method		currentMethod	= target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
-		String		methodName		= currentMethod.getName();
+        Signature sig = point.getSignature();
+        MethodSignature msig = null;
+        if (!(sig instanceof MethodSignature)) {
+            throw new IllegalArgumentException("该注解只能用于方法");
+        }
+        msig = (MethodSignature)sig;
+        Object target = point.getTarget();
+        String className = target.getClass().getName();
+        Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
+        String methodName = currentMethod.getName();
 
-		// 获取注解
-		KtfTrace	annotation		= currentMethod.getAnnotation(KtfTrace.class);
+        // 获取注解
+        KtfTrace annotation = currentMethod.getAnnotation(KtfTrace.class);
 
-		// 获取参数
-		Object[]	params			= point.getArgs();
+        // 获取参数
+        Object[] params = point.getArgs();
 
-		if (log.isTraceEnabled()) {
-			log.trace("<<<<<{}：{}.{} 参数：{}", annotation.value(), className, methodName,
-					JSON.toJSONString(params, SerializerFeature.WriteClassName, SerializerFeature.PrettyFormat));
-		}
+        if (log.isDebugEnabled()) {
+            log.debug("{}{}：{}.{} 参数：{}", annotation.writeDb() ? "!!" : "", annotation.value(), className, methodName,
+                JSON.toJSONString(params, SerializerFeature.WriteClassName, SerializerFeature.PrettyFormat));
+        } else {
+            if (log.isInfoEnabled()) {
+                log.info("{}{} -- {}.{}: {}", annotation.value(), className, methodName, JSON.toJSONString(params));
+            }
+        }
 
-		// 执行业务
-		Object result = point.proceed();
+        // 执行业务
+        Object result = point.proceed();
 
-		if (log.isTraceEnabled()) {
-			log.trace("{}：{}.{}返回值：{}", annotation.value(), className, methodName,
-					JSON.toJSONString(result, SerializerFeature.WriteClassName, SerializerFeature.PrettyFormat));
-		}
+        if (log.isDebugEnabled()) {
+            log.debug("{}{}：{}.{}返回值：{}\n执行耗时：{}ms", annotation.writeDb() ? "!!" : "", annotation.value(), className,
+                methodName, JSON.toJSONString(result, SerializerFeature.WriteClassName, SerializerFeature.PrettyFormat),
+                ClockUtil.elapsedTime(start));
+        } else {
+            if (log.isInfoEnabled()) {
+                log.info("{}{} -- {}.{}: {}", annotation.writeDb() ? "!!" : "", annotation.value(), className,
+                    methodName, JSON.toJSONString(result));
+            }
+        }
 
-		log.debug(">>>>>{}：{}.{}执行耗时：{}ms", annotation.value(), className, methodName, ClockUtil.elapsedTime(start));
-
-		return result;
-	}
+        return result;
+    }
 
 }

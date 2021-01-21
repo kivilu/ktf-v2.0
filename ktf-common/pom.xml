@@ -139,6 +139,15 @@
             <optional>true</optional>
         </dependency>
         <!-- zxing end -->
+        
+        <!-- jasypt -->
+        <dependency>
+	        <groupId>com.github.ulisesbocchio</groupId>
+	        <artifactId>jasypt-spring-boot</artifactId>
+	        <version>${jasypt-springboot.version}</version>
+	        <optional>true</optional>
+		</dependency>
+		<!-- jasypt end-->
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
