@@ -62,10 +62,6 @@ public class KtfTraceAspect {
         if (log.isDebugEnabled()) {
             log.debug("{}{}：{}.{} 参数：{}", annotation.writeDb() ? "!!" : "", annotation.value(), className, methodName,
                 JSON.toJSONString(params, SerializerFeature.WriteClassName, SerializerFeature.PrettyFormat));
-        } else {
-            if (log.isInfoEnabled()) {
-                log.info("{}{} -- {}.{}: {}", annotation.value(), className, methodName, JSON.toJSONString(params));
-            }
         }
 
         // 执行业务
@@ -75,11 +71,6 @@ public class KtfTraceAspect {
             log.debug("{}{}：{}.{}返回值：{}\n执行耗时：{}ms", annotation.writeDb() ? "!!" : "", annotation.value(), className,
                 methodName, JSON.toJSONString(result, SerializerFeature.WriteClassName, SerializerFeature.PrettyFormat),
                 ClockUtil.elapsedTime(start));
-        } else {
-            if (log.isInfoEnabled()) {
-                log.info("{}{} -- {}.{}: {}", annotation.writeDb() ? "!!" : "", annotation.value(), className,
-                    methodName, JSON.toJSONString(result));
-            }
         }
 
         return result;

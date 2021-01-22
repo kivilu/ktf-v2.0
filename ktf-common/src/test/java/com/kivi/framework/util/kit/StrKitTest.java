@@ -26,6 +26,13 @@ public class StrKitTest {
 
         arrays = StringUtils.split("AAAA,BBBB", ",");
         System.out.println(JSON.toJSONString(arrays, true));
+
+        arrays = StringUtils.split("AAAA|BBBB|CCCCC", "|");
+        System.out.println(JSON.toJSONString(arrays, true));
+
+        String data = StrKit.joinWith("|", "AAAA", "BBB", "?", "?", "CCC");
+        arrays = StringUtils.split(data, "|");
+        System.out.println(JSON.toJSONString(arrays, true));
     }
 
     @Test
