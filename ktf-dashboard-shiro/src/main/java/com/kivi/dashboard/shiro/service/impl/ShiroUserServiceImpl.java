@@ -3,6 +3,7 @@ package com.kivi.dashboard.shiro.service.impl;
 import java.util.List;
 import java.util.Set;
 
+import com.kivi.cif.service.CifCustomerAuthsService;
 import com.kivi.dashboard.permission.service.SysResourceService;
 import com.kivi.dashboard.permission.service.SysUserOrgService;
 import com.kivi.dashboard.permission.service.SysUserService;
@@ -15,12 +16,14 @@ public class ShiroUserServiceImpl implements ShiroUserService {
     private final SysUserService userService;
     private final SysResourceService resourceService;
     private final SysUserOrgService userOrgService;
+    private final CifCustomerAuthsService cifAuthService;
 
     public ShiroUserServiceImpl(SysUserService userService, SysResourceService resourceService,
-        SysUserOrgService userOrgService) {
+        SysUserOrgService userOrgService, CifCustomerAuthsService cifAuthService) {
         this.userService = userService;
         this.resourceService = resourceService;
         this.userOrgService = userOrgService;
+        this.cifAuthService = cifAuthService;
     }
 
     @Override
@@ -37,6 +40,11 @@ public class ShiroUserServiceImpl implements ShiroUserService {
     @Override
     public Set<String> getPermissions(List<Long> roleIds) {
         return resourceService.getPermissions(roleIds);
+    }
+
+    @Override
+    public CifCustomerAuthsService cifAuthService() {
+        return this.cifAuthService;
     }
 
     /*

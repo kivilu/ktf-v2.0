@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @Description oauth2过滤器
  */
+@Deprecated
 @Slf4j
 public class JwtFilter extends BasicHttpAuthenticationFilter {
 
@@ -68,7 +68,10 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        throw new UnauthorizedException("用户尚未登录，请登录");
+        response401(response, null);
+        // throw new UnauthorizedException("用户尚未登录，请登录");
+
+        return false;
     }
 
     /**
@@ -107,6 +110,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
         } catch (Exception j) {
             log.error("解析JWT异常", j);
+            // return false;
             throw new KtfException(KtfError.E_UNAUTHORIZED, "用户尚未登录，请登录");
         }
 
@@ -136,7 +140,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         HttpServletResponse httpServletResponse = (HttpServletResponse)response;
         try { // 处理登录失败的异常
             log.error("登录失败的异常", throwable);
-            String json = ResultMap.error(KtfError.E_UNAUTHORIZED, "用户尚未登录，请登录").toString();
+            String json = ResultMap.error(KtfError.E_UNAUTHORIZED, "尚未登录，请登录").toString();
             httpServletResponse.setStatus(KtfError.E_UNAUTHORIZED);
             httpServletResponse.setHeader("Content-Type", "application/json;charset=UTF-8");
             httpServletResponse.getWriter().print(json);

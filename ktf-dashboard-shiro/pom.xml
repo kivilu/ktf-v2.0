@@ -30,6 +30,12 @@
   		
   		<dependency>
        		<groupId>com.kivi</groupId>
+       		<artifactId>ktf-cif-facade</artifactId>
+       		<version>${ktf.version}</version>
+  		</dependency>
+  		
+  		<dependency>
+       		<groupId>com.kivi</groupId>
        		<artifactId>ktf-dubbo</artifactId>
        		<version>${ktf.version}</version>
        		<optional>true</optional>

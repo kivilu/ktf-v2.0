@@ -6,30 +6,34 @@ import org.apache.shiro.authc.AuthenticationToken;
  * @Description OAuth2Token
  */
 public class JwtToken implements AuthenticationToken {
-	/**
-	 *
-	 */
-	private static final long	serialVersionUID	= 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	private final Long			userId;
-	private final String		token;
+    private final Long userId;
+    private final String token;
 
-	public JwtToken(Long userId, String token) {
-		this.userId	= userId;
-		this.token	= token;
-	}
+    public JwtToken(String token) {
+        this(null, token);
+    }
 
-	@Override
-	public String getPrincipal() {
-		return token;
-	}
+    public JwtToken(Long userId, String token) {
+        this.userId = userId;
+        this.token = token;
+    }
 
-	@Override
-	public Object getCredentials() {
-		return token;
-	}
+    @Override
+    public String getPrincipal() {
+        return token;
+    }
 
-	public Long getUserId() {
-		return userId;
-	}
+    @Override
+    public Object getCredentials() {
+        return token;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
 }

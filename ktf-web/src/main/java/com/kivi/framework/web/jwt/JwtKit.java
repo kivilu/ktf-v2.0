@@ -13,13 +13,31 @@ import com.kivi.framework.constant.KtfError;
 import com.kivi.framework.dto.JwtUserDTO;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.util.kit.DateTimeKit;
+import com.vip.vjtools.vjkit.time.ClockUtil;
+import com.vip.vjtools.vjkit.time.DateUtil;
 
 public class JwtKit {
+    private final static int DAYS_OF_30_YEAR = 30 * 365;
+
+    /**
+     * 创建jwt，有效期默认：为30年
+     * 
+     * @param jwtUser 用户信息
+     * @param token token
+     * @return
+     * @throws Exception
+     */
+    public static String create(JwtUserKit jwtUser, String token) throws Exception {
+        Date expiresAt = DateUtil.addDays(DateTimeKit.now(), DAYS_OF_30_YEAR);
+        return create(jwtUser, token, expiresAt);
+    }
 
     /**
      * 创建jwt
      * 
-     * @param identifier 用户标识
+     * @param jwtUser 用户信息
+     * @param token token
+     * @param expiresAt 有效期
      * @return
      * @throws Exception
      */
@@ -45,6 +63,18 @@ public class JwtKit {
         }
 
         return true;
+    }
+
+    public static boolean isExpired(String jwtToken) {
+        Date now = ClockUtil.currentDate();
+        Date expiresAt = JWT.decode(jwtToken).getExpiresAt();
+
+        return expiresAt.before(now);
+    }
+
+    public static Date getIssuedAt(String jwtToken) {
+
+        return JWT.decode(jwtToken).getIssuedAt();
     }
 
     /**

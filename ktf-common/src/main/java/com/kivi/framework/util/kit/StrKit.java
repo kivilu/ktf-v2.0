@@ -1,5 +1,7 @@
 package com.kivi.framework.util.kit;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -710,4 +712,12 @@ public class StrKit {
         return RandomUtil.randomStringFixLength(num);
     }
 
+    public static String getExceptionToString(Throwable e) {
+        if (e == null) {
+            return "";
+        }
+        StringWriter stringWriter = new StringWriter();
+        e.printStackTrace(new PrintWriter(stringWriter));
+        return stringWriter.toString();
+    }
 }
