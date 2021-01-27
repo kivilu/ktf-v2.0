@@ -1,5 +1,10 @@
 package com.kivi.dashboard.shiro.jwt;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -11,11 +16,13 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import com.kivi.dashboard.shiro.ShiroKit;
 import com.kivi.dashboard.shiro.ShiroUser;
+import com.kivi.dashboard.shiro.ShiroUserKit;
 import com.kivi.dashboard.shiro.service.ShiroUserService;
 import com.kivi.framework.constant.enums.KtfStatus;
+import com.kivi.framework.dto.JwtUserDTO;
 import com.kivi.framework.vo.UserVo;
+import com.kivi.framework.web.jwt.JwtKit;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,6 +49,13 @@ public class JwtShiroRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         log.trace("Shiro权限设置使用默认设置, realm={}", super.getName());
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+        UserVo userVo = (UserVo)principals.getPrimaryPrincipal();
+        ShiroUser shiroUser = ShiroUserKit.me().userVoToShiroUser(userVo);
+        Set<String> roles = new HashSet<>();
+        List<String> roleList = shiroUser.getRoleIds().stream().map(id -> id.toString()).collect(Collectors.toList());
+        roles.addAll(roleList);
+        simpleAuthorizationInfo.setRoles(roles);
+        simpleAuthorizationInfo.addStringPermissions(shiroUser.getUrlSet());
         return simpleAuthorizationInfo;
     }
 
@@ -54,9 +68,15 @@ public class JwtShiroRealm extends AuthorizingRealm {
         JwtToken jwtToken = (JwtToken)authcToken;
         String token = jwtToken.getPrincipal();
 
-        ShiroUser shiroUser = ShiroKit.getUser();
+        JwtUserDTO jwtUser = null;
+        try {
+            jwtUser = JwtKit.getJwtUser(token);
+        } catch (Exception e) {
+            log.error("JWT token获取JwtUserDTO异常", e);
+            throw new AuthenticationException("无效JwtToken");
+        }
 
-        UserVo user = shiroUserService.getUserById(shiroUser.getId());
+        UserVo user = shiroUserService.getUserById(jwtUser.getId());
         // 账号不存在
         if (null == user) {
             throw new IncorrectCredentialsException("账号不存在");

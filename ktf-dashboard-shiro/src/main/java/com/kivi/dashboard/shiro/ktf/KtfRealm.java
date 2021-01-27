@@ -128,7 +128,7 @@ public class KtfRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        log.warn("Shiro权限校验, realm={}", super.getName());
+        log.warn("Shiro权限设置使用默认设置,, realm={}", super.getName());
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         UserVo userVo = (UserVo)principals.getPrimaryPrincipal();
         ShiroUser shiroUser = ShiroUserKit.me().userVoToShiroUser(userVo);

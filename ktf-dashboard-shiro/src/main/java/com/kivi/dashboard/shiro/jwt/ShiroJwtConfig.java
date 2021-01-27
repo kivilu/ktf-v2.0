@@ -199,13 +199,11 @@ public class ShiroJwtConfig extends ShiroBaseConfig {
     @Bean("jwtRealm")
     public JwtShiroRealm jwtShiroRealm() {
         JwtShiroRealm jwtRealm = new JwtShiroRealm(shiroUserService);
-        // jwtRealm.setCacheManager(redisCacheManager);
+        jwtRealm.setCacheManager(redisCacheManager);
         // 启用身份验证缓存，即缓存AuthenticationInfo信息，默认false
-        // jwtRealm.setAuthenticationCachingEnabled(true);
+        jwtRealm.setAuthenticationCachingEnabled(true);
         // 缓存AuthenticationInfo信息的缓存名称
-        // jwtRealm.setAuthenticationCacheName("authenticationCache");
-        // 缓存AuthorizationInfo信息的缓存名称
-        // jwtRealm.setAuthorizationCacheName("authorizationCache");
+        jwtRealm.setAuthenticationCacheName(KtfCache.ShiroAuthentication);
         return jwtRealm;
     }
 
