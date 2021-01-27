@@ -30,6 +30,7 @@ import com.kivi.dashboard.shiro.ktf.KtfCredentialsMatcher;
 import com.kivi.dashboard.shiro.ktf.KtfPermsFilter;
 import com.kivi.dashboard.shiro.ktf.KtfRealm;
 import com.kivi.dashboard.shiro.service.ShiroUserService;
+import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.properties.KtfDashboardProperties;
 import com.kivi.framework.service.KtfTokenService;
 
@@ -188,7 +189,7 @@ public class ShiroJwtConfig extends ShiroBaseConfig {
         KtfRealm myShiroRealm = new KtfRealm(shiroUserService, ktfTokenService, ktfCredentialsMatcher());
         myShiroRealm.setCacheManager(redisCacheManager);
         myShiroRealm.setAuthenticationCachingEnabled(true);
-        myShiroRealm.setAuthenticationCacheName("authenticationCache");
+        myShiroRealm.setAuthenticationCacheName(KtfCache.ShiroAuthentication);
         return myShiroRealm;
     }
 

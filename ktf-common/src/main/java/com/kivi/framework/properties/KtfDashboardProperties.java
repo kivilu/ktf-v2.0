@@ -100,7 +100,7 @@ public class KtfDashboardProperties implements IKtfProperties {
         /**
          * shiro的缓存名字，默认值：ktf-shiro-cache-
          */
-        private String cache = "ktf-shiro-cache-";
+        private String cache = "shiro.";
         /**
          * 登录URL，默认：/login
          */
@@ -134,7 +134,7 @@ public class KtfDashboardProperties implements IKtfProperties {
         /**
          * shiro的共享session缓存的名字，默认值：ktf-shiro-session-
          */
-        private String cache = "ktf-shiro-session-";
+        private String cache = "shiro.session.";
 
         // session 在redis过期时间默认是30分钟30*60
         private int expireTime = 1800;
