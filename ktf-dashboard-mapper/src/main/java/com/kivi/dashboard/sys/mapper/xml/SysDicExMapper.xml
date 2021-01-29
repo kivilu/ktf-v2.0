@@ -3,22 +3,182 @@
 <mapper namespace="com.kivi.dashboard.sys.mapper.SysDicExMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.kivi.dashboard.sys.entity.SysDic">
+    <resultMap id="BaseResultMap" type="com.kivi.dashboard.sys.dto.SysDicDTO">
         <id column="id" property="id" />
         <result column="parent_id" property="parentId" />
         <result column="var_code" property="varCode" />
         <result column="var_name" property="varName" />
-        <result column="is_sync" property="isSync" />
-        <result column="gmt_create" property="gmtCreate" />
-        <result column="gmt_update" property="gmtUpdate" />
-        <result column="create_user" property="createUser" />
-        <result column="update_user" property="updateUser" />
+        <result column="var_value" property="varValue" />
+        <result column="type" property="type" />
+        <result column="status" property="status" />
+        <result column="has_children" property="hasChildren"/>
+        <result column="is_leaf" property="isLeaf"/>
     </resultMap>
     
-    
-    <select id="getByVarCode" resultMap="BaseResultMap" >
+    <select id="getDto" resultMap="BaseResultMap" >
     	SELECT
-			d.*
+			t.id,
+			t.parent_id,
+			t.var_code,
+			t.var_name,
+			t.var_value,
+		    t.type,
+		    t.`status`
+		FROM
+			ktf_sys_dic t
+		LEFT JOIN (
+			SELECT
+				d1.id
+			FROM
+				ktf_sys_dic d1
+			WHERE
+			d1.var_code = #{pVarCode}
+		) A ON t.parent_id = A.id
+		WHERE
+			t.var_code = #{varCode}
+    </select>
+    
+    <select id="selectDTO" resultMap="BaseResultMap" >
+    	SELECT
+			t.id,
+			t.parent_id,
+			t.var_code,
+			t.var_name,
+			t.var_value,
+		    t.type,
+		    t.`status`,
+		    if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, true, false) as has_children,
+		    if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, false, true) as is_leaf
+		FROM
+			ktf_sys_dic t
+		<where>
+			<if test="params.parentId !=null">
+				t.parent_id = ${params.parentId}
+			</if>
+			<if test="params.status!=null">
+				AND t.`status` = ${params.status}
+			</if>
+			<if test="params.keyword!=null">
+				AND (t.var_name LIKE '%${params.keyword}%'
+					OR t.var_code LIKE '%${params.keyword}%')
+			</if>
+		</where>
+    </select>
+    
+    <!-- 查询子节点 -->
+    <select id="getChildren" parameterType="map" resultMap="BaseResultMap">
+	    SELECT
+			t.id,
+			t.parent_id,
+			t.var_code,
+			t.var_name,
+			t.var_value,
+		    t.type,
+		    t.`status`,
+		    if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, true, false) as has_children,
+		    if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, false, true) as is_leaf 
+		FROM
+			ktf_sys_dic t
+		<where>
+			<if test="!recursion"> 
+				t.parent_id = #{id}
+			</if>
+		    <if test="recursion and id!=null">
+		    	FIND_IN_SET(t.id, sys_dic_getChildren(#{id}))
+		    </if>
+		    <if test="varCode!=null and varCode != ''">
+		    	AND FIND_IN_SET(t.id, sys_dic_getChildren((SELECT id FROM ktf_sys_dic WHERE var_code=#{varCode})))
+		    </if>
+		    <if test="hasSelf">
+		    	AND t.id != #{id}
+		    </if>
+			<if test="status!=null">
+				AND t.`status` = #{status}
+			</if>
+		</where>
+    </select>
+    
+    <!-- 查询父节点 -->
+    <select id="getParents" parameterType="map" resultMap="BaseResultMap">
+	    SELECT
+			t.id,
+			t.parent_id,
+			t.var_code,
+			t.var_name,
+			t.var_value,
+		    t.type,
+		    t.`status`,
+		    if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, true, false) as has_children,
+		    if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, false, true) as is_leaf 
+		FROM
+			ktf_sys_dic t
+		<where>
+		    FIND_IN_SET(t.id, sys_dic_getParents(#{id}))
+		    <if test="parentId!=null">
+		    	AND t.parent_id = #{parentId}
+		    </if>
+		    <if test="hasSelf">
+		    	AND t.id != #{id}
+		    </if>
+			<if test="status!=null">
+				AND t.`status` = #{status}
+			</if>
+		</where>
+    </select>
+    
+    <!-- 删除节点以及其子节点记录 -->
+    <delete id="deleteWithChildren">
+    	DELETE
+		FROM
+			ktf_sys_dic t
+		WHERE
+			FIND_IN_SET(t.id, sys_dic_getChildren(#{id}))
+    </delete>
+    
+    
+    <!-- 根据varcode和上级varcode查询 -->
+    <select id="getKvMap"  resultType="java.util.HashMap"  >
+    	SELECT
+    	    A.var_code AS `key`,
+			t3.var_value AS `value`
+		FROM
+			ktf_sys_dic t3
+		RIGHT JOIN (
+			SELECT
+				t2.id,
+				t2.var_code
+			FROM
+				ktf_sys_dic t2
+			WHERE
+				t2.parent_id IN (
+					SELECT
+						t1.id
+					FROM
+						ktf_sys_dic t1
+					<where>
+						<if test="pVarCodes !=null">
+							t1.var_code IN      
+							<foreach item="item" index="index" collection="pVarCodes" open="(" separator="," close=")">  
+	      						#{item}  
+	     					</foreach>  
+						</if>
+					</where>
+						
+				)
+		) A ON t3.parent_id = A.id
+		<where>
+			<if test="varCode !=null and varCode != '' ">
+				t3.var_code = #{varCode} 
+			</if>
+		</where>
+    </select>
+    
+    
+    <!--  根据varcode和上级varcode获取KV map
+    <select id="getValueMap"  resultType="java.util.HashMap"  >
+    	SELECT
+			d.var_code as key,
+			d.var_value as value
 		FROM
 			ktf_sys_dic d
 		LEFT JOIN (
@@ -33,23 +193,7 @@
 			d.parent_id = A.id
 		AND d.var_code = #{varCode}
     </select>
-    
-    <select id="getByVarName" resultMap="BaseResultMap" >
-    	SELECT
-			d.*
-		FROM
-			ktf_sys_dic d
-		LEFT JOIN (
-			SELECT
-				d1.id
-			FROM
-				ktf_sys_dic d1
-			WHERE
-			d1.var_name = #{pVarName}
-		) A ON d.parent_id = A.id
-		WHERE
-			d.var_name = #{varName}
-    </select>
+     
     
     <select id="listVarCode" resultType="String">
 	    SELECT
@@ -66,6 +210,6 @@
 			AND d1.var_code = #{pVarCode}
 		) A ON d.parent_id = A.id
 		 WHERE d.parent_id = A.id 
-    </select>
+    </select> -->
 
 </mapper>

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 import com.kivi.framework.constant.KtfError;
+import com.kivi.framework.vo.page.PageInfoVO;
 
 /**
  * @Description 操作结果集
@@ -49,6 +50,17 @@ public class ResultMap extends HashMap<String, Object> {
 
 	public static ResultMap ok() {
 		return new ResultMap();
+	}
+
+	public ResultMap data(Object value) {
+		return this.put("data", value);
+	}
+
+	public <T> ResultMap data(PageInfoVO<T> page) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("total", page.getTotal());
+		map.put("list", page.getList());
+		return this.data(map);
 	}
 
 	@Override

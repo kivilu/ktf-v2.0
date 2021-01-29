@@ -2,8 +2,9 @@ package com.kivi.framework.vo;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -18,12 +19,22 @@ public class PasswordModifyVO implements Serializable {
 	 */
 	private static final long	serialVersionUID	= 1L;
 
-	@ApiModelProperty(position = 2, value = "用户旧密码，md5(12345)", required = true, dataType = "String", example = "827ccb0eea8a706c4c34a16891f84e7b")
+	@ApiModelProperty(
+			position = 2,
+			value = "用户旧密码，md5(12345)",
+			required = true,
+			dataType = "String",
+			example = "827ccb0eea8a706c4c34a16891f84e7b")
 	@NotBlank
 	@Size(max = 32, message = "用户旧密码摘要不能为空")
 	private String				password;
 
-	@ApiModelProperty(position = 2, value = "用户新密码，md5(12345)", required = true, dataType = "String", example = "827ccb0eea8a706c4c34a16891f84e7b")
+	@ApiModelProperty(
+			position = 2,
+			value = "用户新密码，md5(12345)",
+			required = true,
+			dataType = "String",
+			example = "827ccb0eea8a706c4c34a16891f84e7b")
 	@NotBlank
 	@Size(max = 32, message = "用户新密码摘要不能为空")
 	private String				newPassword;

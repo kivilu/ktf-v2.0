@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ins.cif.mapper.CifCustomerAuthsMapper">
+<mapper namespace="com.kivi.cif.mapper.CifCustomerAuthsMapper">
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.kivi.cif.entity.CifCustomerAuths">
         <id column="id" property="id" />
         <result column="cif_id" property="cifId" />
-        <result column="application_id" property="applicationIsd"/>
+        <result column="app_id" property="appIsd"/>
         <result column="user_type" property="userType" />
         <result column="identity_type" property="identityType" />
         <result column="identifier" property="identifier" />

@@ -1,12 +1,11 @@
 package com.kivi.cif.service;
 
-import java.util.List;
-import java.util.Map;
-
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.kivi.cif.dto.CifCustomerAuthsDTO;
 import com.kivi.cif.entity.CifCustomerAuths;
-import com.kivi.framework.vo.page.PageInfoVO;
+import com.kivi.framework.exception.KtfException;
+import com.kivi.framework.form.LoginForm;
+import com.kivi.framework.vo.UserVo;
 
 /**
  * <p>
@@ -18,67 +17,73 @@ import com.kivi.framework.vo.page.PageInfoVO;
  */
 public interface CifCustomerAuthsService extends IService<CifCustomerAuths> {
 
-	/**
-	 * 根据唯一键查询记录
-	 * 
-	 * @see CifCustomerAuthsDao.getCifCustomerAuths
-	 * @param cifAuthDTO
-	 * @return
-	 */
-	public CifCustomerAuths getCifCustomerAuths(final CifCustomerAuthsDTO cifAuthDTO);
+    /**
+     * 验证用户的有效性
+     * 
+     * @param userVo
+     * @return 验证方式
+     */
+    Integer auth(LoginForm form, UserVo userVo) throws KtfException;
 
-	/**
-	 * 根据唯一键查询记录
-	 * 
-	 * @param bizCode
-	 * @param identityType
-	 * @param identifier
-	 * @param userType
-	 * @return
-	 */
-	CifCustomerAuths getCifCustomerAuths(Long appid, String identityType, String identifier, String userType);
+    /**
+     * 根据ID查询DTO
+     */
+    CifCustomerAuthsDTO getDto(Long id);
 
-	/**
-	 * 根据ID查询DTO
-	 */
-	CifCustomerAuthsDTO getDTOById(Long id);
+    /**
+     * 根据唯一键查询记录
+     * 
+     * @see CifCustomerAuthsDao.getCifCustomerAuths
+     * @param cifAuthDTO
+     * @return
+     */
+    CifCustomerAuths getCifCustomerAuths(final CifCustomerAuthsDTO cifAuthDTO);
 
-	/**
-	 * 修改
-	 */
-	Boolean updateById(CifCustomerAuthsDTO cifCustomerAuthsDTO);
+    /**
+     * 根据唯一键查询记录
+     * 
+     * @param bizCode
+     * @param identityType
+     * @param identifier
+     * @param userType
+     * @return
+     */
+    CifCustomerAuths getCifCustomerAuths(Long appid, String identityType, String identifier, String userType);
 
-	/**
-	 * 更新
-	 * 
-	 * @param condEntity
-	 * @param updaeEntity
-	 * @return
-	 */
-	Boolean updateByEntity(CifCustomerAuths condEntity, CifCustomerAuths updaeEntity);
+    /**
+     * 修改
+     */
+    Long save(CifCustomerAuthsDTO dto);
 
-	/**
-	 * 查询列表
-	 */
-	List<CifCustomerAuthsDTO> list(CifCustomerAuthsDTO cifCustomerAuthsDTO);
+    /**
+     * 修改
+     */
+    Boolean updateById(CifCustomerAuthsDTO dto);
 
-	/**
-	 * 指定列查询列表
-	 */
-	List<CifCustomerAuthsDTO> list(Map<String, Object> params, String... columns);
+    /**
+     * 更新
+     * 
+     * @param condEntity
+     * @param updaeEntity
+     * @return
+     */
+    Boolean updateByEntity(CifCustomerAuths condEntity, CifCustomerAuths updaeEntity);
 
-	/**
-	 * 模糊查询
-	 */
-	List<CifCustomerAuthsDTO> listLike(CifCustomerAuthsDTO cifCustomerAuthsDTO);
+    /**
+     * 修改用户密码
+     * 
+     * @param userVo 用户信息， id和password属性必须
+     * @param newPassword 新密码，若未null，则修改为默认密码
+     * @return
+     */
+    Boolean updateCredential(UserVo userVo, String newPassword) throws KtfException;
 
-	/**
-	 * 指定列模糊查询
-	 */
-	List<CifCustomerAuthsDTO> listLike(Map<String, Object> params, String... columns);
+    /**
+     * 重置用户密码
+     * 
+     * @param userVo 用户信息
+     * @return
+     */
+    Boolean resetCredential(UserVo userVo) throws KtfException;
 
-	/**
-	 * 分页查询
-	 */
-	PageInfoVO<CifCustomerAuthsDTO> page(Map<String, Object> params);
 }

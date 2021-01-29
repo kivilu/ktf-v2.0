@@ -8,18 +8,18 @@ package com.kivi.framework.properties;
  */
 public interface IKtfProperties {
 
-    /**
-     * 属性前缀
-     * 
-     * @return
-     */
-    public String prefix();
+	/**
+	 * 属性前缀
+	 * 
+	 * @return
+	 */
+	public String prefix();
 
-    /**
-     * bean name
-     * 
-     * @return
-     */
-    public String beanName();
+	/**
+	 * bean name
+	 * 
+	 * @return
+	 */
+	public String beanName();
 
 }

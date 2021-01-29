@@ -1,10 +1,12 @@
 package com.kivi.dashboard.sys.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.kivi.dashboard.sys.entity.SysDic;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.kivi.dashboard.sys.dto.SysDicDTO;
 
 /**
  * <p>
@@ -17,29 +19,60 @@ import com.kivi.dashboard.sys.entity.SysDic;
 public interface SysDicExMapper {
 
 	/**
-	 * 根据变量和上级变量代码获取变量名称
+	 * 查询DTO
 	 * 
 	 * @param varCode
 	 * @param pVarCode
 	 * @return
 	 */
-	SysDic getByVarCode(@Param("varCode") String varCode, @Param("pVarCode") String pVarCode);
+	SysDicDTO getDto(@Param("varCode") String varCode, @Param("pVarCode") String pVarCode);
 
 	/**
-	 * 根据变量和上级变量名称获取变量代码
+	 * 根据条件查询
 	 * 
-	 * @param varName
-	 * @param parentName
+	 * @param params
 	 * @return
 	 */
-	SysDic getByVarName(@Param("varName") String varName, @Param("pVarName") String pVarName);
+	IPage<SysDicDTO> selectDTO(IPage<SysDicDTO> page, @Param("params") Map<String, Object> params);
 
 	/**
-	 * 根据上级变量代码查询变量代码列表
+	 * 根据条件查询
 	 * 
-	 * @param pVarCode 上级代码
-	 * @param ppId     上上级变量的ID
+	 * @param params
 	 * @return
 	 */
-	List<String> listVarCode(@Param("pVarCode") String pVarCode, @Param("ppId") Long ppId);
+	List<SysDicDTO> selectDTO(@Param("params") Map<String, Object> params);
+
+	/**
+	 * 查询子节点
+	 * 
+	 * @param parentId
+	 * @return
+	 */
+	List<SysDicDTO> getChildren(Map<String, Object> params);
+
+	/**
+	 * 查询父节点
+	 * 
+	 * @param params
+	 * @return
+	 */
+	List<SysDicDTO> getParents(Map<String, Object> params);
+
+	/**
+	 * 获取value
+	 * 
+	 * @param varCode
+	 * @param pVarCode
+	 * @return
+	 */
+	List<Map<String, Object>> getKvMap(@Param("varCode") String varCode, @Param("pVarCodes") String[] pVarCodes);
+
+	/**
+	 * 删除节点以及其子节点
+	 * 
+	 * @param id
+	 * @return
+	 */
+	int deleteWithChildren(@Param("id") Long id);
 }

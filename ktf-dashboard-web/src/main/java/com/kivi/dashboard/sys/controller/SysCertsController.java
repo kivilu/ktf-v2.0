@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.bouncycastle.cert.CertException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,7 @@ import com.kivi.framework.constant.enums.KtfStatus;
 import com.kivi.framework.crypto.enums.KtfCertUse;
 import com.kivi.framework.crypto.util.CertUtil;
 import com.kivi.framework.model.ResultMap;
+import com.kivi.framework.properties.KtfSwaggerProperties;
 import com.kivi.framework.util.kit.ByteStringKit;
 import com.kivi.framework.util.kit.DateTimeKit;
 import com.kivi.framework.util.kit.StrKit;
@@ -53,7 +55,11 @@ import lombok.extern.slf4j.Slf4j;
  * @author Auto-generator
  * @since 2019-10-28
  */
-
+@ConditionalOnProperty(
+		prefix = KtfSwaggerProperties.PREFIX,
+		value = "enable-sys-api",
+		havingValue = "true",
+		matchIfMissing = false)
 @Api(value = "系统证书管理接口", tags = { "系统证书管理接口" })
 @RestController
 @RequestMapping("/sys/cert")

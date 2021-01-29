@@ -33,7 +33,7 @@ public class CifCustomerAuthsDTO implements Serializable {
 	private Long				cifId;
 
 	@ApiModelProperty(value = "应用ID")
-	private Long				applicationId;
+	private Long				appId;
 
 	@ApiModelProperty(value = "用户类型：00-任意，01-管理员，02：用户，03：操作员，04：审核员")
 	private String				userType;
@@ -73,6 +73,7 @@ public class CifCustomerAuthsDTO implements Serializable {
 
 	public static final String	ID					= "id";
 	public static final String	CIF_ID				= "cifId";
+	public static final String	APP_ID				= "appId";
 	public static final String	USER_TYPE			= "userType";
 	public static final String	BIZ_CODE			= "bizCode";
 	public static final String	IDENTITY_TYPE		= "identityType";

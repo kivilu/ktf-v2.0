@@ -1,10 +1,10 @@
 package com.kivi.framework.web.configuration;
 
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.apache.commons.codec.Charsets;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -108,7 +108,7 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 
 			converters.add(new MappingJackson2HttpMessageConverter(objectMapper));
 
-			converters.add(new StringHttpMessageConverter(Charsets.UTF_8));
+			converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
 			converters.add(new ByteArrayHttpMessageConverter());
 

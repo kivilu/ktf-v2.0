@@ -1,45 +1,58 @@
 package com.kivi.dashboard.shiro.service.impl;
 
 import java.util.List;
+import java.util.Set;
 
+import com.kivi.cif.service.CifCustomerAuthsService;
+import com.kivi.dashboard.permission.service.SysResourceService;
+import com.kivi.dashboard.permission.service.SysUserOrgService;
+import com.kivi.dashboard.permission.service.SysUserService;
 import com.kivi.dashboard.shiro.service.ShiroUserService;
-import com.kivi.dashboard.sys.service.ISysRoleService;
-import com.kivi.dashboard.sys.service.ISysUserEnterpriseService;
-import com.kivi.dashboard.sys.service.ISysUserService;
-import com.kivi.framework.vo.RoleVo;
+import com.kivi.framework.annotation.KtfTrace;
 import com.kivi.framework.vo.UserVo;
 
 public class ShiroUserServiceImpl implements ShiroUserService {
 
-	private final ISysUserService			userService;
-	private final ISysRoleService			roleService;
-	private final ISysUserEnterpriseService	userEnterpriseService;
+    private final SysUserService userService;
+    private final SysResourceService resourceService;
+    private final SysUserOrgService userOrgService;
+    private final CifCustomerAuthsService cifAuthService;
 
-	public ShiroUserServiceImpl(ISysUserService userService, ISysRoleService roleService,
-			ISysUserEnterpriseService userEnterpriseService) {
-		this.userService			= userService;
-		this.roleService			= roleService;
-		this.userEnterpriseService	= userEnterpriseService;
-	}
+    public ShiroUserServiceImpl(SysUserService userService, SysResourceService resourceService,
+        SysUserOrgService userOrgService, CifCustomerAuthsService cifAuthService) {
+        this.userService = userService;
+        this.resourceService = resourceService;
+        this.userOrgService = userOrgService;
+        this.cifAuthService = cifAuthService;
+    }
 
-	@Override
-	public UserVo getUserByLoginName(String loginName) {
-		return userService.selectByLoginName(loginName);
-	}
+    @Override
+    public UserVo getUserByLoginName(String loginName) {
+        return userService.getUserVo(loginName);
+    }
 
-	@Override
-	public RoleVo getRoleById(Long roleId) {
-		return roleService.selectByRoleId(roleId);
-	}
+    @Override
+    public UserVo getUserById(Long userId) {
+        return userService.getUserVo(userId);
+    }
 
-	@Override
-	public List<Long> getEnterpriseIdByUserId(Long userId) {
-		return userEnterpriseService.selectEnterpriseIdByUserId(userId);
-	}
+    @KtfTrace("获取角色权限")
+    @Override
+    public Set<String> getPermissions(List<Long> roleIds) {
+        return resourceService.getPermissions(roleIds);
+    }
 
-	@Override
-	public UserVo getUserById(Long userId) {
-		return userService.selectByUserId(userId);
-	}
+    @Override
+    public CifCustomerAuthsService cifAuthService() {
+        return this.cifAuthService;
+    }
+
+    /*
+     * @Override public RoleVo getRoleById(Long roleId) { return
+     * roleService.selectByRoleId(roleId); }
+     * 
+     * @Override public List<Long> getEnterpriseIdByUserId(Long userId) { return
+     * userEnterpriseService.selectEnterpriseIdByUserId(userId); }
+     */
 
 }

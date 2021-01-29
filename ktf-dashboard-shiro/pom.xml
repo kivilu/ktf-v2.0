@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.kivi</groupId>
     <artifactId>ktf</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
   </parent>
   <artifactId>ktf-dashboard-shiro</artifactId>
   
@@ -30,6 +30,12 @@
   		
   		<dependency>
        		<groupId>com.kivi</groupId>
+       		<artifactId>ktf-cif-facade</artifactId>
+       		<version>${ktf.version}</version>
+  		</dependency>
+  		
+  		<dependency>
+       		<groupId>com.kivi</groupId>
        		<artifactId>ktf-dubbo</artifactId>
        		<version>${ktf.version}</version>
        		<optional>true</optional>
@@ -39,7 +45,7 @@
        		<groupId>com.kivi</groupId>
        		<artifactId>ktf-dashboard-facade</artifactId>
        		<version>${ktf.version}</version>
-  		</dependency>
+        </dependency>
   
   		<!-- shiro begin -->
         <dependency>
@@ -80,6 +86,12 @@
             <groupId>org.pac4j</groupId>
             <artifactId>pac4j-jwt</artifactId>
             <version>${pac4j.version}</version>
+            <exclusions>
+            	<exclusion>
+            		<groupId>org.bouncycastle</groupId>
+            		<artifactId>bcprov-jdk15on</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.pac4j</groupId>

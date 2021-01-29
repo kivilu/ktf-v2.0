@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.kivi</groupId>
   <artifactId>ktf</artifactId>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
   <packaging>pom</packaging>
   
   <properties>
@@ -16,14 +16,15 @@
         <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
         <maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
         
-        <spring-boot.version>2.2.2.RELEASE</spring-boot.version>
+        <spring-boot.version>2.3.1.RELEASE</spring-boot.version>
         <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
-        <spring-cloud-alibaba.version>2.1.0.RELEASE</spring-cloud-alibaba.version>
+        <spring-cloud-alibaba.version>2.2.3.RELEASE</spring-cloud-alibaba.version>
         <!-- springboot-admin -->
-        <spring-boot-admin.version>2.2.1</spring-boot-admin.version>
+        <spring-boot-admin.version>2.3.1</spring-boot-admin.version>
         <!-- dubbo -->
-        <dubbo.version>2.7.5</dubbo.version>
-        <dubbo-spring-boot.version>2.7.5</dubbo-spring-boot.version>
+        <dubbo.version>2.7.8</dubbo.version>
+        <dubbo-spring-boot.version>2.7.8</dubbo-spring-boot.version>
+        <nacos.version>0.2.7</nacos.version>
 		
 		<!-- <fastjson.version>1.2.56</fastjson.version> -->
 		<springfox-swagger2-version>2.9.2</springfox-swagger2-version>
@@ -35,10 +36,14 @@
   		<modelmapper.version>2.3.5</modelmapper.version>
   		<!-- zxing -->
         <zxing.core.version>3.3.1</zxing.core.version>
+        <jasypt-springboot.version>3.0.3</jasypt-springboot.version> <!-- 2.1.1-->
+        <mybatis-plus.version>3.3.1.tmp</mybatis-plus.version>
+  		<p6spy.version>3.8.5</p6spy.version>
+  		<mybatis-typehandlers-jsr310.version>1.0.2</mybatis-typehandlers-jsr310.version>
         
         <fst.version>2.57</fst.version>
         
-		<ktf.version>2.0.1</ktf.version>
+		<ktf.version>2.0.2</ktf.version>
 	</properties>
 
 	<dependencies>
@@ -93,13 +98,23 @@
     </dependencyManagement>
 	
 	<distributionManagement>
-		<repository>
+	    <!-- INS -->
+		<!-- <repository>
 			<id>rdc-releases</id>
 			<url>https://repo.rdc.aliyun.com/repository/106428-release-lfVNdn/</url>
 		</repository>
 		<snapshotRepository>
 			<id>rdc-snapshots</id>
 			<url>https://repo.rdc.aliyun.com/repository/106428-snapshot-j1QtNx/</url>
+		</snapshotRepository> -->
+		<!-- BHT -->
+		<repository>
+			<id>ali-releases</id>
+			<url>http://47.92.164.89:9001/repository/maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>ali-snapshots</id>
+			<url>http://47.92.164.89:9001/repository/maven-snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 
@@ -261,5 +276,6 @@
 	<module>ktf-cif-db</module>
 	<module>ktf-dashboard-shiro</module>
 	<module>ktf-dashboard-dubbo</module>
+	<module>ktf-cif-dubbo</module>
 	</modules>
 </project>

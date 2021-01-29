@@ -24,9 +24,9 @@ public enum KmsUserType {
 		REVIEWER_KEY(4, "密钥审核员"),
 		ADMIN_AUDIT(5, "密钥审核员"),
 		AUDITOR(6, "密钥审核员"),
-		API_USER(7, "API用户");
+		API_USER(99, "API用户");
 
-	private final static KmsUserType	ADMIN_SYS_CHILDREN[]	= { ADMIN_BIZ , OPERATOR_KEY};
+	private final static KmsUserType	ADMIN_SYS_CHILDREN[]	= { ADMIN_BIZ, OPERATOR_KEY };
 	private final static KmsUserType	ADMIN_BIZ_CHILDREN[]	= { OPERATOR_KEY, REVIEWER_KEY };
 	private final static KmsUserType	ADMIN_AUDIT_CHILDREN[]	= { AUDITOR };
 

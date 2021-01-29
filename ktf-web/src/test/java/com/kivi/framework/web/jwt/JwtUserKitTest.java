@@ -11,8 +11,7 @@ import com.kivi.framework.util.kit.CollectionKit;
 public class JwtUserKitTest {
 
     @Before
-    public void setUp() throws Exception {
-    }
+    public void setUp() throws Exception {}
 
     @Test
     public void testAudience() {
@@ -24,6 +23,19 @@ public class JwtUserKitTest {
 
         assertEquals(Long.valueOf(1L), user.getId());
         assertEquals(identifier, user.getIdentifier());
+    }
+
+    @Test
+    public void testVerifyJwt() throws Exception {
+        final String identifier = "13800100500";
+        JwtUserKit jwtUser = JwtUserKit.builder().id(1L).identifier(identifier).build();
+
+        String token = "tokenqerwefs";
+
+        String jwt = JwtKit.create(jwtUser, token, null);
+
+        boolean ret = JwtKit.verify(jwt, token);
+        assertEquals(true, ret);
     }
 
 }

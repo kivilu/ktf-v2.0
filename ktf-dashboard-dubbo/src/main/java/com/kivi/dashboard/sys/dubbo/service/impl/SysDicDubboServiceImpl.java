@@ -3,14 +3,14 @@ package com.kivi.dashboard.sys.dubbo.service.impl;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.dashboard.sys.dto.SysDicDTO;
 import com.kivi.dashboard.sys.entity.SysDic;
 import com.kivi.dashboard.sys.mapper.SysDicMapper;
-import com.kivi.dashboard.sys.service.ISysDicService;
+import com.kivi.dashboard.sys.service.SysDicService;
 import com.kivi.framework.annotation.KtfTrace;
 import com.kivi.framework.properties.KtfDashboardProperties;
 import com.kivi.framework.vo.page.PageInfoVO;
@@ -24,42 +24,11 @@ import com.kivi.framework.vo.page.PageInfoVO;
  * @since 2019-09-18
  */
 
-@Service(version = KtfDashboardProperties.DUBBO_VERSION)
-public class SysDicDubboServiceImpl extends ServiceImpl<SysDicMapper, SysDic> implements ISysDicService {
-	// private ConcurrentHashMap<String, String> opDic =
-	// MapUtil.newConcurrentHashMap();
+@DubboService(version = KtfDashboardProperties.DUBBO_VERSION)
+public class SysDicDubboServiceImpl extends ServiceImpl<SysDicMapper, SysDic> implements SysDicService {
 
 	@Autowired
-	private ISysDicService sysDicService;
-
-	@Override
-	public SysDic getByVarCode(String varCode, String pVarCode) {
-		return sysDicService.getByVarCode(varCode, pVarCode);
-	}
-
-	@Override
-	public SysDic getByVarName(String varName, String parentName) {
-		return sysDicService.getByVarName(varName, parentName);
-	}
-
-	@Override
-	public List<String> listVarCode(String pCode, Long ppId) {
-		return sysDicService.listVarCode(pCode, ppId);
-	}
-
-	@Override
-	public List<String> listVarCode(String pVarCode) {
-		return sysDicService.listVarCode(pVarCode);
-	}
-
-	/**
-	 * 根据ID查询数据字典
-	 */
-	@KtfTrace("根据ID查询数据字典")
-	@Override
-	public SysDicDTO getDTOById(Long id) {
-		return sysDicService.getDTOById(id);
-	}
+	private SysDicService sysDicService;
 
 	/**
 	 * 新增数据字典
@@ -79,54 +48,49 @@ public class SysDicDubboServiceImpl extends ServiceImpl<SysDicMapper, SysDic> im
 		return sysDicService.updateById(sysDicDTO);
 	}
 
-	/**
-	 * 查询列表
-	 */
-	@KtfTrace("查询列表数据字典")
 	@Override
-	public List<SysDicDTO> list(SysDicDTO sysDicDTO) {
-		return sysDicService.list(sysDicDTO);
-	}
-
-	/**
-	 * 指定列查询列表
-	 */
-	@KtfTrace("指定列查询列表数据字典")
-	@Override
-	public List<SysDicDTO> list(Map<String, Object> params, String... columns) {
-		return sysDicService.list(params, columns);
-	}
-
-	/**
-	 * 模糊查询
-	 */
-	@KtfTrace("模糊查询数据字典")
-	@Override
-	public List<SysDicDTO> listLike(SysDicDTO sysDicDTO) {
-		return sysDicService.list(sysDicDTO);
-	}
-
-	/**
-	 * 指定列模糊查询
-	 */
-	@Override
-	public List<SysDicDTO> listLike(Map<String, Object> params, String... columns) {
-		return sysDicService.listLike(params, columns);
-	}
-
-	/**
-	 * 分页查询
-	 */
-	@Override
-	@KtfTrace("分页查询数据字典")
-	public PageInfoVO<SysDicDTO> page(Map<String, Object> params) {
-		return sysDicService.page(params);
-
+	public SysDicDTO getDto(Long id) {
+		return sysDicService.getDto(id);
 	}
 
 	@Override
-	public Boolean deleteWithChild(Long id) {
-		return sysDicService.deleteWithChild(id);
+	public SysDicDTO getDto(String varCode, String pVarCode) {
+		return sysDicService.getDto(varCode, pVarCode);
+	}
+
+	@Override
+	public List<Object> getValues(String varCode, String... pVarCodes) {
+		return sysDicService.getValues(varCode, pVarCodes);
+	}
+
+	@Override
+	public Map<String, Object> getValuesMap(String varCode, String... pVarCodes) {
+		return sysDicService.getValuesMap(varCode, pVarCodes);
+	}
+
+	@Override
+	public Map<String, Object> getSettings(String varCode) {
+		return sysDicService.getSettings(varCode);
+	}
+
+	@Override
+	public List<SysDicDTO> getChildren(Long id, Boolean recursion) {
+		return sysDicService.getChildren(id, recursion);
+	}
+
+	@Override
+	public List<SysDicDTO> list(Long pid) {
+		return sysDicService.list(pid);
+	}
+
+	@Override
+	public Boolean removeWithChildren(Long id) {
+		return sysDicService.removeWithChildren(id);
+	}
+
+	@Override
+	public PageInfoVO<SysDicDTO> tops(Map<String, Object> params) {
+		return sysDicService.tops(params);
 	}
 
 }

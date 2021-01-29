@@ -20,10 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SerializationOptimizerImpl implements SerializationOptimizer {
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Collection<Class> getSerializableClasses() {
-		List<Class> classes = new LinkedList<>();
+	public Collection<Class<?>> getSerializableClasses() {
+		List<Class<?>> classes = new LinkedList<>();
 
 		classes.add(WarpperDTO.class);
 		classes.add(WarpReqDTO.class);

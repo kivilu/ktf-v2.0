@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.kivi</groupId>
     <artifactId>ktf</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
   </parent>
   <artifactId>ktf-dashboard-impl</artifactId>
   <description>dashboard service implement</description>
@@ -12,6 +12,12 @@
   		<dependency>
        		<groupId>com.kivi</groupId>
        		<artifactId>ktf-dashboard-facade</artifactId>
+       		<version>${ktf.version}</version>
+  		</dependency>
+  		
+  		<dependency>
+       		<groupId>com.kivi</groupId>
+       		<artifactId>ktf-dashboard-mapper</artifactId>
        		<version>${ktf.version}</version>
   		</dependency>
 

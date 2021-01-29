@@ -67,12 +67,15 @@ public class KtfError {
 	/** RPC调用异常 */
 	public static final int	E_RPC_FAIL				= 507;
 
+	/** 数据库异常 */
+	public static final int	E_DB_ERROR				= 508;
+
 	/** 用户未注册 */
 	public static final int	E_NOT_REGIST			= 530;
-	/** 用户已经注册 */
+	/** 注册失败 */
 	public static final int	E_REGIST_FAILURE		= 531;
 
-	/** 注册失败 */
+	/** 用户已经注册 */
 	public static final int	E_REGISTED				= 532;
 
 }
