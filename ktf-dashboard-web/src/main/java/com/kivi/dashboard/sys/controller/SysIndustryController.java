@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import com.kivi.dashboard.sys.entity.SysIndustry;
 import com.kivi.framework.model.ResultMap;
 import com.kivi.framework.model.SelectNode;
 import com.kivi.framework.model.SelectTreeNode;
+import com.kivi.framework.properties.KtfSwaggerProperties;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.vip.vjtools.vjkit.number.NumberUtil;
 
@@ -42,7 +44,11 @@ import lombok.extern.slf4j.Slf4j;
  * @author Auto-generator
  * @since 2019-09-18
  */
-
+@ConditionalOnProperty(
+		prefix = KtfSwaggerProperties.PREFIX,
+		value = "enable-sys-api",
+		havingValue = "true",
+		matchIfMissing = false)
 @Api(tags = { "行业代码" })
 @RestController
 @RequestMapping("/sys/industry")
@@ -110,7 +116,7 @@ public class SysIndustryController extends DashboardController {
 	 * 删除
 	 */
 	@ApiOperation(value = "删除行业代码", notes = "删除行业代码")
-	@PostMapping("/delete/{id}")
+	@GetMapping("/delete/{id}")
 	@RequiresPermissions("sys/industry/delete")
 	public ResultMap delete(@PathVariable("id") Long id) {
 		try {

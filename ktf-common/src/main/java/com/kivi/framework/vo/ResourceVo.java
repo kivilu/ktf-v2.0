@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+@Deprecated
 @ApiModel(value = "ResourceVo对象", description = "菜单")
 @Data
 public class ResourceVo implements Serializable {
@@ -21,7 +22,7 @@ public class ResourceVo implements Serializable {
 	private Long				id;
 
 	@ApiModelProperty(value = "应用ID，默认值0")
-	private Long				applicationId;
+	private Long				appId;
 
 	@ApiModelProperty(value = "父级资源ID")
 	private Long				parentId;

@@ -26,12 +26,13 @@ public class CsrfInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		HandlerMethod handlerMethod = (HandlerMethod) handler;
 		// 非控制器请求直接跳出
 		if (!(handler instanceof HandlerMethod)) {
 			return true;
 		}
-		CsrfToken csrfToken = handlerMethod.getMethodAnnotation(CsrfToken.class);
+		HandlerMethod	handlerMethod	= (HandlerMethod) handler;
+
+		CsrfToken		csrfToken		= handlerMethod.getMethodAnnotation(CsrfToken.class);
 		// 判断是否含有@CsrfToken注解
 		if (null == csrfToken) {
 			return true;
@@ -79,12 +80,13 @@ public class CsrfInterceptor extends HandlerInterceptorAdapter {
 			HttpServletResponse response,
 			Object handler,
 			ModelAndView modelAndView) throws Exception {
-		HandlerMethod handlerMethod = (HandlerMethod) handler;
+
 		// 非控制器请求直接跳出
 		if (!(handler instanceof HandlerMethod)) {
 			return;
 		}
-		CsrfToken csrfToken = handlerMethod.getMethodAnnotation(CsrfToken.class);
+		HandlerMethod	handlerMethod	= (HandlerMethod) handler;
+		CsrfToken		csrfToken		= handlerMethod.getMethodAnnotation(CsrfToken.class);
 		if (csrfToken == null || !csrfToken.remove()) {
 			return;
 		}

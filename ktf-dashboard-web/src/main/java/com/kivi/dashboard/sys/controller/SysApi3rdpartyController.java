@@ -15,6 +15,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,7 @@ import com.kivi.dashboard.shiro.ShiroUser;
 //import com.kivi.dashboard.shiro.ShiroKit;
 import com.kivi.dashboard.sys.dto.SysApi3rdpartyDTO;
 import com.kivi.framework.model.ResultMap;
+import com.kivi.framework.properties.KtfSwaggerProperties;
 import com.kivi.framework.util.kit.ByteStringKit;
 import com.kivi.framework.util.kit.DateTimeKit;
 import com.kivi.framework.util.kit.StrKit;
@@ -51,7 +53,11 @@ import lombok.extern.slf4j.Slf4j;
  * @author Auto-generator
  * @since 2020-02-17
  */
-
+@ConditionalOnProperty(
+		prefix = KtfSwaggerProperties.PREFIX,
+		value = "enable-sys-api",
+		havingValue = "true",
+		matchIfMissing = false)
 @Api(value = "第三方API接口账号信息管理接口", tags = { "第三方API接口账号信息管理接口" })
 @RestController
 @RequestMapping("/sys/api3rdparty")
@@ -150,7 +156,7 @@ public class SysApi3rdpartyController extends UpLoadController {
 	 * 删除
 	 */
 	@ApiOperation(value = "删除第三方API接口账号信息", notes = "删除第三方API接口账号信息")
-	@PostMapping("/delete/{id}")
+	@GetMapping("/delete/{id}")
 	@RequiresPermissions("sys/api3rdparty/delete")
 	public ResultMap delete(@PathVariable("id") Long id) {
 		try {

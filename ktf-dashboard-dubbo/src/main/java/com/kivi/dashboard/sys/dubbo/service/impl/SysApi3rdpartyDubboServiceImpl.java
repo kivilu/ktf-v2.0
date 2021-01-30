@@ -2,7 +2,7 @@ package com.kivi.dashboard.sys.dubbo.service.impl;
 
 import java.util.Map;
 
-import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -22,7 +22,7 @@ import com.kivi.framework.vo.page.PageInfoVO;
  * @author Auto-generator
  * @since 2020-02-17
  */
-@Service(version = KtfDashboardProperties.DUBBO_VERSION)
+@DubboService(version = KtfDashboardProperties.DUBBO_VERSION)
 public class SysApi3rdpartyDubboServiceImpl extends ServiceImpl<SysApi3rdpartyMapper, SysApi3rdparty>
 		implements SysApi3rdpartyService {
 

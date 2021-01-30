@@ -12,6 +12,7 @@
         <result column="operation" property="operation" />
         <result column="class_name" property="className" />
         <result column="method" property="method" />
+        <result column="uri" property="uri" />
         <result column="params" property="params" />
         <result column="time" property="time" />
         <result column="client_ip" property="clientIp" />
@@ -19,6 +20,7 @@
         <result column="operation_sign" property="operationSign" />
         <result column="gmt_create" property="gmtCreate" />
         <result column="gmt_update" property="gmtUpdate" />
+        <result column="enterprise_id" property="enterpriseId" />
     </resultMap>
 
 </mapper>

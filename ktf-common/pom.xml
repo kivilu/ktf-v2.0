@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.kivi</groupId>
     <artifactId>ktf</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>ktf-common</artifactId>
@@ -12,6 +12,7 @@
   <properties>	
   		<persistence-api>1.0</persistence-api>
   		<guava.version>28.1-jre</guava.version>
+  		<joda-time.version>2.10.8</joda-time.version>
   </properties>
   
   <dependencies>
@@ -70,19 +71,24 @@
         </dependency>
 		
 		<!-- validation-api -->
-  		<dependency>
+  		<!-- <dependency>
 			<groupId>javax.validation</groupId>
     		<artifactId>validation-api</artifactId>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>javax.persistence</groupId>
 			<artifactId>javax.persistence-api</artifactId>
 		</dependency>
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-validator</artifactId>
+        </dependency>
   		<!-- /validation-api-->
   		
   		<dependency>
 		    <groupId>joda-time</groupId>
 		    <artifactId>joda-time</artifactId>
+		    <version>${joda-time.version}</version>
 		</dependency>
 		
 		<dependency>
@@ -133,6 +139,15 @@
             <optional>true</optional>
         </dependency>
         <!-- zxing end -->
+        
+        <!-- jasypt -->
+        <dependency>
+	        <groupId>com.github.ulisesbocchio</groupId>
+	        <artifactId>jasypt-spring-boot</artifactId>
+	        <version>${jasypt-springboot.version}</version>
+	        <optional>true</optional>
+		</dependency>
+		<!-- jasypt end-->
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

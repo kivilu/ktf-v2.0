@@ -1,7 +1,6 @@
 package com.kivi.dashboard.shiro;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -30,31 +29,19 @@ public class ShiroUser implements Serializable {
 	// 状态
 	private Integer				status;
 
-	// 是否领导（0-是，1-否）
-	private Integer				isLeader;
-
 	// 企业Id
-	private Long				enterpriseId;
+	private Long				corpId;
 
 	// 所属部门Id
-	private Long				departmentId;
+	private Long				deptId;
 
 	// 所属职务Id
-	private Long				jobId;
+	private Long				titileId;
 
 	/**
-	 * 上次登录IP
+	 * 用户拥有的角色集合
 	 */
-	private String				lastIp;
-	/**
-	 * 上次登录时间
-	 */
-	private Date				lastTime;
-
-	/**
-	 * 角色管理的企业ID集合
-	 */
-	private List<Long>			enterpriseIdList;
+	private List<Long>			roleIds;
 
 	/**
 	 * 用户拥有的权限集合
@@ -62,9 +49,9 @@ public class ShiroUser implements Serializable {
 	private Set<String>			urlSet;
 
 	/**
-	 * 用户拥有的角色集合
+	 * 角色管理的企业ID集合
 	 */
-	private List<String>		roles;
+	private List<Long>			corpIdList;
 
 	@Override
 	public String toString() {

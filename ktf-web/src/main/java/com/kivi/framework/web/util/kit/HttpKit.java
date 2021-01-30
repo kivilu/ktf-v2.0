@@ -1,4 +1,3 @@
-
 package com.kivi.framework.web.util.kit;
 
 import java.io.UnsupportedEncodingException;
@@ -8,7 +7,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -21,6 +19,9 @@ public class HttpKit {
 	}
 
 	public static String getRemoteAddress(HttpServletRequest request) {
+		if (request == null)
+			return null;
+
 		String ip = request.getHeader("X-Forwarded-For");
 		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
 			ip = request.getHeader("X-Real-IP");
@@ -50,11 +51,6 @@ public class HttpKit {
 			ip = "127.0.0.1";
 
 		return ip;
-	}
-
-	public static String getSessionId(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		return session.getId();
 	}
 
 	/**

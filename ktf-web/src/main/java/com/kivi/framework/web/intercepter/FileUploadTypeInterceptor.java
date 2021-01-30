@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.kivi.framework.component.SpringContextHolder;
 import com.kivi.framework.exception.KtfException;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Descriptin 上传文件类型拦截器
  */
 @Slf4j
-public class FileUploadTypeInterceptor extends HandlerInterceptorAdapter {
+public class FileUploadTypeInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -38,9 +38,9 @@ public class FileUploadTypeInterceptor extends HandlerInterceptorAdapter {
 				// 判断是否为限制文件类型
 				if (!checkFile(filename)) {
 					log.error(
-							"只允许上传gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks格式文件");
+							"只允许上传gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks,pkm,vkd格式文件");
 					new KtfException(
-							"只允许上传gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks格式文件");
+							"只允许上传gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,pkm,pfx,vkd格式文件");
 					flag = false;
 				}
 			}
@@ -53,7 +53,7 @@ public class FileUploadTypeInterceptor extends HandlerInterceptorAdapter {
 	 */
 	private boolean checkFile(String fileName) {
 		// 设置允许上传文件类型
-		String				suffixList	= "gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks";
+		String				suffixList	= "pkm,vkd,gif,jpg,jpeg,bmp,png,jar,doc,docx,xls,xlsx,pdf,txt,rar,zip,pem,key,cer,p12,pkcs12,pfx,jks,";
 
 		KtfWebProperties	webProp		= SpringContextHolder.getBean(KtfWebProperties.class);
 		if (webProp != null)

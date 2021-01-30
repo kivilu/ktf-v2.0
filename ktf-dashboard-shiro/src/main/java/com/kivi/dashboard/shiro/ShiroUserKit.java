@@ -1,22 +1,25 @@
 package com.kivi.dashboard.shiro;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
+import org.apache.shiro.authz.UnauthenticatedException;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.kivi.dashboard.shiro.service.ShiroUserService;
 import com.kivi.framework.component.SpringContextHolder;
-import com.kivi.framework.constant.KtfError;
+import com.kivi.framework.constant.KtfConstant;
+import com.kivi.framework.constant.enums.UserType;
 import com.kivi.framework.exception.KtfException;
+import com.kivi.framework.properties.KtfDashboardProperties;
 import com.kivi.framework.service.KtfTokenService;
-import com.kivi.framework.util.kit.DateTimeKit;
-import com.kivi.framework.vo.RoleVo;
+import com.kivi.framework.util.kit.CollectionKit;
 import com.kivi.framework.vo.UserVo;
 import com.kivi.framework.web.jwt.JwtKit;
+import com.kivi.framework.web.jwt.JwtUserKit;
 import com.vip.vjtools.vjkit.collection.ListUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +29,13 @@ import lombok.extern.slf4j.Slf4j;
 public class ShiroUserKit {
 
 	@Autowired
-	private KtfTokenService		ktfTokenService;
+	private KtfTokenService			ktfTokenService;
 
 	@Autowired
-	private ShiroUserService	shiroUserService;
+	private ShiroUserService		shiroUserService;
+
+	@Autowired
+	private KtfDashboardProperties	ktfDashboardProperties;
 
 	public static ShiroUserKit me() {
 		return SpringContextHolder.getBean(ShiroUserKit.class);
@@ -52,29 +58,17 @@ public class ShiroUserKit {
 			su.setLoginName(userVo.getLoginName());
 			su.setUserType(userVo.getUserType());
 			su.setStatus(userVo.getStatus());
-			su.setIsLeader(userVo.getIsLeader());
-			su.setLastIp(userVo.getLastIp());
-			su.setLastTime(DateTimeKit.toDate(userVo.getLastTime()));
-			List<RoleVo>	rvList	= userVo.getRoles();
-			Set<String>		urlSet	= shiroUserService.getUserPermissions(userVo.getId());
-			List<String>	roles	= null;
-			if (rvList != null && !rvList.isEmpty()) {
-				roles = rvList.stream().map(RoleVo::getName).collect(Collectors.toList());
+			List<Long>	roleIds	= userVo.getRoleIds();
+			Set<String>	urlSet	= CollectionKit.newHashSet();
+
+			if (KtfConstant.SUPER_ADMIN == userVo.getId())
+				urlSet = shiroUserService.getPermissions(null);
+			else {
+				urlSet = shiroUserService.getPermissions(roleIds);
 			}
-			su.setRoles(roles);
+
+			su.setRoleIds(roleIds);
 			su.setUrlSet(urlSet);
-			List<Long>	enterpriseIdList	= new ArrayList<>();
-			List<Long>	enterpriseIds		= shiroUserService.getEnterpriseIdByUserId(userVo.getId());
-			if (enterpriseIds != null && enterpriseIds.size() > 0) {
-				enterpriseIdList.addAll(enterpriseIds);
-			}
-			if (userVo.getEnterpriseId() != null) {
-				enterpriseIdList.add(userVo.getEnterpriseId());
-			}
-			su.setEnterpriseIdList(removeDuplicate(enterpriseIdList));
-			su.setEnterpriseId(userVo.getEnterpriseId());
-			su.setDepartmentId(userVo.getDepartmentId());
-			su.setJobId(userVo.getJobId());
 			return su;
 		}
 	}
@@ -90,6 +84,37 @@ public class ShiroUserKit {
 		return list;
 	}
 
+	public String generateJwtToken(UserVo userVo) {
+		// 从缓存中获取
+		// 生成一个token
+		String		token		= ktfTokenService.token(userVo.getId(), userVo.getCifId(), userVo.getUserType(),
+				userVo.getLoginMode());
+
+		// 过期时间
+
+		JwtUserKit	jwtUser		= JwtUserKit.builder().id(userVo.getId()).identifier(userVo.getLoginName())
+				.userType(userVo.getUserType()).authType(userVo.getAuthType()).build();
+
+		// 创建Jwt Toen
+		String		jwtToken	= null;
+		try {
+			if (userVo.getUserType().intValue() == UserType.SRV.value) {
+				jwtToken = JwtKit.create(jwtUser, token);
+				ktfTokenService.cacheJwt(jwtUser.getId().toString(), token, jwtToken, -1);
+			} else {
+				DateTime	now			= DateTime.now();
+				Date		expireTime	= now.plusSeconds(expire()).toDate();
+				jwtToken = JwtKit.create(jwtUser, token, expireTime);
+				ktfTokenService.cacheJwt(jwtUser.getId().toString(), token, jwtToken, expire());
+			}
+		} catch (Exception e) {
+			log.error("生成JWT token异常", e);
+			throw new KtfException("生成JWT token异常");
+		}
+
+		return jwtToken;
+	}
+
 	/**
 	 * 验证 accessToken
 	 * 
@@ -102,15 +127,23 @@ public class ShiroUserKit {
 		String token = ktfTokenService.cache(userId);
 		log.trace("从缓存中获取用户{}的token:{}", userId, token);
 		if (token == null) {
-			throw new KtfException(KtfError.E_UNAUTHORIZED, "登录状态已过期，请重新登录");
+			throw new UnauthenticatedException("登录状态已过期，请重新登录");
 		}
 
 		// 验证 token
 		if (!JwtKit.verify(accessToken, token)) {
 			log.error("验证JWT token失败");
-			throw new KtfException(KtfError.E_UNAUTHORIZED, "用户尚未登录，请重新登录");
+			throw new UnauthenticatedException("用户尚未登录，请重新登录");
 		}
 
 		return true;
+	}
+
+	public Integer getTokenRefreshInterval() {
+		return ktfDashboardProperties.getSession().getExpireTime();
+	}
+
+	private int expire() {
+		return ktfDashboardProperties.getSession().getExpireTime();
 	}
 }

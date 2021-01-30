@@ -1,5 +1,7 @@
 package com.kivi.framework.util.kit;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.kivi.framework.constant.KtfConstant;
 import com.vip.vjtools.vjkit.collection.ArrayUtil;
 import com.vip.vjtools.vjkit.number.NumberUtil;
+import com.vip.vjtools.vjkit.number.RandomUtil;
 
 /**
  * 本工具类主要是对org.apache.commons.lang3.StringUtils类的封装，目的是为了兼容之前的代码
@@ -634,17 +637,37 @@ public class StrKit {
 	}
 
 	/**
+	 * 连接成字符串
+	 * 
+	 * @param objs
+	 * @return
+	 */
+	public static String join(Object... objs) {
+		return StringUtils.join(objs);
+	}
+
+	/**
+	 * 连接成字符串
+	 * 
+	 * @param objs
+	 * @return
+	 */
+	public static String join(final List<?> objs) {
+		return StringUtils.join(objs);
+	}
+
+	/**
 	 * 以 conjunction 为分隔符将多个对象转换为字符串
 	 * 
 	 * @param conjunction 分隔符
 	 * @param objs        数组
 	 * @return 连接后的字符串
 	 */
-	public static String join(String conjunction, Object... objs) {
+	public static String joinWith(String conjunction, Object... objs) {
 		return StringUtils.join(objs, conjunction);
 	}
 
-	public static String join(String conjunction, final List<?> list) {
+	public static String joinWith(String conjunction, final List<?> list) {
 		return StringUtils.join(list, conjunction);
 	}
 
@@ -691,4 +714,16 @@ public class StrKit {
 
 	}
 
+	public static String random(int num) {
+		return RandomUtil.randomStringFixLength(num);
+	}
+
+	public static String getExceptionToString(Throwable e) {
+		if (e == null) {
+			return "";
+		}
+		StringWriter stringWriter = new StringWriter();
+		e.printStackTrace(new PrintWriter(stringWriter));
+		return stringWriter.toString();
+	}
 }

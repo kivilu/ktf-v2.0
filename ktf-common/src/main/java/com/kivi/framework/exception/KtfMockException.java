@@ -13,4 +13,8 @@ public class KtfMockException extends KtfException {
         super(KtfError.E_RPC_FAIL, "RPC调用失败");
     }
 
+    public KtfMockException(String tips) {
+        super(KtfError.E_RPC_FAIL, tips);
+    }
+
 }

@@ -145,7 +145,7 @@ public abstract class BaseController {
 	}
 
 	protected Long msgId() {
-		return KtfKit.me().nextId();
+		return KtfKit.nextId();
 	}
 
 	protected KtfDeferredResult newDeferredResult() {

@@ -150,7 +150,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
 			String	operation	= (String) pageParams.getRequestMap().get(SysLog.OPERATION);
 			Date	startTime	= DateTimeKit.parse((String) params.get("startTime"));
 			Date	endTime		= DateTimeKit.parse((String) params.get("endTime"));
-
+			Long enterpriseId     = (Long) pageParams.getRequestMap().get(SysLog.ENTERPRISE_ID);
 			if (types != null)
 				query.in(SysLog.DB_TYPE, StrKit.split(types, ','));
 
@@ -168,6 +168,9 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
 
 			if (endTime != null)
 				query.le(SysLog.DB_GMT_CREATE, endTime);
+
+			if (enterpriseId != null)
+				query.eq(SysLog.DB_ENTERPRISE_ID,enterpriseId);
 
 		}
 

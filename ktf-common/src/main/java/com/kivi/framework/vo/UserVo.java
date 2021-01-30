@@ -1,7 +1,6 @@
 package com.kivi.framework.vo;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
@@ -35,78 +34,35 @@ public class UserVo implements Serializable {
 	@ApiModelProperty(value = "密码")
 	private String				password;
 
-	@ApiModelProperty(value = "用户名")
-	private String				name;
-
-	@ApiModelProperty(value = " 性别")
-	private Integer				sex;
-
 	@ApiModelProperty(value = "用户类别（0：超级管理员，1：系统管理员、2：业务管理员、3：密钥操作员、4：密钥审核员、5：审计管理员、6：审计员）")
 	private Integer				userType;
 
+	@ApiModelProperty(value = "姓名")
+	private String				name;
+
 	@ApiModelProperty(value = "应用ID，默认值0")
-	private Long				applicationId;
-
-	@ApiModelProperty(value = "手机号")
-	private String				phone;
-
-	@ApiModelProperty(value = "邮箱")
-	private String				email;
+	private Long				appId;
 
 	@ApiModelProperty(value = "用户状态(0：正常，1：不正常)")
 	private Integer				status;
 
-	@ApiModelProperty(value = "过期字段（0-不过期，1-过期）")
-	private Integer				expired;
-
-	@ApiModelProperty(value = "所属企业")
-	private Long				enterpriseId;
-
-	@ApiModelProperty(value = "所属部门")
-	private Long				departmentId;
-
-	@ApiModelProperty(value = "用户职务")
-	private Long				jobId;
-
-	@ApiModelProperty(value = "是否领导（0-是，1-否）")
-	private Integer				isLeader;
-
-	@ApiModelProperty(value = "记录创建用户ID")
-	private Long				createUserId;
-
-	private String				enterpriseName;
-
-	private String				departmentName;
-
-	private String				jobName;
+	@ApiModelProperty(value = "所属企业Id")
+	private Long				orgId;
 
 	/**
 	 * 密码加密盐
 	 */
+	@ApiModelProperty(hidden = true)
 	private String				salt;
 
-	/**
-	 * 上次登录IP
-	 */
-	private String				lastIp;
-	/**
-	 * 上次登录时间
-	 */
-	private LocalDateTime		lastTime;
-
-	private LocalDateTime		gmtCreate;
+	@ApiModelProperty(hidden = true)
+	private List<Long>			roleIds;
 
 	/**
-	 * 角色Id列表
+	 * 校验类型, 0：CA签名 1：CPK签名 9：密码
 	 */
-	private List<Long>			roleIdList;
-
-	/**
-	 * 用户拥有的企业Id列表
-	 */
-	private List<Long>			enterpriseIdList;
-
-	private List<RoleVo>		roles;
+	@ApiModelProperty(hidden = true)
+	private Integer				authType;
 
 	/**
 	 * 密码盐

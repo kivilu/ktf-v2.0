@@ -3,6 +3,7 @@ package com.kivi.dashboard.shiro.service;
 import java.util.List;
 import java.util.Set;
 
+import com.kivi.cif.service.CifCustomerAuthsService;
 import com.kivi.framework.vo.UserVo;
 
 public interface ShiroUserService {
@@ -24,27 +25,13 @@ public interface ShiroUserService {
 	UserVo getUserById(Long userId);
 
 	/**
-	 * 根据角色ID查询角色信息
+	 * 根据角色ID查询对应的权限URL
 	 * 
-	 * @param roleId
+	 * @param roleIds
 	 * @return
 	 */
-	// SysRole getRoleById(Long roleId);
+	Set<String> getPermissions(List<Long> roleIds);
 
-	/**
-	 * 查询用户权限
-	 * 
-	 * @param userId
-	 * @return
-	 */
-	Set<String> getUserPermissions(Long userId);
-
-	/**
-	 * 根据ID查找所属企业ID
-	 * 
-	 * @param userId
-	 * @return
-	 */
-	List<Long> getEnterpriseIdByUserId(Long userId);
+	CifCustomerAuthsService cifAuthService();
 
 }
