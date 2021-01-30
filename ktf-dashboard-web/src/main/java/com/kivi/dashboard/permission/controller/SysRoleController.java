@@ -51,19 +51,6 @@ public class SysRoleController extends DashboardController {
 	public ResultMap info(@PathVariable("id") Long id) {
 		SysRoleDTO role = sysRoleService().getDto(id);
 
-		// 查询角色对应的菜单
-//		List<Long>	resourceIdList	= sysRoleResourceService().selectResourceIdListByRoleId(role.getId());
-//		role.setResourceIdList(resourceIdList);
-//		List<SysRoleResourceDTO>	roleResourceList	= sysRoleResourceService()
-//				.selectResourceNodeListByRoleId(role.getId());
-//		List<TreeNode>				treeNodeList		= roleResourceList.stream().map(roleResource -> {
-//															TreeNode treeNode = new TreeNode();
-//															treeNode.setId(roleResource.getResourceId().toString());
-//															treeNode.setLabel(roleResource.getResource().getName());
-//															return treeNode;
-//														}).collect(Collectors.toList());
-//
-//		role.setResourceNodeList(treeNodeList);
 		return ResultMap.ok().data(role);
 	}
 
@@ -153,18 +140,4 @@ public class SysRoleController extends DashboardController {
 		return ResultMap.ok().data(page);
 	}
 
-	/**
-	 * 角色列表
-	 */
-	/*
-	 * @GetMapping("/select")
-	 * 
-	 * @RequiresPermissions("permission/role/select") public ResultMap select() {
-	 * Map<String, Object> map = new HashMap<>(); // 如果不是超级管理员，则只查询自己所拥有的角色列表 if
-	 * (ShiroKit.getUser().getId() != KtfConstant.SUPER_ADMIN) {
-	 * map.put("createUserId", ShiroKit.getUser().getId()); } List<SysRoleDTO> list
-	 * = sysRoleService().listLike(map, StrKit.emptyArray());
-	 * 
-	 * return ResultMap.ok().put("list", list); }
-	 */
 }

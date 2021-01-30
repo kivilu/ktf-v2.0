@@ -70,239 +70,248 @@ import com.kivi.framework.service.KtfTokenService;
  */
 
 /**
- * 各默认过滤器常用如下(注意URL Pattern里用到的是两颗星,这样才能实现任意层次的全匹配) /admins/**=anon 无参,表示可匿名使用,可以理解为匿名用户或游客 /admins/user/**=authc
- * 无参,表示需认证才能使用 /admins/user/**=authcBasic 无参,表示httpBasic认证 /admins/user/**=ssl 无参,表示安全的URL请求,协议为https
- * /admins/user/**=perms[user:add:*]
+ * 各默认过滤器常用如下(注意URL Pattern里用到的是两颗星,这样才能实现任意层次的全匹配) /admins/**=anon
+ * 无参,表示可匿名使用,可以理解为匿名用户或游客 /admins/user/**=authc 无参,表示需认证才能使用
+ * /admins/user/**=authcBasic 无参,表示httpBasic认证 /admins/user/**=ssl
+ * 无参,表示安全的URL请求,协议为https /admins/user/**=perms[user:add:*]
  * 参数可写多个,多参时必须加上引号,且参数之间用逗号分割,如/admins/user/**=perms["user:add:*,user:modify:*"]。当有多个参数时必须每个参数都通过才算通过,相当于isPermitedAll()方法
  * /admins/user/**=port[8081]
  * 当请求的URL端口不是8081时,跳转到schemal://serverName:8081?queryString。其中schmal是协议http或https等,serverName是你访问的Host,8081是Port端口,queryString是你访问的URL里的?后面的参数
- * /admins/user/**=rest[user] 根据请求的方法,相当于/admins/user/**=perms[user:method],其中method为post,get,delete等
+ * /admins/user/**=rest[user]
+ * 根据请求的方法,相当于/admins/user/**=perms[user:method],其中method为post,get,delete等
  * /admins/user/**=roles[admin]
  * 参数可写多个,多个时必须加上引号,且参数之间用逗号分割,如：/admins/user/**=roles["admin,guest"]。当有多个参数时必须每个参数都通过才算通过,相当于hasAllRoles()方法
  *
  */
-@ConditionalOnProperty(prefix = KtfDashboardProperties.PREFIX, value = "auth", havingValue = "jwt",
-    matchIfMissing = false)
-@AutoConfigureAfter({ShiroRedisConfig.class})
+@ConditionalOnProperty(
+		prefix = KtfDashboardProperties.PREFIX,
+		value = "auth",
+		havingValue = "jwt",
+		matchIfMissing = false)
+@AutoConfigureAfter({ ShiroRedisConfig.class })
 @Configuration
 public class ShiroJwtConfig extends ShiroBaseConfig {
 
-    @Autowired
-    private KtfDashboardProperties ktfDashboardProperties;
+	@Autowired
+	private KtfDashboardProperties	ktfDashboardProperties;
 
-    // @Autowired
-    // private ShiroRedisSessionDAO shiroRedisSessionDAO;
+	// @Autowired
+	// private ShiroRedisSessionDAO shiroRedisSessionDAO;
 
-    @Autowired
-    public ShiroRedisCacheManager redisCacheManager;
+	@Autowired
+	public ShiroRedisCacheManager	redisCacheManager;
 
-    @Autowired
-    private KtfTokenService ktfTokenService;
+	@Autowired
+	private KtfTokenService			ktfTokenService;
 
-    @Autowired
-    ShiroUserService shiroUserService;
+	@Autowired
+	ShiroUserService				shiroUserService;
 
-    /* @Bean
-    public FilterRegistrationBean<Filter> filterRegistrationBean(SecurityManager securityManager) throws Exception {
-        FilterRegistrationBean<Filter> filterRegistration = new FilterRegistrationBean<Filter>();
-        filterRegistration.setFilter((Filter)shiroFilter(securityManager).getObject());
-        filterRegistration.addInitParameter("targetFilterLifecycle", "true");
-        filterRegistration.setAsyncSupported(true);
-        filterRegistration.setEnabled(true);
-        filterRegistration.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.ASYNC);
-    
-        return filterRegistration;
-    }*/
+	/*
+	 * @Bean public FilterRegistrationBean<Filter>
+	 * filterRegistrationBean(SecurityManager securityManager) throws Exception {
+	 * FilterRegistrationBean<Filter> filterRegistration = new
+	 * FilterRegistrationBean<Filter>();
+	 * filterRegistration.setFilter((Filter)shiroFilter(securityManager).getObject()
+	 * ); filterRegistration.addInitParameter("targetFilterLifecycle", "true");
+	 * filterRegistration.setAsyncSupported(true);
+	 * filterRegistration.setEnabled(true);
+	 * filterRegistration.setDispatcherTypes(DispatcherType.REQUEST,
+	 * DispatcherType.ASYNC);
+	 * 
+	 * return filterRegistration; }
+	 */
 
-    @Bean
-    public Authenticator authenticator() {
-        ModularRealmAuthenticator authenticator = new ModularRealmAuthenticator();
-        authenticator.setRealms(Arrays.asList(jwtShiroRealm(), ktfShiroRealm()));
-        authenticator.setAuthenticationStrategy(new FirstSuccessfulStrategy());
-        return authenticator;
-    }
+	@Bean
+	public Authenticator authenticator() {
+		ModularRealmAuthenticator authenticator = new ModularRealmAuthenticator();
+		authenticator.setRealms(Arrays.asList(jwtShiroRealm(), ktfShiroRealm()));
+		authenticator.setAuthenticationStrategy(new FirstSuccessfulStrategy());
+		return authenticator;
+	}
 
-    /**
-     * 不存储Session
-     * 
-     * @return
-     */
-    @Bean
-    protected SessionStorageEvaluator sessionStorageEvaluator() {
-        DefaultWebSessionStorageEvaluator sessionStorageEvaluator = new DefaultWebSessionStorageEvaluator();
-        sessionStorageEvaluator.setSessionStorageEnabled(false);
-        return sessionStorageEvaluator;
-    }
+	/**
+	 * 不存储Session
+	 * 
+	 * @return
+	 */
+	@Bean
+	protected SessionStorageEvaluator sessionStorageEvaluator() {
+		DefaultWebSessionStorageEvaluator sessionStorageEvaluator = new DefaultWebSessionStorageEvaluator();
+		sessionStorageEvaluator.setSessionStorageEnabled(false);
+		return sessionStorageEvaluator;
+	}
 
-    /**
-     * ShiroFilterFactoryBean 处理拦截资源文件问题。 注意：单独一个ShiroFilterFactoryBean配置是或报错的，以为在
-     * 初始化ShiroFilterFactoryBean的时候需要注入：SecurityManager Filter Chain定义说明 1、一个URL可以配置多个Filter，使用逗号分隔
-     * 2、当设置多个过滤器时，全部验证通过，才视为通过 3、部分过滤器可指定参数，如perms，roles
-     */
-    @Bean
-    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
+	/**
+	 * ShiroFilterFactoryBean 处理拦截资源文件问题。 注意：单独一个ShiroFilterFactoryBean配置是或报错的，以为在
+	 * 初始化ShiroFilterFactoryBean的时候需要注入：SecurityManager Filter Chain定义说明
+	 * 1、一个URL可以配置多个Filter，使用逗号分隔 2、当设置多个过滤器时，全部验证通过，才视为通过 3、部分过滤器可指定参数，如perms，roles
+	 */
+	@Bean
+	public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
 
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-        // Shiro的核心安全接口,这个属性是必须的
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
-        // shiroFilter.setLoginUrl("");//身份认证失败，则跳转到登录页面的配置
-        // 没有登录的用户请求需要登录的页面时自动跳转到登录页面，不是必须的属性，不输入地址的话会自动寻找项目web项目的根目录下的”/login.jsp”页面。
-        // shiroFilter.setSuccessUrl("");//登录成功默认跳转页面，不配置则跳转至”/”。如果登陆前点击的一个需要登录的页面，则在登录自动跳转到那个需要登录的页面。不跳转到此。
-        // shiroFilter.setUnauthorizedUrl("");//没有权限默认跳转的页面
-        // shiroFilter.setFilterChainDefinitions("");//filterChainDefinitions的配置顺序为自上而下,以最上面的为准
+		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+		// Shiro的核心安全接口,这个属性是必须的
+		shiroFilterFactoryBean.setSecurityManager(securityManager);
+		// shiroFilter.setLoginUrl("");//身份认证失败，则跳转到登录页面的配置
+		// 没有登录的用户请求需要登录的页面时自动跳转到登录页面，不是必须的属性，不输入地址的话会自动寻找项目web项目的根目录下的”/login.jsp”页面。
+		// shiroFilter.setSuccessUrl("");//登录成功默认跳转页面，不配置则跳转至”/”。如果登陆前点击的一个需要登录的页面，则在登录自动跳转到那个需要登录的页面。不跳转到此。
+		// shiroFilter.setUnauthorizedUrl("");//没有权限默认跳转的页面
+		// shiroFilter.setFilterChainDefinitions("");//filterChainDefinitions的配置顺序为自上而下,以最上面的为准
 
-        Map<String, Filter> filtersMap = shiroFilterFactoryBean.getFilters();
+		Map<String, Filter> filtersMap = shiroFilterFactoryBean.getFilters();
 
-        filtersMap.put("authcToken", createAuthFilter());
-        filtersMap.put("anyRole", createRolesFilter());
-        // filtersMap.put("perms", createPermsFilter());
+		filtersMap.put("authcToken", createAuthFilter());
+		filtersMap.put("anyRole", createRolesFilter());
+		// filtersMap.put("perms", createPermsFilter());
 
-        shiroFilterFactoryBean.setFilters(filtersMap);
+		shiroFilterFactoryBean.setFilters(filtersMap);
 
-        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        super.filterChainAnonMap(filterChainDefinitionMap);
-        filterChainDefinitionMap.put("/**", "authcToken");
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
+		super.filterChainAnonMap(filterChainDefinitionMap);
+		filterChainDefinitionMap.put("/**", "authcToken");
+		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
-        return shiroFilterFactoryBean;
-    }
+		return shiroFilterFactoryBean;
+	}
 
-    @Bean
-    public DefaultWebSecurityManager securityManager() {
-        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        // 设置realm.
-        securityManager.setRealms(Arrays.asList(ktfShiroRealm(), jwtShiroRealm()));
-        // 注入Session管理器
-        // securityManager.setSessionManager(sessionManager());
-        // 注入缓存管理器
-        // securityManager.setCacheManager(redisCacheManager);
-        // 注入记住我管理器
-        // securityManager.setRememberMeManager(rememberMeManager());
-        return securityManager;
-    }
+	@Bean
+	public DefaultWebSecurityManager securityManager() {
+		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+		// 设置realm.
+		securityManager.setRealms(Arrays.asList(ktfShiroRealm(), jwtShiroRealm()));
+		// 注入Session管理器
+		// securityManager.setSessionManager(sessionManager());
+		// 注入缓存管理器
+		// securityManager.setCacheManager(redisCacheManager);
+		// 注入记住我管理器
+		// securityManager.setRememberMeManager(rememberMeManager());
+		return securityManager;
+	}
 
-    /**
-     * 用于用户名密码登录时认证的realm
-     */
-    @Bean("ktfRealm")
-    public Realm ktfShiroRealm() {
-        KtfRealm myShiroRealm = new KtfRealm(shiroUserService, ktfTokenService, ktfCredentialsMatcher());
-        myShiroRealm.setCacheManager(redisCacheManager);
-        myShiroRealm.setAuthenticationCachingEnabled(true);
-        myShiroRealm.setAuthenticationCacheName(KtfCache.ShiroAuthentication);
-        return myShiroRealm;
-    }
+	/**
+	 * 用于用户名密码登录时认证的realm
+	 */
+	@Bean("ktfRealm")
+	public Realm ktfShiroRealm() {
+		KtfRealm myShiroRealm = new KtfRealm(shiroUserService, ktfTokenService, ktfCredentialsMatcher());
+		myShiroRealm.setCacheManager(redisCacheManager);
+		myShiroRealm.setAuthenticationCachingEnabled(true);
+		myShiroRealm.setAuthenticationCacheName(KtfCache.ShiroAuthentication);
+		return myShiroRealm;
+	}
 
-    /**
-     * 用于JWT token认证的realm
-     */
-    @Bean("jwtRealm")
-    public JwtShiroRealm jwtShiroRealm() {
-        JwtShiroRealm jwtRealm = new JwtShiroRealm(shiroUserService);
-        jwtRealm.setCacheManager(redisCacheManager);
-        // 启用身份验证缓存，即缓存AuthenticationInfo信息，默认false
-        jwtRealm.setAuthenticationCachingEnabled(true);
-        // 缓存AuthenticationInfo信息的缓存名称
-        jwtRealm.setAuthenticationCacheName(KtfCache.ShiroAuthentication);
-        return jwtRealm;
-    }
+	/**
+	 * 用于JWT token认证的realm
+	 */
+	@Bean("jwtRealm")
+	public JwtShiroRealm jwtShiroRealm() {
+		JwtShiroRealm jwtRealm = new JwtShiroRealm(shiroUserService);
+		jwtRealm.setCacheManager(redisCacheManager);
+		// 启用身份验证缓存，即缓存AuthenticationInfo信息，默认false
+		jwtRealm.setAuthenticationCachingEnabled(true);
+		// 缓存AuthenticationInfo信息的缓存名称
+		jwtRealm.setAuthenticationCacheName(KtfCache.ShiroAuthentication);
+		return jwtRealm;
+	}
 
-    /**
-     * 开启shiro aop注解支持. 使用代理方式; 所以需要开启代码支持;
-     *
-     * @param securityManager
-     * @return
-     */
-    @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
-        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
-        advisor.setSecurityManager(securityManager);
-        return advisor;
-    }
+	/**
+	 * 开启shiro aop注解支持. 使用代理方式; 所以需要开启代码支持;
+	 *
+	 * @param securityManager
+	 * @return
+	 */
+	@Bean
+	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+		AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+		advisor.setSecurityManager(securityManager);
+		return advisor;
+	}
 
-    @Override
-    protected KtfDashboardProperties ktfProperties() {
-        return this.ktfDashboardProperties;
-    }
+	@Override
+	protected KtfDashboardProperties ktfProperties() {
+		return this.ktfDashboardProperties;
+	}
 
-    // 注意不要加@Bean注解，不然spring会自动注册成filter
-    protected JwtAuthFilter createAuthFilter() {
-        return new JwtAuthFilter();
-    }
+	// 注意不要加@Bean注解，不然spring会自动注册成filter
+	protected JwtAuthFilter createAuthFilter() {
+		return new JwtAuthFilter();
+	}
 
-    // 注意不要加@Bean注解，不然spring会自动注册成filter
-    protected AnyRolesAuthorizationFilter createRolesFilter() {
-        return new AnyRolesAuthorizationFilter();
-    }
+	// 注意不要加@Bean注解，不然spring会自动注册成filter
+	protected AnyRolesAuthorizationFilter createRolesFilter() {
+		return new AnyRolesAuthorizationFilter();
+	}
 
-    protected KtfPermsFilter createPermsFilter() {
-        return new KtfPermsFilter();
-    }
+	protected KtfPermsFilter createPermsFilter() {
+		return new KtfPermsFilter();
+	}
 
-    protected KtfCredentialsMatcher ktfCredentialsMatcher() {
-        return new KtfCredentialsMatcher(shiroUserService.cifAuthService());
-    }
+	protected KtfCredentialsMatcher ktfCredentialsMatcher() {
+		return new KtfCredentialsMatcher(shiroUserService.cifAuthService());
+	}
 
-    /**
-     * cookie对象;
-     *
-     * @return
-     */
-    // @Bean
-    // public SimpleCookie rememberMeCookie() {
-    // SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
-    // // 记住我cookie生效时间1小时 ,单位秒
-    // simpleCookie.setMaxAge(shiroCookie().getMaxAge());
-    // simpleCookie.setPath(shiroCookie().getPath());
-    // simpleCookie.setHttpOnly(true);
-    // return simpleCookie;
-    // }
+	/**
+	 * cookie对象;
+	 *
+	 * @return
+	 */
+	// @Bean
+	// public SimpleCookie rememberMeCookie() {
+	// SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+	// // 记住我cookie生效时间1小时 ,单位秒
+	// simpleCookie.setMaxAge(shiroCookie().getMaxAge());
+	// simpleCookie.setPath(shiroCookie().getPath());
+	// simpleCookie.setHttpOnly(true);
+	// return simpleCookie;
+	// }
 
-    /**
-     * cookie管理对象;
-     *
-     * @return
-     */
-    // @Bean
-    // public CookieRememberMeManager rememberMeManager() {
-    // CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
-    // cookieRememberMeManager.setCookie(rememberMeCookie());
-    // cookieRememberMeManager.setCipherKey(Base64.decode("5aaC5qKm5oqA5pyvAAAAAA=="));
-    // return cookieRememberMeManager;
-    // }
+	/**
+	 * cookie管理对象;
+	 *
+	 * @return
+	 */
+	// @Bean
+	// public CookieRememberMeManager rememberMeManager() {
+	// CookieRememberMeManager cookieRememberMeManager = new
+	// CookieRememberMeManager();
+	// cookieRememberMeManager.setCookie(rememberMeCookie());
+	// cookieRememberMeManager.setCipherKey(Base64.decode("5aaC5qKm5oqA5pyvAAAAAA=="));
+	// return cookieRememberMeManager;
+	// }
 
-    /*
-     * @Bean(name = "sessionManager") public SessionManager sessionManager() {
-     * DefaultWebSessionManager sessionManager = new DefaultWebSessionManager(); //
-     * 会话超时时间，单位：毫秒
-     * sessionManager.setGlobalSessionTimeout(TimeUnit.SECONDS.toMillis(shiroCookie(
-     * ).getMaxAge())); sessionManager.setSessionDAO(shiroRedisSessionDAO); //
-     * 去掉shiro登录时url里的JSESSIONID
-     * sessionManager.setSessionIdUrlRewritingEnabled(false); // 删除失效的session
-     * sessionManager.setDeleteInvalidSessions(true);
-     * 
-     * // 会话验证 sessionManager.setSessionValidationScheduler(
-     * getExecutorServiceSessionValidationScheduler());
-     * sessionManager.setSessionValidationSchedulerEnabled(true);
-     * 
-     * // 设置cookie sessionManager.setSessionIdCookieEnabled(true);
-     * sessionManager.getSessionIdCookie().setName("session-z-id");
-     * sessionManager.getSessionIdCookie().setPath(shiroCookie().getPath());
-     * sessionManager.getSessionIdCookie().setMaxAge(shiroCookie().getMaxAge());
-     * sessionManager.getSessionIdCookie().setHttpOnly(true); return sessionManager;
-     * }
-     * 
-     * @Bean(name = "sessionValidationScheduler") public
-     * ExecutorServiceSessionValidationScheduler
-     * getExecutorServiceSessionValidationScheduler() {
-     * ExecutorServiceSessionValidationScheduler sessionValidationScheduler = new
-     * ExecutorServiceSessionValidationScheduler();
-     * sessionValidationScheduler.setInterval(TimeUnit.SECONDS.toMillis(shiroCookie(
-     * ).getMaxAge())); return sessionValidationScheduler; }
-     */
+	/*
+	 * @Bean(name = "sessionManager") public SessionManager sessionManager() {
+	 * DefaultWebSessionManager sessionManager = new DefaultWebSessionManager(); //
+	 * 会话超时时间，单位：毫秒
+	 * sessionManager.setGlobalSessionTimeout(TimeUnit.SECONDS.toMillis(shiroCookie(
+	 * ).getMaxAge())); sessionManager.setSessionDAO(shiroRedisSessionDAO); //
+	 * 去掉shiro登录时url里的JSESSIONID
+	 * sessionManager.setSessionIdUrlRewritingEnabled(false); // 删除失效的session
+	 * sessionManager.setDeleteInvalidSessions(true);
+	 * 
+	 * // 会话验证 sessionManager.setSessionValidationScheduler(
+	 * getExecutorServiceSessionValidationScheduler());
+	 * sessionManager.setSessionValidationSchedulerEnabled(true);
+	 * 
+	 * // 设置cookie sessionManager.setSessionIdCookieEnabled(true);
+	 * sessionManager.getSessionIdCookie().setName("session-z-id");
+	 * sessionManager.getSessionIdCookie().setPath(shiroCookie().getPath());
+	 * sessionManager.getSessionIdCookie().setMaxAge(shiroCookie().getMaxAge());
+	 * sessionManager.getSessionIdCookie().setHttpOnly(true); return sessionManager;
+	 * }
+	 * 
+	 * @Bean(name = "sessionValidationScheduler") public
+	 * ExecutorServiceSessionValidationScheduler
+	 * getExecutorServiceSessionValidationScheduler() {
+	 * ExecutorServiceSessionValidationScheduler sessionValidationScheduler = new
+	 * ExecutorServiceSessionValidationScheduler();
+	 * sessionValidationScheduler.setInterval(TimeUnit.SECONDS.toMillis(shiroCookie(
+	 * ).getMaxAge())); return sessionValidationScheduler; }
+	 */
 
-    // private Cookie shiroCookie() {
-    // return this.ktfDashboardProperties.getCookie();
-    // }
+	// private Cookie shiroCookie() {
+	// return this.ktfDashboardProperties.getCookie();
+	// }
 
 }

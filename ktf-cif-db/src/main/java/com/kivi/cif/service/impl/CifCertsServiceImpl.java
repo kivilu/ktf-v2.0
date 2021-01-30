@@ -50,8 +50,7 @@ public class CifCertsServiceImpl extends ServiceImpl<CifCertsMapper, CifCerts> i
 		CifCerts entity = super.getById(id);
 		if (entity == null)
 			return null;
-		CifCertsDTO dto = BeanConverter.convert(CifCertsDTO.class, decoderPriKey(entity), BeanConverter.long2String,
-				BeanConverter.integer2String);
+		CifCertsDTO dto = BeanConverter.convert(CifCertsDTO.class, decoderPriKey(entity));
 		return dto;
 	}
 

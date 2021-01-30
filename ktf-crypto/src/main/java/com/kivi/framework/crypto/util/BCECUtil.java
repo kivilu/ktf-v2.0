@@ -1,4 +1,4 @@
-package com.kivi.framework.crypto.sm2;
+package com.kivi.framework.crypto.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
