@@ -1,5 +1,7 @@
 package com.kivi.dashboard.advice;
 
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,10 @@ import com.kivi.dashboard.shiro.ShiroKit;
 import com.kivi.dashboard.shiro.ShiroUser;
 import com.kivi.framework.constant.KtfError;
 import com.kivi.framework.exception.KtfException;
+import com.kivi.framework.exception.KtfMockException;
 import com.kivi.framework.model.ResultMap;
 import com.kivi.framework.service.KtfTokenService;
+import com.kivi.framework.util.kit.StrKit;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,12 +48,18 @@ public class GlobalExceptionHandler {
         if (e instanceof KtfException) {
             KtfException ke = (KtfException)e;
             result = ke.getCode() == null ? ResultMap.error(ke.getTips()) : ResultMap.error(ke.getCode(), ke.getTips());
-        } else if (e instanceof UnauthorizedException) {
-            result = ResultMap.error(KtfError.E_FORBIDDEN, "请求权限不满足");
+        }
+        if (e instanceof KtfMockException) {
+            KtfMockException ke = (KtfMockException)e;
+            result = ke.getCode() == null ? ResultMap.error(ke.getTips()) : ResultMap.error(ke.getCode(), ke.getTips());
+        } else if (e instanceof UnauthorizedException || e instanceof AuthorizationException) {
+            result = ResultMap.error(KtfError.E_FORBIDDEN, "没有权限访问");
         } else if (e instanceof UnauthenticatedException) {
             result = ResultMap.error(KtfError.E_UNAUTHORIZED, "尚未登录，请登录");
+        } else if (e instanceof AuthenticationException) {
+            result = ResultMap.error(KtfError.E_UNAUTHORIZED, StrKit.join("登录失败:", e.getMessage()));
         } else {
-            result = ResultMap.error(KtfError.E_SERVICE_UNAVAILABLE, "操作异常");
+            result = ResultMap.error(KtfError.E_SERVICE_UNAVAILABLE, e.getMessage());
         }
 
         if (result.code() == KtfError.E_UNAUTHORIZED) {

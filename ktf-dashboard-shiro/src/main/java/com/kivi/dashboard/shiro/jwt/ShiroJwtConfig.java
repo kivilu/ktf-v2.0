@@ -8,7 +8,6 @@ import javax.servlet.Filter;
 
 import org.apache.shiro.authc.Authenticator;
 import org.apache.shiro.authc.pam.FirstSuccessfulStrategy;
-import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.mgt.SessionStorageEvaluator;
 import org.apache.shiro.realm.Realm;
@@ -27,6 +26,7 @@ import com.kivi.dashboard.shiro.cache.ShiroRedisCacheManager;
 import com.kivi.dashboard.shiro.configure.ShiroRedisConfig;
 import com.kivi.dashboard.shiro.ktf.AnyRolesAuthorizationFilter;
 import com.kivi.dashboard.shiro.ktf.KtfCredentialsMatcher;
+import com.kivi.dashboard.shiro.ktf.KtfModularRealmAuthenticator;
 import com.kivi.dashboard.shiro.ktf.KtfPermsFilter;
 import com.kivi.dashboard.shiro.ktf.KtfRealm;
 import com.kivi.dashboard.shiro.service.ShiroUserService;
@@ -116,8 +116,8 @@ public class ShiroJwtConfig extends ShiroBaseConfig {
 
     @Bean
     public Authenticator authenticator() {
-        ModularRealmAuthenticator authenticator = new ModularRealmAuthenticator();
-        authenticator.setRealms(Arrays.asList(jwtShiroRealm(), ktfShiroRealm()));
+        KtfModularRealmAuthenticator authenticator = new KtfModularRealmAuthenticator();
+        authenticator.setRealms(Arrays.asList(jwtShiroRealm(), ktfRealm()));
         authenticator.setAuthenticationStrategy(new FirstSuccessfulStrategy());
         return authenticator;
     }
@@ -171,7 +171,8 @@ public class ShiroJwtConfig extends ShiroBaseConfig {
     public DefaultWebSecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 设置realm.
-        securityManager.setRealms(Arrays.asList(ktfShiroRealm(), jwtShiroRealm()));
+        // securityManager.setRealms(Arrays.asList(ktfRealm(), jwtShiroRealm()));
+        securityManager.setAuthenticator(authenticator());
         // 注入Session管理器
         // securityManager.setSessionManager(sessionManager());
         // 注入缓存管理器
@@ -185,7 +186,7 @@ public class ShiroJwtConfig extends ShiroBaseConfig {
      * 用于用户名密码登录时认证的realm
      */
     @Bean("ktfRealm")
-    public Realm ktfShiroRealm() {
+    public Realm ktfRealm() {
         KtfRealm myShiroRealm = new KtfRealm(shiroUserService, ktfTokenService, ktfCredentialsMatcher());
         myShiroRealm.setCacheManager(redisCacheManager);
         myShiroRealm.setAuthenticationCachingEnabled(true);
@@ -196,7 +197,7 @@ public class ShiroJwtConfig extends ShiroBaseConfig {
     /**
      * 用于JWT token认证的realm
      */
-    @Bean("jwtRealm")
+    @Bean("jwtShiroRealm")
     public JwtShiroRealm jwtShiroRealm() {
         JwtShiroRealm jwtRealm = new JwtShiroRealm(shiroUserService);
         jwtRealm.setCacheManager(redisCacheManager);
