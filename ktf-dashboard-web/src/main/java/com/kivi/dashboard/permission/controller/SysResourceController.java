@@ -32,8 +32,11 @@ import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.page.PageInfoVO;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * <p>
@@ -177,9 +180,11 @@ public class SysResourceController extends DashboardController {
      * 查询顶级菜单
      */
     @ApiOperation(value = "查询顶级菜单", notes = "查询顶级菜单")
+    @ApiImplicitParams({@ApiImplicitParam(name = SysResourceDTO.RESOURCE_TYPE, dataType = "integer",
+        value = "资源类别(0：菜单，1：按钮)", paramType = "query", allowEmptyValue = true)})
     @RequiresPermissions("permission/menu/tops")
     @GetMapping("/tops")
-    public ResultMap tops(@RequestParam Map<String, Object> params) {
+    public ResultMap tops(@ApiIgnore @RequestParam Map<String, Object> params) {
         PageInfoVO<SysResourceDTO> page = sysResourceService().tops(params);
 
         return ResultMap.ok().data(page);
@@ -190,14 +195,17 @@ public class SysResourceController extends DashboardController {
      */
 
     @ApiOperation(value = "查询菜单列表", notes = "查询菜单列表")
+    @ApiImplicitParams({@ApiImplicitParam(name = "resourceTypes", dataType = "string", value = "资源类型，多个类型使用逗号分隔",
+        paramType = "query", allowEmptyValue = true)})
     @RequiresPermissions("permission/menu/list")
     @GetMapping("/list")
-    public ResultMap list(@RequestParam Map<String, Object> params) {
+    public ResultMap list(@ApiIgnore @RequestParam Map<String, Object> params) {
         if (params != null) {
-            String types = (String)params.get("resourceTypes");
+            String types = (String)params.remove("resourceTypes");
             if (StrKit.isNotBlank(types)) {
                 params.put("resourceTypes", StrKit.split(types, ','));
             }
+
         }
         List<SysResourceDTO> list = sysResourceService().selectMenutList(params);
         return ResultMap.ok().data(list);

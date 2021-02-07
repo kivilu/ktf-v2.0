@@ -7,9 +7,6 @@ import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kivi.dashboard.shiro.ShiroKit;
 import com.kivi.dashboard.shiro.ShiroUser;
@@ -25,9 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 /**
  **/
 
-@ControllerAdvice
+// @ControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler {
+public abstract class GlobalExceptionHandler {
 
     @Autowired
     private KtfTokenService ktfTokenService;
@@ -38,10 +35,10 @@ public class GlobalExceptionHandler {
      * @param e
      * @return
      */
-    @ExceptionHandler(Exception.class)
-    @ResponseBody
-    ResponseEntity<ResultMap> handleException(Exception e) {
-        log.error("统一异常处理，{}", e.getMessage());
+    // @ExceptionHandler(Exception.class)
+    // @ResponseBody
+    protected ResponseEntity<ResultMap> handleException(Exception e) {
+        // log.error("统一异常处理，{}", e.getMessage());
 
         ResultMap result = null;
 
@@ -76,19 +73,5 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(result, httpStatus);
     }
-
-    /*@ExceptionHandler(value = {UnauthorizedException.class})
-    ResponseEntity<ResultMap> unauthorizedExceptionHandler(HttpServletRequest request, Exception e) {
-        log.error("访问无权限异常处理", e);
-        ShiroUser shiroUser = ShiroKit.getUser();
-        if (shiroUser != null && shiroUser.getId() != null) {
-            log.warn("返回客户端401错误，清除用户{}的登录token", shiroUser.getLoginName());
-            ktfTokenService.evictJwt(shiroUser.getId().toString());
-        }
-    
-        ResultMap result = ResultMap.error(KtfError.E_UNAUTHORIZED, "暂无权限");
-        HttpStatus httpStatus = HttpStatus.resolve(result.code());
-        return new ResponseEntity<>(result, httpStatus);
-    }*/
 
 }

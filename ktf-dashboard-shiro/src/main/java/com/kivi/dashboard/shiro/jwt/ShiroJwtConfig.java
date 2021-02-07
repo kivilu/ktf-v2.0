@@ -171,7 +171,7 @@ public class ShiroJwtConfig extends ShiroBaseConfig {
     public DefaultWebSecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 设置realm.
-        // securityManager.setRealms(Arrays.asList(ktfRealm(), jwtShiroRealm()));
+        securityManager.setRealms(Arrays.asList(ktfRealm(), jwtShiroRealm()));
         securityManager.setAuthenticator(authenticator());
         // 注入Session管理器
         // securityManager.setSessionManager(sessionManager());

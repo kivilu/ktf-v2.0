@@ -720,4 +720,16 @@ public class StrKit {
         e.printStackTrace(new PrintWriter(stringWriter));
         return stringWriter.toString();
     }
+
+    /**
+     * 驼峰名称字符串转换为下划线
+     * 
+     * @param str
+     * @return
+     */
+    public static String camel2Underline(String str) {
+        String[] items = StringUtils.splitByCharacterTypeCamelCase(str);
+
+        return StringUtils.join(items, "_").toLowerCase();
+    }
 }

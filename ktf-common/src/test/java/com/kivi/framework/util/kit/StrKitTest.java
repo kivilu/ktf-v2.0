@@ -51,4 +51,11 @@ public class StrKitTest {
         System.out.println(StrKit.joinWith("-", "Test1", "Test2", "Test3"));
     }
 
+    @Test
+    public void testCamel2Underline() {
+
+        System.out.println(StrKit.camel2Underline("testCamel2Underline"));
+        System.out.println(StrKit.camel2Underline("test_camel2_underline"));
+    }
+
 }
