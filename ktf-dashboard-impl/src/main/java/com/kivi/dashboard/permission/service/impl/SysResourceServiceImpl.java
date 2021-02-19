@@ -115,11 +115,13 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         return true;
     }
 
-    @Cacheable(value = KtfCache.SysResource, key = "caches[0].name+'.list.'+#userId+#types?.hashCode()",
-        unless = "#result == null")
+    @Cacheable(value = KtfCache.SysResource,
+        key = "caches[0].name+'.list.'+#userId+T(org.apache.commons.lang3.StringUtils).join(#types)",
+        condition = "#types!=null", unless = "#result == null")
     @KtfTrace("根据用户ID和资源类型查询")
     @Override
     public List<SysResourceDTO> selectResources(Long userId, MenuType... types) {
+
         // 系统管理员，拥有最高权限
         Map<String, Object> params = new HashMap<>();
 
@@ -208,8 +210,9 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
     }
 
-    @Cacheable(value = KtfCache.SysResource, key = "caches[0].name+'.urls.'+#roleIds?.hashCode()",
-        unless = "#result == null")
+    @Cacheable(value = KtfCache.SysResource,
+        key = "caches[0].name+'.urls.'+T(org.apache.commons.lang3.StringUtils).join(#roleIds)",
+        condition = "#roleIds!=null", unless = "#result == null")
     @Override
     public Set<String> getPermissions(List<Long> roleIds) {
         Map<String, Object> params = new HashMap<>();

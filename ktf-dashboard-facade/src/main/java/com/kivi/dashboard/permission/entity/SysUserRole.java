@@ -1,11 +1,11 @@
 package com.kivi.dashboard.permission.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.kivi.framework.util.kit.StrKit;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,11 +28,6 @@ public class SysUserRole extends Model<SysUserRole> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键id
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
-    /**
      * 用户id
      */
     @TableField("user_id")
@@ -43,16 +38,14 @@ public class SysUserRole extends Model<SysUserRole> {
     @TableField("role_id")
     private Long roleId;
 
-
-    public static final String DB_ID = "id";
-	public static final String ID = "id";
     public static final String DB_USER_ID = "user_id";
-	public static final String USER_ID = "userId";
+    public static final String USER_ID = "userId";
     public static final String DB_ROLE_ID = "role_id";
-	public static final String ROLE_ID = "roleId";
+    public static final String ROLE_ID = "roleId";
+
     @Override
     protected Serializable pkVal() {
-        return this.id;
+        return StrKit.join(userId, roleId);
     }
 
 }
