@@ -43,7 +43,6 @@ import com.kivi.framework.vo.page.PageInfoVO;
  * 资源 服务实现类
  * </p>
  *
- * @author Auto-generator
  * @since 2019-09-18
  */
 
