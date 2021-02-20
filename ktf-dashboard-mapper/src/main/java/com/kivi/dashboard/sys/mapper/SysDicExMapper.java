@@ -52,6 +52,15 @@ public interface SysDicExMapper {
 	List<SysDicDTO> getChildren(Map<String, Object> params);
 
 	/**
+	 * 查找子节点的代码列表
+	 * 
+	 * @param pVarCode
+	 * @param ppId
+	 * @return
+	 */
+	List<String> getChildrenCodes(@Param("pVarCode") String pVarCode, @Param("ppId") Long ppId);
+
+	/**
 	 * 查询父节点
 	 * 
 	 * @param params

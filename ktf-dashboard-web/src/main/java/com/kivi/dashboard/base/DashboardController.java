@@ -8,20 +8,20 @@ import com.kivi.cif.service.CifCustomerService;
 import com.kivi.dashboard.org.service.OrgCorpService;
 import com.kivi.dashboard.org.service.OrgDeptService;
 import com.kivi.dashboard.org.service.OrgTitleService;
+import com.kivi.dashboard.permission.service.SysResourceService;
 import com.kivi.dashboard.permission.service.SysRoleResourceService;
 import com.kivi.dashboard.permission.service.SysRoleService;
 import com.kivi.dashboard.permission.service.SysUserOrgService;
 import com.kivi.dashboard.permission.service.SysUserRoleService;
 import com.kivi.dashboard.permission.service.SysUserService;
 import com.kivi.dashboard.permission.service.SysUserTokenService;
-import com.kivi.dashboard.permission.service.SysResourceService;
 import com.kivi.dashboard.sys.service.ISysApplicationService;
-import com.kivi.dashboard.sys.service.SysDicService;
 import com.kivi.dashboard.sys.service.ISysFileService;
 import com.kivi.dashboard.sys.service.ISysIndustryService;
 import com.kivi.dashboard.sys.service.ISysLogService;
 import com.kivi.dashboard.sys.service.ISysRegionService;
 import com.kivi.dashboard.sys.service.SysApi3rdpartyService;
+import com.kivi.dashboard.sys.service.SysDicService;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.crypto.sm3.SM3Kit;
 import com.kivi.framework.crypto.sm4.SM4Kit;
@@ -120,7 +120,7 @@ public abstract class DashboardController extends BaseController {
 		byte[]	key		= new byte[16];
 		System.arraycopy(hash, 16, key, 0, 16);
 
-		byte[] data = SM4Kit.decryptEcbHex(encData, key);
+		byte[] data = SM4Kit.decryptHex(encData, key);
 
 		return new String(data, KtfConstant.DEFAULT_CHARSET);
 	}

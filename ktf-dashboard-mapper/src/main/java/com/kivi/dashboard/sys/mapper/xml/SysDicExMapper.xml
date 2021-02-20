@@ -98,6 +98,23 @@
 		</where>
     </select>
     
+    <select id="getChildrenCodes" resultType="String">
+	    SELECT
+				d.var_code
+		FROM
+				ktf_sys_dic d
+		LEFT JOIN (
+			SELECT
+				d1.id
+			FROM
+				ktf_sys_dic d1
+			WHERE
+				d1.parent_id = #{ppId}
+			AND d1.var_code = #{pVarCode}
+		) A ON d.parent_id = A.id
+		 WHERE d.parent_id = A.id 
+    </select>
+    
     <!-- 查询父节点 -->
     <select id="getParents" parameterType="map" resultMap="BaseResultMap">
 	    SELECT
@@ -193,23 +210,6 @@
 			d.parent_id = A.id
 		AND d.var_code = #{varCode}
     </select>
-     
-    
-    <select id="listVarCode" resultType="String">
-	    SELECT
-				d.var_code
-		FROM
-				ktf_sys_dic d
-		LEFT JOIN (
-			SELECT
-				d1.id
-			FROM
-				ktf_sys_dic d1
-			WHERE
-				d1.parent_id = #{ppId}
-			AND d1.var_code = #{pVarCode}
-		) A ON d.parent_id = A.id
-		 WHERE d.parent_id = A.id 
-    </select> -->
+    -->
 
 </mapper>

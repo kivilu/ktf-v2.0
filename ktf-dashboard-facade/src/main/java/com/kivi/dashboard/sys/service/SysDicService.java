@@ -67,6 +67,15 @@ public interface SysDicService extends IService<SysDic> {
 	List<SysDicDTO> getChildren(Long id, Boolean recursion);
 
 	/**
+	 * 查找子数据
+	 * 
+	 * @param pVarCode
+	 * @param recursion
+	 * @return
+	 */
+	List<SysDicDTO> getChildren(String pVarCode, Boolean recursion);
+
+	/**
 	 * 指定列查询列表
 	 */
 	PageInfoVO<SysDicDTO> tops(Map<String, Object> params);

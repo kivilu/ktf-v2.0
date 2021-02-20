@@ -37,8 +37,12 @@ public class KtfKit {
 		return SpringContextHolder.getBean(KtfKit.class);
 	}
 
-	public static long ktfNextId() {
+	public static long nextId() {
 		return idWalker.nextId();
+	}
+
+	public static int nextIntId() {
+		return idWalker.nextIntId();
 	}
 
 	public int getServerPort() {
@@ -62,14 +66,6 @@ public class KtfKit {
 
 	public Boolean isActiveDev() {
 		return StrKit.equals("dev", getEnvProperty("spring.profiles.active"));
-	}
-
-	public long nextId() {
-		return idWalker.nextId();
-	}
-
-	public int nextIntId() {
-		return idWalker.nextIntId();
 	}
 
 	public Resource[] getResources(String locationPattern) {

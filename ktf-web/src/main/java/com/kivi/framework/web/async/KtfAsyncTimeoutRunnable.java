@@ -16,11 +16,7 @@ public class KtfAsyncTimeoutRunnable<T> implements Runnable {
 
 	@Override
 	public void run() {
-
-		KtfBaseRsp<String> rsp = new KtfBaseRsp<String>();
-		rsp.setRspCode(KtfError.E_REQUEST_TIMEOUT);
-		rsp.setRspDesc("请求超时");
-		rsp.setRspBody("");
+		KtfBaseRsp<String> rsp = KtfBaseRsp.error(KtfError.E_REQUEST_TIMEOUT, "请求超时");
 
 		if (timeoutService != null)
 			timeoutService.onTimeout(deferredResult.getKtfMsgId());

@@ -10,9 +10,12 @@ import org.bouncycastle.jce.interfaces.ECPrivateKey;
  *
  */
 public interface Sm2PrivateKey extends ECPrivateKey {
-    ECPrivateKeyParameters getPrivateKeyParameters();
 
-    byte[] getWithId();
+	ECPrivateKeyParameters getPrivateKeyParameters();
 
-    void setWithId( byte[] withId );
+	byte[] getWithId();
+
+	void setWithId(byte[] withId);
+
+	byte[] getData();
 }

@@ -70,20 +70,25 @@ import com.kivi.framework.service.KtfTokenService;
  */
 
 /**
- * 各默认过滤器常用如下(注意URL Pattern里用到的是两颗星,这样才能实现任意层次的全匹配) /admins/**=anon 无参,表示可匿名使用,可以理解为匿名用户或游客 /admins/user/**=authc
- * 无参,表示需认证才能使用 /admins/user/**=authcBasic 无参,表示httpBasic认证 /admins/user/**=ssl 无参,表示安全的URL请求,协议为https
- * /admins/user/**=perms[user:add:*]
+ * 各默认过滤器常用如下(注意URL Pattern里用到的是两颗星,这样才能实现任意层次的全匹配) /admins/**=anon
+ * 无参,表示可匿名使用,可以理解为匿名用户或游客 /admins/user/**=authc 无参,表示需认证才能使用
+ * /admins/user/**=authcBasic 无参,表示httpBasic认证 /admins/user/**=ssl
+ * 无参,表示安全的URL请求,协议为https /admins/user/**=perms[user:add:*]
  * 参数可写多个,多参时必须加上引号,且参数之间用逗号分割,如/admins/user/**=perms["user:add:*,user:modify:*"]。当有多个参数时必须每个参数都通过才算通过,相当于isPermitedAll()方法
  * /admins/user/**=port[8081]
  * 当请求的URL端口不是8081时,跳转到schemal://serverName:8081?queryString。其中schmal是协议http或https等,serverName是你访问的Host,8081是Port端口,queryString是你访问的URL里的?后面的参数
- * /admins/user/**=rest[user] 根据请求的方法,相当于/admins/user/**=perms[user:method],其中method为post,get,delete等
+ * /admins/user/**=rest[user]
+ * 根据请求的方法,相当于/admins/user/**=perms[user:method],其中method为post,get,delete等
  * /admins/user/**=roles[admin]
  * 参数可写多个,多个时必须加上引号,且参数之间用逗号分割,如：/admins/user/**=roles["admin,guest"]。当有多个参数时必须每个参数都通过才算通过,相当于hasAllRoles()方法
  *
  */
-@ConditionalOnProperty(prefix = KtfDashboardProperties.PREFIX, value = "auth", havingValue = "jwt",
-    matchIfMissing = false)
-@AutoConfigureAfter({ShiroRedisConfig.class})
+@ConditionalOnProperty(
+		prefix = KtfDashboardProperties.PREFIX,
+		value = "auth",
+		havingValue = "jwt",
+		matchIfMissing = false)
+@AutoConfigureAfter({ ShiroRedisConfig.class })
 @Configuration
 public class ShiroJwtConfig extends ShiroBaseConfig {
 

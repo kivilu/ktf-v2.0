@@ -23,7 +23,6 @@ import com.vip.vjtools.vjkit.number.RandomUtil;
  *
  */
 public class StrKit {
-
     public static final String SPACE = " ";
     public static final String DOT = ".";
     public static final String SLASH = "/";
@@ -732,4 +731,5 @@ public class StrKit {
 
         return StringUtils.join(items, "_").toLowerCase();
     }
+
 }
