@@ -107,7 +107,7 @@ public class JwtAuthFilter extends AuthenticatingFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
-        String json = ResultMap.error(KtfError.E_UNAUTHORIZED, "AccessToken无效").toString();
+        String json = ResultMap.error(KtfError.E_UNAUTHORIZED, "登录状态失效，请重新登录").toString();
         httpServletResponse.setStatus(HttpStatus.SC_NON_AUTHORITATIVE_INFORMATION);
         httpServletResponse.setHeader("Content-Type", "application/json;charset=UTF-8");
         httpServletResponse.getWriter().print(json);

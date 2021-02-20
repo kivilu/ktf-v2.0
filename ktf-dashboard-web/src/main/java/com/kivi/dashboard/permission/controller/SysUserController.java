@@ -37,8 +37,11 @@ import com.kivi.framework.vo.UserVo;
 import com.kivi.framework.vo.page.PageInfoVO;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * <p>
@@ -80,9 +83,16 @@ public class SysUserController extends DashboardController {
      * 所有用户列表
      */
     @ApiOperation(value = "用户分页查询", notes = "用户分页查询")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "keyword", dataType = "string", value = "用户名称，可选，模糊匹配", paramType = "query",
+            allowEmptyValue = true),
+        @ApiImplicitParam(name = "page", dataType = "int", value = "当前页，可选，默认值：1", paramType = "query",
+            allowEmptyValue = true),
+        @ApiImplicitParam(name = "limit", dataType = "int", value = "每页大小，可选，默认值：10", paramType = "query",
+            allowEmptyValue = true)})
     @GetMapping("/page")
     @RequiresPermissions("permission/user/page")
-    public ResultMap page(@RequestParam(required = false) Map<String, Object> params) {
+    public ResultMap page(@ApiIgnore @RequestParam(required = false) Map<String, Object> params) {
         // 只有超级管理员，才能查看所有管理员列表
         ShiroUser shiroUser = ShiroKit.getUser();
 
@@ -103,9 +113,16 @@ public class SysUserController extends DashboardController {
      * 所有用户列表
      */
     @ApiOperation(value = "简单用户分页查询", notes = "简单用户分页查询")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "keyword", dataType = "string", value = "用户名称，可选，模糊匹配", paramType = "query",
+            allowEmptyValue = true),
+        @ApiImplicitParam(name = "page", dataType = "int", value = "当前页，可选，默认值：1", paramType = "query",
+            allowEmptyValue = true),
+        @ApiImplicitParam(name = "limit", dataType = "int", value = "每页大小，可选，默认值：10", paramType = "query",
+            allowEmptyValue = true)})
     @GetMapping("/page/simple")
     @RequiresPermissions("permission/user/page")
-    public ResultMap pageSimple(@RequestParam(required = false) Map<String, Object> params) {
+    public ResultMap pageSimple(@ApiIgnore @RequestParam(required = false) Map<String, Object> params) {
         // 只有超级管理员，才能查看所有管理员列表
         ShiroUser shiroUser = ShiroKit.getUser();
 

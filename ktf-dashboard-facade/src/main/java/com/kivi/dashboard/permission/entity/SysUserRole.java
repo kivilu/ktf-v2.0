@@ -24,28 +24,27 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("ktf_sys_user_role")
 public class SysUserRole extends Model<SysUserRole> {
+    private static final long serialVersionUID = 1L;
 
-	private static final long	serialVersionUID	= 1L;
+    /**
+     * 用户id
+     */
+    @TableField("user_id")
+    private Long userId;
+    /**
+     * 角色id
+     */
+    @TableField("role_id")
+    private Long roleId;
 
-	/**
-	 * 用户id
-	 */
-	@TableField("user_id")
-	private Long				userId;
-	/**
-	 * 角色id
-	 */
-	@TableField("role_id")
-	private Long				roleId;
+    public static final String DB_USER_ID = "user_id";
+    public static final String USER_ID = "userId";
+    public static final String DB_ROLE_ID = "role_id";
+    public static final String ROLE_ID = "roleId";
 
-	public static final String	DB_USER_ID			= "user_id";
-	public static final String	USER_ID				= "userId";
-	public static final String	DB_ROLE_ID			= "role_id";
-	public static final String	ROLE_ID				= "roleId";
-
-	@Override
-	protected Serializable pkVal() {
-		return StrKit.join(this.userId, this.roleId);
-	}
+    @Override
+    protected Serializable pkVal() {
+        return StrKit.join(userId, roleId);
+    }
 
 }
