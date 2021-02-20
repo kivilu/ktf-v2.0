@@ -1,32 +1,35 @@
 {
-  "groups": [
-    {
-      "name": "ktf.cif",
-      "type": "com.kivi.cif.properties.CifProperties",
-      "sourceType": "com.kivi.cif.properties.CifProperties"
-    }
-  ],
+  "groups": [{
+    "name": "ktf.cif",
+    "type": "com.kivi.cif.properties.CifProperties",
+    "sourceType": "com.kivi.cif.properties.CifProperties"
+  }],
   "properties": [
     {
       "name": "ktf.cif.dubbo-service-version",
       "type": "java.lang.String",
-      "description": "dubbo service ç‰ˆæœ¬å·",
+      "description": "dubbo service °æ±¾ºÅ",
       "sourceType": "com.kivi.cif.properties.CifProperties",
       "defaultValue": "1.0.0"
     },
     {
       "name": "ktf.cif.default-password",
       "type": "java.lang.String",
-      "description": "é»˜è®¤å¯†ç ",
+      "description": "Ä¬ÈÏÃÜÂë",
       "sourceType": "com.kivi.cif.properties.CifProperties",
       "defaultValue": "11111111"
     },
     {
       "name": "ktf.cif.alg-digest",
       "type": "com.kivi.framework.crypto.enums.AlgDigest",
-      "description": "æ‘˜è¦ç®—æ³•",
+      "description": "ÕªÒªËã·¨",
       "sourceType": "com.kivi.cif.properties.CifProperties",
       "defaultValue": "MD5"
+    },
+    {
+      "name": "kms",
+      "type": "java.lang.String",
+      "description": "A description for 'kms'"
     }
   ],
   "hints": []

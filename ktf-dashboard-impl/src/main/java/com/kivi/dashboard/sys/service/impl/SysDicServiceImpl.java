@@ -211,10 +211,24 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 		return result;
 	}
 
+	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'.'+#id+'.'+#recursion", unless = "#result == null")
 	@Override
 	public List<SysDicDTO> getChildren(Long id, Boolean recursion) {
 		Map<String, Object> params = new HashMap<>();
 		params.put(SysDicDTO.ID, id);
+		params.put(SysDicDTO.STATUS, KtfStatus.ENABLED.code);
+		params.put("hasSelf", false);
+		params.put("recursion", recursion);
+		List<SysDicDTO> list = sysDicExMapper.getChildren(params);
+
+		return list;
+	}
+
+	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'.'+#pVarCode+'.'+#recursion", unless = "#result == null")
+	@Override
+	public List<SysDicDTO> getChildren(String pVarCode, Boolean recursion) {
+		Map<String, Object> params = new HashMap<>();
+		params.put(SysDicDTO.VAR_CODE, pVarCode);
 		params.put(SysDicDTO.STATUS, KtfStatus.ENABLED.code);
 		params.put("hasSelf", false);
 		params.put("recursion", recursion);
@@ -253,14 +267,6 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 	 * 
 	 * @Override public List<String> listVarCode(String pCode, Long ppId) { return
 	 * sysDicExMapper.listVarCode(pCode, ppId); }
-	 */
-
-	/*
-	 * @Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'.'+#pVarCode",
-	 * unless = "#result == null")
-	 * 
-	 * @Override public List<String> listVarCode(String pVarCode) { return
-	 * sysDicExMapper.listVarCode(pVarCode, 0L); }
 	 */
 
 }

@@ -1,6 +1,11 @@
 {
   "groups": [
     {
+      "name": "ktf.cif",
+      "type": "com.kivi.cif.properties.CifProperties",
+      "sourceType": "com.kivi.cif.properties.CifProperties"
+    },
+    {
       "name": "ktf.common",
       "type": "com.kivi.framework.properties.KtfCommonProperties",
       "sourceType": "com.kivi.framework.properties.KtfCommonProperties"
@@ -36,6 +41,16 @@
       "sourceType": "com.kivi.framework.properties.KtfDashboardProperties"
     },
     {
+      "name": "ktf.logback",
+      "type": "com.kivi.framework.properties.KtfLogbackProperties",
+      "sourceType": "com.kivi.framework.properties.KtfLogbackProperties"
+    },
+    {
+      "name": "ktf.logback.datasource",
+      "type": "com.kivi.framework.properties.KtfLogbackProperties$Datasource",
+      "sourceType": "com.kivi.framework.properties.KtfLogbackProperties"
+    },
+    {
       "name": "ktf.swagger",
       "type": "com.kivi.framework.properties.KtfSwaggerProperties",
       "sourceType": "com.kivi.framework.properties.KtfSwaggerProperties"
@@ -47,6 +62,33 @@
     }
   ],
   "properties": [
+    {
+      "name": "ktf.cif.alg-digest",
+      "type": "com.kivi.framework.crypto.enums.AlgDigest",
+      "description": "摘要算法",
+      "sourceType": "com.kivi.cif.properties.CifProperties"
+    },
+    {
+      "name": "ktf.cif.default-password",
+      "type": "java.lang.String",
+      "description": "用户默认密码",
+      "sourceType": "com.kivi.cif.properties.CifProperties",
+      "defaultValue": "11111111"
+    },
+    {
+      "name": "ktf.cif.dubbo-service-version",
+      "type": "java.lang.String",
+      "description": "dubbo service 版本号",
+      "sourceType": "com.kivi.cif.properties.CifProperties",
+      "defaultValue": "1.0.0"
+    },
+    {
+      "name": "ktf.common.app-id",
+      "type": "java.lang.Long",
+      "description": "业务应用ID",
+      "sourceType": "com.kivi.framework.properties.KtfCommonProperties",
+      "defaultValue": 1
+    },
     {
       "name": "ktf.common.bz-applicaton-code",
       "type": "java.lang.String",
@@ -107,6 +149,20 @@
       "sourceType": "com.kivi.framework.properties.KtfDashboardProperties"
     },
     {
+      "name": "ktf.dashboard.max-reserve-menu-id",
+      "type": "java.lang.Integer",
+      "description": "系统预留菜单最大ID，默认：90",
+      "sourceType": "com.kivi.framework.properties.KtfDashboardProperties",
+      "defaultValue": 90
+    },
+    {
+      "name": "ktf.logback.log-path",
+      "type": "java.lang.String",
+      "description": "日志保存路径，默认：\/tmp\/logs",
+      "sourceType": "com.kivi.framework.properties.KtfLogbackProperties",
+      "defaultValue": "\/tmp\/logs"
+    },
+    {
       "name": "ktf.swagger.authorization-enabled",
       "type": "java.lang.Boolean",
       "sourceType": "com.kivi.framework.properties.KtfSwaggerProperties",
@@ -117,6 +173,42 @@
       "type": "java.lang.String",
       "sourceType": "com.kivi.framework.properties.KtfSwaggerProperties",
       "defaultValue": "系统API接口文档简要描述"
+    },
+    {
+      "name": "ktf.swagger.enable-dic-api",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.properties.KtfSwaggerProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "ktf.swagger.enable-login-api",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.properties.KtfSwaggerProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "ktf.swagger.enable-org-api",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.properties.KtfSwaggerProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "ktf.swagger.enable-permission-api",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.properties.KtfSwaggerProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "ktf.swagger.enable-region-api",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.properties.KtfSwaggerProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "ktf.swagger.enable-sys-api",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.kivi.framework.properties.KtfSwaggerProperties",
+      "defaultValue": false
     },
     {
       "name": "ktf.swagger.enabled",
