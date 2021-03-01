@@ -2,9 +2,11 @@ package com.kivi.dashboard.shiro;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
+import com.kivi.dashboard.shiro.ktf.KtfRealm;
 import com.kivi.framework.util.JacksonUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -237,13 +239,15 @@ public class ShiroKit {
 	}
 
 	/**
-	 * 获取角色关联的企业
-	 *
-	 * @return
+	 * 
+	 * @Title: clearAuth
+	 * @Description: TODO 清空所有资源权限
+	 * @return void 返回类型
 	 */
-	/*
-	 * public static List<Long> getEnterpriseIdByUser() { return
-	 * getUser().getEnterpriseIdList(); }
-	 */
+	public static void clearAuth() {
+		RealmSecurityManager	rsm		= (RealmSecurityManager) SecurityUtils.getSecurityManager();
+		KtfRealm				realm	= (KtfRealm) rsm.getRealms().iterator().next();
+		realm.clearCachedAuthorization();
+	}
 
 }

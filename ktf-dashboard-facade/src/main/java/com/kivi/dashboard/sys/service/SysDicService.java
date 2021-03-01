@@ -59,14 +59,6 @@ public interface SysDicService extends IService<SysDic> {
 	Map<String, Object> getSettings(String varCode);
 
 	/**
-	 * 递归查询下属字段数据
-	 * 
-	 * @param id
-	 * @return
-	 */
-	List<SysDicDTO> getChildren(Long id, Boolean recursion);
-
-	/**
 	 * 查找子数据
 	 * 
 	 * @param pVarCode
@@ -76,14 +68,27 @@ public interface SysDicService extends IService<SysDic> {
 	List<SysDicDTO> getChildren(String pVarCode, Boolean recursion);
 
 	/**
-	 * 指定列查询列表
+	 * 分页查询
 	 */
-	PageInfoVO<SysDicDTO> tops(Map<String, Object> params);
+	PageInfoVO<SysDicDTO> page(Map<String, Object> params);
+
+	/**
+	 * 递归查询下属字段数据
+	 * 
+	 * @param id
+	 * @return
+	 */
+	List<SysDicDTO> getChildren(Long id, Boolean recursion);
 
 	/**
 	 * 根据Pid查询
 	 */
 	List<SysDicDTO> list(Long pid);
+
+	/**
+	 * 根据Pid字典树一个级别的数据
+	 */
+	List<SysDicDTO> treeQuery(Long pid);
 
 	/**
 	 * 新增

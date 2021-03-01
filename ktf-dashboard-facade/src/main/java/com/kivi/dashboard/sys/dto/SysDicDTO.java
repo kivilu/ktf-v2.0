@@ -52,6 +52,9 @@ public class SysDicDTO implements Serializable {
 	@ApiModelProperty(value = "是否叶子")
 	private Boolean				isLeaf;
 
+	@ApiModelProperty(hidden = true)
+	private Boolean				localCached			= false;
+
 	public static final String	ID					= "id";
 	public static final String	PARENT_ID			= "parentId";
 	public static final String	VAR_CODE			= "varCode";

@@ -8,21 +8,21 @@
     {
       "name": "ktf.cif.dubbo-service-version",
       "type": "java.lang.String",
-      "description": "dubbo service °æ±¾ºÅ",
+      "description": "dubbo service ç‰ˆæœ¬å·",
       "sourceType": "com.kivi.cif.properties.CifProperties",
       "defaultValue": "1.0.0"
     },
     {
       "name": "ktf.cif.default-password",
       "type": "java.lang.String",
-      "description": "Ä¬ÈÏÃÜÂë",
+      "description": "é»˜è®¤å¯†ç ",
       "sourceType": "com.kivi.cif.properties.CifProperties",
       "defaultValue": "11111111"
     },
     {
       "name": "ktf.cif.alg-digest",
       "type": "com.kivi.framework.crypto.enums.AlgDigest",
-      "description": "ÕªÒªËã·¨",
+      "description": "æ‘˜è¦ç®—æ³•",
       "sourceType": "com.kivi.cif.properties.CifProperties",
       "defaultValue": "MD5"
     },

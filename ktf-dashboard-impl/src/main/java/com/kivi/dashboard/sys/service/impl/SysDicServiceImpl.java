@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
@@ -30,7 +29,6 @@ import com.kivi.framework.cache.annotation.KtfCacheEvict;
 import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.constant.enums.KtfStatus;
 import com.kivi.framework.converter.BeanConverter;
-import com.kivi.framework.util.kit.NumberKit;
 import com.kivi.framework.util.kit.ObjectKit;
 import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.page.PageInfoVO;
@@ -68,7 +66,8 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'.'+#varCode+#pVarCode", unless = "#result == null")
 	@Override
 	public SysDicDTO getDto(String varCode, String pVarCode) {
-		return sysDicExMapper.getDto(varCode, pVarCode);
+		SysDicDTO dto = sysDicExMapper.getDto(varCode, pVarCode);
+		return dto;
 	}
 
 	/**
@@ -106,12 +105,9 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 		return result;
 	}
 
-	/**
-	 * 指定列查询列表
-	 */
-	@KtfTrace("指定列查询列表数据字典")
+	@KtfTrace("分页查询数据字典")
 	@Override
-	public PageInfoVO<SysDicDTO> tops(Map<String, Object> params) {
+	public PageInfoVO<SysDicDTO> page(Map<String, Object> params) {
 		if (params == null)
 			params = new HashMap<>();
 
@@ -178,32 +174,18 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 		Map<String, Object> params = new HashMap<>();
 		params.put(SysDicDTO.VAR_CODE, varCode);
 		params.put(SysDicDTO.STATUS, KtfStatus.ENABLED.code);
-		params.put("hasSelf", false);
+		params.put("hasSelf", true);
 		List<SysDicDTO>		list	= sysDicExMapper.getChildren(params);
 		Map<String, Object>	result	= new HashMap<>();
 		list.stream().forEach(dic -> {
 			if ("json".equals(dic.getType())) {
-				result.put(dic.getVarCode(), JSON.parse(dic.getVarValue()));
-
-			} else if ("boolean".equals(dic.getType())) {
-				result.put(dic.getVarCode(), Boolean.parseBoolean(dic.getVarValue()));
-			} else if ("number".equals(dic.getType())) {
-				result.put(dic.getVarCode(), NumberKit.toInt(dic.getVarValue()));
-			} else if ("xpath".equals(dic.getType())) {
-				String[]	codes		= StrKit.split(dic.getVarValue(), StrKit.SLASH);
-
-				int			lastIndex	= codes.length - 1;
-				lastIndex = lastIndex < 0 ? 0 : lastIndex;
-
-				String			code	= codes[lastIndex];
-				String[]		pcodes	= ArrayUtils.subarray(codes, 0, lastIndex);
-				List<Object>	values	= this.getValues(code, pcodes).stream().map(v -> {
-											return JSON.parse((String) v);
-										}).collect(Collectors.toList());
-				result.put(dic.getVarCode(), values);
-
+				if (dic.getIsLeaf() && list.size() > 1)
+					result.put(StrKit.underlineToCamel(dic.getVarCode()), JSON.parse(dic.getVarValue()));
+				else {
+					result.putAll(JSON.parseObject(dic.getVarValue()));
+				}
 			} else {
-				result.put(dic.getVarCode(), dic.getVarValue());
+				result.put(StrKit.underlineToCamel(dic.getVarCode()), dic.getVarValue());
 			}
 
 		});
@@ -211,7 +193,10 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 		return result;
 	}
 
-	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'.'+#id+'.'+#recursion", unless = "#result == null")
+	@Cacheable(
+			value = KtfCache.SysDic,
+			key = "caches[0].name+'.'+#id+'.'+#recursion",
+			unless = "#result == null || #result.isEmpty()")
 	@Override
 	public List<SysDicDTO> getChildren(Long id, Boolean recursion) {
 		Map<String, Object> params = new HashMap<>();
@@ -224,7 +209,10 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 		return list;
 	}
 
-	@Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'.'+#pVarCode+'.'+#recursion", unless = "#result == null")
+	@Cacheable(
+			value = KtfCache.SysDic,
+			key = "caches[0].name+'.'+#pVarCode+'.'+#recursion",
+			unless = "#result == null || #result.isEmpty()")
 	@Override
 	public List<SysDicDTO> getChildren(String pVarCode, Boolean recursion) {
 		Map<String, Object> params = new HashMap<>();
@@ -251,6 +239,18 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 	public List<Object> getValues(String varCode, String... pVarCodes) {
 		List<Map<String, Object>> list = sysDicExMapper.getKvMap(varCode, pVarCodes);
 		return list.stream().map(map -> map.get("value")).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<SysDicDTO> treeQuery(Long pid) {
+		if (pid == null)
+			pid = ROOT_ID;
+
+		Map<String, Object> params = new HashMap<>();
+		params.put(SysDicDTO.STATUS, KtfStatus.ENABLED.code);
+		params.put(SysDicDTO.PARENT_ID, pid);
+
+		return sysDicExMapper.treeQuery(params);
 	}
 
 	/*

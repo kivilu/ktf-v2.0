@@ -33,42 +33,73 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author Auto-generator
  * @since 2019-09-18
  */
-@ConditionalOnProperty(prefix = KtfSwaggerProperties.PREFIX, value = "enable-sys-api", havingValue = "true",
-    matchIfMissing = false)
-@Api(tags = {"系统日志"})
+@ConditionalOnProperty(
+		prefix = KtfSwaggerProperties.PREFIX,
+		value = "enable-sys-api",
+		havingValue = "true",
+		matchIfMissing = false)
+@Api(tags = { "系统日志" })
 @RestController
 @RequestMapping("/sys/log")
 public class SysLogController extends DashboardController {
 
-    /**
-     * 分页查询
-     */
-    @ApiOperation(value = "分页查询系统日志", notes = "分页查询系统日志")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "keyword", dataType = "string", value = "用户名称，可选，模糊匹配", paramType = "query",
-            allowEmptyValue = true),
-        @ApiImplicitParam(name = SysLogDTO.OPERATION, dataType = "string", value = "操作名称，可选，模糊匹配", paramType = "query",
-            allowEmptyValue = true),
-        @ApiImplicitParam(name = SysLogDTO.TYPE, dataType = "int", value = "日志类型，可选，（0:系统日志，1：操作日志）",
-            paramType = "query", allowEmptyValue = true),
-        @ApiImplicitParam(name = "startTime", dataType = "string", value = "开始时间，可选，格式：yyyy-mm-dd", paramType = "query",
-            allowEmptyValue = true),
-        @ApiImplicitParam(name = "endTime", dataType = "string", value = "结束时间，可选，格式：yyyy-mm-dd", paramType = "query",
-            allowEmptyValue = true),
-        @ApiImplicitParam(name = "page", dataType = "int", value = "当前页，可选，默认值：1", paramType = "query",
-            allowEmptyValue = true),
-        @ApiImplicitParam(name = "limit", dataType = "int", value = "每页大小，可选，默认值：10", paramType = "query",
-            allowEmptyValue = true)})
-    @RequiresPermissions("sys/log/page")
-    @GetMapping("/page")
-    public ResultMap page(@ApiIgnore @RequestParam(required = false) Map<String, Object> params) {
-        ShiroUser shiroUser = ShiroKit.getUser();
-        if (shiroUser.getId() != KtfConstant.SUPER_ADMIN) {
-            params.put("enterpriseId", ShiroKit.getUser().getCorpId());
-        }
-        PageInfoVO<SysLogDTO> page = sysLogService().page(params);
+	/**
+	 * 分页查询
+	 */
+	@ApiOperation(value = "分页查询系统日志", notes = "分页查询系统日志")
+	@ApiImplicitParams({
+			@ApiImplicitParam(
+					name = "keyword",
+					dataType = "string",
+					value = "用户名称，可选，模糊匹配",
+					paramType = "query",
+					allowEmptyValue = true),
+			@ApiImplicitParam(
+					name = SysLogDTO.OPERATION,
+					dataType = "string",
+					value = "操作名称，可选，模糊匹配",
+					paramType = "query",
+					allowEmptyValue = true),
+			@ApiImplicitParam(
+					name = SysLogDTO.TYPE,
+					dataType = "integer",
+					value = "日志类型，可选，（0:系统日志，1：操作日志）",
+					paramType = "query",
+					allowEmptyValue = true),
+			@ApiImplicitParam(
+					name = "startTime",
+					dataType = "string",
+					value = "开始时间，可选，格式：yyyy-mm-dd",
+					paramType = "query",
+					allowEmptyValue = true),
+			@ApiImplicitParam(
+					name = "endTime",
+					dataType = "string",
+					value = "结束时间，可选，格式：yyyy-mm-dd",
+					paramType = "query",
+					allowEmptyValue = true),
+			@ApiImplicitParam(
+					name = "page",
+					dataType = "integer",
+					value = "当前页，可选，默认值：1",
+					paramType = "query",
+					allowEmptyValue = true),
+			@ApiImplicitParam(
+					name = "limit",
+					dataType = "integer",
+					value = "每页大小，可选，默认值：10",
+					paramType = "query",
+					allowEmptyValue = true) })
+	@RequiresPermissions("sys/log/page")
+	@GetMapping("/page")
+	public ResultMap page(@ApiIgnore @RequestParam(required = false) Map<String, Object> params) {
+		ShiroUser shiroUser = ShiroKit.getUser();
+		if (shiroUser.getId() != KtfConstant.SUPER_ADMIN) {
+			params.put("enterpriseId", ShiroKit.getUser().getCorpId());
+		}
+		PageInfoVO<SysLogDTO> page = sysLogService().page(params);
 
-        return ResultMap.ok().data(page);
-    }
+		return ResultMap.ok().data(page);
+	}
 
 }

@@ -44,6 +44,14 @@ public interface SysDicExMapper {
 	List<SysDicDTO> selectDTO(@Param("params") Map<String, Object> params);
 
 	/**
+	 * 树形数据查询
+	 * 
+	 * @param params
+	 * @return
+	 */
+	List<SysDicDTO> treeQuery(@Param("params") Map<String, Object> params);
+
+	/**
 	 * 查询子节点
 	 * 
 	 * @param parentId

@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @Description oauth2过滤器
  */
+@Deprecated
 @Slf4j
 public class JwtFilter extends BasicHttpAuthenticationFilter {
 

@@ -159,9 +159,9 @@ public class OrgTitleController extends DashboardController {
     @ApiImplicitParams({
         @ApiImplicitParam(name = "name", dataType = "string", value = "名称，可选，模糊匹配", paramType = "query",
             allowEmptyValue = true),
-        @ApiImplicitParam(name = "page", dataType = "int", value = "当前页，可选，默认值：1", paramType = "query",
+        @ApiImplicitParam(name = "page", dataType = "integer", value = "当前页，可选，默认值：1", paramType = "query",
             allowEmptyValue = true),
-        @ApiImplicitParam(name = "limit", dataType = "int", value = "每页大小，可选，默认值：10", paramType = "query",
+        @ApiImplicitParam(name = "limit", dataType = "integer", value = "每页大小，可选，默认值：10", paramType = "query",
             allowEmptyValue = true)})
     @RequiresPermissions("org/title/page")
     @GetMapping("/page")

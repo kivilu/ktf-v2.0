@@ -38,6 +38,7 @@
 			t.var_code = #{varCode}
     </select>
     
+    <!-- 列表查询 -->
     <select id="selectDTO" resultMap="BaseResultMap" >
     	SELECT
 			t.id,
@@ -63,9 +64,10 @@
 					OR t.var_code LIKE '%${params.keyword}%')
 			</if>
 		</where>
+		ORDER BY t.id
     </select>
     
-    <!-- 查询子节点 -->
+    <!-- 查询列表子节点 -->
     <select id="getChildren" parameterType="map" resultMap="BaseResultMap">
 	    SELECT
 			t.id,
@@ -80,7 +82,7 @@
 		FROM
 			ktf_sys_dic t
 		<where>
-			<if test="!recursion"> 
+			<if test="!recursion and id!=null"> 
 				t.parent_id = #{id}
 			</if>
 		    <if test="recursion and id!=null">
@@ -89,13 +91,36 @@
 		    <if test="varCode!=null and varCode != ''">
 		    	AND FIND_IN_SET(t.id, sys_dic_getChildren((SELECT id FROM ktf_sys_dic WHERE var_code=#{varCode})))
 		    </if>
-		    <if test="hasSelf">
+		    <if test="!hasSelf and id!=null">
 		    	AND t.id != #{id}
+		    </if>
+		    <if test="!hasSelf and varCode!=null and varCode != ''">
+		    	AND t.var_code != #{varCode}
 		    </if>
 			<if test="status!=null">
 				AND t.`status` = #{status}
 			</if>
 		</where>
+		ORDER BY t.id
+    </select>
+    
+    <!-- tree查询 -->
+    <select id="treeQuery" resultMap="BaseResultMap" >
+    	SELECT
+			t.id,
+			t.var_name,
+		    if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, false, true) as is_leaf
+		FROM
+			ktf_sys_dic t
+		<where>
+			<if test="params.parentId !=null">
+				t.parent_id = ${params.parentId}
+			</if>
+			<if test="params.status!=null">
+				AND t.`status` = ${params.status}
+			</if>
+		</where>
+		ORDER BY t.id
     </select>
     
     <select id="getChildrenCodes" resultType="String">

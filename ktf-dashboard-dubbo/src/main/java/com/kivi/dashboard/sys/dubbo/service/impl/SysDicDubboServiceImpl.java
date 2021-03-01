@@ -89,8 +89,18 @@ public class SysDicDubboServiceImpl extends ServiceImpl<SysDicMapper, SysDic> im
 	}
 
 	@Override
-	public PageInfoVO<SysDicDTO> tops(Map<String, Object> params) {
-		return sysDicService.tops(params);
+	public List<SysDicDTO> getChildren(String pVarCode, Boolean recursion) {
+		return sysDicService.getChildren(pVarCode, recursion);
+	}
+
+	@Override
+	public PageInfoVO<SysDicDTO> page(Map<String, Object> params) {
+		return sysDicService.page(params);
+	}
+
+	@Override
+	public List<SysDicDTO> treeQuery(Long pid) {
+		return sysDicService.treeQuery(pid);
 	}
 
 }

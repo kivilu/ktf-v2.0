@@ -11,13 +11,12 @@ import lombok.Getter;
 
 @Getter
 public enum DicEnum {
-	DATA_TYPE("DATA_TYPES", "数据类型"),
-		STS_RUNTIME("RUNTIME_SETTINGS", "系统运行配置"),
+	SYS_CONSTANT("SYS_CONSTANT", "系统常量"),
+		STS_RUNTIME("RUNTIME_SETTINGS", "运行配置"),
 		STS_VUE("VUE_SETTINGS", "VUE前端设置"),
-		MODULE_NAME("MODULE_NAME", "模块名称"),
 		LOG_OPERATIONS("LOG_OPERATIONS", "操作日志"),
-		LOG_REC_OPTS("LOG_REC_OPERATIONS", "需记录的操作"),
-		LOG_ADT_OPTS("LOG_AUDIT_OPERATIONS", "需审计的操作");
+		MODULE_NAME("MODULE_NAME", "模块名称"),
+		METHOD_NAME("METHOD_NAME", "方法名称"),;
 
 	private final String	code;
 	private final String	desc;

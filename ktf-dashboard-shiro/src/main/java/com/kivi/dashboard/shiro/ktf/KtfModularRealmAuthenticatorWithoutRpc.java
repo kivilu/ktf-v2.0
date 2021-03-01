@@ -3,7 +3,6 @@ package com.kivi.dashboard.shiro.ktf;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.dubbo.rpc.RpcException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -17,7 +16,7 @@ import com.kivi.framework.exception.KtfMockException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class KtfModularRealmAuthenticator extends ModularRealmAuthenticator {
+public class KtfModularRealmAuthenticatorWithoutRpc extends ModularRealmAuthenticator {
 	/**
 	 * 扩展父类原方法，对异常立即进行外抛
 	 * 
@@ -45,14 +44,7 @@ public class KtfModularRealmAuthenticator extends ModularRealmAuthenticator {
 					info = realm.getAuthenticationInfo(token);
 				} catch (Throwable var11) {
 					t = var11;
-					if (t instanceof RpcException) {
-						if (log.isDebugEnabled()) {
-							String msg = "Realm [" + realm
-									+ "] threw an exceptionduring a multi-realm authentication attempt:";
-							log.debug(msg, var11);
-							authenticationException = new AuthenticationException("后台服务不可用");
-						}
-					} else if (t instanceof KtfException || t instanceof KtfMockException) {
+					if (t instanceof KtfException || t instanceof KtfMockException) {
 
 						if (log.isDebugEnabled()) {
 							String msg = "Realm [" + realm

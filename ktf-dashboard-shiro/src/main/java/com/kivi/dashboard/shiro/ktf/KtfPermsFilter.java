@@ -16,30 +16,30 @@ import com.kivi.framework.model.ResultMap;
 
 public class KtfPermsFilter extends AuthorizationFilter {
 
-    @Override
-    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue)
-        throws Exception {
-        HttpServletRequest req = WebUtils.toHttp(request);
-        HttpServletResponse resp = WebUtils.toHttp(response);
+	@Override
+	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue)
+			throws Exception {
+		HttpServletRequest	req			= WebUtils.toHttp(request);
+		HttpServletResponse	resp		= WebUtils.toHttp(response);
 
-        String permission = "/idis/log/page";
+		String				permission	= req.getContextPath();
 
-        Subject subject = getSubject(request, response);
-        // If the subject isn't identified, redirect to login URL
-        if (!subject.isPermitted(permission)) {
-            resp.setHeader("Access-Control-Allow-Origin", req.getHeader("Origin"));
-            resp.setHeader("Access-Control-Allow-Credentials", "true");
-            resp.setContentType("application/json; charset=utf-8");
-            resp.setCharacterEncoding("UTF-8");
-            PrintWriter out = resp.getWriter();
-            String json = ResultMap.error(KtfError.E_FORBIDDEN, "权限不足").toString();
-            out.println(json);
-            out.flush();
-            out.close();
-            return false;
-        }
+		Subject				subject		= getSubject(request, response);
+		// If the subject isn't identified, redirect to login URL
+		if (!subject.isPermitted(permission)) {
+			resp.setHeader("Access-Control-Allow-Origin", req.getHeader("Origin"));
+			resp.setHeader("Access-Control-Allow-Credentials", "true");
+			resp.setContentType("application/json; charset=utf-8");
+			resp.setCharacterEncoding("UTF-8");
+			PrintWriter	out		= resp.getWriter();
+			String		json	= ResultMap.error(KtfError.E_FORBIDDEN, "权限不足").toString();
+			out.println(json);
+			out.flush();
+			out.close();
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
 }
