@@ -50,23 +50,25 @@ public class KtfModularRealmAuthenticator extends ModularRealmAuthenticator {
                             String msg =
                                 "Realm [" + realm + "] threw an exceptionduring a multi-realm authentication attempt:";
                             log.debug(msg, var11);
-                            authenticationException = new AuthenticationException("后台服务不可用");
                         }
+                        authenticationException = new AuthenticationException("后台服务不可用");
                     } else if (t instanceof KtfException || t instanceof KtfMockException) {
 
                         if (log.isDebugEnabled()) {
                             String msg =
                                 "Realm [" + realm + "] threw an exceptionduring a multi-realm authentication attempt:";
                             log.debug(msg, var11);
-                            authenticationException = new AuthenticationException(((KtfException)t).getTips());
                         }
-                    } else {
+                        authenticationException = new AuthenticationException(((KtfException)t).getTips());
+                    } else if (t instanceof AuthenticationException) {
                         authenticationException = (AuthenticationException)var11;
                         if (log.isDebugEnabled()) {
                             String msg =
                                 "Realm [" + realm + "] threw an exceptionduring a multi-realm authentication attempt:";
                             log.debug(msg, var11);
                         }
+                    } else {
+                        log.error("shiro运行异常", var11);
                     }
                 }
                 aggregate = strategy.afterAttempt(realm, token, info, aggregate, t);
