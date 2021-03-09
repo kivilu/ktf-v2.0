@@ -112,7 +112,7 @@ public class SysUserController extends DashboardController {
 		ShiroUser shiroUser = ShiroKit.getUser();
 
 		if (shiroUser.getId() != KtfConstant.SUPER_ADMIN) {
-			params.put("userId", ShiroKit.getUser().getId());
+			params.put(SysUserDTO.CREATE_ROLE_ID, shiroUser.getRoleId());
 			if (shiroUser.getUserType() != UserType.SYS.value) {
 				Long corpId = shiroUser.getCorpId();
 				params.put(SysUserDTO.ORG_ID, corpId);
@@ -232,9 +232,10 @@ public class SysUserController extends DashboardController {
 				return ResultMap.error(KtfError.E_CONFLICT, "登录名已存在");
 			}
 
-			JwtUserDTO jwtUser = super.getJwtUser();
+			ShiroUser user = ShiroKit.getUser();
 			dto.setLoginMode(KtfIdentifyType.USERNAME.text);
-			dto.setCreateUserId(jwtUser.getId());
+			dto.setCreateUserId(user.getId());
+			dto.setCreateRoleId(user.getRoleId());
 
 			Long userId = sysUserService().save(dto);
 			if (userId != null)
@@ -301,39 +302,31 @@ public class SysUserController extends DashboardController {
 	}
 
 	/**
-	 * 用户选择树
-	 *
-	 * @return
+	 * 单个删除
 	 */
-	// @ApiOperation(value = "用户选择树", notes = "用户选择树")
-	// @GetMapping("/getUserTree")
-	// public ResultMap getUserTree() {
-	// try {
-	// List<Map<String, Object>> list = sysUserService().selectUserTree();
-	// List<SelectNode> nodeList = list.stream().map(baseUser -> {
-	// SelectNode node = new SelectNode();
-	// node.setLabel(baseUser.get("name").toString());
-	// node.setValue(baseUser.get("id").toString());
-	// return node;
-	// }).collect(Collectors.toList());
-	//
-	// return ResultMap.ok().put("list", nodeList);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// return ResultMap.error("运行异常，请联系管理员");
-	// }
-	// }
+	@ApiOperation(value = "批量删除用户", notes = "删除用户")
+	@GetMapping("/delete/{id}")
+	@RequiresPermissions("permission/user/delete")
+	public ResultMap deleteById(@PathVariable("id") Long id) {
+		try {
+			if (KtfConstant.SUPER_ADMIN == id) {
+				return ResultMap.error("超级管理员不能删除");
+			}
+			if (ShiroKit.getUser().getId().longValue() == id.longValue()) {
+				return ResultMap.error("当前用户不能删除");
+			}
 
-	/**
-	 * 获取登录的用户信息
-	 */
-	// @GetMapping("/info")
-	// public ResultMap info() {
-	// ShiroUser user = ShiroKit.getUser();
-	// OrgCorpDTO enterpriseDTO = orgCorpService().getDto(user.getEnterpriseId());
-	// user.setEnterpriseName(enterpriseDTO.getName());
-	// user.setPre(enterpriseDTO.getPrefix());
-	// return ResultMap.ok().data(user);
-	// }
+			Long[]	ids	= { id };
+			Boolean	b	= sysUserService().deleteBatch(ids);
+			if (b) {
+				return ResultMap.ok("用户删除成功！");
+			} else {
+				return ResultMap.ok("用户删除失败！");
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return ResultMap.error("用户删除失败，请联系管理员");
+		}
+	}
 
 }

@@ -6,12 +6,14 @@
     <resultMap id="BaseResultMap" type="com.kivi.dashboard.permission.entity.SysRole">
         <id column="id" property="id" />
         <result column="name" property="name" />
-        <result column="seq" property="seq" />
+        <result column="type" property="type" />
         <result column="description" property="description" />
         <result column="status" property="status" />
         <result column="gmt_create" property="gmtCreate" />
         <result column="gmt_update" property="gmtUpdate" />
         <result column="create_user_id" property="createUserId" />
+        <result column="sub_role_ids" property="subRoleIds" />
+        <result column="org_id" property="orgId" />
     </resultMap>
     
 </mapper>

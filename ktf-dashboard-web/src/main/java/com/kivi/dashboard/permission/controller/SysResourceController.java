@@ -1,6 +1,7 @@
 package com.kivi.dashboard.permission.controller;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import com.kivi.dashboard.permission.entity.SysResource;
 import com.kivi.dashboard.shiro.ShiroKit;
 import com.kivi.framework.constant.enums.CommonEnum;
 import com.kivi.framework.constant.enums.CommonEnum.MenuType;
+import com.kivi.framework.constant.enums.KtfStatus;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.model.ResultMap;
 import com.kivi.framework.properties.KtfDashboardProperties;
@@ -226,26 +228,13 @@ public class SysResourceController extends DashboardController {
 				params.put("resourceTypes", StrKit.split(types, ','));
 			}
 
+		} else {
+			params = new HashMap<>();
 		}
+		params.put(SysResourceDTO.STATUS, KtfStatus.ENABLED.code);
 		List<SysResourceDTO> list = sysResourceService().selectMenutList(params);
 		return ResultMap.ok().data(list);
 	}
-
-	/**
-	 * 选择菜单(添加、修改菜单)
-	 */
-	/*
-	 * @ApiOperation(value = "选择菜单(添加、修改菜单)", notes = "选择菜单(添加、修改菜单)")
-	 * 
-	 * @GetMapping("/select")
-	 * 
-	 * @RequiresPermissions("permission/menu/select") public ResultMap select() { //
-	 * 查询列表数据 List<ResourceVo> menuList =
-	 * sysResourceService().selectNotButtonList(); // 添加顶级菜单 ResourceVo root = new
-	 * ResourceVo(); root.setId(0L); root.setName("顶级菜单"); root.setParentId(0L);
-	 * root.setOpen(true); menuList.add(root); return ResultMap.ok().put("menuList",
-	 * menuList); }
-	 */
 
 	/**
 	 * 验证参数是否正确

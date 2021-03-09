@@ -58,4 +58,11 @@ public class ShiroUser implements Serializable {
 		return JacksonUtils.toJson(this);
 	}
 
+	public Long getRoleId() {
+		if (roleIds == null || roleIds.isEmpty())
+			return null;
+
+		return roleIds.get(0);
+	}
+
 }

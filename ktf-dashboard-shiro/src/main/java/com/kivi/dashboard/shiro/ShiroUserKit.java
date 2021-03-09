@@ -115,6 +115,14 @@ public class ShiroUserKit {
 		return jwtToken;
 	}
 
+	public void evicJwtToken(Long userId) {
+		if (userId == null)
+			return;
+
+		ktfTokenService.evict(userId.toString());
+		ktfTokenService.evictJwt(userId.toString());
+	}
+
 	/**
 	 * 验证 accessToken
 	 * 

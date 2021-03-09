@@ -50,7 +50,7 @@ public abstract class ShiroBaseConfig {
 		filterChainDefinitionMap.put("/login/settings", "anon");
 		filterChainDefinitionMap.put("/sys/login", "anon");
 		filterChainDefinitionMap.put("/login", "anon"); // login不做认证，noSessionCreation的作用是用户在操作session时会抛异常
-		filterChainDefinitionMap.put("/logout", "noSessionCreation,authcToken[permissive]");
+		filterChainDefinitionMap.put("/logout", "authcToken[permissive]");
 
 		List<String> anonList = ktfProperties().getShiro().getAnonFilter();
 		if (CollectionKit.isNotEmpty(anonList)) {

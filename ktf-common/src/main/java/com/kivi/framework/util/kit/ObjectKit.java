@@ -254,7 +254,8 @@ public class ObjectKit {
 		if (obj == null) {
 			return false;
 		}
-		return obj.getClass().isArray();
+
+		return obj.getClass().isArray() || obj instanceof List;
 	}
 
 }

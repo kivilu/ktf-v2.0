@@ -32,6 +32,9 @@ public class SysRoleDTO implements Serializable {
 	@ApiModelProperty(value = "角色名称")
 	private String				name;
 
+	@ApiModelProperty(value = "类型")
+	private Integer				type;
+
 	@ApiModelProperty(value = "角色描述")
 	private String				description;
 
@@ -43,9 +46,13 @@ public class SysRoleDTO implements Serializable {
 	@ApiModelProperty(hidden = true)
 	private Long				createUserId;
 
+	@ApiModelProperty(hidden = true)
+	private String				subRoleIds;
+
 	public static final String	ID					= "id";
 	public static final String	NAME				= "name";
 	public static final String	DESCRIPTION			= "description";
 	public static final String	STATUS				= "status";
 	public static final String	CREATE_USER_ID		= "createUserId";
+	public static final String	SUB_ROLE_IDS		= "subRoleIds";
 }

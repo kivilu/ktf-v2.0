@@ -50,8 +50,8 @@ public class KtfModularRealmAuthenticatorWithoutRpc extends ModularRealmAuthenti
 							String msg = "Realm [" + realm
 									+ "] threw an exceptionduring a multi-realm authentication attempt:";
 							log.debug(msg, var11);
-							authenticationException = new AuthenticationException(((KtfException) t).getTips());
 						}
+						authenticationException = new AuthenticationException(((KtfException) t).getTips());
 					} else if (t instanceof AuthenticationException) {
 						authenticationException = (AuthenticationException) var11;
 						if (log.isDebugEnabled()) {
@@ -61,6 +61,7 @@ public class KtfModularRealmAuthenticatorWithoutRpc extends ModularRealmAuthenti
 						}
 					} else {
 						log.error("shiro运行异常", var11);
+						authenticationException = new AuthenticationException("后台服务异常");
 					}
 				}
 				aggregate = strategy.afterAttempt(realm, token, info, aggregate, t);

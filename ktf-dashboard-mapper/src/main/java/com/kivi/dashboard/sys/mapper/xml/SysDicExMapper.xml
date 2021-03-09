@@ -215,26 +215,20 @@
 		</where>
     </select>
     
-    
-    <!--  根据varcode和上级varcode获取KV map
-    <select id="getValueMap"  resultType="java.util.HashMap"  >
+    <select id="getMaxId" parameterType="map" >
     	SELECT
-			d.var_code as key,
-			d.var_value as value
+			MAX(id)
 		FROM
-			ktf_sys_dic d
-		LEFT JOIN (
-			SELECT
-				d1.id
-			FROM
-				ktf_sys_dic d1
-			WHERE
-				d1.var_code = #{pVarCode}
-		) A ON d.parent_id = A.id
-		WHERE
-			d.parent_id = A.id
-		AND d.var_code = #{varCode}
+			ktf_sys_dic t
+		<where>
+		    <if test="parentId = 0">
+		    	t.parent_id = 0
+		    </if>
+			<if test="parentId > 0">
+		    	t.parent_id BETWEEN 1 AND 9
+		    </if>
+		</where>
     </select>
-    -->
+    
 
 </mapper>

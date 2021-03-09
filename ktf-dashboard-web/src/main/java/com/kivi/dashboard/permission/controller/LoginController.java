@@ -32,6 +32,7 @@ import com.kivi.framework.annotation.KtfTrace;
 import com.kivi.framework.cache.redis.IRedisService;
 import com.kivi.framework.constant.KtfError;
 import com.kivi.framework.constant.enums.KtfStatus;
+import com.kivi.framework.dto.JwtUserDTO;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.form.LoginForm;
 import com.kivi.framework.model.ResultMap;
@@ -223,6 +224,12 @@ public class LoginController extends DashboardController {
 	public ResultMap logout() throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		subject.logout();
+
+		JwtUserDTO jwtUser = super.getJwtUser();
+
+		if (jwtUser != null)
+			ShiroUserKit.me().evicJwtToken(jwtUser.getId());
+
 		return ResultMap.ok();
 	}
 

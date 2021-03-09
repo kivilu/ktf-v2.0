@@ -29,6 +29,7 @@ import com.kivi.framework.cache.annotation.KtfCacheEvict;
 import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.constant.enums.KtfStatus;
 import com.kivi.framework.converter.BeanConverter;
+import com.kivi.framework.util.kit.CollectionKit;
 import com.kivi.framework.util.kit.ObjectKit;
 import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.page.PageInfoVO;
@@ -77,7 +78,14 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 	@KtfTrace("新增数据字典")
 	@Override
 	public Boolean save(SysDicDTO sysDicDTO) {
-		SysDic entity = BeanConverter.convert(SysDic.class, sysDicDTO);
+		SysDic	entity	= BeanConverter.convert(SysDic.class, sysDicDTO);
+
+		Long	id		= sysDicExMapper.getMaxId(CollectionKit.newHashMap(SysDic.PARENT_ID, entity.getParentId())) + 1;
+		if (entity.getParentId() == 0 && id < 10) {
+			entity.setId(id);
+		} else if (entity.getParentId() > 0 && id < 10 * (entity.getParentId() + 1)) {
+			entity.setId(id);
+		}
 
 		return super.save(entity);
 	}
@@ -253,20 +261,13 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 		return sysDicExMapper.treeQuery(params);
 	}
 
-	/*
-	 * @Cacheable(value = KtfCache.SysDic, key =
-	 * "caches[0].name+'.'+#varName+#parentName", unless = "#result == null")
-	 * 
-	 * @Override public SysDic getByVarName(String varName, String parentName) {
-	 * SysDic dic = sysDicExMapper.getByVarName(varName, parentName); return dic; }
-	 */
+	@Override
+	public List<SysDicDTO> getParents(Long id) {
 
-	/*
-	 * @Cacheable(value = KtfCache.SysDic, key = "caches[0].name+'.'+#pCode+#ppId",
-	 * unless = "#result == null")
-	 * 
-	 * @Override public List<String> listVarCode(String pCode, Long ppId) { return
-	 * sysDicExMapper.listVarCode(pCode, ppId); }
-	 */
+		Map<String, Object> params = new HashMap<>();
+		params.put(SysDicDTO.STATUS, KtfStatus.ENABLED.code);
+		params.put(SysDicDTO.ID, id);
 
+		return sysDicExMapper.getParents(params);
+	}
 }

@@ -75,6 +75,7 @@
 			r.id,
 			r.parent_id,
 			r.`name`,
+			r.description,
 			r.url,
 			r.icon,
 			r.seq,
@@ -189,6 +190,7 @@
 			r.id,
 			r.parent_id,
 			r.`name`,
+			r.description,
 			r.url,
 			r.icon,
 			r.seq,
@@ -282,6 +284,15 @@
 					a.pid IS NULL
 			)
     </delete>
+    
+    <select id="getMaxId" parameterType="map" >
+    	SELECT
+			MAX(id)
+		FROM
+			ktf_sys_resource t
+		WHERE
+			t.resource_type = #{resourceType}
+    </select>
     
     
     <!-- <resultMap id="ResouceVoResultMap" type="com.kivi.framework.vo.ResourceVo">

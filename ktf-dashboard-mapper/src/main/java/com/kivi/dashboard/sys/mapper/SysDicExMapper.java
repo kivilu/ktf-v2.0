@@ -92,4 +92,12 @@ public interface SysDicExMapper {
 	 * @return
 	 */
 	int deleteWithChildren(@Param("id") Long id);
+
+	/**
+	 * 查询最大的ID
+	 * 
+	 * @param params
+	 * @return
+	 */
+	Long getMaxId(Map<String, Object> params);
 }

@@ -101,6 +101,12 @@ public class SysUser extends Model<SysUser> {
 	@TableField("create_user_id")
 	private Long				createUserId;
 
+	/**
+	 * 记录创建用户角色ID
+	 */
+	@TableField("create_role_id")
+	private Long				createRoleId;
+
 	public static final String	DB_ID				= "id";
 	public static final String	ID					= "id";
 	public static final String	DB_CIF_ID			= "cif_id";
@@ -131,6 +137,8 @@ public class SysUser extends Model<SysUser> {
 	public static final String	GMT_UPDATE			= "gmtUpdate";
 	public static final String	DB_CREATE_USER_ID	= "create_user_id";
 	public static final String	CREATE_USER_ID		= "createUserId";
+	public static final String	DB_CREATE_ROLE_ID	= "create_role_id";
+	public static final String	CREATE_ROLE_ID		= "createRoleId";
 
 	@Override
 	protected Serializable pkVal() {

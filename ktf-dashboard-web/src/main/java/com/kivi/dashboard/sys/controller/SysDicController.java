@@ -226,11 +226,22 @@ public class SysDicController extends DashboardController {
 	/**
 	 * 字典数据树的子节点
 	 */
-	@ApiOperation(value = "字典数据树的一级节点", notes = "字典数据树的一级节点")
+	@ApiOperation(value = "字典数据树的子节点", notes = "字典数据树的子节点")
 	@GetMapping("/tree/{pid}")
 	@RequiresPermissions("sys/dic/tree")
 	public ResultMap getTreeChildren(@PathVariable("pid") Long pid) {
 		List<SysDicDTO> list = sysDicService().treeQuery(pid);
+		return ResultMap.ok().data(list);
+	}
+
+	/**
+	 * 字典数据树的父节点
+	 */
+	@ApiOperation(value = "字典数据树的父节点", notes = "字典数据树的父节点")
+	@GetMapping("/tree/parent/{id}")
+	@RequiresPermissions("sys/dic/tree")
+	public ResultMap getTreeParent(@PathVariable("id") Long id) {
+		List<SysDicDTO> list = sysDicService().getParents(id);
 		return ResultMap.ok().data(list);
 	}
 

@@ -91,6 +91,14 @@ public interface SysDicService extends IService<SysDic> {
 	List<SysDicDTO> treeQuery(Long pid);
 
 	/**
+	 * 查询父级
+	 * 
+	 * @param id
+	 * @return
+	 */
+	List<SysDicDTO> getParents(Long id);
+
+	/**
 	 * 新增
 	 */
 	Boolean save(SysDicDTO dto);

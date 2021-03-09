@@ -139,6 +139,9 @@
 		                 #{item}
 		         </foreach>
             </if>
+            <if test=" params.createRoleId != null ">
+                AND U.create_role_id = #{params.createRoleId}
+            </if>
             <if test=" params.orgId != null ">
                 AND U.org_id = #{params.orgId}
             </if>

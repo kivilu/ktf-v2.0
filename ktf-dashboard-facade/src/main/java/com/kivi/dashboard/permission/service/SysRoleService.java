@@ -1,5 +1,6 @@
 package com.kivi.dashboard.permission.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -53,6 +54,11 @@ public interface SysRoleService extends IService<SysRole> {
 	void deleteBatch(Long[] roleIds);
 
 	/**
+	 * 指定列模糊查询
+	 */
+	List<SysRole> listLike(Map<String, Object> params, String... columns);
+
+	/**
 	 * 查询列表
 	 */
 	// List<SysRoleDTO> list(SysRoleDTO dto);
@@ -66,10 +72,5 @@ public interface SysRoleService extends IService<SysRole> {
 	 * 模糊查询
 	 */
 	// List<SysRoleDTO> listLike(SysRoleDTO applicationDTO);
-
-	/**
-	 * 指定列模糊查询
-	 */
-	// List<SysRoleDTO> listLike(Map<String, Object> params, String... columns);
 
 }

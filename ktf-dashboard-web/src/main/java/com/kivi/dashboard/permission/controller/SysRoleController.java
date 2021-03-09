@@ -1,5 +1,7 @@
 package com.kivi.dashboard.permission.controller;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kivi.dashboard.base.DashboardController;
 import com.kivi.dashboard.permission.dto.SysRoleDTO;
+import com.kivi.dashboard.permission.entity.SysRole;
 import com.kivi.dashboard.shiro.ShiroKit;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.model.ResultMap;
@@ -65,7 +68,6 @@ public class SysRoleController extends DashboardController {
 	@PostMapping("/save")
 	public ResultMap save(@Valid @RequestBody SysRoleDTO dto) {
 		try {
-			// sysRoleDTO.setCreateUser(ShiroKit.getUser().getLoginName());
 			dto.setCreateUserId(ShiroKit.getUser().getId());
 			sysRoleService().save(dto);
 			return ResultMap.ok("新增成功！");
@@ -169,4 +171,75 @@ public class SysRoleController extends DashboardController {
 		PageInfoVO<SysRoleDTO> page = sysRoleService().page(params);
 		return ResultMap.ok().data(page);
 	}
+
+	@ApiOperation(value = "角色列表查询", notes = "角色列表查询")
+	@ApiImplicitParams({
+			@ApiImplicitParam(
+					name = "name",
+					dataType = "string",
+					value = "角色名称，可选，模糊匹配",
+					paramType = "query",
+					allowEmptyValue = true),
+			@ApiImplicitParam(
+					name = "status",
+					dataType = "integer",
+					value = "角色状态，可选，0有效，1无效",
+					paramType = "query",
+					allowEmptyValue = true),
+			@ApiImplicitParam(
+					name = SysRole.SUB_ROLE_IDS,
+					dataType = "string",
+					value = "下属角色ID列表，ID之间使用逗号分隔",
+					paramType = "query",
+					allowEmptyValue = true) })
+	@GetMapping("/list")
+	@RequiresPermissions("permission/role/list")
+	public ResultMap list(@ApiIgnore @RequestParam Map<String, Object> params) {
+		if (params == null)
+			params = new HashMap<>();
+		// 如果不是超级管理员，则只查询自己创建的角色列表
+		if (ShiroKit.getUser().getId() != KtfConstant.SUPER_ADMIN) {
+			SysRole optRole = sysRoleService().getById(ShiroKit.getUser().getRoleId());
+			params.put(SysRoleDTO.SUB_ROLE_IDS, optRole.getSubRoleIds());
+		}
+		List<SysRole> list = sysRoleService().listLike(params, SysRole.DB_ID, SysRole.DB_NAME, SysRole.DB_TYPE);
+		return ResultMap.ok().data(list);
+	}
+
+	@ApiOperation(value = "角色列表查询", notes = "角色列表查询")
+	@ApiImplicitParams({
+			@ApiImplicitParam(
+					name = SysRole.NAME,
+					dataType = "string",
+					value = "角色名称，可选，模糊匹配",
+					paramType = "query",
+					allowEmptyValue = true),
+			@ApiImplicitParam(
+					name = SysRole.STATUS,
+					dataType = "integer",
+					value = "角色状态，可选，0有效，1无效",
+					paramType = "query",
+					allowEmptyValue = true),
+			@ApiImplicitParam(
+					name = SysRole.SUB_ROLE_IDS,
+					dataType = "string",
+					value = "下属角色ID列表，ID之间使用逗号分隔",
+					paramType = "query",
+					allowEmptyValue = true) })
+	@GetMapping("/list/{orgId}")
+	@RequiresPermissions("permission/role/list")
+	public ResultMap
+			listByOrgId(@PathVariable("orgId") Long orgId, @ApiIgnore @RequestParam Map<String, Object> params) {
+		if (params == null)
+			params = new HashMap<>();
+		params.put(SysRole.ORG_ID, orgId);
+
+		// 如果不是超级管理员，则只查询自己创建的角色列表
+//		if (ShiroKit.getUser().getId() != KtfConstant.SUPER_ADMIN) {
+//			params.put(SysRoleDTO.CREATE_USER_ID, ShiroKit.getUser().getId());
+//		}
+		List<SysRole> list = sysRoleService().listLike(params, SysRole.DB_ID, SysRole.DB_NAME, SysRole.DB_TYPE);
+		return ResultMap.ok().data(list);
+	}
+
 }

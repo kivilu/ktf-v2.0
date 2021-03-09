@@ -71,7 +71,7 @@ public class JwtAuthFilter extends AuthenticatingFilter {
 		try {
 			allowed = executeLogin(request, response);
 		} catch (IllegalStateException e) { // not found any token
-			log.error("请求中没有Token");
+			log.error("请求Token无效", e);
 		} catch (Exception e) {
 			log.error("Error occurs when login", e);
 		}
