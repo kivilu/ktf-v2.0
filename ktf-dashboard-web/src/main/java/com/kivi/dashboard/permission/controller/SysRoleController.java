@@ -148,19 +148,4 @@ public class SysRoleController extends DashboardController {
         PageInfoVO<SysRoleDTO> page = sysRoleService().page(params);
         return ResultMap.ok().data(page);
     }
-
-    /**
-     * 角色列表
-     */
-    /*
-     * @GetMapping("/select")
-     * 
-     * @RequiresPermissions("permission/role/select") public ResultMap select() {
-     * Map<String, Object> map = new HashMap<>(); // 如果不是超级管理员，则只查询自己所拥有的角色列表 if
-     * (ShiroKit.getUser().getId() != KtfConstant.SUPER_ADMIN) {
-     * map.put("createUserId", ShiroKit.getUser().getId()); } List<SysRoleDTO> list
-     * = sysRoleService().listLike(map, StrKit.emptyArray());
-     * 
-     * return ResultMap.ok().put("list", list); }
-     */
 }

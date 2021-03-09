@@ -99,23 +99,23 @@
 	
 	<distributionManagement>
 	    <!-- INS -->
-		<!-- <repository>
+		<repository>
 			<id>rdc-releases</id>
 			<url>https://repo.rdc.aliyun.com/repository/106428-release-lfVNdn/</url>
 		</repository>
 		<snapshotRepository>
 			<id>rdc-snapshots</id>
 			<url>https://repo.rdc.aliyun.com/repository/106428-snapshot-j1QtNx/</url>
-		</snapshotRepository> -->
+		</snapshotRepository>
 		<!-- BHT -->
-		<repository>
+		<!-- <repository>
 			<id>ali-releases</id>
 			<url>http://47.92.164.89:9001/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>ali-snapshots</id>
 			<url>http://47.92.164.89:9001/repository/maven-snapshots/</url>
-		</snapshotRepository>
+		</snapshotRepository> -->
 	</distributionManagement>
 
 

@@ -53,13 +53,6 @@ public class ShiroUser implements Serializable {
 	 */
 	private List<Long>			corpIdList;
 
-	/**
-	 *
-	 */
-	// private String pre;
-
-	// private String enterpriseName;
-
 	@Override
 	public String toString() {
 		return JacksonUtils.toJson(this);

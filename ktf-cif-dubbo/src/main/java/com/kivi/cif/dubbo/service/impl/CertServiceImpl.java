@@ -30,6 +30,7 @@ import com.kivi.framework.crypto.enums.KeyType;
 import com.kivi.framework.crypto.enums.KtfCertType;
 import com.kivi.framework.crypto.sm2.Sm2PublicKey;
 import com.kivi.framework.crypto.sm2.Sm2PublicKeyImpl;
+import com.kivi.framework.crypto.util.CertUtil;
 import com.kivi.framework.crypto.util.KeyPairUtil;
 import com.kivi.framework.dto.warapper.WarpReqDTO;
 import com.kivi.framework.exception.KtfException;
@@ -82,7 +83,7 @@ public class CertServiceImpl implements CertService {
 
 			ByteBuffer certBuf = null;
 			if (type.isPublickey()) {
-				PublicKey		publicKey		= KeyPairUtil
+				PublicKey		publicKey		= CertUtil
 						.convertPemToPublicKey(new ByteArrayInputStream(cifCert.getDataBase64().getBytes()));
 				Sm2PublicKey	sm2PublicKey	= new Sm2PublicKeyImpl((BCECPublicKey) publicKey);
 				byte[]			pubkey			= sm2PublicKey.getQ().getEncoded(false);

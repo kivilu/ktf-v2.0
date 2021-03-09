@@ -1,8 +1,7 @@
 package com.kivi.framework.crypto.util;
 
 import java.security.Provider;
-
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import java.security.Security;
 
 /**
  * 提供者创建工具
@@ -11,13 +10,19 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  *
  */
 public class ProviderInstance {
-    private static Provider BCProvider;
+	static {
+		if (Security.getProvider("BC") == null) {
+			Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		}
+	}
 
-    public static Provider getBCProvider() {
-        if (null == BCProvider) {
-            BCProvider = new BouncyCastleProvider();
-        }
-        return BCProvider;
-    }
+	private static Provider BCProvider;
+
+	public static Provider getBCProvider() {
+		if (null == BCProvider) {
+			BCProvider = Security.getProvider("BC");
+		}
+		return BCProvider;
+	}
 
 }

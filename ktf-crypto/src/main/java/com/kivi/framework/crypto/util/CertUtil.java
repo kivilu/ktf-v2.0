@@ -1,11 +1,15 @@
 package com.kivi.framework.crypto.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
@@ -16,13 +20,21 @@ import java.security.cert.X509Certificate;
 import java.util.Enumeration;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.cert.CertException;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemReader;
 
+import com.kivi.framework.constant.KtfError;
 import com.kivi.framework.crypto.enums.KeyStoreType;
+import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.util.kit.StrKit;
 import com.vip.vjtools.vjkit.io.FileUtil;
 
@@ -42,21 +54,19 @@ public class CertUtil {
 	 * @param filePath
 	 * @return
 	 */
-	public static String guessKeystoreType(String filePath) {
+	public static KeyStoreType guessKeystoreType(String filePath) {
 		String suffix = filePath.substring(filePath.lastIndexOf(".") + 1).toLowerCase();
 		if (suffix.equals("jks") || suffix.equals("keystore")) {
-			return KEYSTORE_TYPE_JKS;
+			return KeyStoreType.JKS;
 		} else if (suffix.equals("p12")) {
-			return KEYSTORE_TYPE_P12;
+			return KeyStoreType.PKCS12;
 		}
-		return KEYSTORE_TYPE_P12;
+		return KeyStoreType.PKCS12;
 	}
 
-	public static KeyStore readKeyStore(String filePath, String keyPassword) throws CertException {
-		try (FileInputStream file = new FileInputStream(new File(filePath))) {
-			KeyStore keyStore = KeyStore.getInstance(guessKeystoreType(filePath), BouncyCastleProvider.PROVIDER_NAME);
-			keyStore.load(file, keyPassword.toCharArray());
-			return keyStore;
+	public static KeyStore readKeyStore(File pfxFile, String keyPassword) throws CertException {
+		try (FileInputStream fin = new FileInputStream(pfxFile)) {
+			return readKeyStore(fin, keyPassword, guessKeystoreType(pfxFile.getName()));
 		} catch (Exception e) {
 			throw new CertException("读取key store异常", e);
 		}
@@ -98,7 +108,7 @@ public class CertUtil {
 			} else if (StringUtils.containsAny(StringUtils.lowerCase(fileExt), "p12", "pfx", "jks")) {
 				if (keyPassword == null || StrKit.isBlank(keyPassword[0]))
 					throw new CertException("私钥文件密码为空");
-				KeyStore ks = readKeyStore(certFilePath, keyPassword[0]);
+				KeyStore ks = readKeyStore(new File(certFilePath), keyPassword[0]);
 				cert = getCertificate(ks);
 			}
 
@@ -183,6 +193,20 @@ public class CertUtil {
 		}
 	}
 
+	public static PrivateKey getPrivateKey(KeyStore keyStore, String keyPassword) throws KeyStoreException {
+		Enumeration<String> aliases = keyStore.aliases();
+		while (aliases.hasMoreElements()) {
+			String alias = aliases.nextElement();
+			try {
+				PrivateKey privateKey = getPrivateKey(keyStore, keyPassword, alias);
+				if (privateKey != null)
+					return privateKey;
+			} catch (CertException e) {
+			}
+		}
+		return null;
+	}
+
 	public static PrivateKey getPrivateKey(KeyStore keyStore, String keyPassword, String alias) throws CertException {
 		try {
 			if (!keyStore.isKeyEntry(alias)) {
@@ -192,6 +216,86 @@ public class CertUtil {
 		} catch (Exception e) {
 			throw new CertException("analyze KeyStore failed", e);
 		}
+	}
+
+	public final static String convertPublicKeyToPemString(PublicKey pub) {
+		try {
+			if (null == pub) {
+				return null;
+			}
+			ByteArrayOutputStream	out				= new ByteArrayOutputStream(1024);
+			OutputStreamWriter		outWriter		= new OutputStreamWriter(out);
+			JcaPEMWriter			jcaPEMWriter	= new JcaPEMWriter(outWriter);
+			jcaPEMWriter.writeObject(pub);
+			jcaPEMWriter.close();
+			return new String(out.toByteArray());
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public final static PrivateKey convertPemToPrivateKey(InputStream in) {
+		PrivateKey privateKey = null;
+		try (PEMParser pemParser = new PEMParser(new InputStreamReader(in))) {
+			Object readObject = pemParser.readObject();
+			if (readObject instanceof PEMKeyPair) {
+				PEMKeyPair key = (PEMKeyPair) readObject;
+				privateKey = new JcaPEMKeyConverter().setProvider(BouncyCastleProvider.PROVIDER_NAME).getKeyPair(key)
+						.getPrivate();
+			}
+
+		} catch (Exception e) {
+			log.error("pem格式私钥转化为PrivateKey失败");
+			throw new KtfException(KtfError.E_CRYPTO, "pem格式私钥转化为PrivateKey失败", e);
+		}
+
+		return privateKey;
+	}
+
+	public final static PublicKey convertPemToPublicKey(InputStream in) {
+		PublicKey publicKey = null;
+
+		try (PEMParser pemParser = new PEMParser(new InputStreamReader(in))) {
+			Object readObject = pemParser.readObject();
+			if (readObject instanceof SubjectPublicKeyInfo) {
+				SubjectPublicKeyInfo subjectPublicKeyInfo = (SubjectPublicKeyInfo) readObject;
+				publicKey = new JcaPEMKeyConverter().setProvider(BouncyCastleProvider.PROVIDER_NAME)
+						.getPublicKey(subjectPublicKeyInfo);
+			}
+
+		} catch (Exception e) {
+			log.error("PEM格式公钥转换为PublicKey失败");
+			throw new KtfException(KtfError.E_CRYPTO, "PEM格式公钥转换为PublicKey失败", e);
+		}
+
+		return publicKey;
+	}
+
+	public final static String convertPrivateKeyToPemString(PrivateKey pri) {
+		try {
+			if (null == pri) {
+				return null;
+			}
+			ByteArrayOutputStream	out				= new ByteArrayOutputStream(1024);
+			OutputStreamWriter		outWriter		= new OutputStreamWriter(out);
+			JcaPEMWriter			jcaPEMWriter	= new JcaPEMWriter(outWriter);
+			jcaPEMWriter.writeObject(pri);
+			jcaPEMWriter.close();
+			return new String(out.toByteArray());
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public static byte[] convertPemToDerEcData(String pemString) {
+		ByteArrayInputStream bIn = new ByteArrayInputStream(pemString.getBytes());
+		try (PemReader pRdr = new PemReader(new InputStreamReader(bIn))) {
+			PemObject pemObject = pRdr.readPemObject();
+			return pemObject.getContent();
+		} catch (IOException e) {
+			log.error("PEM格式转换为DER异常", e);
+		}
+		return null;
 	}
 
 }

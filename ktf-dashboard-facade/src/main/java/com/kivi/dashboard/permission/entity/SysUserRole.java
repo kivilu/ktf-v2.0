@@ -24,7 +24,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("ktf_sys_user_role")
 public class SysUserRole extends Model<SysUserRole> {
-
     private static final long serialVersionUID = 1L;
 
     /**

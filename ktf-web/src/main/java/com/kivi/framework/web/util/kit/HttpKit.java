@@ -1,4 +1,3 @@
-
 package com.kivi.framework.web.util.kit;
 
 import java.io.UnsupportedEncodingException;
@@ -8,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -52,6 +52,16 @@ public class HttpKit {
 			ip = "127.0.0.1";
 
 		return ip;
+	}
+	
+	/**
+	 * 获取sessionId
+	 * @param request
+	 * @return
+	 */
+	public static String getSessionId(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		return session.getId();
 	}
 
 	/**
