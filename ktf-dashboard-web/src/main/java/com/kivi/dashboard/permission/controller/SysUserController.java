@@ -173,14 +173,8 @@ public class SysUserController extends DashboardController {
 
     @ApiOperation(value = "用户密码重置", notes = "用户密码重置")
     @GetMapping("/passwordReset/{id}")
-    public ResultMap restUserPassword(@Valid @RequestBody PasswordResetVO form) {
+    public ResultMap restUserPassword(@PathVariable("id") Long id) {
 
-        return ResultMap.error(KtfError.E_NOT_IMPLEMENT, "待实现");
-    }
-
-    @ApiOperation(value = "用户密码重置", notes = "用户密码重置")
-    @GetMapping("/passwordReset")
-    public ResultMap restSelfPassword(@PathVariable("id") Long id) {
         SysUser entity = new SysUser();
         entity.setId(id);
         entity.setStatus(KtfStatus.INIT.code);
@@ -191,6 +185,13 @@ public class SysUserController extends DashboardController {
         customerAuthsService().updateCredential(userVo, null);
 
         return ResultMap.ok("重置成功");
+
+    }
+
+    @ApiOperation(value = "用户密码重置", notes = "用户密码重置")
+    @GetMapping("/passwordReset")
+    public ResultMap restSelfPassword(@Valid @RequestBody PasswordResetVO form) {
+        return ResultMap.error(KtfError.E_NOT_IMPLEMENT, "待实现");
     }
 
     /**
