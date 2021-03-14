@@ -77,7 +77,7 @@
 			t.var_value,
 		    t.type,
 		    t.`status`,
-		    if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, true, false) as has_children,
+		    <!-- if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, true, false) as has_children, -->
 		    if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, false, true) as is_leaf 
 		FROM
 			ktf_sys_dic t

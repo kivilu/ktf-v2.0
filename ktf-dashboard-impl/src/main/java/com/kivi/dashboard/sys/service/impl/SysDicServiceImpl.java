@@ -201,10 +201,10 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 		return result;
 	}
 
-	@Cacheable(
-			value = KtfCache.SysDic,
-			key = "caches[0].name+'.'+#id+'.'+#recursion",
-			unless = "#result == null || #result.isEmpty()")
+//	@Cacheable(
+//			value = KtfCache.SysDic,
+//			key = "caches[0].name+'.'+#id+'.'+#recursion",
+//			unless = "#result == null || #result.isEmpty()")
 	@Override
 	public List<SysDicDTO> getChildren(Long id, Boolean recursion) {
 		Map<String, Object> params = new HashMap<>();
@@ -217,10 +217,10 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
 		return list;
 	}
 
-	@Cacheable(
-			value = KtfCache.SysDic,
-			key = "caches[0].name+'.'+#pVarCode+'.'+#recursion",
-			unless = "#result == null || #result.isEmpty()")
+//	@Cacheable(
+//			value = KtfCache.SysDic,
+//			key = "caches[0].name+'.'+#pVarCode+'.'+#recursion",
+//			unless = "#result == null || #result.isEmpty()")
 	@Override
 	public List<SysDicDTO> getChildren(String pVarCode, Boolean recursion) {
 		Map<String, Object> params = new HashMap<>();

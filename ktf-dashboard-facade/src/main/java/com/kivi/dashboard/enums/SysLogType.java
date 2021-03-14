@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum SysLogType {
 	Login(0),
 		Operate(1),
-		Signed(2);
+		Audit(2);
 
 	private final int code;
 
