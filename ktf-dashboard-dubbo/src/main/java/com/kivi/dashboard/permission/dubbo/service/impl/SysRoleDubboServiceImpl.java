@@ -1,5 +1,6 @@
 package com.kivi.dashboard.permission.dubbo.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.dubbo.config.annotation.DubboService;
@@ -74,6 +75,11 @@ public class SysRoleDubboServiceImpl extends ServiceImpl<SysRoleMapper, SysRole>
 	@Override
 	public void deleteBatch(Long[] roleIds) {
 		sysRoleService.deleteBatch(roleIds);
+	}
+
+	@Override
+	public List<SysRole> listLike(Map<String, Object> params, String... columns) {
+		return sysRoleService.listLike(params, columns);
 	}
 
 }

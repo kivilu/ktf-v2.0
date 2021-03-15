@@ -1,8 +1,10 @@
 package com.kivi.dashboard.sys.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.dashboard.sys.dto.SysRegionDTO;
 import com.kivi.dashboard.sys.entity.SysRegion;
+import com.kivi.dashboard.sys.mapper.SysRegionExMapper;
 import com.kivi.dashboard.sys.mapper.SysRegionMapper;
 import com.kivi.dashboard.sys.service.ISysRegionService;
 import com.kivi.db.page.PageParams;
@@ -36,6 +39,9 @@ import com.vip.vjtools.vjkit.collection.MapUtil;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class SysRegionServiceImpl extends ServiceImpl<SysRegionMapper, SysRegion> implements ISysRegionService {
+
+	@Autowired
+	private SysRegionExMapper sysRegionExMapper;
 
 	/**
 	 * 根据ID查询地区信息
@@ -129,36 +135,33 @@ public class SysRegionServiceImpl extends ServiceImpl<SysRegionMapper, SysRegion
 	/**
 	 * 分页查询
 	 */
-	@KtfTrace("分页查询地区信息")
+	@KtfTrace("分页查询行业代码")
 	public PageInfoVO<SysRegionDTO> page(Map<String, Object> params) {
 		PageParams<SysRegionDTO>	pageParams	= new PageParams<>(params);
-		Page<SysRegion>				page		= new Page<>(pageParams.getCurrPage(), pageParams.getPageSize());
+		Page<SysRegionDTO>			page		= new Page<>(pageParams.getCurrPage(), pageParams.getPageSize());
 
-		QueryWrapper<SysRegion>		query		= Wrappers.<SysRegion>query();
-		if (MapUtil.isNotEmpty(pageParams.getRequestMap())) {
-			pageParams.getRequestMap().entrySet().stream().forEach(entry -> {
-				if (ObjectKit.isNotEmpty(entry.getValue())) {
-					if (NumberKit.isNumberic(entry.getValue()))
-						query.eq(entry.getKey(), entry.getValue());
-					else
-						query.like(entry.getKey(), entry.getValue());
-				}
-			});
-		}
+		IPage<SysRegionDTO>			iPage		= sysRegionExMapper.selectDTO(page, pageParams.getRequestMap());
 
-		IPage<SysRegion>			iPage	= super.page(page, query);
-
-		PageInfoVO<SysRegionDTO>	pageVo	= new PageInfoVO<>();
+		PageInfoVO<SysRegionDTO>	pageVo		= new PageInfoVO<>();
 		pageVo.setCurPage(iPage.getCurrent());
 		pageVo.setTotal(iPage.getTotal());
 		pageVo.setPageSize(iPage.getSize());
 		pageVo.setPages(iPage.getPages());
 		pageVo.setRequestMap(params);
-		pageVo.setList(BeanConverter.convert(SysRegionDTO.class, iPage.getRecords()));
+		pageVo.setList(iPage.getRecords());
 		pageVo.compute();
 
 		return pageVo;
 
+	}
+
+	@Override
+	public List<SysRegionDTO> getChildren(Long pid, Boolean recursion) {
+		Map<String, Object> params = new HashMap<>();
+		params.put(SysRegionDTO.PID, pid);
+		params.put(SysRegionDTO.STATUS, true);
+		params.put("recursion", recursion);
+		return sysRegionExMapper.getChildren(params);
 	}
 
 	@Override
@@ -171,5 +174,32 @@ public class SysRegionServiceImpl extends ServiceImpl<SysRegionMapper, SysRegion
 		List<SysRegion> list = super.list(query);
 		return BeanConverter.convert(SysRegionDTO.class, list);
 	}
+
+//	@Override
+//	public void test() {
+//		LambdaQueryWrapper<SysRegion> queryWrapper = Wrappers.<SysRegion>lambdaQuery().select(SysRegion::getId,
+//				SysRegion::getPid, SysRegion::getCode, SysRegion::getKey);
+//		queryWrapper.eq(SysRegion::getType, 4).gt(SysRegion::getPid, 86023203040L);
+//		List<SysRegion>				list	= super.list(queryWrapper);
+//
+//		Map<Long, List<SysRegion>>	map		= list.stream().collect(Collectors.toMap(SysRegion::getPid,
+//				v -> new ArrayList<>(Collections.singletonList(v)), (left, right) -> {
+//														left.addAll(right);
+//														return left;
+//													}));
+//
+//		map.entrySet().stream().forEach(ent -> {
+//			Long			pid		= ent.getKey();
+//			AtomicInteger	index	= new AtomicInteger(0);
+//			List<SysRegion>	regions	= ent.getValue();
+//			regions.stream().forEach(r -> {
+//				r.setCode(r.getCode() + String.format("%02d", index.incrementAndGet()));
+//				r.setKey(Long.parseLong(pid.toString() + r.getCode()));
+//			});
+//
+//			super.updateBatchById(regions);
+//		});
+//
+//	}
 
 }

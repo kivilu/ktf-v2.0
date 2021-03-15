@@ -107,4 +107,9 @@ public class SysRegionDubboServiceImpl extends ServiceImpl<SysRegionMapper, SysR
 		return sysRegionService.listProvice();
 	}
 
+	@Override
+	public List<SysRegionDTO> getChildren(Long pid, Boolean recursion) {
+		return sysRegionService.getChildren(pid, recursion);
+	}
+
 }

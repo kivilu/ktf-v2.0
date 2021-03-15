@@ -34,6 +34,13 @@ public interface ISysRegionService extends IService<SysRegion> {
 	Boolean updateById(SysRegionDTO sysRegionDTO);
 
 	/**
+	 * 分页查询
+	 */
+	PageInfoVO<SysRegionDTO> page(Map<String, Object> params);
+
+	List<SysRegionDTO> getChildren(Long pid, Boolean recursion);
+
+	/**
 	 * 查询列表
 	 */
 	List<SysRegionDTO> list(SysRegionDTO sysRegionDTO);
@@ -59,10 +66,5 @@ public interface ISysRegionService extends IService<SysRegion> {
 	 * @return
 	 */
 	List<SysRegionDTO> listProvice();
-
-	/**
-	 * 分页查询
-	 */
-	PageInfoVO<SysRegionDTO> page(Map<String, Object> params);
 
 }

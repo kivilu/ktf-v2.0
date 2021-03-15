@@ -103,4 +103,9 @@ public class SysIndustryDubboServiceImpl extends ServiceImpl<SysIndustryMapper, 
 
 	}
 
+	@Override
+	public List<SysIndustryDTO> getChildren(Long pid, Boolean recursion) {
+		return sysIndustryService.getChildren(pid, recursion);
+	}
+
 }

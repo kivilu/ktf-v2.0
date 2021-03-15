@@ -196,7 +196,7 @@ public class SysDicController extends DashboardController {
 					allowEmptyValue = true) })
 	@RequiresPermissions("sys/dic/page")
 	@GetMapping("/page")
-	public ResultMap list(@ApiIgnore @RequestParam(required = false) Map<String, Object> params) {
+	public ResultMap page(@ApiIgnore @RequestParam(required = false) Map<String, Object> params) {
 		PageInfoVO<SysDicDTO> page = sysDicService().page(params);
 		return ResultMap.ok().data(page);
 	}

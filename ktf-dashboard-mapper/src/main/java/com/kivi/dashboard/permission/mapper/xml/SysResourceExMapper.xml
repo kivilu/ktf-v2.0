@@ -253,9 +253,9 @@
     <delete id="deleteWithChildren">
     	DELETE
 		FROM
-			ktf_sys_resource t
+			ktf_sys_resource
 		WHERE
-			FIND_IN_SET(t.id, sys_resource_getChildren(#{id}))
+			FIND_IN_SET(id, sys_resource_getChildren(#{id}))
     </delete>
     
        <!-- 删除没有父节点的记录 -->
@@ -285,7 +285,7 @@
 			)
     </delete>
     
-    <select id="getMaxId" parameterType="map" >
+    <select id="getMaxId" parameterType="map" resultType="java.lang.Long">
     	SELECT
 			MAX(id)
 		FROM
@@ -294,44 +294,4 @@
 			t.resource_type = #{resourceType}
     </select>
     
-    
-    <!-- <resultMap id="ResouceVoResultMap" type="com.kivi.framework.vo.ResourceVo">
-        <id column="id" property="id" />
-        <result column="app_id" property="appId" />
-        <result column="parent_id" property="parentId" />
-        <result column="name" property="name" />
-        <result column="url" property="url" />
-        <result column="description" property="description" />
-        <result column="icon" property="icon" />
-        <result column="seq" property="seq" />
-        <result column="resource_type" property="resourceType" />
-        <result column="status" property="status" />
-        <result column="gmt_create" property="gmtCreate" />
-        <result column="gmt_update" property="gmtUpdate" />
-        <result column="create_user" property="createUser" />
-        <result column="update_user" property="updateUser" />
-        <result column="parent_name" property="parentName" />
-    </resultMap>
-    
-   
-    
-   
-   
-    
-    查询用户的所有菜单ID
-    <select id="selectResourceIdListByUserId" resultType="long">
-		SELECT DISTINCT
-	    	rm.resource_id
-        FROM
-	    	ktf_sys_user_role ur
-        LEFT JOIN ktf_sys_role_resource rm ON ur.role_id = rm.role_id
-        WHERE
-	    	 ur.user_id = #{userId}
-	</select>
-     -->
-    
-   
-	
-    
-
 </mapper>

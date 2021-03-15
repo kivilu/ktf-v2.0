@@ -77,7 +77,7 @@
 			t.var_value,
 		    t.type,
 		    t.`status`,
-		    <!-- if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, true, false) as has_children, -->
+		    if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, true, false) as has_children,
 		    if ((SELECT count(1) FROM ktf_sys_dic t1 WHERE t1.parent_id= t.id) >0, false, true) as is_leaf 
 		FROM
 			ktf_sys_dic t
@@ -172,9 +172,9 @@
     <delete id="deleteWithChildren">
     	DELETE
 		FROM
-			ktf_sys_dic t
+			ktf_sys_dic
 		WHERE
-			FIND_IN_SET(t.id, sys_dic_getChildren(#{id}))
+			FIND_IN_SET(id, sys_dic_getChildren(#{id}))
     </delete>
     
     
@@ -215,7 +215,7 @@
 		</where>
     </select>
     
-    <select id="getMaxId" parameterType="map" >
+    <select id="getMaxId" parameterType="map" resultType="java.lang.Long" >
     	SELECT
 			MAX(id)
 		FROM

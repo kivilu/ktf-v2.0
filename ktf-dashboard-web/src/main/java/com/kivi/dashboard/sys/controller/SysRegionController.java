@@ -160,23 +160,6 @@ public class SysRegionController extends DashboardController {
 	}
 
 	/**
-	 * 查询列表
-	 */
-	@ApiOperation(value = "查询地区信息列表", notes = "查询地区信息列表")
-	@ApiImplicitParams({ @ApiImplicitParam(
-			name = "name",
-			dataType = "string",
-			value = "名称，可选，模糊匹配",
-			paramType = "query",
-			allowEmptyValue = true) })
-	@RequiresPermissions("sys/region/list")
-	@GetMapping("/list")
-	public ResultMap list(@ApiIgnore @RequestParam(required = false) Map<String, Object> params) {
-		List<SysRegionDTO> list = sysRegionService().listLike(params);
-		return ResultMap.ok().data(list);
-	}
-
-	/**
 	 * 分页查询
 	 */
 	@ApiOperation(value = "分页查询地区信息", notes = "分页查询地区信息")
@@ -207,6 +190,14 @@ public class SysRegionController extends DashboardController {
 		return ResultMap.ok().data(page);
 	}
 
+	@ApiOperation(value = "根据ID查询下级地区", notes = "根据ID查询下级地区")
+	@GetMapping("/getChildren/{id}")
+	@RequiresPermissions("sys/region/getChildren")
+	public ResultMap getChildren(@PathVariable("id") Long id) {
+		List<SysRegionDTO> list = sysRegionService().getChildren(id, false);
+		return ResultMap.ok().data(list);
+	}
+
 	/**
 	 * 选择地区（添加、修改）
 	 *
@@ -231,7 +222,7 @@ public class SysRegionController extends DashboardController {
 												}).collect(Collectors.toList());
 
 		treeNodeList.add(SelectTreeNode.createParent());
-		return ResultMap.ok().put("list", treeNodeList);
+		return ResultMap.ok().data(treeNodeList);
 	}
 
 	/**
@@ -254,7 +245,7 @@ public class SysRegionController extends DashboardController {
 											return selectNode;
 										}).collect(Collectors.toList());
 
-		return ResultMap.ok().put("list", tree);
+		return ResultMap.ok().data(tree);
 	}
 
 	@ApiOperation(value = "获取省份select树", notes = "获取选择省份select树")
@@ -270,6 +261,7 @@ public class SysRegionController extends DashboardController {
 													return selectTreeNode;
 												}).collect(Collectors.toList());
 
-		return ResultMap.ok().put("list", treeNodeList);
+		return ResultMap.ok().data(treeNodeList);
 	}
+
 }

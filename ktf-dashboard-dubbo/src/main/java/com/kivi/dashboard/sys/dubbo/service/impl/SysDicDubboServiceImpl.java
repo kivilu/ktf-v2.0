@@ -103,4 +103,9 @@ public class SysDicDubboServiceImpl extends ServiceImpl<SysDicMapper, SysDic> im
 		return sysDicService.treeQuery(pid);
 	}
 
+	@Override
+	public List<SysDicDTO> getParents(Long id) {
+		return sysDicService.getParents(id);
+	}
+
 }

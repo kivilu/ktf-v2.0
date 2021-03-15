@@ -160,38 +160,37 @@ public class SysIndustryController extends DashboardController {
 	/**
 	 * 查询列表
 	 */
-	@ApiOperation(value = "查询行业代码列表", notes = "查询行业代码列表")
-	@ApiImplicitParams({
-			@ApiImplicitParam(
-					name = "name",
-					dataType = "string",
-					value = "名称，可选，模糊匹配",
-					paramType = "query",
-					allowEmptyValue = true),
-			@ApiImplicitParam(
-					name = "page",
-					dataType = "integer",
-					value = "当前页，可选，默认值：1",
-					paramType = "query",
-					allowEmptyValue = true),
-			@ApiImplicitParam(
-					name = "limit",
-					dataType = "integer",
-					value = "每页大小，可选，默认值：10",
-					paramType = "query",
-					allowEmptyValue = true) })
-	@RequiresPermissions("sys/industry/list")
-	@GetMapping("/list")
-	public ResultMap list(@RequestParam(required = false) Map<String, Object> params) {
-		List<SysIndustryDTO> list = sysIndustryService().listLike(params);
-		return ResultMap.ok().data(list);
-	}
+//	@ApiOperation(value = "查询行业代码列表", notes = "查询行业代码列表")
+//	@ApiImplicitParams({
+//			@ApiImplicitParam(
+//					name = "name",
+//					dataType = "string",
+//					value = "名称，可选，模糊匹配",
+//					paramType = "query",
+//					allowEmptyValue = true),
+//			@ApiImplicitParam(
+//					name = "page",
+//					dataType = "integer",
+//					value = "当前页，可选，默认值：1",
+//					paramType = "query",
+//					allowEmptyValue = true),
+//			@ApiImplicitParam(
+//					name = "limit",
+//					dataType = "integer",
+//					value = "每页大小，可选，默认值：10",
+//					paramType = "query",
+//					allowEmptyValue = true) })
+//	@RequiresPermissions("sys/industry/list")
+//	@GetMapping("/list")
+//	public ResultMap list(@RequestParam(required = false) Map<String, Object> params) {
+//		List<SysIndustryDTO> list = sysIndustryService().listLike(params);
+//		return ResultMap.ok().data(list);
+//	}
 
 	/**
 	 * 分页查询
 	 */
 	@ApiOperation(value = "分页查询行业代码", notes = "分页查询行业代码")
-	@RequiresPermissions("sys/sysIndustry/page")
 	@ApiImplicitParams({
 			@ApiImplicitParam(
 					name = "name",
@@ -212,10 +211,22 @@ public class SysIndustryController extends DashboardController {
 					paramType = "query",
 					allowEmptyValue = true) })
 	@GetMapping("/page")
+	@RequiresPermissions("sys/industry/page")
 	public ResultMap page(@ApiIgnore @RequestParam(required = false) Map<String, Object> params) {
 		PageInfoVO<SysIndustryDTO> page = sysIndustryService().page(params);
 
 		return ResultMap.ok().data(page);
+	}
+
+	/**
+	 * 根据ID查询所属字典数据
+	 */
+	@ApiOperation(value = "根据ID查询下级行业", notes = "根据ID查询下级行业")
+	@GetMapping("/getChildren/{id}")
+	@RequiresPermissions("sys/industry/getChildren")
+	public ResultMap getChildren(@PathVariable("id") Long id) {
+		List<SysIndustryDTO> list = sysIndustryService().getChildren(id, false);
+		return ResultMap.ok().data(list);
 	}
 
 	/**

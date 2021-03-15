@@ -50,7 +50,7 @@ public class SysIndustryDTO implements Serializable {
 	private Boolean				hasChildren;
 
 	@ApiModelProperty(value = "是否叶子")
-	private Boolean				hasLeaf;
+	private Boolean				isLeaf;
 
 	public static final String	ID					= "id";
 	public static final String	PID					= "pid";

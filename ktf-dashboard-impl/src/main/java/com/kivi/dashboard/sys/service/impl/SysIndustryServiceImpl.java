@@ -1,8 +1,10 @@
 package com.kivi.dashboard.sys.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.dashboard.sys.dto.SysIndustryDTO;
 import com.kivi.dashboard.sys.entity.SysIndustry;
+import com.kivi.dashboard.sys.mapper.SysIndustryExMapper;
 import com.kivi.dashboard.sys.mapper.SysIndustryMapper;
 import com.kivi.dashboard.sys.service.ISysIndustryService;
 import com.kivi.db.page.PageParams;
@@ -36,6 +39,9 @@ import com.vip.vjtools.vjkit.collection.MapUtil;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class SysIndustryServiceImpl extends ServiceImpl<SysIndustryMapper, SysIndustry> implements ISysIndustryService {
+
+	@Autowired
+	private SysIndustryExMapper sysIndustryExMapper;
 
 	/**
 	 * 根据ID查询行业代码
@@ -68,6 +74,38 @@ public class SysIndustryServiceImpl extends ServiceImpl<SysIndustryMapper, SysIn
 	public Boolean updateById(SysIndustryDTO sysIndustryDTO) {
 		SysIndustry entity = BeanConverter.convert(SysIndustry.class, sysIndustryDTO);
 		return super.updateById(entity);
+	}
+
+	/**
+	 * 分页查询
+	 */
+	@KtfTrace("分页查询行业代码")
+	public PageInfoVO<SysIndustryDTO> page(Map<String, Object> params) {
+		PageParams<SysIndustryDTO>	pageParams	= new PageParams<>(params);
+		Page<SysIndustryDTO>		page		= new Page<>(pageParams.getCurrPage(), pageParams.getPageSize());
+
+		IPage<SysIndustryDTO>		iPage		= sysIndustryExMapper.selectDTO(page, pageParams.getRequestMap());
+
+		PageInfoVO<SysIndustryDTO>	pageVo		= new PageInfoVO<>();
+		pageVo.setCurPage(iPage.getCurrent());
+		pageVo.setTotal(iPage.getTotal());
+		pageVo.setPageSize(iPage.getSize());
+		pageVo.setPages(iPage.getPages());
+		pageVo.setRequestMap(params);
+		pageVo.setList(iPage.getRecords());
+		pageVo.compute();
+
+		return pageVo;
+
+	}
+
+	@Override
+	public List<SysIndustryDTO> getChildren(Long pid, Boolean recursion) {
+		Map<String, Object> params = new HashMap<>();
+		params.put(SysIndustryDTO.PID, pid);
+		params.put(SysIndustryDTO.STATUS, true);
+		params.put("recursion", recursion);
+		return sysIndustryExMapper.getChildren(params);
 	}
 
 	/**
@@ -124,41 +162,6 @@ public class SysIndustryServiceImpl extends ServiceImpl<SysIndustryMapper, SysIn
 
 		List<SysIndustry> list = super.list(query);
 		return BeanConverter.convert(SysIndustryDTO.class, list);
-	}
-
-	/**
-	 * 分页查询
-	 */
-	@KtfTrace("分页查询行业代码")
-	public PageInfoVO<SysIndustryDTO> page(Map<String, Object> params) {
-		PageParams<SysIndustryDTO>	pageParams	= new PageParams<>(params);
-		Page<SysIndustry>			page		= new Page<>(pageParams.getCurrPage(), pageParams.getPageSize());
-
-		QueryWrapper<SysIndustry>	query		= Wrappers.<SysIndustry>query();
-		if (MapUtil.isNotEmpty(pageParams.getRequestMap())) {
-			pageParams.getRequestMap().entrySet().stream().forEach(entry -> {
-				if (ObjectKit.isNotEmpty(entry.getValue())) {
-					if (NumberKit.isNumberic(entry.getValue()))
-						query.eq(entry.getKey(), entry.getValue());
-					else
-						query.like(entry.getKey(), entry.getValue());
-				}
-			});
-		}
-
-		IPage<SysIndustry>			iPage	= super.page(page, query);
-
-		PageInfoVO<SysIndustryDTO>	pageVo	= new PageInfoVO<>();
-		pageVo.setCurPage(iPage.getCurrent());
-		pageVo.setTotal(iPage.getTotal());
-		pageVo.setPageSize(iPage.getSize());
-		pageVo.setPages(iPage.getPages());
-		pageVo.setRequestMap(params);
-		pageVo.setList(BeanConverter.convert(SysIndustryDTO.class, iPage.getRecords()));
-		pageVo.compute();
-
-		return pageVo;
-
 	}
 
 }
