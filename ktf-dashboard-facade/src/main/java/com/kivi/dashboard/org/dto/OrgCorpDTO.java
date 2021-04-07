@@ -28,6 +28,9 @@ public class OrgCorpDTO implements Serializable {
 	@ApiModelProperty(value = "主键ID")
 	private Long				id;
 
+	@ApiModelProperty(value = "appID")
+	private Long				appId;
+
 	@ApiModelProperty(value = "企业名称")
 	private String				name;
 
