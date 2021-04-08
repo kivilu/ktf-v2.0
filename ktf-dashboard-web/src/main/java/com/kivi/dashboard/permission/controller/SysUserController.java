@@ -114,7 +114,7 @@ public class SysUserController extends DashboardController {
 		if (shiroUser.getId() != KtfConstant.SUPER_ADMIN) {
 			params.put(SysUserDTO.CREATE_ROLE_ID, shiroUser.getRoleId());
 			if (shiroUser.getUserType() != UserType.SYS.value) {
-				Long corpId = shiroUser.getCorpId();
+				Long corpId = shiroUser.getOrgId();
 				params.put(SysUserDTO.ORG_ID, corpId);
 			}
 		}

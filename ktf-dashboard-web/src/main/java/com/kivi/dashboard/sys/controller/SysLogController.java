@@ -95,7 +95,7 @@ public class SysLogController extends DashboardController {
 	public ResultMap page(@ApiIgnore @RequestParam(required = false) Map<String, Object> params) {
 		ShiroUser shiroUser = ShiroKit.getUser();
 		if (shiroUser.getId() != KtfConstant.SUPER_ADMIN) {
-			params.put("enterpriseId", ShiroKit.getUser().getCorpId());
+			params.put("enterpriseId", ShiroKit.getUser().getOrgId());
 		}
 		PageInfoVO<SysLogDTO> page = sysLogService().page(params);
 

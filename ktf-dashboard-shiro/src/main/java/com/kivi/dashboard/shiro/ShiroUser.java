@@ -30,7 +30,7 @@ public class ShiroUser implements Serializable {
 	private Integer				status;
 
 	// 企业Id
-	private Long				corpId;
+	private Long				orgId;
 
 	// 所属部门Id
 	private Long				deptId;
