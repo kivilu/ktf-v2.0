@@ -3,7 +3,10 @@ package com.kivi.dashboard.org.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.kivi.framework.cache.annotation.KtfCacheEvict;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +54,7 @@ public class OrgCorpServiceImpl extends ServiceImpl<OrgCorpMapper, OrgCorp> impl
 	 * 新增企业信息
 	 */
 	@KtfTrace("新增企业信息")
+	@KtfCacheEvict(cacheNames = "kikv.org.list")
 	@Override
 	public OrgCorp save(OrgCorpDTO dto) {
 		OrgCorp entity = BeanConverter.convert(OrgCorp.class, dto);
@@ -62,6 +66,7 @@ public class OrgCorpServiceImpl extends ServiceImpl<OrgCorpMapper, OrgCorp> impl
 	 * 修改
 	 */
 	@KtfTrace("修改企业信息")
+	@KtfCacheEvict(cacheNames = "kikv.org.list")
 	@Override
 	public Boolean updateById(OrgCorpDTO dto) {
 		OrgCorp entity = BeanConverter.convert(OrgCorp.class, dto);
@@ -89,6 +94,15 @@ public class OrgCorpServiceImpl extends ServiceImpl<OrgCorpMapper, OrgCorp> impl
 	@Override
 	public List<OrgCorpDTO> list(Map<String, Object> params) {
 		return orgCorpExMapper.selectDTO(params);
+	}
+
+	@Override
+	@Cacheable(value = "kikv.org.list", key = "caches[0].name+'.dto.'", unless = "#result == null")
+	public List<OrgCorpDTO> allList() {
+		QueryWrapper<OrgCorp> queryWrapper = new QueryWrapper<>();
+		queryWrapper.select(OrgCorp.ID);
+		List<OrgCorpDTO> list = BeanConverter.convert(OrgCorpDTO.class,super.list(queryWrapper));
+		return list;
 	}
 
 }

@@ -61,6 +61,11 @@ public class OrgCorpDubboServiceImpl extends ServiceImpl<OrgCorpMapper, OrgCorp>
 	}
 
 	@Override
+	public List<OrgCorpDTO> allList() {
+		return orgCorpService.allList();
+	}
+
+	@Override
 	public PageInfoVO<OrgCorpDTO> page(Map<String, Object> params) {
 		return orgCorpService.page(params);
 	}

@@ -38,6 +38,12 @@ public interface OrgCorpService extends IService<OrgCorp> {
 	 */
 	List<OrgCorpDTO> list(Map<String, Object> params);
 
+
+	/**
+	 * 指定列查询列表
+	 */
+	List<OrgCorpDTO> allList();
+
 	/**
 	 * 单表分页查询
 	 */

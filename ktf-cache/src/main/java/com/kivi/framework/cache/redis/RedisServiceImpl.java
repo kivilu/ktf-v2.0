@@ -63,7 +63,16 @@ public class RedisServiceImpl implements IRedisService {
 
     @Override
     public long incr(String key, long num) {
-        return redisTemplate.opsForValue().increment(key(key), num);
+        if (!this.exists(key)){
+            return redisTemplate.opsForValue().increment(key(key), num);
+        }else {
+            if (this.get(key).equals(9223372036854775807L)){
+                this.set(key,0,-1);
+                return 0;
+            }else {
+                return redisTemplate.opsForValue().increment(key(key), num);
+            }
+        }
     }
 
     @Override
@@ -169,7 +178,9 @@ public class RedisServiceImpl implements IRedisService {
     @Override
     public void madd(String key, Map<String, Object> par, int second) {
         redisTemplate.opsForHash().putAll(key(key), par);
-        this.expire(key(key), second);
+        if (second != -1){
+            this.expire(key(key), second);
+        }
     }
 
     @Override
