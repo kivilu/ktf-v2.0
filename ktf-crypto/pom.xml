@@ -10,7 +10,7 @@
   <description>KTF框架加密算法模块</description>
   
   <properties>
-  	<bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
+  	<bcprov-jdk15on.version>1.67</bcprov-jdk15on.version>
   </properties>
   
   <dependencies>
