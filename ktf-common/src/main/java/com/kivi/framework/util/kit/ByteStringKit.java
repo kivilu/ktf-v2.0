@@ -35,19 +35,19 @@ public class ByteStringKit {
 			return new byte[0];
 		switch (type) {
 		case BASE64:
-			return EncodeUtil.decodeBase64(data);
+			return EncodeUtil.decodeBase64(data.replaceAll("\r\n",""));
 		case HEX:
 			return EncodeUtil.decodeHex(data.toUpperCase());
 		case ASCII:
 			return BinaryCodec.fromAscii(data.getBytes());
 		default:
-			return EncodeUtil.decodeBase64(data);
+			return EncodeUtil.decodeBase64(data.replaceAll("\r\n",""));
 		}
 	}
 
 	/**
 	 * byte数组转换为HEX字符串
-	 * 
+	 *
 	 * @param data
 	 * @return
 	 */

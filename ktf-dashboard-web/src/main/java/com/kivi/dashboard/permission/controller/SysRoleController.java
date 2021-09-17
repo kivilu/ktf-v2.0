@@ -199,8 +199,8 @@ public class SysRoleController extends DashboardController {
 			params = new HashMap<>();
 		// 如果不是超级管理员，则只查询自己创建的角色列表
 		if (ShiroKit.getUser().getId() != KtfConstant.SUPER_ADMIN) {
-			SysRole optRole = sysRoleService().getById(ShiroKit.getUser().getRoleId());
-			params.put(SysRoleDTO.SUB_ROLE_IDS, optRole.getSubRoleIds());
+//			SysRole optRole = sysRoleService().getById(ShiroKit.getUser().getRoleId());
+//			params.put(SysRoleDTO.SUB_ROLE_IDS, optRole.getSubRoleIds());
 		}
 		List<SysRole> list = sysRoleService().listLike(params, SysRole.DB_ID, SysRole.DB_NAME, SysRole.DB_TYPE);
 		return ResultMap.ok().data(list);

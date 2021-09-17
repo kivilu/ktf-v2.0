@@ -112,11 +112,11 @@ public class SysUserController extends DashboardController {
 		ShiroUser shiroUser = ShiroKit.getUser();
 
 		if (shiroUser.getId() != KtfConstant.SUPER_ADMIN) {
-			params.put(SysUserDTO.CREATE_ROLE_ID, shiroUser.getRoleId());
-			if (shiroUser.getUserType() != UserType.SYS.value) {
+//			params.put(SysUserDTO.CREATE_ROLE_ID, shiroUser.getRoleId());
+//			if (shiroUser.getUserType() != UserType.SYS.value) {
 				Long corpId = shiroUser.getOrgId();
 				params.put(SysUserDTO.ORG_ID, corpId);
-			}
+//			}
 		}
 
 		PageInfoVO<SysUserDTO> page = sysUserService().page(params);
@@ -200,14 +200,9 @@ public class SysUserController extends DashboardController {
 
 	@ApiOperation(value = "用户密码重置", notes = "用户密码重置")
 	@GetMapping("/passwordReset/{id}")
-	public ResultMap restUserPassword(@Valid @RequestBody PasswordResetVO form) {
-
-		return ResultMap.error(KtfError.E_NOT_IMPLEMENT, "待实现");
-	}
-
-	@ApiOperation(value = "用户密码重置", notes = "用户密码重置")
-	@GetMapping("/passwordReset")
-	public ResultMap restSelfPassword(@PathVariable("id") Long id) {
+	public ResultMap restUserPassword(@PathVariable("id") Long id) {
+//
+//		return ResultMap.error(KtfError.E_NOT_IMPLEMENT, "待实现");
 		SysUser entity = new SysUser();
 		entity.setId(id);
 		entity.setStatus(KtfStatus.INIT.code);
@@ -219,6 +214,21 @@ public class SysUserController extends DashboardController {
 
 		return ResultMap.ok("重置成功");
 	}
+
+//	@ApiOperation(value = "用户密码重置", notes = "用户密码重置")
+//	@GetMapping("/passwordReset")
+//	public ResultMap restSelfPassword(@PathVariable("id") Long id) {
+//		SysUser entity = new SysUser();
+//		entity.setId(id);
+//		entity.setStatus(KtfStatus.INIT.code);
+//		sysUserService().updateById(entity);
+//
+//		UserVo userVo = new UserVo();
+//		userVo.setId(id);
+//		customerAuthsService().updateCredential(userVo, null);
+//
+//		return ResultMap.ok("重置成功");
+//	}
 
 	/**
 	 * 新增
