@@ -210,7 +210,7 @@ public class SysUserController extends DashboardController {
 
 		UserVo userVo = new UserVo();
 		userVo.setId(id);
-		customerAuthsService().updateCredential(userVo, null);
+		customerAuthsService().resetCredential(userVo);
 
 		return ResultMap.ok("重置成功");
 	}
