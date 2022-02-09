@@ -8,7 +8,7 @@
   <artifactId>ktf-dashboard-shiro</artifactId>
   
   <properties>
-        <shiro.version>1.4.1</shiro.version>
+        <shiro.version>1.7.1</shiro.version>
         <thymeleaf-extras-shiro.version>2.0.0</thymeleaf-extras-shiro.version>
         <pac4j.version>3.8.0</pac4j.version>
         <buji.version>4.0.0</buji.version>
