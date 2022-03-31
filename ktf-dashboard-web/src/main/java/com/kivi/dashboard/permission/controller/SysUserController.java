@@ -67,7 +67,7 @@ public class SysUserController extends DashboardController {
 
 	@ApiOperation(value = "用户信息", notes = "用户信息")
 	@GetMapping("/info")
-	@RequiresPermissions("permission/user/info")
+	//@RequiresPermissions("permission/user/info")
 	public ResultMap self() {
 		JwtUserDTO	jwtUser	= super.getJwtUser();
 		SysUserDTO	user	= sysUserService().getDto(jwtUser.getId());
@@ -76,7 +76,7 @@ public class SysUserController extends DashboardController {
 
 	@ApiOperation(value = "用户信息", notes = "用户信息")
 	@GetMapping("/info/{id}")
-	@RequiresPermissions("permission/user/info")
+	//@RequiresPermissions("permission/user/info")
 	public ResultMap info(@PathVariable("id") Long id) {
 		SysUserDTO user = sysUserService().getDto(id);
 		return ResultMap.ok().data(user);

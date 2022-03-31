@@ -157,7 +157,7 @@ public class SysDicController extends DashboardController {
 	}
 
 	@ApiOperation(value = "获取系统运行配置", notes = "获取系统运行配置")
-	@RequiresPermissions("sys/dic/getSettings")
+	//@RequiresPermissions("sys/dic/getSettings")
 	@GetMapping("/getSettings")
 	@KtfTrace("获取系统运行配置")
 	public ResultMap getSettings() {
@@ -166,7 +166,7 @@ public class SysDicController extends DashboardController {
 	}
 
 	@ApiOperation(value = "获取系统运行配置", notes = "获取系统运行配置")
-	@RequiresPermissions("sys/dic/getSettings")
+	//@RequiresPermissions("sys/dic/getSettings")
 	@GetMapping("/getSettings/{code}")
 	@KtfTrace("获取系统运行配置")
 	public ResultMap getSettingsByCode(@PathVariable("code") String code) {
