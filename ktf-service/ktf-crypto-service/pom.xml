@@ -3,7 +3,8 @@
   <parent>
     <groupId>com.kivi</groupId>
     <artifactId>ktf-service</artifactId>
-    <version>2.0.2</version>
+    <version>2.3.0</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>ktf-crypto-service</artifactId>
   <description>KTF统一加密服务</description>
@@ -31,11 +32,12 @@
   			<version>${ktf.version}</version>
   		</dependency>
   		
-  		<dependency>
-  			<groupId>com.kivi</groupId>
-  			<artifactId>ktf-web</artifactId>
-  			<version>${ktf.version}</version>
-  		</dependency>
+  		 <dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
   </dependencies>
   
 </project>

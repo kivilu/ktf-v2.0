@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.framework.annotation.KtfTrace;
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.kivi.sys.sys.dto.SysSmsTypeDTO;
 import com.kivi.sys.sys.entity.SysSmsType;
@@ -24,7 +24,7 @@ import com.kivi.sys.sys.service.ISysSmsTypeService;
  * @since 2019-09-24
  */
 
-@DubboService(version = KtfDashboardProperties.DUBBO_VERSION)
+@DubboService(version = KtfSysProperties.DUBBO_VERSION)
 public class SysSmsTypeDubboServiceImpl extends ServiceImpl<SysSmsTypeMapper, SysSmsType>
 		implements ISysSmsTypeService {
 

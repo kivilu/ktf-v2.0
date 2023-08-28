@@ -8,7 +8,7 @@ import org.apache.shiro.session.mgt.ValidatingSession;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,11 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ShiroRedisSessionDAO extends EnterpriseCacheSessionDAO {
 
-	private final KtfDashboardProperties		ktfDashboardProperties;
+	private final KtfSysProperties		ktfDashboardProperties;
 
 	private final RedisTemplate<String, Object>	redisTemplate;
 
-	public ShiroRedisSessionDAO(KtfDashboardProperties ktfDashboardProperties,
+	public ShiroRedisSessionDAO(KtfSysProperties ktfDashboardProperties,
 			RedisTemplate<String, Object> redisTemplate) {
 		this.ktfDashboardProperties	= ktfDashboardProperties;
 		this.redisTemplate			= redisTemplate;

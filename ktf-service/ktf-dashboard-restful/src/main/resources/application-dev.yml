@@ -6,7 +6,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.0.66/ktf?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost/ktf?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=Asia/Shanghai
     username: root
     password: root
     type: com.zaxxer.hikari.HikariDataSource
@@ -25,7 +25,7 @@ spring:
     timeout: 3600s
   redis:
     database: 0
-    host: 192.168.0.66
+    host: 127.0.0.1
     port: 6379
     timeout: 5000ms
     lettuce:
@@ -38,4 +38,7 @@ spring:
 logging:
   level:
     com.kivi: trace
-    com.ktf.dashboard: trace
+    com.ktf.sys: trace
+
+knife4j:
+  enable: true

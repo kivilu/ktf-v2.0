@@ -24,7 +24,7 @@ public class UnreadSms implements Serializable {
 	/**
 	 * 未读消息数量
 	 */
-	private Integer				count;
+	private Long				count;
 
 	private List<Sms>			list;
 

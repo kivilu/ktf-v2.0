@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.kivi.cif.properties.CifProperties;
 import com.kivi.cif.service.CifCustomerAuthsService;
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 import com.kivi.sys.permission.service.SysResourceService;
 import com.kivi.sys.permission.service.SysUserOrgService;
 import com.kivi.sys.permission.service.SysUserService;
@@ -32,11 +32,11 @@ public class ShiroUserConfig {
 	@Autowired(required = false)
 	private CifCustomerAuthsService	cifAuthService;
 
-	@DubboReference(version = KtfDashboardProperties.DUBBO_VERSION, check = false)
+	@DubboReference(version = KtfSysProperties.DUBBO_VERSION, check = false)
 	private SysUserService			dubboUserService;
-	@DubboReference(version = KtfDashboardProperties.DUBBO_VERSION, check = false)
+	@DubboReference(version = KtfSysProperties.DUBBO_VERSION, check = false)
 	private SysResourceService		dubboResourceService;
-	@DubboReference(version = KtfDashboardProperties.DUBBO_VERSION, check = false)
+	@DubboReference(version = KtfSysProperties.DUBBO_VERSION, check = false)
 	private SysUserOrgService		dubboUserEnterpriseService;
 
 	@DubboReference(version = CifProperties.DUBBO_VERSION, check = false)

@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.kivi.framework.cache.constant.KtfCache;
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 import com.kivi.framework.service.KtfTokenService;
 import com.kivi.sys.shiro.base.ShiroBaseConfig;
 import com.kivi.sys.shiro.cache.ShiroRedisCacheManager;
@@ -87,7 +87,7 @@ import com.kivi.sys.shiro.service.ShiroUserService;
  *
  */
 @ConditionalOnProperty(
-		prefix = KtfDashboardProperties.PREFIX,
+		prefix = KtfSysProperties.PREFIX,
 		value = "auth",
 		havingValue = "jwt",
 		matchIfMissing = false)
@@ -96,7 +96,7 @@ import com.kivi.sys.shiro.service.ShiroUserService;
 public class ShiroJwtConfig extends ShiroBaseConfig {
 
 	@Autowired
-	private KtfDashboardProperties	ktfDashboardProperties;
+	private KtfSysProperties	ktfDashboardProperties;
 
 	// @Autowired
 	// private ShiroRedisSessionDAO shiroRedisSessionDAO;
@@ -260,7 +260,7 @@ public class ShiroJwtConfig extends ShiroBaseConfig {
 	}
 
 	@Override
-	protected KtfDashboardProperties ktfProperties() {
+	protected KtfSysProperties ktfProperties() {
 		return this.ktfDashboardProperties;
 	}
 

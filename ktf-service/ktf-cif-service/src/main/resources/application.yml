@@ -1,18 +1,3 @@
-server:
-  undertow:
-    threads:
-      # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程不要设置过大，
-        # 如果过大，启动项目会报错：打开文件数过多
-      io: 4
-        # 阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程
-        # 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
-      worker: 32
-        # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
-        # 每块buffer的空间大小,越小的空间被利用越充分，不要设置太大，以免影响其他应用，合适即可
-    buffer-size: 1024
-        # 是否分配的直接内存(NIO直接分配的堆外内存)
-    direct-buffers: true
-    
 spring:
   application:
     name: cif-service
@@ -26,7 +11,7 @@ mybatis-plus:
   #type-aliases-package: com.kivi.cif.*.entity
   global-config:
     db-config:
-      id-type: ID_WORKER
+      id-type: assign-id
       table-underline: true
       logic-delete-value: 1
       logic-not-delete-value: 0
@@ -57,40 +42,42 @@ dubbo:
   registry:
     client: curator
   scan:
-    base-packages: com.kivi.cif.dubbo.service
+    base-packages: 
+      - com.kivi.cif.dubbo.service
    
 ktf:
   cif:
-    dubbo-service-version: 1.0.0
+    dubbo-service-version: 2.3.0
   common:
     component-scan: com.kivi.cif
   cache:
     redis:
       client-type: lettuce
     ttl: 86400
-  dashboard:
-    dubbo-service-version: 1.0.0
+  sys:
+    dubbo-service-version: 2.3.0
+    login-type: USERNAME
   db:
     mappers: com.kivi.**.mapper
     
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-  endpoint:
-    health:
-      enabled: true
-      show-details: always
-    #dubbo:
-    #  enable: true
-    #  dubbo-shutdown.enabled: true
-    #  dubbo-configs.enabled: true
-    #  dubbo-services.enabled: true
-    #  dubbo-references.enabled: true
-    #  dubbo-properties.enabled: true
-  #health:
-    #dubbo:
-    #  status:
-    #    defaults: memory,load
-    #    extras: registry,load,threadpool
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
+#  endpoint:
+#    health:
+#      enabled: true
+#      show-details: always
+#    #dubbo:
+#    #  enable: true
+#    #  dubbo-shutdown.enabled: true
+#    #  dubbo-configs.enabled: true
+#    #  dubbo-services.enabled: true
+#    #  dubbo-references.enabled: true
+#    #  dubbo-properties.enabled: true
+#  #health:
+#    #dubbo:
+#    #  status:
+#    #    defaults: memory,load
+#    #    extras: registry,load,threadpool

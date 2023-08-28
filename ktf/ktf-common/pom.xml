@@ -13,24 +13,12 @@
   		<persistence-api.version>1.0.2</persistence-api.version>
   		 <guava.version>32.1.2-jre</guava.version>
   		<joda-time.version>2.12.5</joda-time.version>
-  		<hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
   </properties>
   
   <dependencies>
   		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
 		</dependency>
 		
 		<!-- 常用工具类  -->
@@ -66,10 +54,6 @@
 		<!-- /md5、sha256等工具包 -->
 		
 		<!-- fastjson -->
-		<!-- <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency> -->
         <dependency>
 		    <groupId>com.alibaba.fastjson2</groupId>
 		    <artifactId>fastjson2</artifactId>
@@ -86,11 +70,6 @@
 			<groupId>javax.validation</groupId>
     		<artifactId>validation-api</artifactId>
 		</dependency>
-		<dependency>
-		    <groupId>org.hibernate</groupId>
-		    <artifactId>hibernate-validator</artifactId>
-		    <version>${hibernate-validator.version}</version>
-        </dependency>
   		<!-- /validation-api-->
   		
   		<dependency>
@@ -127,6 +106,18 @@
 			<groupId>com.google.guava</groupId>
        		<artifactId>guava</artifactId>
        		<version>${guava.version}</version>
+		</dependency>
+		
+			<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
 		</dependency>
 		
   </dependencies>

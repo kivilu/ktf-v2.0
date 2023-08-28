@@ -9,7 +9,7 @@
   <artifactId>ktf-web</artifactId>
   <description>Spring boot web功能集成</description>
   <properties>
-  	
+  	<hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
   </properties>
   
   <dependencies>
@@ -41,6 +41,12 @@
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
         
+  		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-validator</artifactId>
+		    <version>${hibernate-validator.version}</version>
+		</dependency>
+        
         <dependency>
 		    <groupId>io.projectreactor</groupId>
 		    <artifactId>reactor-core</artifactId>
@@ -64,10 +70,10 @@
         </dependency>
 		<!-- /jwt -->
 		
-		<dependency>
+		<!-- <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-client</artifactId>
-        </dependency>
+        </dependency> -->
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

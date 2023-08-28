@@ -30,7 +30,7 @@ import com.kivi.framework.crypto.enums.KtfCertType;
 import com.kivi.framework.crypto.sm2.Sm2PublicKey;
 import com.kivi.framework.crypto.sm2.Sm2PublicKeyImpl;
 import com.kivi.framework.crypto.util.CertUtil;
-import com.kivi.framework.dto.warapper.WarpReqDTO;
+import com.kivi.framework.dto.KtfDTO;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.util.CRC16Util;
 import com.kivi.framework.util.kit.ByteStringKit;
@@ -64,8 +64,8 @@ public class KtfCryptoServiceImpl implements KtfCryptoService {
 	}
 
 	@Override
-	public String ctx(WarpReqDTO<byte[]> keyDTO, KtfCryptoAlg alg) throws KtfException {
-		final Long		hawkSeqId	= keyDTO.getTranUniqueId();
+	public String ctx(KtfDTO<byte[]> keyDTO, KtfCryptoAlg alg) throws KtfException {
+		final Long		hawkSeqId	= keyDTO.getKtfId();
 		final byte[]	key			= keyDTO.getReqObject();
 		String			ctxToken	= null;
 		String			keyOfCTX	= null;
@@ -130,8 +130,8 @@ public class KtfCryptoServiceImpl implements KtfCryptoService {
 	}
 
 	@Override
-	public String ctx(WarpReqDTO<KeyPairDO> keypairDTO, AlgSign signAlg) {
-		final Long		hawkSeqId	= keypairDTO.getTranUniqueId();
+	public String ctx(KtfDTO<KeyPairDO> keypairDTO, AlgSign signAlg) {
+		final Long		hawkSeqId	= keypairDTO.getKtfId();
 		final KeyPairDO	keypair		= keypairDTO.getReqObject();
 		String			ctxToken	= null;
 		String			keyOfCTX	= null;
@@ -182,11 +182,11 @@ public class KtfCryptoServiceImpl implements KtfCryptoService {
 	}
 
 	@Override
-	public byte[] encrypt(WarpReqDTO<String> ctxDTO, byte[] data) {
+	public byte[] encrypt(KtfDTO<String> ctxDTO, byte[] data) {
 		String	ctxToken	= ctxToken(ctxDTO.getReqObject());
 		byte[]	result		= sm4Service.encrypt(ctxToken, data);
 		if (log.isTraceEnabled()) {
-			log.trace("【{}】数据加密\r\nCTX:{}\r\n明文：{}\r\n密文：{}", ctxDTO.getTranUniqueId(), ctxToken,
+			log.trace("【{}】数据加密\r\nCTX:{}\r\n明文：{}\r\n密文：{}", ctxDTO.getKtfId(), ctxToken,
 					ByteStringKit.toString(data, ByteStringKit.HEX), ByteStringKit.toString(result, ByteStringKit.HEX));
 		}
 
@@ -194,11 +194,11 @@ public class KtfCryptoServiceImpl implements KtfCryptoService {
 	}
 
 	@Override
-	public byte[] decrypt(WarpReqDTO<String> ctxDTO, byte[] data) {
+	public byte[] decrypt(KtfDTO<String> ctxDTO, byte[] data) {
 		String	ctxToken	= ctxToken(ctxDTO.getReqObject());
 		byte[]	result		= sm4Service.decrypt(ctxToken, data);
 		if (log.isTraceEnabled()) {
-			log.trace("【{}】数据解密\r\nctx:{}\r\n密文：{}\r\n明文：{}", ctxDTO.getTranUniqueId(), ctxToken,
+			log.trace("【{}】数据解密\r\nctx:{}\r\n密文：{}\r\n明文：{}", ctxDTO.getKtfId(), ctxToken,
 					ByteStringKit.toString(data, ByteStringKit.HEX), ByteStringKit.toString(result, ByteStringKit.HEX));
 		}
 
@@ -206,7 +206,7 @@ public class KtfCryptoServiceImpl implements KtfCryptoService {
 	}
 
 	@Override
-	public Short crc(WarpReqDTO<String> ctxDTO, byte[] data) throws KtfException {
+	public Short crc(KtfDTO<String> ctxDTO, byte[] data) throws KtfException {
 		String		ctxToken	= ctxToken(ctxDTO.getReqObject());
 
 		byte[]		sessionKey	= symmKey(ctxToken);
@@ -222,20 +222,20 @@ public class KtfCryptoServiceImpl implements KtfCryptoService {
 		Integer crc = CRC16Util.calcCrc16(crcBuff.array());
 
 		if (log.isTraceEnabled())
-			log.trace("【{}】CRC计算，\r\n原文:{}\r\n结果：{}", ctxDTO.getTranUniqueId(),
+			log.trace("【{}】CRC计算，\r\n原文:{}\r\n结果：{}", ctxDTO.getKtfId(),
 					ByteStringKit.toString(crcBuff.array(), ByteStringKit.HEX), crc);
 
 		return crc.shortValue();
 	}
 
 	@Override
-	public Boolean crc(WarpReqDTO<String> ctxDTO, Short crc, byte[] data) throws KtfException {
+	public Boolean crc(KtfDTO<String> ctxDTO, Short crc, byte[] data) throws KtfException {
 		Short cacCrc = crc(ctxDTO, data);
 		return cacCrc.compareTo(crc) == 0;
 	}
 
 	@Override
-	public byte[] sign(WarpReqDTO<String> ctxDTO, byte[] data) throws KtfException {
+	public byte[] sign(KtfDTO<String> ctxDTO, byte[] data) throws KtfException {
 		String	ctxToken	= ctxToken(ctxDTO.getReqObject());
 		byte[]	result		= null;
 		if (data.length == 32)
@@ -243,20 +243,20 @@ public class KtfCryptoServiceImpl implements KtfCryptoService {
 		else
 			result = sm2Service.sign(ctxToken, data);
 		if (log.isTraceEnabled()) {
-			log.trace("【{}】SM2签名CTX:{}\r\n明文：{}\r\n签名：{}\r\n", ctxDTO.getTranUniqueId(), ctxToken,
+			log.trace("【{}】SM2签名CTX:{}\r\n明文：{}\r\n签名：{}\r\n", ctxDTO.getKtfId(), ctxToken,
 					ByteStringKit.toString(data, ByteStringKit.HEX), ByteStringKit.toString(result, ByteStringKit.HEX));
 		}
 		return result;
 	}
 
 	@Override
-	public byte[] sign(WarpReqDTO<String> ctxDTO, String withId, byte[] data) throws KtfException {
+	public byte[] sign(KtfDTO<String> ctxDTO, String withId, byte[] data) throws KtfException {
 		String	ctxToken	= ctxToken(ctxDTO.getReqObject());
 		byte[]	result		= sm2Service.signWithId(ctxToken, withId, data);
 		if (log.isTraceEnabled()) {
 			if (log.isTraceEnabled()) {
-				log.trace("【{}】SM2withId签名CTX:{}\r\nwithId:{}\r\n明文：{}\r\n签名：{}\r\n", ctxDTO.getTranUniqueId(),
-						ctxToken, withId, ByteStringKit.toString(data, ByteStringKit.HEX),
+				log.trace("【{}】SM2withId签名CTX:{}\r\nwithId:{}\r\n明文：{}\r\n签名：{}\r\n", ctxDTO.getKtfId(), ctxToken,
+						withId, ByteStringKit.toString(data, ByteStringKit.HEX),
 						ByteStringKit.toString(result, ByteStringKit.HEX));
 			}
 		}
@@ -264,7 +264,7 @@ public class KtfCryptoServiceImpl implements KtfCryptoService {
 	}
 
 	@Override
-	public Boolean verify(WarpReqDTO<String> ctxDTO, byte[] data, byte[] sign) throws KtfException {
+	public Boolean verify(KtfDTO<String> ctxDTO, byte[] data, byte[] sign) throws KtfException {
 		String	ctxToken	= ctxToken(ctxDTO.getReqObject());
 		Boolean	result		= false;
 		if (data.length == 32)
@@ -272,7 +272,7 @@ public class KtfCryptoServiceImpl implements KtfCryptoService {
 		else
 			result = sm2Service.verify(ctxToken, data, sign);
 		if (log.isTraceEnabled()) {
-			log.trace("【{}】CTX:{}，明文：{}，签名：{}，验签结果：{}", ctxDTO.getTranUniqueId(), ctxToken,
+			log.trace("【{}】CTX:{}，明文：{}，签名：{}，验签结果：{}", ctxDTO.getKtfId(), ctxToken,
 					ByteStringKit.toString(data, ByteStringKit.HEX), ByteStringKit.toString(sign, ByteStringKit.HEX),
 					result);
 		}
@@ -280,13 +280,13 @@ public class KtfCryptoServiceImpl implements KtfCryptoService {
 	}
 
 	@Override
-	public Boolean verify(WarpReqDTO<String> ctxDTO, String withId, byte[] data, byte[] sign) throws KtfException {
+	public Boolean verify(KtfDTO<String> ctxDTO, String withId, byte[] data, byte[] sign) throws KtfException {
 		Boolean	result		= false;
 		String	ctxToken	= ctxToken(ctxDTO.getReqObject());
 		result = sm2Service.verifyWithId(ctxToken, withId, data, sign);
 
 		if (log.isTraceEnabled()) {
-			log.trace("【{}】CTX:{}，明文：{}，签名：{}，验签结果：{}", ctxDTO.getTranUniqueId(), ctxToken,
+			log.trace("【{}】CTX:{}，明文：{}，签名：{}，验签结果：{}", ctxDTO.getKtfId(), ctxToken,
 					ByteStringKit.toString(data, ByteStringKit.HEX), ByteStringKit.toString(sign, ByteStringKit.HEX),
 					result);
 		}
@@ -316,8 +316,8 @@ public class KtfCryptoServiceImpl implements KtfCryptoService {
 	}
 
 	@Override
-	public byte[] convertPem2Bin(WarpReqDTO<String> base64KeyDTO, KtfCertType type) {
-		final Long		hawkSeqId	= base64KeyDTO.getTranUniqueId();
+	public byte[] convertPem2Bin(KtfDTO<String> base64KeyDTO, KtfCertType type) {
+		final Long		hawkSeqId	= base64KeyDTO.getKtfId();
 		final String	base64Key	= base64KeyDTO.getReqObject();
 
 		ByteBuffer		result		= null;

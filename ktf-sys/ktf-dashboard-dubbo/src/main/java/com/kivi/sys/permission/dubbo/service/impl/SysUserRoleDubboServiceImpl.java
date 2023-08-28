@@ -6,7 +6,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 import com.kivi.sys.permission.entity.SysUserRole;
 import com.kivi.sys.permission.mapper.SysUserRoleMapper;
 import com.kivi.sys.permission.service.SysUserRoleService;
@@ -20,7 +20,7 @@ import com.kivi.sys.permission.service.SysUserRoleService;
  * @since 2019-09-18
  */
 
-@DubboService(version = KtfDashboardProperties.DUBBO_VERSION)
+@DubboService(version = KtfSysProperties.DUBBO_VERSION)
 public class SysUserRoleDubboServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRole>
     implements SysUserRoleService {
 

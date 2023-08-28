@@ -3,12 +3,12 @@ package com.kivi.sys.shiro.base;
 import java.util.List;
 import java.util.Map;
 
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 import com.kivi.framework.util.kit.CollectionKit;
 
 public abstract class ShiroBaseConfig {
 
-	protected abstract KtfDashboardProperties ktfProperties();
+	protected abstract KtfSysProperties ktfProperties();
 
 	/**
 	 * 开放资源表

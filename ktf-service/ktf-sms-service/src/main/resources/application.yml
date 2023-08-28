@@ -7,8 +7,6 @@ spring:
     allow-bean-definition-overriding: true
   mvc:
     throw-exception-if-no-handler-found: false
-  resources:
-    add-mappings: false
 
 dubbo:
   application:
@@ -22,10 +20,17 @@ dubbo:
     retries: 0
   registry:
     client: curator
-  scan-base-packages: com.kivi.sms.dubbo.service
+  scan:
+    base-packages:
+    - com.kivi.sms.dubbo.service
+  
 ktf:
   common:
     component-scan: com.kivi
+  cache:
+    enabled: true
+    redis:
+      client-type: lettuce
   db:
     mappers: com.kivi.sms.*.mapper
   sms:
@@ -50,7 +55,7 @@ mybatis-plus:
   type-aliases-package: com.kivi.sms.*.entity
   global-config:
     db-config:
-      id-type: ID_WORKER
+      id-type: assign-id
       table-underline: true
       logic-delete-value: 1
       logic-not-delete-value: 0

@@ -5,18 +5,18 @@ import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.cache.CacheManager;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 
 /**
  * @Descriptin 实现shiro的CacheManager
  */
 public class ShiroRedisCacheManager implements CacheManager {
 
-	private final KtfDashboardProperties		ktfDashboardProperties;
+	private final KtfSysProperties		ktfDashboardProperties;
 
 	private final RedisTemplate<String, Object>	redisTemplate;
 
-	public ShiroRedisCacheManager(KtfDashboardProperties ktfDashboardProperties,
+	public ShiroRedisCacheManager(KtfSysProperties ktfDashboardProperties,
 			RedisTemplate<String, Object> redisTemplate) {
 		this.ktfDashboardProperties	= ktfDashboardProperties;
 		this.redisTemplate			= redisTemplate;

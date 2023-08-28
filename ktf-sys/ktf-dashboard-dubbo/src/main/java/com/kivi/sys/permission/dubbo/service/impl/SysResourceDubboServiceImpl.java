@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.framework.annotation.KtfTrace;
 import com.kivi.framework.constant.enums.CommonEnum.MenuType;
 import com.kivi.framework.converter.BeanConverter;
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.kivi.sys.permission.dto.SysResourceDTO;
 import com.kivi.sys.permission.entity.SysResource;
@@ -26,7 +26,7 @@ import com.kivi.sys.permission.service.SysResourceService;
  * @author Auto-generator
  * @since 2019-09-18
  */
-@DubboService(version = KtfDashboardProperties.DUBBO_VERSION)
+@DubboService(version = KtfSysProperties.DUBBO_VERSION)
 public class SysResourceDubboServiceImpl extends ServiceImpl<SysResourceMapper, SysResource>
 		implements SysResourceService {
 	@Autowired

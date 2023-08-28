@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.model.ResultMap;
-import com.kivi.framework.properties.KtfSwaggerProperties;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.kivi.sys.base.DashboardController;
 import com.kivi.sys.permission.dto.SysRoleDTO;
@@ -40,12 +39,8 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author Auto-generator
  * @since 2019-09-18
  */
-@ConditionalOnProperty(
-		prefix = KtfSwaggerProperties.PREFIX,
-		value = "enable-permission-api",
-		havingValue = "true",
-		matchIfMissing = false)
-@Api(value = "SYS角色管理接口", tags = { "SYS角色管理接口" })
+@Api(tags = "权限管理—角色管理")
+@ApiSupport(order = 12)
 @RestController
 @RequestMapping("/permission/role")
 @Slf4j

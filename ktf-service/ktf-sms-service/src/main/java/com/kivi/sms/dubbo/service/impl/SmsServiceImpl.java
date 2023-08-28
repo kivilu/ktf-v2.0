@@ -1,7 +1,7 @@
 package com.kivi.sms.dubbo.service.impl;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kivi.framework.annotation.KtfTrace;
@@ -22,7 +22,7 @@ import com.kivi.sms.service.SmsOtpService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service(version = KtfSmsProperties.DUBBO_VERSION, timeout = 10000, validation = "true")
+@DubboService(version = KtfSmsProperties.DUBBO_VERSION, timeout = 10000, validation = "true")
 @Slf4j
 public class SmsServiceImpl implements SmsService {
 

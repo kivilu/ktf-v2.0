@@ -38,4 +38,7 @@ spring:
 logging:
   level:
     com.kivi: trace
-    com.ktf.dashboard: trace
+    com.ktf.sys: trace
+knife4j:
+  enable: false
+  

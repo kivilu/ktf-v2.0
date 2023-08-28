@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.framework.annotation.KtfTrace;
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.kivi.sys.org.dto.OrgCorpDTO;
 import com.kivi.sys.org.entity.OrgCorp;
@@ -22,7 +22,7 @@ import com.kivi.sys.org.service.OrgCorpService;
  *
  * @author Auto-generator s
  */
-@DubboService(version = KtfDashboardProperties.DUBBO_VERSION)
+@DubboService(version = KtfSysProperties.DUBBO_VERSION)
 public class OrgCorpDubboServiceImpl extends ServiceImpl<OrgCorpMapper, OrgCorp> implements OrgCorpService {
 
 	@Autowired

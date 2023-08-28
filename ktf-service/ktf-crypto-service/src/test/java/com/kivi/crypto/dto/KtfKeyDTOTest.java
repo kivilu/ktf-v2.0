@@ -1,16 +1,17 @@
 package com.kivi.crypto.dto;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson2.JSON;
 
 public class KtfKeyDTOTest {
 
 	@Test
 	public void test() {
-		ParserConfig.getGlobalInstance().addAccept("com.kivi.,com.ins.");
-		ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+		/*
+		 * ParserConfig.getGlobalInstance().addAccept("com.kivi.,com.ins.");
+		 * ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+		 */
 		String	json	= "{\r\n" + "    \"@type\": \"com.kivi.crypto.dto.KtfKeyDTO\",\r\n" + "    \"key\": {\r\n"
 				+ "        \"@type\": \"com.kivi.framework.crypto.domain.KeyPairDO\",\r\n"
 				+ "        \"pri_pem\": \"-----BEGIN EC PRIVATE KEY-----\\r\\nMHcCAQEEILidz2rd+1HiqbU7sigYnP2pc++kgvtXwkUvsn3C1QdqoAoGCCqBHM9V\\r\\nAYItoUQDQgAEMaSfDpa5Vq1kvS7QJoRfaN/FL+qG35u1Dx2NeU5VJStiCrwY8Jb2\\r\\noQ4GDGDTEyqBe5fo8JPVdvt8UVGMK6OJqw==\\r\\n-----END EC PRIVATE KEY-----\\r\\n\",\r\n"

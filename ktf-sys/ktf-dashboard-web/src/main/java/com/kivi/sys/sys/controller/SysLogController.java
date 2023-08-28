@@ -3,15 +3,14 @@ package com.kivi.sys.sys.controller;
 import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.model.ResultMap;
-import com.kivi.framework.properties.KtfSwaggerProperties;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.kivi.sys.base.DashboardController;
 import com.kivi.sys.shiro.ShiroKit;
@@ -32,12 +31,8 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author Auto-generator
  * @since 2019-09-18
  */
-@ConditionalOnProperty(
-		prefix = KtfSwaggerProperties.PREFIX,
-		value = "enable-sys-api",
-		havingValue = "true",
-		matchIfMissing = false)
-@Api(tags = { "系统日志" })
+@Api(tags = "系统管理—系统日志")
+@ApiSupport(order = 35)
 @RestController
 @RequestMapping("/sys/log")
 public class SysLogController extends DashboardController {

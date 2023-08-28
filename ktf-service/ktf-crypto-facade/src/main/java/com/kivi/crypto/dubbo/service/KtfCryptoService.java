@@ -4,7 +4,7 @@ import com.kivi.crypto.enums.KtfCryptoAlg;
 import com.kivi.framework.crypto.domain.KeyPairDO;
 import com.kivi.framework.crypto.enums.AlgSign;
 import com.kivi.framework.crypto.enums.KtfCertType;
-import com.kivi.framework.dto.warapper.WarpReqDTO;
+import com.kivi.framework.dto.KtfDTO;
 import com.kivi.framework.exception.KtfException;
 
 /**
@@ -24,7 +24,7 @@ public interface KtfCryptoService {
 	 * 
 	 * @return
 	 */
-	String ctx(WarpReqDTO<byte[]> keyDTO, KtfCryptoAlg alg) throws KtfException;
+	String ctx(KtfDTO<byte[]> keyDTO, KtfCryptoAlg alg) throws KtfException;
 
 	/**
 	 * 签名算法CTX
@@ -33,7 +33,7 @@ public interface KtfCryptoService {
 	 * @param signAlg
 	 * @return
 	 */
-	String ctx(WarpReqDTO<KeyPairDO> keypairDTO, AlgSign signAlg);
+	String ctx(KtfDTO<KeyPairDO> keypairDTO, AlgSign signAlg);
 
 	/**
 	 * CRC计算
@@ -43,7 +43,7 @@ public interface KtfCryptoService {
 	 * @param data
 	 * @return
 	 */
-	Short crc(WarpReqDTO<String> ctxTokenDTO, byte[] data) throws KtfException;
+	Short crc(KtfDTO<String> ctxTokenDTO, byte[] data) throws KtfException;
 
 	/**
 	 * CRC校验
@@ -53,7 +53,7 @@ public interface KtfCryptoService {
 	 * @param data
 	 * @return
 	 */
-	Boolean crc(WarpReqDTO<String> ctxTokenDTO, Short crc, byte[] data) throws KtfException;
+	Boolean crc(KtfDTO<String> ctxTokenDTO, Short crc, byte[] data) throws KtfException;
 
 	/**
 	 * 加密
@@ -62,7 +62,7 @@ public interface KtfCryptoService {
 	 * @param data
 	 * @return
 	 */
-	byte[] encrypt(WarpReqDTO<String> ctxTokenDTO, byte[] data) throws KtfException;
+	byte[] encrypt(KtfDTO<String> ctxTokenDTO, byte[] data) throws KtfException;
 
 	/**
 	 * 解密
@@ -71,7 +71,7 @@ public interface KtfCryptoService {
 	 * @param data
 	 * @return
 	 */
-	byte[] decrypt(WarpReqDTO<String> ctxTokenDTO, byte[] data) throws KtfException;
+	byte[] decrypt(KtfDTO<String> ctxTokenDTO, byte[] data) throws KtfException;
 
 	/**
 	 * 生成公私钥密钥对
@@ -89,7 +89,7 @@ public interface KtfCryptoService {
 	 * @return
 	 * @throws KtfException
 	 */
-	byte[] sign(WarpReqDTO<String> ctxTokenDTO, byte[] data) throws KtfException;
+	byte[] sign(KtfDTO<String> ctxTokenDTO, byte[] data) throws KtfException;
 
 	/**
 	 * 签名
@@ -99,7 +99,7 @@ public interface KtfCryptoService {
 	 * @return
 	 * @throws KtfException
 	 */
-	byte[] sign(WarpReqDTO<String> ctxTokenDTO, String withId, byte[] data) throws KtfException;
+	byte[] sign(KtfDTO<String> ctxTokenDTO, String withId, byte[] data) throws KtfException;
 
 	/**
 	 * 验签
@@ -110,7 +110,7 @@ public interface KtfCryptoService {
 	 * @return
 	 * @throws KtfException
 	 */
-	Boolean verify(WarpReqDTO<String> ctxTokenDTO, byte[] data, byte[] sign) throws KtfException;
+	Boolean verify(KtfDTO<String> ctxTokenDTO, byte[] data, byte[] sign) throws KtfException;
 
 	/**
 	 * 验签
@@ -121,7 +121,7 @@ public interface KtfCryptoService {
 	 * @return
 	 * @throws KtfException
 	 */
-	Boolean verify(WarpReqDTO<String> ctxTokenDTO, String withId, byte[] data, byte[] sign) throws KtfException;
+	Boolean verify(KtfDTO<String> ctxTokenDTO, String withId, byte[] data, byte[] sign) throws KtfException;
 
 	/**
 	 * 将PEM格式密钥转换为原始二进制密钥数据
@@ -129,5 +129,5 @@ public interface KtfCryptoService {
 	 * @param base64Key
 	 * @return
 	 */
-	byte[] convertPem2Bin(WarpReqDTO<String> base64KeyDTO, KtfCertType type);
+	byte[] convertPem2Bin(KtfDTO<String> base64KeyDTO, KtfCertType type);
 }

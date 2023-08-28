@@ -15,15 +15,13 @@ server:
       
 spring:
   application:
-    name: ktf-dashboard
+    name: ktf-sys-restful
   profiles:
     active: '@profileActive@'
   main:
     allow-bean-definition-overriding: true
   mvc:
     throw-exception-if-no-handler-found: false
-  resources:
-    add-mappings: false
 #  thymeleaf:
 #    cache: false
 #    encoding: UTF-8
@@ -41,7 +39,7 @@ mybatis-plus:
   type-aliases-package: com.kivi.**.entity
   global-config:
     db-config:
-      id-type: ID_WORKER
+      id-type: assign-id
       table-underline: true
       logic-delete-value: 1
       logic-not-delete-value: 0
@@ -63,19 +61,18 @@ management:
   endpoint:
     health:
       enabled: true
-      show-details: always
-    #dubbo:
-    #  enable: true
-    #  dubbo-shutdown.enabled: true
-    #  dubbo-configs.enabled: true
-    #  dubbo-services.enabled: true
-    #  dubbo-references.enabled: true
-    #  dubbo-properties.enabled: true
-  #health:
-    #dubbo:
-    #  status:
-    #    defaults: memory,load
-    #    extras: registry,load,threadpool
+    dubbo:
+      enable: true
+      dubbo-shutdown.enabled: true
+      dubbo-configs.enabled: true
+      dubbo-services.enabled: true
+      dubbo-references.enabled: true
+      dubbo-properties.enabled: true
+  health:
+    dubbo:
+      status:
+        defaults: memory,load
+        extras: registry,load,threadpool
 info:
   name: 基础平台KTF管理后台服务
   version: 1.0.0
@@ -85,10 +82,10 @@ ktf:
     redis:
       client-type: lettuce 
   common:
-    component-scan: com.ktf.dashboard
+    component-scan: com.ktf.sys
   db:
     mappers: com.kivi.**.mapper
-  dashboard:
+  sys:
     auth: jwt
     enable-kaptcha: false
     shiro:
@@ -103,15 +100,25 @@ ktf:
       max-age: 604800
       path: /ktf-dashboard
     login-type: username
-  swagger:
-    enabled: true
-    enable-dic-api: true
-    enable-permission-api: true
-    enable-sys-api: true
-    enable-org-api: true
-    enable-region-api: true
-    title: KMS管理后台API接口
-    version: 1.0.0
   logback:
     log-path: /tmp/logs
-
+    
+knife4j:
+  openapi:
+    title: KTF管理后台系统服务接口
+    description: "**KTF管理后台**系统服务SYS模块接口文档"
+    email: kivi@ktf.com
+    concat: KIVI
+    url: https://www.ktf.cn
+    version: v1.0
+    license: Apache 2.0
+    license-url: https://www.ktf.cn/
+    terms-of-service-url: https://www.ktf.cn/
+    group:
+      dashboard:
+        group-name: 管理后台
+        api-rule: package
+        api-rule-resources:
+          - com.kivi.sys.permission.controller
+          - com.kivi.sys.org.controller
+          - com.kivi.sys.sys.controller

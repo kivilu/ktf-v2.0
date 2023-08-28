@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.framework.annotation.KtfTrace;
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.kivi.sys.org.dto.OrgTitleDTO;
 import com.kivi.sys.org.entity.OrgTitle;
@@ -24,7 +24,7 @@ import com.kivi.sys.org.service.OrgTitleService;
  * @since 2019-09-18
  */
 
-@DubboService(version = KtfDashboardProperties.DUBBO_VERSION)
+@DubboService(version = KtfSysProperties.DUBBO_VERSION)
 public class OrgTitleDubboServiceImpl extends ServiceImpl<OrgTitleMapper, OrgTitle> implements OrgTitleService {
 
 	@Autowired

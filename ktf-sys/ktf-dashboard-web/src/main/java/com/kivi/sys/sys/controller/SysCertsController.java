@@ -15,7 +15,6 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.bouncycastle.cert.CertException;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,13 +26,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.kivi.cif.dto.CifCertsDTO;
 import com.kivi.cif.entity.CifCerts;
 import com.kivi.framework.constant.enums.KtfStatus;
 import com.kivi.framework.crypto.enums.KtfCertUse;
 import com.kivi.framework.crypto.util.CertUtil;
 import com.kivi.framework.model.ResultMap;
-import com.kivi.framework.properties.KtfSwaggerProperties;
 import com.kivi.framework.util.kit.ByteStringKit;
 import com.kivi.framework.util.kit.DateTimeKit;
 import com.kivi.framework.util.kit.StrKit;
@@ -58,12 +57,8 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author Auto-generator
  * @since 2019-10-28
  */
-@ConditionalOnProperty(
-		prefix = KtfSwaggerProperties.PREFIX,
-		value = "enable-sys-api",
-		havingValue = "true",
-		matchIfMissing = false)
-@Api(value = "系统证书管理接口", tags = { "系统证书管理接口" })
+@Api(tags = { "系统管理—证书管理" })
+@ApiSupport(order = 34)
 @RestController
 @RequestMapping("/sys/cert")
 @Slf4j

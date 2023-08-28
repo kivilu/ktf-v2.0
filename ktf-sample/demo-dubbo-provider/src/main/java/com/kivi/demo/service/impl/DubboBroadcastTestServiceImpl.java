@@ -26,6 +26,8 @@ public class DubboBroadcastTestServiceImpl implements DubboBroadcastTestService 
 
 		result.setBody(StrKit.join("-", "broadcast", KtfKit.me().getAppcationName(), KtfKit.me().getServerPort(),
 				reqDto.getBody()));
+
+//		result.setBody("broadcast");
 		log.info("回复广播消息：{}", JSON.toJSONString(result));
 
 		return result;

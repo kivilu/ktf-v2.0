@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import com.kivi.framework.cache.configuration.RedisConfiguration;
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 import com.kivi.sys.shiro.cache.ShiroRedisCacheManager;
 import com.kivi.sys.shiro.cache.ShiroRedisSessionDAO;
 
@@ -19,11 +19,11 @@ import com.kivi.sys.shiro.cache.ShiroRedisSessionDAO;
 
 @ConditionalOnProperty(name = { "spring.cache.type" }, havingValue = "redis", matchIfMissing = false)
 @Configuration
-@AutoConfigureAfter({ RedisConfiguration.class, KtfDashboardProperties.class })
+@AutoConfigureAfter({ RedisConfiguration.class, KtfSysProperties.class })
 public class ShiroRedisConfig {
 
 	@Autowired
-	private KtfDashboardProperties			ktfDashboardProperties;
+	private KtfSysProperties			ktfDashboardProperties;
 
 	@Autowired
 	private RedisTemplate<String, Object>	redisTemplate;

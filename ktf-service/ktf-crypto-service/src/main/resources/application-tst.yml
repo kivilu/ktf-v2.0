@@ -1,20 +1,3 @@
-dubbo:
-  application:
-    qosEnable: false
-  protocol:
-    port: 17778
-  registry:
-    address: zookeeper://172.16.146.216:2181
-ktf:
-  cache:
-    enabled: true
-    expiration: 86400
-  zkconfig:
-    connect-str: 172.16.146.216:2181
-server:
-  port: 7778
-  servlet:
-    context-path: /${spring.application.name}
 spring:
   cache:
     type: redis
@@ -29,3 +12,16 @@ spring:
         min-idle: 10
     password: Ins*IK<9ol.
     timeout: 5000
+dubbo:
+  application:
+    qosEnable: false
+  protocol:
+    port: 17778
+  registry:
+    address: zookeeper://172.16.146.216:2181
+ktf:
+  cache:
+    enabled: true
+    expiration: 86400
+  zkconfig:
+    connect-str: 172.16.146.216:2181

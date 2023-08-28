@@ -7,7 +7,7 @@ spring:
 dubbo:
   application:
     logger: slf4j
-    name: smartlock-rest
+    name: dubbo-client
   protocol:
     name: dubbo
     optimizer: com.kivi.dubbo.serialize.SerializationOptimizerImpl
@@ -19,4 +19,22 @@ dubbo:
 ktf:
   common:
     component-scan: com.kivi
-  
+
+knife4j:
+  enable: true
+  openapi:
+    title: Demo Dubbo provider文档
+    description: "**Dubbo**服务端demo的文档"
+    email: test@foxmail.com
+    concat: inssec
+    url: https://www.inssec.cn
+    version: v1.0
+    license: Apache 2.0
+    license-url: https://www.inssec.cn/
+    terms-of-service-url: https://www.inssec.cn/
+    group:
+      test1:
+        group-name: 分组名称
+        api-rule: package
+        api-rule-resources:
+          - com.kivi.demo.controller

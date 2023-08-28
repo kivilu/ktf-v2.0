@@ -33,6 +33,8 @@ public class DubboTestServiceImpl implements DubboTestService {
 
 		result.setBody(StrKit.join("-", "dubbo", KtfKit.me().getAppcationName(), KtfKit.me().getServerPort(),
 				reqDto.getBody(), "count", reqDto.getBody() + 1));
+
+//		result.setBody("dubbo");
 		log.info("回复dubbo调用消息：{}", JSON.toJSONString(result));
 
 		return result;

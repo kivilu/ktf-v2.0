@@ -28,8 +28,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Maps;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.model.ResultMap;
-import com.kivi.framework.properties.KtfDashboardProperties;
-import com.kivi.framework.properties.KtfDashboardProperties.Upload;
+import com.kivi.framework.properties.KtfSysProperties;
+import com.kivi.framework.properties.KtfSysProperties.Upload;
 import com.kivi.framework.util.QRCodeUtils;
 import com.kivi.framework.util.kit.DateTimeKit;
 import com.kivi.framework.web.util.kit.HttpKit;
@@ -48,7 +48,7 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class UpLoadController extends DashboardController {
 
 	@Autowired
-	private KtfDashboardProperties	ktfDashboardProperties;
+	private KtfSysProperties	ktfDashboardProperties;
 
 	@Autowired
 	private FastFileStorageClient	fastFileStorageClient;

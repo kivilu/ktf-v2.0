@@ -3,14 +3,15 @@
   <parent>
     <groupId>com.kivi</groupId>
     <artifactId>ktf-service</artifactId>
-    <version>2.0.2</version>
+    <version>2.3.0</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>ktf-sms-facade</artifactId>
   
   <dependencies>
   	<dependency>
   		<groupId>com.kivi</groupId>
-    	<artifactId>ktf-common</artifactId>
+    	<artifactId>ktf-web-common</artifactId>
     	<version>${ktf.version}</version>
   	</dependency>
   	<dependency>

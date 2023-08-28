@@ -10,7 +10,7 @@ import com.kivi.cif.properties.CifProperties;
 import com.kivi.cif.service.CifCertsService;
 import com.kivi.cif.service.CifCustomerAuthsService;
 import com.kivi.cif.service.CifCustomerService;
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 import com.kivi.sys.org.service.OrgCorpService;
 import com.kivi.sys.org.service.OrgDeptService;
 import com.kivi.sys.org.service.OrgTitleService;
@@ -36,61 +36,61 @@ public class DashboardDubboServiceHolder {
 	@DubboReference(check = false, version = CifProperties.DUBBO_VERSION)
 	private CifCertsService			cifCertsService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private CifCustomerService		iCustomerService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private CifCustomerAuthsService	customerAuthsService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private OrgCorpService			iEnterpriseService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private ISysFileService			sysFileService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private OrgDeptService			iEnterpriseDepartmentService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private OrgTitleService			iEnterpriseJobService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private SysUserTokenService		userTokenService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private ISysApplicationService	iSysApplicationService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private SysDicService			iSysDicService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private ISysIndustryService		sysIndustryService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private ISysLogService			iSysLogService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private ISysRegionService		iSysRegionService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private SysUserService			sysUserService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private SysResourceService		sysResourceService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private SysRoleService			iSysRoleService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private SysRoleResourceService	sysRoleResourceService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private SysUserRoleService		sysUserRoleService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private SysUserOrgService		sysUserEnterpriseService;
 
-	@DubboReference(check = false, version = KtfDashboardProperties.DUBBO_VERSION)
+	@DubboReference(check = false, version = KtfSysProperties.DUBBO_VERSION)
 	private SysApi3rdpartyService	sysApi3rdpartyService;
 
 	@PostConstruct

@@ -1,11 +1,6 @@
 spring:
   application:
     name: crypto-service
-  http:
-    encoding:
-      charset: UTF-8
-      enabled: true
-      force: true
   profiles:
     active: '@profileActive@'
     
@@ -22,31 +17,37 @@ dubbo:
     timeout: 20000
   registry:
     client: curator
-  scan-base-packages: com.kivi.crypto.*.dubbo.service
+  scan:
+    base-packages: 
+    - com.kivi.crypto.*.dubbo.service
 ktf:
   common:
     component-scan: com.kivi
+  cache:
+    redis:
+      client-type: lettuce
+    ttl: 86400
   crypto:
     dubbo-service-version: 1.0.0
     
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-  endpoint:
-    health:
-      enabled: true
-      show-details: always
-    #dubbo:
-    #  enable: true
-    #  dubbo-shutdown.enabled: true
-    #  dubbo-configs.enabled: true
-    #  dubbo-services.enabled: true
-    #  dubbo-references.enabled: true
-    #  dubbo-properties.enabled: true
-  health:
-    dubbo:
-      status:
-        defaults: memory,load
-        extras: registry,load,threadpool
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
+#  endpoint:
+#    health:
+#      enabled: true
+#      show-details: always
+#    #dubbo:
+#    #  enable: true
+#    #  dubbo-shutdown.enabled: true
+#    #  dubbo-configs.enabled: true
+#    #  dubbo-services.enabled: true
+#    #  dubbo-references.enabled: true
+#    #  dubbo-properties.enabled: true
+#  health:
+#    dubbo:
+#      status:
+#        defaults: memory,load
+#        extras: registry,load,threadpool

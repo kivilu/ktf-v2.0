@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,11 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.google.common.collect.Maps;
 import com.kivi.framework.model.ResultMap;
 import com.kivi.framework.model.SelectNode;
 import com.kivi.framework.model.SelectTreeNode;
-import com.kivi.framework.properties.KtfSwaggerProperties;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.kivi.sys.base.DashboardController;
 import com.kivi.sys.sys.dto.SysIndustryDTO;
@@ -48,12 +47,8 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author Auto-generator
  * @since 2019-09-18
  */
-@ConditionalOnProperty(
-		prefix = KtfSwaggerProperties.PREFIX,
-		value = "enable-region-api",
-		havingValue = "true",
-		matchIfMissing = false)
-@Api(tags = { "地区信息" })
+@Api(tags = "系统管理—地区信息")
+@ApiSupport(order = 32)
 @RestController
 @RequestMapping("/sys/region")
 @Slf4j

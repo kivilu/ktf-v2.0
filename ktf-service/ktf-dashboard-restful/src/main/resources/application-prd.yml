@@ -39,3 +39,6 @@ ktf:
     enabled: true
     redis:
       client-type: lettuce
+
+knife4j:
+  enable: false

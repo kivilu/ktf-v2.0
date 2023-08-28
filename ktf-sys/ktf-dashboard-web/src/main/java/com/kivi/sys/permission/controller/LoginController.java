@@ -17,12 +17,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.google.code.kaptcha.Producer;
 import com.kivi.cif.entity.CifCustomerAuths;
 import com.kivi.framework.annotation.KtfTrace;
@@ -33,8 +33,7 @@ import com.kivi.framework.dto.JwtUserDTO;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.form.LoginForm;
 import com.kivi.framework.model.ResultMap;
-import com.kivi.framework.properties.KtfDashboardProperties;
-import com.kivi.framework.properties.KtfSwaggerProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 import com.kivi.framework.util.kit.CollectionKit;
 import com.kivi.framework.util.kit.StrKit;
 import com.kivi.framework.vo.UserVo;
@@ -53,24 +52,20 @@ import springfox.documentation.annotations.ApiIgnore;
 /**
  * @Description 登录退出Controller
  */
-@ConditionalOnProperty(
-		prefix = KtfSwaggerProperties.PREFIX,
-		value = "enable-login-api",
-		havingValue = "true",
-		matchIfMissing = true)
-@Api(value = "登录退出", tags = { " 登录退出" })
+@Api(tags = "登录退出")
+@ApiSupport(order = 10)
 @RestController
 @Slf4j
 public class LoginController extends DashboardController {
 
 	@Autowired
-	private Producer				producer;
+	private Producer			producer;
 
 	@Autowired(required = false)
-	private IRedisService			redisService;
+	private IRedisService		redisService;
 
 	@Autowired
-	private KtfDashboardProperties	ktfDashboardProperties;
+	private KtfSysProperties	ktfDashboardProperties;
 
 	@KtfTrace("验证码启用状态")
 	@GetMapping("/captcha/status")

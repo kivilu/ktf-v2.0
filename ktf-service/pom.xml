@@ -3,25 +3,27 @@
   <parent>
     <groupId>com.kivi</groupId>
     <artifactId>ktf</artifactId>
-    <version>2.0.2</version>
+    <version>2.3.0</version>
+    <relativePath>../ktf/pom.xml</relativePath>
   </parent>
   <artifactId>ktf-service</artifactId>
   <packaging>pom</packaging>
-  <description>ktf公共服务</description>
+  <description>ktf基础服务</description>
   
   <properties>
-  	<ktf.version>2.0.2</ktf.version>
-  	<ktf-service.version>2.0.2</ktf-service.version>
+  	<ktf.version>2.3.0</ktf.version>
+  	<ktf-sys.version>2.3.0</ktf-sys.version>
+  	<ktf-service.version>2.3.0</ktf-service.version>
   </properties>
   
   <modules>
+    <module>ktf-sms-facade</module>
   	<module>ktf-sms-service</module>
-  	<module>ktf-sms-facade</module>
-  	<module>ktf-crypto-facade</module>
+  	<!-- <module>ktf-crypto-facade</module>
   	<module>ktf-crypto-service</module>
   	<module>ktf-dashboard-restful</module>
   	<module>ktf-code-generator</module>
   	<module>ktf-running-mp</module>
-	<module>ktf-cif-service</module>
+	<module>ktf-cif-service</module> -->
   </modules>
 </project>

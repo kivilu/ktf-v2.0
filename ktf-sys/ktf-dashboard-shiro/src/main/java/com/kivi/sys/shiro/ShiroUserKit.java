@@ -13,7 +13,7 @@ import com.kivi.framework.component.SpringContextHolder;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.constant.enums.UserType;
 import com.kivi.framework.exception.KtfException;
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 import com.kivi.framework.service.KtfTokenService;
 import com.kivi.framework.util.kit.CollectionKit;
 import com.kivi.framework.vo.UserVo;
@@ -35,7 +35,7 @@ public class ShiroUserKit {
 	private ShiroUserService		shiroUserService;
 
 	@Autowired
-	private KtfDashboardProperties	ktfDashboardProperties;
+	private KtfSysProperties	ktfDashboardProperties;
 
 	public static ShiroUserKit me() {
 		return SpringContextHolder.getBean(ShiroUserKit.class);

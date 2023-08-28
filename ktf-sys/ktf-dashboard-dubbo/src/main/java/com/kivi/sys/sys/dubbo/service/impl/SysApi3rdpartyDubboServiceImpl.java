@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.framework.annotation.KtfTrace;
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.kivi.sys.sys.dto.SysApi3rdpartyDTO;
 import com.kivi.sys.sys.entity.SysApi3rdparty;
@@ -22,7 +22,7 @@ import com.kivi.sys.sys.service.SysApi3rdpartyService;
  * @author Auto-generator
  * @since 2020-02-17
  */
-@DubboService(version = KtfDashboardProperties.DUBBO_VERSION)
+@DubboService(version = KtfSysProperties.DUBBO_VERSION)
 public class SysApi3rdpartyDubboServiceImpl extends ServiceImpl<SysApi3rdpartyMapper, SysApi3rdparty>
 		implements SysApi3rdpartyService {
 

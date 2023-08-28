@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.kivi</groupId>
      <artifactId>ktf-sys</artifactId>
-    <version>1.0.0</version>
+    <version>2.3.0</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>ktf-sys-shiro</artifactId>

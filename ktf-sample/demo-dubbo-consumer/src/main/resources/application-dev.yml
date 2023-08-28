@@ -13,13 +13,13 @@ dubbo:
   application:
     qosEnable: false
   protocol:
+    host: 127.0.0.1
     port: -1
   provider:
     retries: 0
     timeout: 20000
   registry:
-    #address: zookeeper://127.0.0.1:2181
-    address: nacos://${nacos.config.server-addr}/?username=${nacos.config.username}&password=${nacos.config.password}
-ktf:
-  swagger:
-    enabled: true
+    protocol: zookeeper
+    address: 127.0.0.1:2181
+    #address: nacos://${nacos.config.server-addr}/?username=${nacos.config.username}&password=${nacos.config.password}
+

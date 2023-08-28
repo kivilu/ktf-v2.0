@@ -33,6 +33,8 @@ public class DubboForkingTestServiceImpl implements DubboForkingTestService {
 
 		result.setBody(StrKit.join("-", "forking", KtfKit.me().getAppcationName(), KtfKit.me().getServerPort(),
 				reqDto.getBody(), "count", reqDto.getBody() + 1));
+
+//		result.setBody("forking");
 		log.info("回复forking集群消息：{}", JSON.toJSONString(result));
 
 		return result;

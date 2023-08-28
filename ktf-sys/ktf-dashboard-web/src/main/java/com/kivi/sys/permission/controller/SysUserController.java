@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,18 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.kivi.framework.constant.KtfConstant;
 import com.kivi.framework.constant.KtfError;
 import com.kivi.framework.constant.enums.KtfIdentifyType;
 import com.kivi.framework.constant.enums.KtfStatus;
-import com.kivi.framework.constant.enums.UserType;
 import com.kivi.framework.dto.JwtUserDTO;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.form.PasswordForm;
 import com.kivi.framework.model.ResultMap;
-import com.kivi.framework.properties.KtfSwaggerProperties;
 import com.kivi.framework.service.KtfTokenService;
-import com.kivi.framework.vo.PasswordResetVO;
 import com.kivi.framework.vo.UserVo;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.kivi.sys.base.DashboardController;
@@ -51,12 +48,8 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author Auto-generator
  * @since 2019-09-18
  */
-@ConditionalOnProperty(
-		prefix = KtfSwaggerProperties.PREFIX,
-		value = "enable-permission-api",
-		havingValue = "true",
-		matchIfMissing = false)
-@Api(value = "SYS用户管理", tags = { "SYS用户管理" })
+@Api(tags = "权限管理—用户管理")
+@ApiSupport(order = 13)
 @RestController
 @RequestMapping("/permission/user")
 @Slf4j
@@ -67,7 +60,7 @@ public class SysUserController extends DashboardController {
 
 	@ApiOperation(value = "用户信息", notes = "用户信息")
 	@GetMapping("/info")
-	//@RequiresPermissions("permission/user/info")
+	// @RequiresPermissions("permission/user/info")
 	public ResultMap self() {
 		JwtUserDTO	jwtUser	= super.getJwtUser();
 		SysUserDTO	user	= sysUserService().getDto(jwtUser.getId());
@@ -76,7 +69,7 @@ public class SysUserController extends DashboardController {
 
 	@ApiOperation(value = "用户信息", notes = "用户信息")
 	@GetMapping("/info/{id}")
-	//@RequiresPermissions("permission/user/info")
+	// @RequiresPermissions("permission/user/info")
 	public ResultMap info(@PathVariable("id") Long id) {
 		SysUserDTO user = sysUserService().getDto(id);
 		return ResultMap.ok().data(user);
@@ -114,8 +107,8 @@ public class SysUserController extends DashboardController {
 		if (shiroUser.getId() != KtfConstant.SUPER_ADMIN) {
 //			params.put(SysUserDTO.CREATE_ROLE_ID, shiroUser.getRoleId());
 //			if (shiroUser.getUserType() != UserType.SYS.value) {
-				Long corpId = shiroUser.getOrgId();
-				params.put(SysUserDTO.ORG_ID, corpId);
+			Long corpId = shiroUser.getOrgId();
+			params.put(SysUserDTO.ORG_ID, corpId);
 //			}
 		}
 

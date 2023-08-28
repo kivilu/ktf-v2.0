@@ -36,9 +36,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.kivi.framework.properties.KtfDashboardProperties;
-import com.kivi.framework.properties.KtfDashboardProperties.Cas;
-import com.kivi.framework.properties.KtfDashboardProperties.Cookie;
+import com.kivi.framework.properties.KtfSysProperties;
+import com.kivi.framework.properties.KtfSysProperties.Cas;
+import com.kivi.framework.properties.KtfSysProperties.Cookie;
 import com.kivi.sys.shiro.base.ShiroBaseConfig;
 import com.kivi.sys.shiro.cache.ShiroRedisCacheManager;
 import com.kivi.sys.shiro.cache.ShiroRedisSessionDAO;
@@ -55,7 +55,7 @@ import io.buji.pac4j.subject.Pac4jSubjectFactory;
  */
 
 @ConditionalOnProperty(
-		prefix = KtfDashboardProperties.PREFIX,
+		prefix = KtfSysProperties.PREFIX,
 		value = "auth",
 		havingValue = "cas",
 		matchIfMissing = false)
@@ -64,7 +64,7 @@ import io.buji.pac4j.subject.Pac4jSubjectFactory;
 public class ShiroCasConfig extends ShiroBaseConfig{
 
 	@Autowired
-	private KtfDashboardProperties	ktfDashboardProperties;
+	private KtfSysProperties	ktfDashboardProperties;
 
 	@Autowired
 	private ShiroRedisSessionDAO	sessionDAO;
@@ -309,7 +309,7 @@ public class ShiroCasConfig extends ShiroBaseConfig{
 	}
 
 	@Override
-	protected KtfDashboardProperties ktfProperties() {
+	protected KtfSysProperties ktfProperties() {
 		return ktfDashboardProperties;
 	}
 }

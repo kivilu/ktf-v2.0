@@ -38,7 +38,6 @@ import com.kivi.framework.web.csrf.CookieCsrfTokenRepository;
 import com.kivi.framework.web.csrf.CsrfInterceptor;
 import com.kivi.framework.web.intercepter.FileUploadTypeInterceptor;
 import com.kivi.framework.web.intercepter.JwtAuthInterceptor;
-import com.kivi.framework.web.intercepter.SwaggerInterceptor;
 import com.kivi.framework.web.properties.KtfJwtProperties;
 import com.kivi.framework.web.xss.XssFilter;
 
@@ -49,14 +48,11 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 	@Autowired(required = false)
 	FastJsonHttpMessageConverter	fastJsonHttpMessageConverter;
 
-//	@Autowired(required = false)
-//	private CsrfInterceptor			csrfInterceptor;
-
 	@Autowired(required = false)
 	private JwtAuthInterceptor		jwtAuthInterceptor;
 
-	@Autowired
-	private SwaggerInterceptor		swaggerInterceptor;
+//	@Autowired
+//	private SwaggerInterceptor		swaggerInterceptor;
 
 	@Autowired
 	private KtfJwtProperties		ktfJwtProperties;
@@ -133,7 +129,8 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 		registry.addInterceptor(fileUploadTypeInterceptor()).addPathPatterns("/**");
 		registry.addInterceptor(csrfInterceptor()).addPathPatterns("/login");
 
-		registry.addInterceptor(swaggerInterceptor).addPathPatterns("/swagger-ui.html", "/doc.html");
+		// registry.addInterceptor(swaggerInterceptor).addPathPatterns("/swagger-ui.html",
+		// "/doc.html");
 
 		if (jwtAuthInterceptor != null) {
 			registry.addInterceptor(jwtAuthInterceptor).excludePathPatterns(ktfJwtProperties.getExcludePathPatterns())

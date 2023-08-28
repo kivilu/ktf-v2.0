@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kivi.framework.annotation.KtfTrace;
-import com.kivi.framework.properties.KtfDashboardProperties;
+import com.kivi.framework.properties.KtfSysProperties;
 import com.kivi.framework.vo.page.PageInfoVO;
 import com.kivi.sys.sys.dto.SysLogDTO;
 import com.kivi.sys.sys.entity.SysLog;
@@ -23,7 +23,7 @@ import com.kivi.sys.sys.service.ISysLogService;
  * @since 2019-09-18
  */
 
-@DubboService(version = KtfDashboardProperties.DUBBO_VERSION)
+@DubboService(version = KtfSysProperties.DUBBO_VERSION)
 public class SysLogDubboServiceImpl extends ServiceImpl<SysLogMapper, SysLog> implements ISysLogService {
 
 	@Autowired
