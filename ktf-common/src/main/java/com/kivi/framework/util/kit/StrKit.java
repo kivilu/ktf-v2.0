@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONWriter;
 import com.kivi.framework.constant.KtfConstant;
 import com.vip.vjtools.vjkit.collection.ArrayUtil;
 import com.vip.vjtools.vjkit.number.NumberUtil;
@@ -107,7 +108,7 @@ public class StrKit {
 	 * @return
 	 */
 	public static String toJson(Object object) {
-		return JSON.toJSONString(object, true);
+		return JSON.toJSONString(object, JSONWriter.Feature.PrettyFormat);
 	}
 
 	/**

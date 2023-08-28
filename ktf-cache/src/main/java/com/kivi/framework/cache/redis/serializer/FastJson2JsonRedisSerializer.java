@@ -3,9 +3,9 @@ package com.kivi.framework.cache.redis.serializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.parser.Feature;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONReader;
+import com.alibaba.fastjson2.JSONWriter;
 import com.kivi.framework.constant.KtfConstant;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +24,8 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 
 	public FastJson2JsonRedisSerializer(Class<T> clazz) {
 		super();
-		//ParserConfig.getGlobalInstance().addAccept("com.kivi.,com.ins.");
-		//ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+		// ParserConfig.getGlobalInstance().addAccept("com.kivi.,com.ins.");
+		// ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
 
 		this.clazz = clazz;
 	}
@@ -35,7 +35,7 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 		if (t == null) {
 			return new byte[0];
 		}
-		byte[] bytes = JSON.toJSONBytes(t, SerializerFeature.WriteClassName);
+		byte[] bytes = JSON.toJSONBytes(t, JSONWriter.Feature.WriteClassName);
 
 		return bytes;
 	}
@@ -51,7 +51,8 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 			log.trace("json:{}", str);
 		}
 
-		T obj = JSON.parseObject(bytes, clazz, Feature.SupportAutoType, Feature.IgnoreNotMatch);
+		T obj = JSON.parseObject(bytes, clazz, JSONReader.Feature.SupportAutoType,
+				JSONReader.Feature.IgnoreSetNullValue);
 
 		return obj;
 	}

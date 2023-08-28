@@ -2,7 +2,7 @@ package com.kivi.framework.crypto.sm2;
 
 import java.io.IOException;
 
-import org.bouncycastle.asn1.DERBitString;
+import org.bouncycastle.asn1.ASN1BitString;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
@@ -52,7 +52,7 @@ public class Sm2PublicKeyImpl extends BCECPublicKey implements Sm2PublicKey {
 
 		try {
 			SubjectPublicKeyInfo	subjectPublicKeyInfo	= SubjectPublicKeyInfo.getInstance(this.getEncoded());
-			DERBitString			publicKeyData			= subjectPublicKeyInfo.getPublicKeyData();
+			ASN1BitString			publicKeyData			= subjectPublicKeyInfo.getPublicKeyData();
 			byte[]					publicKey				= publicKeyData.getEncoded();
 			byte[]					encodedPublicKey		= publicKey;
 

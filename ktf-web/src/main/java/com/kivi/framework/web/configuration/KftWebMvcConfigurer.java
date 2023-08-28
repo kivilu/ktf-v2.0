@@ -21,15 +21,15 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.alibaba.fastjson2.support.spring.http.converter.FastJsonHttpMessageConverter;
+import com.alibaba.fastjson2.support.spring.webservlet.view.FastJsonJsonView;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -47,40 +47,32 @@ import com.kivi.framework.web.xss.XssFilter;
 public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 
 	@Autowired(required = false)
-	FastJsonHttpMessageConverter		fastJsonHttpMessageConverter;
+	FastJsonHttpMessageConverter	fastJsonHttpMessageConverter;
 
-	@Autowired
-	private FileUploadTypeInterceptor	fileUploadTypeInterceptor;
-
-	@Autowired(required = false)
-	private CsrfInterceptor				csrfInterceptor;
+//	@Autowired(required = false)
+//	private CsrfInterceptor			csrfInterceptor;
 
 	@Autowired(required = false)
-	private JwtAuthInterceptor			jwtAuthInterceptor;
+	private JwtAuthInterceptor		jwtAuthInterceptor;
 
 	@Autowired
-	private SwaggerInterceptor			swaggerInterceptor;
+	private SwaggerInterceptor		swaggerInterceptor;
 
 	@Autowired
-	private KtfJwtProperties			ktfJwtProperties;
+	private KtfJwtProperties		ktfJwtProperties;
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("swagger-ui.html", "doc.html")
 				.addResourceLocations("classpath:/META-INF/resources/");
-		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 		registry.addResourceHandler("static/**").addResourceLocations("classpath:/static/");
+		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+//		super.addResourceHandlers(registry);
 	}
 
 	@Override
 	public Validator getValidator() {
 		return new SpringValidatorAdapter(new KtfValidatorCollection());
-	}
-
-	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowCredentials(true).allowedHeaders("*").allowedOrigins("*")
-				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS").maxAge(3600);
 	}
 
 	@Override
@@ -92,7 +84,7 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 
 		if (fastJsonHttpMessageConverter != null) {
-			converters.add(fastJsonHttpMessageConverter);
+			converters.add(0, fastJsonHttpMessageConverter);
 		} else {
 			Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
 			builder.serializationInclusion(JsonInclude.Include.NON_NULL);
@@ -100,7 +92,7 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 			SimpleModule	simpleModule	= new SimpleModule();
 			simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
 			objectMapper.registerModule(simpleModule);
-			objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);// 忽略 transient 修饰的属性
+//			objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);// 忽略 transient 修饰的属性
 			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			// 设置为中国上海时区
 			objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
@@ -120,6 +112,16 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 		super.configureMessageConverters(converters);
 	}
 
+	@Override
+	public void configureViewResolvers(ViewResolverRegistry registry) {
+		FastJsonJsonView fastJsonJsonView = new FastJsonJsonView();
+		// 自定义配置...
+		// FastJsonConfig config = new FastJsonConfig();
+		// config.set...
+		// fastJsonJsonView.setFastJsonConfig(config);
+		registry.enableContentNegotiation(fastJsonJsonView);
+	}
+
 	/**
 	 * 添加拦截器
 	 */
@@ -128,8 +130,8 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 		// 注册自定义拦截器，添加拦截路径和排除拦截路径
 
 		// 添加文件上传类型拦截器
-		registry.addInterceptor(fileUploadTypeInterceptor).addPathPatterns("/**");
-		registry.addInterceptor(csrfInterceptor).addPathPatterns("/login");
+		registry.addInterceptor(fileUploadTypeInterceptor()).addPathPatterns("/**");
+		registry.addInterceptor(csrfInterceptor()).addPathPatterns("/login");
 
 		registry.addInterceptor(swaggerInterceptor).addPathPatterns("/swagger-ui.html", "/doc.html");
 
@@ -173,17 +175,14 @@ public class KftWebMvcConfigurer extends WebMvcConfigurationSupport {
 		return registration;
 	}
 
-	@Bean
 	public CookieCsrfTokenRepository cookieCsrfTokenRepository() {
 		return new CookieCsrfTokenRepository();
 	}
 
-	@Bean
-	public CsrfInterceptor CsrfInterceptor(@Autowired CookieCsrfTokenRepository cookieCsrfTokenRepository) {
-		return new CsrfInterceptor(cookieCsrfTokenRepository);
+	public CsrfInterceptor csrfInterceptor() {
+		return new CsrfInterceptor(cookieCsrfTokenRepository());
 	}
 
-	@Bean
 	public FileUploadTypeInterceptor fileUploadTypeInterceptor() {
 		return new FileUploadTypeInterceptor();
 	}

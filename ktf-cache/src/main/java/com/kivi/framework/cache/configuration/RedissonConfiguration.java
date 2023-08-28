@@ -35,7 +35,8 @@ import com.kivi.framework.cache.redis.redission.RedisLockKit;
 import com.kivi.framework.cache.redis.redission.RedisMapKit;
 
 @Configuration
-@ConditionalOnProperty(prefix = KtfRedisProperties.PREFIX,
+@ConditionalOnProperty(
+		prefix = KtfRedisProperties.PREFIX,
 		name = { "client-type" },
 		havingValue = "redisson",
 		matchIfMissing = false)
@@ -64,14 +65,13 @@ public class RedissonConfiguration {
 		return template;
 	}
 
-
 	@Bean
 	@ConditionalOnMissingBean(RedisConnectionFactory.class)
 	public RedissonConnectionFactory redissonConnectionFactory(RedissonClient redisson) {
 		return new RedissonConnectionFactory(redisson);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Bean(destroyMethod = "shutdown")
 	@ConditionalOnMissingBean(RedissonClient.class)
 	public RedissonClient redisson() throws IOException {

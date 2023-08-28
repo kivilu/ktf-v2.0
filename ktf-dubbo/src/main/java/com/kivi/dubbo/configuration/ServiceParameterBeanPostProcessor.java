@@ -7,13 +7,12 @@ import org.apache.dubbo.config.spring.ServiceBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.PropertyValues;
-import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
+import org.springframework.beans.factory.config.SmartInstantiationAwareBeanPostProcessor;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 
-public class ServiceParameterBeanPostProcessor extends InstantiationAwareBeanPostProcessorAdapter
-		implements PriorityOrdered {
+public class ServiceParameterBeanPostProcessor implements SmartInstantiationAwareBeanPostProcessor, PriorityOrdered {
 	@Override
 	public int getOrder() {
 		return PriorityOrdered.LOWEST_PRECEDENCE;

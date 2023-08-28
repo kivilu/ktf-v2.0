@@ -25,15 +25,12 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair;
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson2.support.spring.data.redis.FastJsonRedisSerializer;
+import com.alibaba.fastjson2.support.spring.data.redis.GenericFastJsonRedisSerializer;
 import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.cache.properties.KtfCacheProperties;
 import com.kivi.framework.cache.properties.KtfRedisProperties;
-import com.kivi.framework.cache.redis.serializer.FastJson2JsonRedisSerializer;
-import com.kivi.framework.cache.redis.serializer.RedisObjectSerializer;
 
 @Configuration
 @ConditionalOnProperty(name = { "spring.cache.type" }, havingValue = "redis", matchIfMissing = false)
@@ -80,27 +77,27 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 	}
 
 	private CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
-		ParserConfig.getGlobalInstance().addAccept("com.kivi.,com.ins.");
-		ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+//		ParserConfig.getGlobalInstance().addAccept("com.kivi.,com.ins.");
+//		ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
 
 		// 创建自定义序列化器
-		FastJson2JsonRedisSerializer<?>	fastJson2JsonRedisSerializer	= new FastJson2JsonRedisSerializer<>(
-				Object.class);
+//		FastJson2JsonRedisSerializer<?>	fastJson2JsonRedisSerializer	= new FastJson2JsonRedisSerializer<>(
+//				Object.class);
+		FastJsonRedisSerializer<?>	fastJsonRedisSerializer	= new FastJsonRedisSerializer<>(Object.class);
 
 		// 包装成SerializationPair类型
-		SerializationPair<?>			serializationPair				= SerializationPair
-				.fromSerializer(fastJson2JsonRedisSerializer);
+		SerializationPair<?>		serializationPair		= SerializationPair.fromSerializer(fastJsonRedisSerializer);
 
 		// redis默认配置文件
-		RedisCacheConfiguration			redisCacheConfiguration			= RedisCacheConfiguration.defaultCacheConfig()
+		RedisCacheConfiguration		redisCacheConfiguration	= RedisCacheConfiguration.defaultCacheConfig()
 				// 设置序列化器
 				.serializeValuesWith(serializationPair)
 				// 设置过期时间为 1 天
 				.entryTtl(Duration.ofSeconds(ktfCacheProperties.getTtl()))
-				.prefixKeysWith(ktfCacheProperties.getPrefixKey()).disableCachingNullValues();
+				.prefixCacheNameWith(ktfCacheProperties.getPrefixKey()).disableCachingNullValues();
 
 		// 设置一个初始化的缓存空间set集合
-		Set<String>						cacheNames						= new HashSet<>();
+		Set<String>					cacheNames				= new HashSet<>();
 		cacheNames.addAll(Arrays.asList(KtfCache.KTF_CACHE_NAMES));
 
 		// 对每个缓存空间应用不同的配置
@@ -130,12 +127,17 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 	public RedisTemplate<String, Object> objectRedisTemplate(RedisConnectionFactory factory) {
 		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 		redisTemplate.setConnectionFactory(factory);
-		RedisSerializer<String>	stringSerializer		= new StringRedisSerializer();
-		RedisObjectSerializer	redisObjectSerializer	= new RedisObjectSerializer();
-		redisTemplate.setKeySerializer(stringSerializer);
-		redisTemplate.setValueSerializer(redisObjectSerializer);
-		redisTemplate.setHashKeySerializer(stringSerializer);
-		redisTemplate.setHashValueSerializer(redisObjectSerializer);
+
+		// GenericFastJsonRedisSerializer use jsonb
+		GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer(true);
+
+		redisTemplate.setDefaultSerializer(fastJsonRedisSerializer);// 设置默认的Serialize，包含 keySerializer & valueSerializer
+
+//		RedisSerializer<String>	stringSerializer		= new StringRedisSerializer();
+//		redisTemplate.setKeySerializer(stringSerializer);
+//		redisTemplate.setValueSerializer(fastJsonRedisSerializer);
+//		redisTemplate.setHashKeySerializer(stringSerializer);
+//		redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
 		return redisTemplate;
 	}
 

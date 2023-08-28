@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  * CSRF拦截器，用来生成或去除CsrfToken CSRF （Cross Site Request Forgery），中文是跨站点请求伪造。
  */
 @Slf4j
-public class CsrfInterceptor extends HandlerInterceptorAdapter {
+public class CsrfInterceptor implements AsyncHandlerInterceptor {
 
 	private final CsrfTokenRepository csrfTokenRepository;
 

@@ -28,7 +28,6 @@ import java.util.WeakHashMap;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 
-import com.alibaba.fastjson.util.TypeUtils;
 import com.kivi.framework.constant.enums.IEnum;
 
 /**
@@ -69,7 +68,7 @@ public class IEnumConverterFactory implements ConverterFactory<String, IEnum> {
 		public IntegerStrToEnum(Class<T> enumType) {
 			T[] enums = enumType.getEnumConstants();
 			for (T e : enums) {
-				enumMap.put(TypeUtils.castToString(e.getValue()), e);
+				enumMap.put(Integer.toString(e.getValue()), e);
 			}
 		}
 

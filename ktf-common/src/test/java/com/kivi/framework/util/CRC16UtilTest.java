@@ -1,6 +1,6 @@
 package com.kivi.framework.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.vip.vjtools.vjkit.text.EncodeUtil;
 

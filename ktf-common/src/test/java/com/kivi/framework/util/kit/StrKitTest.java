@@ -1,12 +1,13 @@
 package com.kivi.framework.util.kit;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Arrays;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONWriter;
 
 public class StrKitTest {
 
@@ -22,17 +23,17 @@ public class StrKitTest {
 	@Test
 	public void testSplit() {
 		String[] arrays = StringUtils.split("AAAA", ",");
-		System.out.println(JSON.toJSONString(arrays, true));
+		System.out.println(JSON.toJSONString(arrays, JSONWriter.Feature.PrettyFormat));
 
 		arrays = StringUtils.split("AAAA,BBBB", ",");
-		System.out.println(JSON.toJSONString(arrays, true));
+		System.out.println(JSON.toJSONString(arrays, JSONWriter.Feature.PrettyFormat));
 
 		arrays = StringUtils.split("AAAA|BBBB|CCCCC", "|");
-		System.out.println(JSON.toJSONString(arrays, true));
+		System.out.println(JSON.toJSONString(arrays, JSONWriter.Feature.PrettyFormat));
 
 		String data = StrKit.joinWith("|", "AAAA", "BBB", "?", "?", "CCC");
 		arrays = StringUtils.split(data, "|");
-		System.out.println(JSON.toJSONString(arrays, true));
+		System.out.println(JSON.toJSONString(arrays, JSONWriter.Feature.PrettyFormat));
 	}
 
 	@Test

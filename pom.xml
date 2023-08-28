@@ -1,8 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.kivi</groupId>
   <artifactId>ktf</artifactId>
-  <version>2.0.2</version>
+  <version>2.3.0</version>
   <packaging>pom</packaging>
   
   <properties>
@@ -16,38 +17,61 @@
         <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
         <maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
         
+       <!--  
         <spring-boot.version>2.3.1.RELEASE</spring-boot.version>
         <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
-        <spring-cloud-alibaba.version>2.2.3.RELEASE</spring-cloud-alibaba.version>
-        <!-- springboot-admin -->
+        <spring-cloud-alibaba.version>2.2.3.RELEASE</spring-cloud-alibaba.version> 
+        
         <spring-boot-admin.version>2.3.1</spring-boot-admin.version>
-        <!-- dubbo -->
+        
         <dubbo.version>2.7.8</dubbo.version>
         <dubbo-spring-boot.version>2.7.8</dubbo-spring-boot.version>
         <nacos.version>0.2.7</nacos.version>
+        
+        -->
+         <!-- springboot 2.7.x -->
+        <spring-boot.version>2.7.15</spring-boot.version>
+        <spring-cloud.version>2021.0.8</spring-cloud.version>
+        <spring-cloud-alibaba.version>2021.0.4.0</spring-cloud-alibaba.version>
+        
+        
+        <!-- springboot 3.0 -->
+        <!-- <spring-boot.version>3.1.2</spring-boot.version>
+        <spring-cloud.version>2022.0.4</spring-cloud.version>
+        <spring-cloud-alibaba.version>2021.0.4.0</spring-cloud-alibaba.version> -->
+        
+       
+        <!-- springboot-admin -->
+        <spring-boot-admin.version>2.7.10</spring-boot-admin.version>
+        <!-- dubbo -->
+        <dubbo.version>3.2.4</dubbo.version>
+        <nacos.version>0.2.12</nacos.version>
 		
 		<!-- <fastjson.version>1.2.56</fastjson.version> -->
-		<springfox-swagger2-version>2.9.2</springfox-swagger2-version>
+		<fastjson2.version>2.0.39</fastjson2.version>
+		
 		<jjwt.version>0.9.1</jjwt.version>
   		<java-jwt.version>3.7.0</java-jwt.version>
 		<commons-logging.version>1.2</commons-logging.version>
 		<oracle-ojdbc6.version>11.2.0.1.0</oracle-ojdbc6.version>
 		<vjkit.version>1.0.8</vjkit.version>
-  		<modelmapper.version>2.3.5</modelmapper.version>
+  		<!-- <modelmapper.version>2.3.5</modelmapper.version> -->
+  		<modelmapper.version>3.1.1</modelmapper.version>
   		<!-- zxing -->
-        <zxing.core.version>3.3.1</zxing.core.version>
-        <jasypt-springboot.version>3.0.3</jasypt-springboot.version> <!-- 2.1.1-->
-        <mybatis-plus.version>3.3.1.tmp</mybatis-plus.version>
-  		<p6spy.version>3.8.5</p6spy.version>
-  		<mybatis-typehandlers-jsr310.version>1.0.2</mybatis-typehandlers-jsr310.version>
-        
+        <!-- <zxing.core.version>3.3.1</zxing.core.version> -->
+        <zxing.core.version>3.5.2</zxing.core.version>
+        <jasypt-springboot.version>3.0.5</jasypt-springboot.version> <!-- 3.0.3-->
+        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
+        <mybatis-typehandlers-jsr310.version>1.0.2</mybatis-typehandlers-jsr310.version>
+  		<p6spy.version>3.9.1</p6spy.version>
+  	
         <fst.version>2.57</fst.version>
         
-		<ktf.version>2.0.2</ktf.version>
+		<ktf.version>2.3.0</ktf.version>
 	</properties>
 
 	<dependencies>
-		<dependency>
+		 <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -64,13 +88,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
+           <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+        
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
@@ -85,15 +110,24 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
+ 
             <!-- Apache Dubbo  -->
+            <!-- Dubbo -->
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-dependencies-bom</artifactId>
+                <artifactId>dubbo-bom</artifactId>
                 <version>${dubbo.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-dependencies-zookeeper-curator5</artifactId>
+                <version>${dubbo.version}</version>
+                <type>pom</type>
+            </dependency>
+             
         </dependencies>
     </dependencyManagement>
 	
@@ -101,11 +135,13 @@
 	    <!-- INS -->
 		<repository>
 			<id>rdc-releases</id>
-			<url>https://repo.rdc.aliyun.com/repository/106428-release-lfVNdn/</url>
+			<!-- <url>https://repo.rdc.aliyun.com/repository/106428-release-lfVNdn/</url> -->
+			<url>https://packages.aliyun.com/maven/repository/2165180-release-v00mW3/</url>
 		</repository>
 		<snapshotRepository>
 			<id>rdc-snapshots</id>
-			<url>https://repo.rdc.aliyun.com/repository/106428-snapshot-j1QtNx/</url>
+			<!-- <url>https://repo.rdc.aliyun.com/repository/106428-snapshot-j1QtNx/</url> -->
+			<url>https://packages.aliyun.com/maven/repository/2165180-snapshot-h1K7Oq/</url>
 		</snapshotRepository>
 		<!-- BHT -->
 		<!-- <repository>
@@ -127,7 +163,8 @@
         </repository>
 		<repository>
 			<id>rdc-releases</id>
-			<url>https://repo.rdc.aliyun.com/repository/106428-release-lfVNdn/</url>
+			<!-- <url>https://repo.rdc.aliyun.com/repository/106428-release-lfVNdn/</url> -->
+			<url>https://packages.aliyun.com/maven/repository/2165180-release-v00mW3/</url>
 		</repository>
 		<!--
 		<snapshotRepository>
@@ -260,22 +297,12 @@
     </build>
 	
 	<modules>
-	<module>ktf-apollo</module>
-	<module>ktf-cache</module>
-	<module>ktf-common</module>
-	<module>ktf-crypto</module>
-	<module>ktf-db</module>
-	<module>ktf-dubbo</module>
-	<module>ktf-web</module>
-	<module>ktf-netty</module>
-	<module>ktf-dashboard-facade</module>
-	<module>ktf-dashboard-mapper</module>
-	<module>ktf-dashboard-web</module>
-	<module>ktf-dashboard-impl</module>
-	<module>ktf-cif-facade</module>
-	<module>ktf-cif-db</module>
-	<module>ktf-dashboard-shiro</module>
-	<module>ktf-dashboard-dubbo</module>
-	<module>ktf-cif-dubbo</module>
+		<module>ktf-common</module>
+		<module>ktf-cache</module>
+		<module>ktf-web</module>
+		<module>ktf-web-common</module>
+		<module>ktf-crypto</module>
+		<module>ktf-db</module>
+		<module>ktf-dubbo</module>
 	</modules>
 </project>

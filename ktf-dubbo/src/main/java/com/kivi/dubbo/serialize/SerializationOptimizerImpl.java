@@ -8,12 +8,8 @@ import org.apache.dubbo.common.serialize.support.SerializationOptimizer;
 
 import com.kivi.dubbo.properties.KtfDubboProperties;
 import com.kivi.framework.component.SpringContextHolder;
-import com.kivi.framework.dto.warapper.WarpReqDTO;
-import com.kivi.framework.dto.warapper.WarpRspDTO;
-import com.kivi.framework.dto.warapper.WarpperDTO;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.util.kit.StrKit;
-import com.kivi.framework.vo.page.PageInfoVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,10 +20,10 @@ public class SerializationOptimizerImpl implements SerializationOptimizer {
 	public Collection<Class<?>> getSerializableClasses() {
 		List<Class<?>> classes = new LinkedList<>();
 
-		classes.add(WarpperDTO.class);
-		classes.add(WarpReqDTO.class);
-		classes.add(WarpRspDTO.class);
-		classes.add(PageInfoVO.class);
+		/*
+		 * classes.add(WarpperDTO.class); classes.add(WarpRspDTO.class);
+		 * classes.add(PageInfoVO.class);
+		 */
 		classes.add(byte.class);
 		classes.add(Byte.class);
 		classes.add(KtfException.class);

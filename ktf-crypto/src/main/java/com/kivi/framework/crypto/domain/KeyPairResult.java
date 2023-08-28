@@ -34,7 +34,7 @@ public class KeyPairResult extends KeyPairDO {
 
 	@Override
 	public String getPub_pem() {
-		if (StringUtils.isEmpty(pub_pem)) {
+		if (StringUtils.hasLength(pub_pem)) {
 			pub_pem = CertUtil.convertPublicKeyToPemString(pub);
 		}
 		return pub_pem;
@@ -47,7 +47,7 @@ public class KeyPairResult extends KeyPairDO {
 
 	@Override
 	public String getPri_pem() {
-		if (StringUtils.isEmpty(pri_pem)) {
+		if (StringUtils.hasLength(pri_pem)) {
 			pri_pem = CertUtil.convertPrivateKeyToPemString(pri);
 		}
 		return pri_pem;

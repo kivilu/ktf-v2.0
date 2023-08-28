@@ -1,6 +1,6 @@
 package com.kivi.framework.util.kit;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.ByteBuffer;
 import java.text.ParseException;
@@ -10,15 +10,15 @@ import java.util.Arrays;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.vip.vjtools.vjkit.time.DateFormatUtil;
 import com.vip.vjtools.vjkit.time.DateUtil;
 
 public class DateTimeKitTest {
 
-	@Before
+	@BeforeEach()
 	public void setUp() throws Exception {
 	}
 

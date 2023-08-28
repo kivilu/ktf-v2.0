@@ -5,8 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.kivi.db.fill.CommonMetaObjectHandler;
 import com.kivi.db.properties.KtfDbProperties;
 
@@ -25,18 +27,12 @@ public class KtfMybatisConfiguration {
 	 * @return
 	 */
 	@Bean
-	public PaginationInterceptor paginationInterceptor() {
-		return new PaginationInterceptor();
-	}
-
-	/**
-	 * 乐观锁
-	 *
-	 * @return
-	 */
-	@Bean
-	public OptimisticLockerInterceptor optimisticLockerInterceptor() {
-		return new OptimisticLockerInterceptor();
+	public MybatisPlusInterceptor mybatisPlusInterceptor() {
+		MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+		interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+		// 乐观锁
+		interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
+		return interceptor;
 	}
 
 	/**

@@ -3,16 +3,17 @@
   <parent>
     <groupId>com.kivi</groupId>
     <artifactId>ktf</artifactId>
-    <version>2.0.2</version>
-    <relativePath>..</relativePath>
+    <version>2.3.0</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>ktf-common</artifactId>
   <description>常用工具类以及自定义配置文件属性</description>
   
   <properties>	
-  		<persistence-api>1.0</persistence-api>
-  		<guava.version>30.0-jre</guava.version>
-  		<joda-time.version>2.10.8</joda-time.version>
+  		<persistence-api.version>1.0.2</persistence-api.version>
+  		 <guava.version>32.1.2-jre</guava.version>
+  		<joda-time.version>2.12.5</joda-time.version>
+  		<hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
   </properties>
   
   <dependencies>
@@ -65,23 +66,30 @@
 		<!-- /md5、sha256等工具包 -->
 		
 		<!-- fastjson -->
-		<dependency>
+		<!-- <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-        </dependency>
+        </dependency> -->
+        <dependency>
+		    <groupId>com.alibaba.fastjson2</groupId>
+		    <artifactId>fastjson2</artifactId>
+		    <version>${fastjson2.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.alibaba.fastjson2</groupId>
+		    <artifactId>fastjson2-extension-spring5</artifactId>
+		    <version>${fastjson2.version}</version><!-- 2.0.34 -->
+		</dependency>
 		
 		<!-- validation-api -->
-  		<!-- <dependency>
+  		<dependency>
 			<groupId>javax.validation</groupId>
     		<artifactId>validation-api</artifactId>
-		</dependency> -->
-		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>javax.persistence-api</artifactId>
 		</dependency>
 		<dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-validator</artifactId>
+		    <version>${hibernate-validator.version}</version>
         </dependency>
   		<!-- /validation-api-->
   		
@@ -103,42 +111,8 @@
 		    <groupId>de.ruedigermoeller</groupId>
 		    <artifactId>fst</artifactId>
 		    <optional>true</optional>
+		    <version>${fst.version}</version>
 		</dependency>
-		
-		<!-- swagger -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>${springfox-swagger2-version}</version>
-			<exclusions>
-       			<exclusion>
-       				<groupId>com.google.guava</groupId>
-       				<artifactId>guava</artifactId>
-       			</exclusion>
-       		</exclusions>
-		</dependency>
-		<!-- /swagger -->
-		
-		<dependency>
-			<groupId>com.google.guava</groupId>
-       		<artifactId>guava</artifactId>
-       		<version>${guava.version}</version>
-		</dependency>
-		
-		  <!-- zxing begin -->
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>core</artifactId>
-            <version>${zxing.core.version}</version>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>javase</artifactId>
-            <version>${zxing.core.version}</version>
-            <optional>true</optional>
-        </dependency>
-        <!-- zxing end -->
         
         <!-- jasypt -->
         <dependency>
@@ -150,9 +124,9 @@
 		<!-- jasypt end-->
 		
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<groupId>com.google.guava</groupId>
+       		<artifactId>guava</artifactId>
+       		<version>${guava.version}</version>
 		</dependency>
 		
   </dependencies>
