@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.kivi</groupId>
+    <artifactId>ktf-sample</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <artifactId>demo-dubbo-consumer</artifactId>
+ <dependencies>
+		<dependency>
+       		<groupId>com.kivi</groupId>
+       		<artifactId>demo-dubbo-facade</artifactId>
+       		<version>1.0.0</version>
+       	</dependency>
+  		<!-- kivi -->
+  		<dependency>
+       		<groupId>com.kivi</groupId>
+       		<artifactId>ktf-common</artifactId>
+       		<version>${ktf.version}</version>
+       	</dependency>
+       	<dependency>
+       		<groupId>com.kivi</groupId>
+       		<artifactId>ktf-dubbo</artifactId>
+       		<version>${ktf.version}</version>
+       	</dependency>
+       	<dependency>
+       		<groupId>com.kivi</groupId>
+       		<artifactId>ktf-web</artifactId>
+       		<version>${ktf.version}</version>
+       	</dependency>
+  		<!-- /kivi -->
+  		
+  		<dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+            <version>${swagger-bootstrap-ui.version}</version>
+        </dependency>
+        
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<!--<version>1.4.0.RELEASE</version>-->
+		</dependency>
+        
+  </dependencies>
+  
+</project>

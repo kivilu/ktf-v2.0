@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kivi.sys.permission.mapper.SysRoleExMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kivi.sys.permission.entity.SysRole">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="type" property="type" />
+        <result column="description" property="description" />
+        <result column="status" property="status" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="gmt_update" property="gmtUpdate" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="sub_role_ids" property="subRoleIds" />
+        <result column="org_id" property="orgId" />
+    </resultMap>
+    
+    <resultMap id="RoleDtoResultMap" type="com.kivi.sys.permission.dto.SysRoleDTO">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="type" property="type" />
+        <result column="description" property="description"/>
+        <result column="status" property="status"/>
+        <result column="sub_role_ids" property="subRoleIds" />
+        <result column="org_id" property="orgId" />
+        <collection property="resourceIds" ofType="java.lang.Long">
+            <result column="resource_id" property="id"/>
+        </collection>
+    </resultMap>
+    
+    <select id="selectByRoleId" resultMap="RoleDtoResultMap" parameterType="java.lang.Long">
+        SELECT
+	        t.id,
+	        t.`name`,
+	        t.`type`,
+	        t.description,
+	        t.`status`,
+	        t.sub_role_ids,
+	        t2.resource_id
+        FROM
+            ktf_sys_role t
+        LEFT JOIN ktf_sys_role_resource t2 ON t.id = t2.role_id
+        <where>
+        	t.id=#{roleId}
+        </where>
+    </select>
+    
+    <select id="selectRoles" resultMap="BaseResultMap" parameterType="map">
+    	SELECT
+	        t.id,
+	        t.`name`,
+	        t.`type`,
+	        t.description,
+	        t.`status`
+        FROM
+            ktf_sys_role t
+        <where>
+        	<if test="params.status != null">
+        		t.status = #{params.status}
+        	</if>
+        	<if test="params.keyword != null and params.keyword != '' ">
+        		AND ( t.`name` like '%#{params.keyword}%' or t.description like '%#{params.keyword}%')
+        	</if>
+        	<if test="params.createUserId != null ">
+        		AND ( t.create_user_id = #{params.createUserId})
+        	</if>
+        	<if test="params.orgId != null ">
+        		AND ( t.org_id = #{params.orgId})
+        	</if>
+        </where>
+    </select>
+    
+</mapper>

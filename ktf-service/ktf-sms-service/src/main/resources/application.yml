@@ -1,0 +1,86 @@
+spring:
+  application:
+    name: sms-service
+  profiles:
+    active: '@profileActive@'
+  main:
+    allow-bean-definition-overriding: true
+  mvc:
+    throw-exception-if-no-handler-found: false
+  resources:
+    add-mappings: false
+
+dubbo:
+  application:
+    name: sms-service
+  protocol:
+    name: dubbo
+    optimizer: com.kivi.dubbo.serialize.SerializationOptimizerImpl
+    serialization: kryo
+    status: server
+  provider:
+    retries: 0
+  registry:
+    client: curator
+  scan-base-packages: com.kivi.sms.dubbo.service
+ktf:
+  common:
+    component-scan: com.kivi
+  db:
+    mappers: com.kivi.sms.*.mapper
+  sms:
+    aliyun:
+      access-key-id: LTAIr4HgBYcHuB1M
+      access-key-secret: D3OQTbQbj3vfNYy2lrg5elzTfShNMA
+      sign-name: !!binary |-
+        w6bCjMKHw6TCu8Kkw6fCp8KRw6bCisKA
+      sms-report-queue: Alicom-Queue-1385937323263273-SmsReport
+      template-map:
+        grantLock: SMS_175495464
+        regist: SMS_158941810
+        resetAuthPwd: SMS_158947873
+        resetPwd: SMS_158941811
+        unlockOTP: SMS_180351903
+        unlockOnce: SMS_175540271
+    dubbo-service-version: 1.0.0
+
+    
+mybatis-plus:
+  mapper-locations: classpath*:com/kivi/sms/*/mapper/xml/*Mapper.xml
+  type-aliases-package: com.kivi.sms.*.entity
+  global-config:
+    db-config:
+      id-type: ID_WORKER
+      table-underline: true
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+
+logging:
+  level:
+    com.kivi: trace
+    com.baomidou: trace
+    
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    #dubbo:
+    #  enable: true
+    #  dubbo-shutdown.enabled: true
+    #  dubbo-configs.enabled: true
+    #  dubbo-services.enabled: true
+    #  dubbo-references.enabled: true
+    #  dubbo-properties.enabled: true
+  health:
+    dubbo:
+      status:
+        defaults: memory,load
+        extras: registry,load,threadpool

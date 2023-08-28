@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kivi.sys.org.mapper.OrgCorpMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kivi.sys.org.entity.OrgCorp">
+        <id column="id" property="id" />
+        <result column="app_id" property="appId" />
+        <result column="name" property="name" />
+        <result column="abbr" property="abbr" />
+        <result column="prefix" property="prefix" />
+        <result column="uscc" property="uscc" />
+        <result column="type" property="type" />
+        <result column="industry_id" property="industryId" />
+        <result column="province_id" property="provinceId" />
+        <result column="city_id" property="cityId" />
+        <result column="county_id" property="countyId" />
+        <result column="main_person" property="mainPerson" />
+        <result column="main_person_mobile" property="mainPersonMobile" />
+        <result column="main_person_email" property="mainPersonEmail" />
+        <result column="map_x" property="mapX" />
+        <result column="map_y" property="mapY" />
+        <result column="map_z" property="mapZ" />
+        <result column="zip_code" property="zipCode" />
+        <result column="address" property="address" />
+        <result column="status" property="status" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="gmt_update" property="gmtUpdate" />
+        <result column="create_user" property="createUser" />
+        <result column="update_user" property="updateUser" />
+    </resultMap>
+
+</mapper>

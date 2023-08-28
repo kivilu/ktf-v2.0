@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>com.kivi</groupId>
+    <artifactId>ktf</artifactId>
+    <version>2.3.0</version>
+  </parent>
+  
+  <artifactId>ktf-sample</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
+  
+  	<properties>
+  		<ktf.version>2.3.0</ktf.version>
+  		<mysql-jdbc.version>8.0.20</mysql-jdbc.version>
+  		<swagger-bootstrap-ui.version>1.9.6</swagger-bootstrap-ui.version>
+	</properties>
+	  
+    <modules>
+    	<module>mybatisplus-sample</module>
+    	<module>demo-dubbo-provider</module>
+  	    <module>demo-dubbo-consumer</module>
+  	    <module>demo-dubbo-facade</module>
+  	    <module>demo-swagger3</module>
+    </modules>
+</project>

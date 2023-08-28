@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.kivi</groupId>
+    <artifactId>ktf-service</artifactId>
+    <version>2.0.2</version>
+  </parent>
+  <artifactId>ktf-crypto-facade</artifactId>
+  <description>统一加密服务facade</description>
+  
+  <properties>
+  	<bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
+  </properties>
+  
+  <dependencies>
+  		<dependency>
+  			<groupId>com.kivi</groupId>
+  			<artifactId>ktf-crypto</artifactId>
+  			<version>${ktf.version}</version>
+  			<exclusions>
+  				<exclusion>
+  					<groupId>org.bouncycastle</groupId>
+		    		<artifactId>bcprov-jdk15on</artifactId>
+  				</exclusion>
+  			</exclusions>
+  		</dependency>
+  		
+  		<!-- 自定义bouncycastle  -->
+  		<dependency>
+		    <groupId>org.bouncycastle</groupId>
+		    <artifactId>bcprov-jdk15on</artifactId>
+		    <version>${bcprov-jdk15on.version}-a</version>
+		</dependency>
+
+  		<dependency>
+  			<groupId>org.springframework.boot</groupId>
+  			<artifactId>
+  				spring-boot-configuration-processor
+  			</artifactId>
+  			<optional>true</optional>
+  		</dependency>
+  </dependencies>
+</project>

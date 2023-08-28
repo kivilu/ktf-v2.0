@@ -1,0 +1,52 @@
+dubbo:
+  application:
+    qosEnable: false
+  protocol:
+    port: 17788
+  provider:
+    retries: 0
+  registry:
+    address: 172.16.146.215:2181,172.16.146.215:2182,172.16.146.215:2183
+    protocol: zookeeper
+ktf:
+  cache:
+    enabled: true
+    expiration: 3600
+    redis:
+      client-type: lettuce
+  sms:
+    aliyun:
+      open-debug-log: false
+server:
+  port: 7788
+  servlet:
+    context-path: /${spring.application.name}
+spring:
+  cache:
+    type: redis
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-test-query: SELECT 1
+      connection-timeout: 60000
+      idle-timeout: 500000
+      max-lifetime: 540000
+      maximum-pool-size: 20
+      minimum-idle: 10
+      pool-name: HikariPool-KTF
+    password: InsPL#EDC4rfv
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://pc-inslock-mysql.rwlb.rds.aliyuncs.com:3306/inslock?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: inssec
+  redis:
+    database: 0
+    host: redis-inslock.redis.rds.aliyuncs.com
+    lettuce:
+      pool:
+        max-active: 300
+        max-idle: 300
+        max-wait: 60000
+        min-idle: 100
+    password: InsSec*2019@)!(
+    port: 6379
+    timeout: 5000

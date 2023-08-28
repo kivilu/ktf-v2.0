@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kivi.sys.permission.mapper.SysRoleResourceExMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kivi.sys.permission.entity.SysRoleResource">
+        <result column="role_id" property="roleId" />
+        <result column="resource_id" property="resourceId" />
+    </resultMap>
+    
+    <resultMap id="RoleResouceDTOResultMap" type="com.kivi.sys.permission.dto.SysRoleResourceDTO">
+        <result column="role_id" property="roleId"/>
+        <result column="resource_id" property="resourceId"/>
+        <association property="role" javaType="com.kivi.sys.permission.dto.SysRoleDTO">
+            <id column="roleId" property="id"/>
+            <result column="roleName" property="name"/>
+        </association>
+        <association property="resource" javaType="com.kivi.sys.permission.dto.SysResourceDTO">
+            <id column="resourceId" property="id"/>
+            <result column="resourceName" property="name"/>
+        </association>
+    </resultMap>
+    
+     <select id="selectResourceNodeListByRoleId"  resultMap="RoleResouceDTOResultMap">
+        SELECT
+	        t.role_id,
+	        t.resource_id,
+	        t2.id AS roleId,
+	        t2.`name`	AS roleName,
+	        t3.id AS resourceId,
+	        t3.`name` AS resourceName
+        FROM
+            ktf_sys_role_resource t
+            INNER JOIN ktf_sys_role t2 ON t.role_id = t2.id
+            INNER JOIN ktf_sys_resource t3 ON t.resource_id = t3.id
+        WHERE
+            t.role_id = #{roleId}
+            AND t3.id NOT IN ( SELECT t.parent_id FROM ktf_sys_resource t WHERE t.role_id = #{roleId} )
+    </select>
+
+</mapper>

@@ -1,0 +1,76 @@
+package ${package.Entity};
+
+#set($excludeFields=${cfg.excludeFields})
+
+#foreach($pkg in ${table.importPackages})
+#if( !$pkg.contains("com.baomidou.mybatisplus.annotation"))
+import ${pkg};
+#end
+#end
+
+
+#if(${swagger2})
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+#end
+
+#if(${cfg.entityLombokModel})
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+#end
+
+/**
+ * <p>
+ * $!{table.comment}
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${cfg.entityLombokModel})
+@Data
+#if(${superEntityClass})
+@EqualsAndHashCode(callSuper = true)
+#else
+@EqualsAndHashCode(callSuper = false)
+#end
+@Accessors(chain = true)
+#end
+
+#if(${swagger2})
+@ApiModel(value="${entity}对象", description="$!{table.comment}")
+#end
+#if(${superEntityClass})
+public class ${entity} extends ${superEntityClass}{
+#else
+public class ${entity} implements Serializable {
+#end
+
+    private static final long serialVersionUID = 1L;
+
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in ${table.fields})
+
+#if(${excludeFields.indexOf(${field.propertyName})}==-1)
+#if("$!field.comment" != "")
+	#if(${swagger2})
+	@ApiModelProperty(value = "${field.comment}")
+	#else
+	/**
+	 * ${field.comment}
+	 */
+	#end
+#end
+	private ${field.propertyType} ${field.propertyName};
+#end
+
+#end
+
+#foreach($field in ${table.fields})
+#if(${excludeFields.indexOf(${field.propertyName})}==-1)
+	public static final String ${field.name.toUpperCase()} = "${field.propertyName}";
+#end
+#end
+
+}

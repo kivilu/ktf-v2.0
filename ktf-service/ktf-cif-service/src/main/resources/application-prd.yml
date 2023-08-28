@@ -1,0 +1,44 @@
+server:
+  port: 8000
+  servlet:
+    context-path: /${spring.application.name}
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://pc-inslock-mysql.rwlb.rds.aliyuncs.com:3306/inslock?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: inssec
+    password: InsPL#EDC4rfv
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-test-query: SELECT 1
+      connection-timeout: 60000
+      idle-timeout: 500000
+      max-lifetime: 540000
+      maximum-pool-size: 12
+      minimum-idle: 10
+      pool-name: HikariPool-KTF
+  cache:
+    type: redis   
+  redis:
+    database: 0
+    host: redis-inslock.redis.rds.aliyuncs.com
+    port: 6379
+    timeout: 5000
+    lettuce:
+      pool:
+        max-active: 300
+        max-idle: 300
+        max-wait: 60000
+        min-idle: 10
+      shutdown-timeout: 100ms
+    password: InsSec*2019@)!(
+   
+dubbo:
+  application:
+    qosEnable: false
+  protocol:
+    port: 18000
+  registry:
+    address: 172.16.146.215:2181,172.16.146.215:2182,172.16.146.215:2183
+    protocol: zookeeper
+

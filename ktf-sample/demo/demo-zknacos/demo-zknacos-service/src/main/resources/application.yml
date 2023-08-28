@@ -1,0 +1,28 @@
+spring:
+  thymeleaf:
+    cache: true
+    check-template: true
+    check-template-location: true
+    content-type: text/html
+    enabled: true
+    encoding: UTF-8
+    excluded-view-names: null
+    mode: HTML5
+    prefix: classpath:/templates/
+    suffix: .html
+server:
+  port: 8080
+dubbo:
+  registry:
+    address: nacos://${nacos.address:127.0.0.1}:8848
+  protocol:
+    name: tri
+    port: 50051
+  application:
+    qos-enable: true
+    name: DemoZknacosApplication
+    qos-port: 22222
+    qos-accept-foreign-ip: false
+    logger: slf4j
+  metadata-report:
+    address: redis://${redis.address:127.0.0.1}:6379

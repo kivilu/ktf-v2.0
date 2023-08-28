@@ -1,0 +1,90 @@
+package ${package.ServiceImpl};
+
+import java.util.List;
+import java.util.Map;
+
+import ${package.Entity}.${entity};
+import com.${package.ModuleName}.dto.${entity}DTO;
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+import ${superServiceImplClassPackage};
+import org.apache.dubbo.config.annotation.DubboService;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import com.kivi.db.page.PageParams;
+import com.kivi.framework.annotation.KtfTrace;
+import com.kivi.framework.vo.page.PageInfoVO;
+
+
+/**
+ * <p>
+ * $!{table.comment} 服务实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@DubboService
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
+
+	#set($lowerCaseServiceName = $table.serviceName.substring(0,1).toLowerCase() + $table.serviceName.substring(1,$table.serviceName.length()))
+
+	@Autowired
+	private ${table.serviceName} ${lowerCaseServiceName};
+	
+	/**
+     * 根据ID查询$!{table.comment}
+     */
+    @KtfTrace("根据ID查询$!{table.comment}")
+    @Override
+ 	public ${entityDTO} getDTOById(Long id){
+ 		return ${lowerCaseServiceName}.getDTOById(id);
+ 	}
+ 	
+ 	/**
+ 	 * 新增$!{table.comment}
+ 	 */
+ 	@KtfTrace("新增$!{table.comment}")
+ 	@Override
+ 	public Boolean save(${entityDTO} ${lowrEntityDTO}){
+ 		return ${lowerCaseServiceName}.save(${lowrEntityDTO});
+ 	}
+ 	
+ 	/**
+ 	 * 修改
+ 	 */
+ 	@KtfTrace("修改$!{table.comment}")
+ 	@Override
+ 	public Boolean updateById(${entityDTO} ${lowrEntityDTO}){
+ 		return ${lowerCaseServiceName}.updateById(${lowrEntityDTO});
+ 	}
+ 	
+ 	/**
+ 	 * 查询列表
+ 	 */
+ 	@KtfTrace("查询列表$!{table.comment}")
+ 	@Override
+ 	public List<${entityDTO}> list(${entityDTO} ${lowrEntityDTO}){
+ 		return ${lowerCaseServiceName}.list(${lowrEntityDTO});
+	}
+	
+	/**
+	 * 指定列模糊查询
+	 */
+	@Override
+ 	public List<${entityDTO}> listLike(Map<String, Object> params, String... columns){
+ 		return ${lowerCaseServiceName}.listLike(params,columns);
+ 	}
+ 	
+ 	/**
+ 	 * 分页查询
+ 	 */
+ 	 @KtfTrace("分页查询$!{table.comment}")
+ 	public PageInfoVO<${entityDTO}> page(Map<String, Object> params){
+ 		return ${lowerCaseServiceName}.page(params);
+ 	
+ 	}
+
+}

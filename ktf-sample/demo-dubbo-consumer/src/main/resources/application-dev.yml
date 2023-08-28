@@ -1,0 +1,25 @@
+server:
+  port: 8080
+  servlet:
+     context-path: /
+     
+nacos:
+  config:
+    server-addr: 192.168.0.66:8848
+    username: nacos
+    password: nacos
+    
+dubbo:
+  application:
+    qosEnable: false
+  protocol:
+    port: -1
+  provider:
+    retries: 0
+    timeout: 20000
+  registry:
+    #address: zookeeper://127.0.0.1:2181
+    address: nacos://${nacos.config.server-addr}/?username=${nacos.config.username}&password=${nacos.config.password}
+ktf:
+  swagger:
+    enabled: true

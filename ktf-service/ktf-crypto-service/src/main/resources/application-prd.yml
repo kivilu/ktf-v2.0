@@ -1,0 +1,35 @@
+dubbo:
+  application:
+    qosEnable: false
+  protocol:
+    port: 17778
+  provider:
+    retries: 0
+  registry:
+    address: 172.16.146.215:2181,172.16.146.215:2182,172.16.146.215:2183
+    protocol: zookeeper
+ktf:
+  cache:
+    enabled: true
+    expiration: 3600
+    redis:
+      client-type: lettuce
+server:
+  port: 7778
+  servlet:
+    context-path: /${spring.application.name}
+spring:
+  cache:
+    type: redis
+  redis:
+    database: 0
+    host: redis-inslock.redis.rds.aliyuncs.com
+    lettuce:
+      pool:
+        max-active: 300
+        max-idle: 300
+        max-wait: 60000
+        min-idle: 100
+    password: InsSec*2019@)!(
+    port: 6379
+    timeout: 5000

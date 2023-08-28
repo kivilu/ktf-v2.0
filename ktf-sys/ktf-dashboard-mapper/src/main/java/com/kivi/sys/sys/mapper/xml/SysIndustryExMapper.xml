@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kivi.sys.sys.mapper.SysIndustryExMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kivi.sys.sys.dto.SysIndustryDTO">
+        <id column="id" property="id" />
+        <result column="pid" property="pid" />
+        <result column="code" property="code" />
+        <result column="pcode" property="pcode" />
+        <result column="name" property="name" />
+        <result column="status" property="status" />
+        <result column="has_children" property="hasChildren"/>
+        <result column="is_leaf" property="isLeaf"/>
+    </resultMap>
+    
+    <!-- 列表查询 -->
+    <select id="selectDTO" resultMap="BaseResultMap" >
+    	SELECT
+			id,
+			pid,
+			`code`,
+			pcode,
+			`name`,
+			`status`,
+			IF ((SELECT count(1) FROM ktf_sys_industry t1 WHERE t1.pid = t.id) >0, TRUE, FALSE) as has_children,
+			IF ((SELECT	count(1) FROM ktf_sys_industry t1 WHERE	t1.pid = t.id) > 0,	FALSE, TRUE	) AS is_leaf
+		FROM
+			ktf_sys_industry t
+		<where>
+			<if test="params.pid !=null">
+				t.pid = ${params.pid}
+			</if>
+			<if test="params.status!=null">
+				AND t.`status` = ${params.status}
+			</if>
+			<if test="params.keyword!=null">
+				AND (t.name LIKE '%${params.keyword}%'
+					OR t.code LIKE '%${params.keyword}%')
+			</if>
+		</where>
+		ORDER BY t.id
+    </select>
+    
+    <!-- 查询列表子节点 -->
+    <select id="getChildren" parameterType="map" resultMap="BaseResultMap">
+    	SELECT
+			id,
+			pid,
+			`code`,
+			pcode,
+			`name`,
+			`status`,
+			IF ((SELECT count(1) FROM ktf_sys_industry t1 WHERE t1.pid = t.id) >0, TRUE, FALSE) as has_children,
+			IF ((SELECT	count(1) FROM ktf_sys_industry t1 WHERE	t1.pid = t.id) > 0,	FALSE, TRUE	) AS is_leaf
+		FROM
+			ktf_sys_industry t
+		<where>
+			<if test="!recursion and pid!=null"> 
+				t.pid = #{pid}
+			</if>
+			<if test="recursion and pid!=null">
+		    	t.pid LIKE '%${pid}%'
+		    </if>
+			<if test="status!=null">
+				AND t.`status` = #{status}
+			</if>
+		</where>
+		ORDER BY t.id
+    </select>
+
+</mapper>

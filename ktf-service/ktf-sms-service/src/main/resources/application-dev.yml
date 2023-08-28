@@ -1,0 +1,47 @@
+dubbo:
+  application:
+    qosEnable: false
+  protocol:
+    port: 17788
+  registry:
+    address: zookeeper://127.0.0.1:2181
+ktf:
+  cache:
+    enabled: true
+  common:
+    enable-test: false
+  sms:
+    aliyun:
+      open-debug-log: true
+server:
+  port: 7788
+  servlet:
+    context-path: /${spring.application.name}
+spring:
+  cache:
+    type: redis
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-test-query: SELECT 1
+      connection-timeout: 60000
+      idle-timeout: 500000
+      max-lifetime: 540000
+      maximum-pool-size: 12
+      minimum-idle: 10
+      pool-name: HikariPool-KTF
+    password: root
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://localhost/ktf_sms?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=Asia/Shanghai
+    username: root
+  redis:
+    database: 0
+    host: 127.0.0.1
+    lettuce:
+      pool:
+        max-active: 30
+        max-idle: 30
+        max-wait: 60000
+        min-idle: 5
+    port: 7000
+    timeout: 5000

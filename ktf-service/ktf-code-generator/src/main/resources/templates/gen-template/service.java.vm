@@ -1,0 +1,58 @@
+package ${package.Service};
+
+import ${package.Entity}.${entity};
+import com.${package.ModuleName}.dto.${entity}DTO;
+import ${superServiceClassPackage};
+
+import java.util.List;
+import java.util.Map;
+
+import com.kivi.framework.vo.page.PageInfoVO;
+
+/**
+ * <p>
+ * $!{table.comment} 服务类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${kotlin})
+interface ${table.serviceName} : ${superServiceClass}<${entity}>
+#else
+public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+	#set($lowrEntity = $table.entityName.substring(0,1).toLowerCase() + $table.entityName.substring(1,$table.entityName.length()))
+    #set($entityDTO = ${table.entityName} +"DTO")
+    #set($lowrEntityDTO = ${lowrEntity} +"DTO")
+ 
+    /**
+     * 根据ID查询DTO
+     */
+ 	${entityDTO} getDTOById(Long id);   
+ 	
+ 	/**
+ 	 * 新增
+ 	 */
+ 	Boolean save(${entityDTO} ${lowrEntityDTO});
+ 	
+ 	/**
+ 	 * 修改
+ 	 */
+ 	Boolean updateById(${entityDTO} ${lowrEntityDTO});
+ 	
+ 	/**
+ 	 * 查询列表
+ 	 */
+ 	List<${entityDTO}> list(${entityDTO} ${lowrEntityDTO});
+ 	
+ 	/**
+	 * 指定列查询列表
+	 */
+	List<${entityDTO}> list(Map<String, Object> params, String... columns);
+ 	
+ 	/**
+ 	 * 分页查询
+ 	 */
+ 	PageInfoVO<${entityDTO}> page(Map<String, Object> params);
+}
+#end

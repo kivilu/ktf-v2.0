@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.kivi</groupId>
+    <artifactId>ktf</artifactId>
+    <version>2.0.2</version>
+  </parent>
+  <artifactId>ktf-service</artifactId>
+  <packaging>pom</packaging>
+  <description>ktf公共服务</description>
+  
+  <properties>
+  	<ktf.version>2.0.2</ktf.version>
+  	<ktf-service.version>2.0.2</ktf-service.version>
+  </properties>
+  
+  <modules>
+  	<module>ktf-sms-service</module>
+  	<module>ktf-sms-facade</module>
+  	<module>ktf-crypto-facade</module>
+  	<module>ktf-crypto-service</module>
+  	<module>ktf-dashboard-restful</module>
+  	<module>ktf-code-generator</module>
+  	<module>ktf-running-mp</module>
+	<module>ktf-cif-service</module>
+  </modules>
+</project>

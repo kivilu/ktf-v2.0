@@ -1,0 +1,52 @@
+dubbo:
+  application:
+    qosEnable: false
+  protocol:
+    port: 17788
+  provider:
+    retries: 0
+  registry:
+    address: zookeeper://172.16.146.216:2181
+ktf:
+  cache:
+    enabled: true
+    expiration: 3600
+    redis:
+      client-type: lettuce
+  sms:
+    aliyun:
+      open-debug-log: true
+server:
+  port: 7788
+  servlet:
+    context-path: /${spring.application.name}
+spring:
+  cache:
+    type: redis
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-test-query: SELECT 1
+      connection-timeout: 60000
+      idle-timeout: 500000
+      max-lifetime: 540000
+      maximum-pool-size: 12
+      minimum-idle: 10
+      pool-name: HikariPool-KTF
+    password: ins4rfv%TGB
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://172.16.146.216:3506/ins?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&maxReconnects=10&serverTimezone=Asia/Shanghai
+    username: inssec
+  redis:
+    cluster:
+      max-redirects: 3
+      nodes: 172.16.146.216:7000,172.16.146.216:7001,172.16.146.216:7002,172.16.146.216:7003,172.16.146.216:7004,172.16.146.216:7005
+    database: 0
+    lettuce:
+      pool:
+        max-active: 300
+        max-idle: 300
+        max-wait: 60000
+        min-idle: 100
+    password: Ins*IK<9ol.
+    timeout: 5000

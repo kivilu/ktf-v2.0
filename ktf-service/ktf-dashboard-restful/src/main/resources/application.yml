@@ -1,0 +1,117 @@
+server:
+  undertow:
+        # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程不要设置过大，
+        # 如果过大，启动项目会报错：打开文件数过多
+    buffer-size: 1024
+        # 是否分配的直接内存(NIO直接分配的堆外内存)
+    direct-buffers: true
+    threads:
+      io: 4
+      worker: 32
+          # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+          # 每块buffer的空间大小,越小的空间被利用越充分，不要设置太大，以免影响其他应用，合适即可
+          # 阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程
+          # 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
+      
+spring:
+  application:
+    name: ktf-dashboard
+  profiles:
+    active: '@profileActive@'
+  main:
+    allow-bean-definition-overriding: true
+  mvc:
+    throw-exception-if-no-handler-found: false
+  resources:
+    add-mappings: false
+#  thymeleaf:
+#    cache: false
+#    encoding: UTF-8
+#    mode: LEGACYHTML5
+#    prefix: classpath:/templates/
+#    suffix: .html
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+    
+mybatis-plus:
+  mapper-locations: [classpath*:com/kivi/*/*/mapper/xml/*Mapper.xml]
+  type-aliases-package: com.kivi.**.entity
+  global-config:
+    db-config:
+      id-type: ID_WORKER
+      table-underline: true
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+
+logging:
+  level:
+    com.kivi: trace
+    com.baomidou: trace
+    java.rmi: info
+    
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    #dubbo:
+    #  enable: true
+    #  dubbo-shutdown.enabled: true
+    #  dubbo-configs.enabled: true
+    #  dubbo-services.enabled: true
+    #  dubbo-references.enabled: true
+    #  dubbo-properties.enabled: true
+  #health:
+    #dubbo:
+    #  status:
+    #    defaults: memory,load
+    #    extras: registry,load,threadpool
+info:
+  name: 基础平台KTF管理后台服务
+  version: 1.0.0
+    
+ktf:
+  cache:
+    redis:
+      client-type: lettuce 
+  common:
+    component-scan: com.ktf.dashboard
+  db:
+    mappers: com.kivi.**.mapper
+  dashboard:
+    auth: jwt
+    enable-kaptcha: false
+    shiro:
+      cache: ktf-shiro-cache-
+      login-url: /login
+      successUrl: /index
+      unauthorizedUrl: /unauth
+    session:
+      enabled: true
+      expire-time: 3600
+    cookie:
+      max-age: 604800
+      path: /ktf-dashboard
+    login-type: username
+  swagger:
+    enabled: true
+    enable-dic-api: true
+    enable-permission-api: true
+    enable-sys-api: true
+    enable-org-api: true
+    enable-region-api: true
+    title: KMS管理后台API接口
+    version: 1.0.0
+  logback:
+    log-path: /tmp/logs
+

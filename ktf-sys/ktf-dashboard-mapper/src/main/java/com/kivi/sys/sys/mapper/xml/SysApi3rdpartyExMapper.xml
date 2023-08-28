@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kivi.sys.sys.mapper.SysApi3rdpartyExMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kivi.sys.sys.dto.SysApi3rdpartyDTO">
+        <id column="id" property="id" />
+        <result column="ktf_app_id" property="ktfAppId" />
+        <result column="ktf_app_Name" property="ktfAppName" />
+        <result column="type" property="type" />
+        <result column="api_appid" property="apiAppid" />
+        <result column="api_secret" property="apiSecret" />
+        <result column="api_name" property="apiName" />
+        <result column="api_base_url" property="apiBaseUrl" />
+        <result column="self_cert_name" property="selfCertName" />
+        <result column="self_cert_data" property="selfCertData" />
+        <result column="self_cert_pass" property="selfCertPass" />
+        <result column="peer_cert_name" property="peerCertName" />
+        <result column="peer_cert_data" property="peerCertData" />
+        <result column="peer_cert_pass" property="peerCertPass" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="gmt_update" property="gmtUpdate" />
+        <result column="create_id" property="createId" />
+        <result column="update_id" property="updateId" />
+    </resultMap>
+    
+    <select id="selectByPage" parameterType="map" resultMap="BaseResultMap">
+	    SELECT
+	    	api.id,
+	    	api.ktf_app_id,
+			app.`name` AS ktf_app_name,
+			api.type,
+			api.api_appid,
+			api.api_secret,
+			api.api_name,
+			api.api_base_url,
+			api.self_cert_name,
+			api.self_cert_data,
+			api.self_cert_pass,
+			api.peer_cert_name,
+			api.peer_cert_data,
+			api.peer_cert_pass,
+			api.gmt_create,
+			api.gmt_update
+		FROM
+			ktf_sys_api3rdparty api
+		LEFT JOIN ktf_sys_application app ON api.ktf_app_id = app.id
+	    <where>
+	    	<if test="params.appName != null and params.appName != '' ">
+                api.app_name like concat('%',#{params.appName},'%')
+            </if>
+            <if test="params.userType !=null">
+            	api.type = #{params.type}
+            </if>
+	    </where> 
+    </select>
+
+</mapper>

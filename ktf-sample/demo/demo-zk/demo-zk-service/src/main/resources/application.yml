@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: DemoZkApplication
+  thymeleaf:
+    cache: true
+    check-template: true
+    check-template-location: true
+    content-type: text/html
+    enabled: true
+    encoding: UTF-8
+    excluded-view-names: null
+    mode: HTML5
+    prefix: classpath:/templates/
+    suffix: .html
+dubbo:
+  registry:
+    address: zookeeper://${zookeeper.address:127.0.0.1}:2181
+  protocol:
+    name: tri
+    port: 50051
+  application:
+    name: DemoZkService-Provider
+    qos-enable: true
+    qos-port: 22222
+    logger: slf4j
+    qos-accept-foreign-ip: false
+  metadata-report:
+    address: redis://${redis.address:127.0.0.1}:6379
+server:
+  port: 8080

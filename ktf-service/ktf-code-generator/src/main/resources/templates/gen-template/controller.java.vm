@@ -1,0 +1,217 @@
+package ${package.Controller};
+
+import javax.validation.Valid;
+#if(${cfg.dubbo})
+import org.apache.dubbo.config.annotation.DubboReference;
+#else
+import org.springframework.beans.factory.annotation.Autowired;
+#end
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+
+import org.springframework.web.bind.annotation.*;
+
+import ${package.Service}.${table.serviceName};
+//import com.kivi.dashboard.shiro.ShiroKit;
+import com.${package.ModuleName}.dto.${entity}DTO;
+import java.util.*;
+
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+#if(${cfg.restControllerStyle})
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+
+import com.kivi.framework.model.ResultMap;
+import com.kivi.framework.vo.page.PageInfoVO;
+import com.vip.vjtools.vjkit.number.NumberUtil;
+
+#if(${swagger2})
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+#end
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+ 
+ #set($modulName = $package.ModuleName.substring($package.ModuleName.lastIndexOf('.') + 1))
+ 
+#if(${swagger2})
+@Api(value = "$!{table.comment}管理接口", tags = {"$!{table.comment}管理接口"})
+#end
+#if(${cfg.restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("/#if(${modulName})${modulName}/#end#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+#else
+@Slf4j
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+	
+    #set($lowerCaseServiceName = $table.serviceName.substring(0,1).toLowerCase() + $table.serviceName.substring(1,$table.serviceName.length()))
+    #set($lowrEntity = $table.entityName.substring(0,1).toLowerCase() + $table.entityName.substring(1,$table.entityName.length()))
+    #set($entityDTO = ${table.entityName} +"DTO")
+    #set($lowrEntityDTO = ${lowrEntity} +"DTO")
+    
+    #if(${cfg.dubbo})
+    @DubboReference
+    #else
+    @Autowired
+    #end
+    private ${table.serviceName} ${lowerCaseServiceName};
+
+	#if(${swagger2})
+	@ApiOperation(value = "$!{table.comment}信息", notes = "$!{table.comment}信息")
+	#end
+    @GetMapping("/info/{id}")
+    @RequiresPermissions("#if(${modulName})${modulName}/#end${lowrEntity}/info")
+    public ResultMap info(@PathVariable("id") Long id) {
+    	${entityDTO} dto = ${lowerCaseServiceName}.getDTOById(id);
+        return ResultMap.ok().data(dto)
+    }
+
+    /**
+    * 新增
+    */
+    #if(${swagger2})
+    @ApiOperation(value = "新增$!{table.comment}", notes = "新增$!{table.comment}")
+    #end
+    @RequiresPermissions("#if(${modulName})${modulName}/#end${lowrEntity}/save")
+    @PostMapping("/save")
+    public ResultMap save(@Valid @RequestBody ${entityDTO} dto){
+    	try {
+    		//${lowrEntityDTO}.setCreateUser(ShiroKit.getUser().getLoginName());
+	        Boolean b = ${lowerCaseServiceName}.save(dto);
+	        if (b) {
+	            return ResultMap.ok("新增成功！");
+	        } else {
+	            return ResultMap.ok("新增失败！");
+	        }
+        } catch (Exception e) {
+            log.error(e.getMessage(),e);
+            return ResultMap.error("添加失败，请联系管理员");
+        }
+    }
+    
+    /**
+    * 修改
+    */
+    #if(${swagger2})
+    @ApiOperation(value = "修改$!{table.comment}", notes = "修改$!{table.comment}")
+    #end
+    @RequiresPermissions("#if(${modulName})${modulName}/#end${lowrEntity}/update")
+    @PostMapping("/update")
+    public ResultMap updateById(@RequestBody ${entityDTO} dto){
+     	try {
+     		//${lowrEntityDTO}.setUpdateUser(ShiroKit.getUser().getLoginName());
+	        Boolean b = ${lowerCaseServiceName}.updateById(dto);
+	        if (b) {
+	            return ResultMap.ok("编辑成功！");
+	        } else {
+	            return ResultMap.ok("编辑失败！");
+	        }
+        } catch (Exception e) {
+            log.error(e.getMessage(),e);
+            return ResultMap.error("编辑失败，请联系管理员");
+        }
+    }
+    
+   /**
+    * 删除
+    */
+    #if(${swagger2})
+    @ApiOperation(value = "删除$!{table.comment}", notes = "删除$!{table.comment}")
+    #end
+    @PostMapping("/delete/{id}")
+    @RequiresPermissions("#if(${modulName})${modulName}/#end${lowrEntity}/delete")
+    public ResultMap delete(@PathVariable("id") Long id){
+    	try {
+	        Boolean b = ${lowerCaseServiceName}.removeById(id);
+	         if (b) {
+	            return ResultMap.ok("删除成功！");
+	        } else {
+	            return ResultMap.ok("删除失败！");
+	        }
+	    } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResultMap.error("删除失败，请联系管理员");
+        }
+    }
+
+    /**
+    * 批量删除
+    */
+    #if(${swagger2})
+    @ApiOperation(value = "批量删除$!{table.comment}", notes = "批量删除$!{table.comment}")
+    #end
+    @PostMapping("/delete")
+    @RequiresPermissions("#if(${modulName})${modulName}/#end${lowrEntity}/delete")
+    public ResultMap deleteBatchIds(@RequestBody Long[] ids){
+	    try {
+	        Boolean b = ${lowerCaseServiceName}.removeByIds(Arrays.asList(ids));
+	         if (b) {
+	            return ResultMap.ok("删除成功！");
+	        } else {
+	            return ResultMap.ok("删除失败！");
+	        }
+	    } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResultMap.error("批量删除失败，请联系管理员");
+        }
+    }
+
+    
+
+
+    /**
+    * 查询列表
+    */
+    #if(${swagger2})
+    @ApiOperation(value = "查询$!{table.comment}列表", notes = "查询$!{table.comment}列表")
+    #end
+    @RequiresPermissions("#if(${modulName})${modulName}/#end${lowrEntity}/list")
+    @GetMapping("/list")
+    public ResultMap list(@RequestParam(required = false) Map<String, Object> params){
+        List<${entityDTO}> list =  ${lowerCaseServiceName}.listLike(params);
+        return ResultMap.ok().data( list);
+    }
+
+    /**
+    * 分页查询
+    */
+     #if(${swagger2})
+    @ApiOperation(value = "分页查询$!{table.comment}", notes = "分页查询$!{table.comment}")
+    #end
+    @RequiresPermissions("#if(${modulName})${modulName}/#end${lowrEntity}/page")
+    @GetMapping("/page")
+    public ResultMap page(@RequestParam(required = false) Map<String, Object> params){
+        PageInfoVO<${entityDTO}> page = ${lowerCaseServiceName}.page(params);
+    	
+        return ResultMap.ok().data( page);
+    }
+
+
+}
+
+#end

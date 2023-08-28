@@ -1,0 +1,69 @@
+server:
+  undertow:
+        # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程不要设置过大，
+        # 如果过大，启动项目会报错：打开文件数过多
+    io-threads: 4
+        # 阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程
+        # 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
+    worker-threads: 32
+        # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+        # 每块buffer的空间大小,越小的空间被利用越充分，不要设置太大，以免影响其他应用，合适即可
+    buffer-size: 1024
+        # 是否分配的直接内存(NIO直接分配的堆外内存)
+    direct-buffers: true
+      
+spring:
+  application:
+    name: mp-sample
+  profiles:
+    active: '@profileActive@'
+  main:
+    allow-bean-definition-overriding: true
+  mvc: 
+    throw-exception-if-no-handler-found: false
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+  web:
+    resources:
+      add-mappings: false
+
+mybatis-plus:
+  mapper-locations: [classpath*:com/kivi/mp/*/mapper/xml/*Mapper.xml]
+  type-aliases-package: com.kivi.mp.*.entity
+  global-config:
+    db-config:
+      id-type: ID_WORKER
+      table-underline: true
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+logging:
+  level:
+    com.kivi: trace
+    com.baomidou: trace
+    java.rmi: info
+
+knife4j:
+  enable: true
+  openapi:
+    title: Mybatiplus-Sample文档
+    description: "`我是测试`,**你知道吗**#aaa"
+    email: test@foxmail.com
+    concat: inssec
+    url: https://www.inssec.cn
+    version: v1.0
+    license: Apache 2.0
+    license-url: https://www.inssec.cn/
+    terms-of-service-url: https://www.inssec.cn/
+    group:
+      test1:
+        group-name: 分组名称
+        api-rule: package
+        api-rule-resources:
+          - com.kivi.mp.sys.controller

@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.kivi</groupId>
+    <artifactId>ktf-service</artifactId>
+    <version>2.0.2</version>
+  </parent>
+  <artifactId>ktf-dashboard-restful</artifactId>
+  
+  <properties>
+  	<swagger-bootstrap-ui.version>1.9.4</swagger-bootstrap-ui.version>
+  </properties>
+  
+  <dependencies>
+  		<!-- kivi -->
+  		<dependency>
+       		<groupId>com.kivi</groupId>
+       		<artifactId>ktf-dashboard-facade</artifactId>
+       		<version>${ktf.version}</version>
+  		</dependency>
+  		<dependency>
+       		<groupId>com.kivi</groupId>
+       		<artifactId>ktf-dashboard-impl</artifactId>
+       		<version>${ktf.version}</version>
+  		</dependency>
+  		<dependency>
+       		<groupId>com.kivi</groupId>
+       		<artifactId>ktf-dashboard-web</artifactId>
+       		<version>${ktf.version}</version>
+  		</dependency>
+  		<!-- kivi -->
+  		
+  		<dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+            <version>${swagger-bootstrap-ui.version}</version>
+        </dependency>
+        
+       <!--  <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency> -->
+        
+        <dependency>
+  			<groupId>org.springframework.boot</groupId>
+  			<artifactId>spring-boot-configuration-processor</artifactId>
+  			<optional>true</optional>
+  		</dependency>
+  		
+  		<!-- websocket begin -->
+       <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+            <scope>provided</scope>
+            <exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+            		<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+       </dependency>
+        <!-- websocket end -->
+  		
+  </dependencies>
+  
+</project>

@@ -1,0 +1,49 @@
+server:
+  port: 8000
+  servlet:
+    context-path: /${spring.application.name}
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/ktf?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-test-query: SELECT 1
+      connection-timeout: 60000
+      idle-timeout: 500000
+      max-lifetime: 540000
+      maximum-pool-size: 12
+      minimum-idle: 10
+      pool-name: HikariPool-KTF
+  cache:
+    type: redis
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    timeout: 5000
+    lettuce:
+      pool:
+        max-active: 30
+        max-idle: 30
+        max-wait: 60000
+        min-idle: 5
+      shutdown-timeout: 100ms
+nacos:
+  server-address: 192.168.66.198
+  port: 8848
+  username: nacos
+  password: nacos
+  
+dubbo:
+  application:
+    qosEnable: false
+  protocol:
+    port: 18000
+  registry:
+    #address: zookeeper://127.0.0.1:2181
+    address: nacos://${nacos.server-address}:${nacos.port}/?username=${nacos.username}&password=${nacos.password}
+

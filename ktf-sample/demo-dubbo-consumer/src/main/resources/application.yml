@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: dubbo-client
+  profiles:
+    active: '@profileActive@'
+
+dubbo:
+  application:
+    logger: slf4j
+    name: smartlock-rest
+  protocol:
+    name: dubbo
+    optimizer: com.kivi.dubbo.serialize.SerializationOptimizerImpl
+    serialization: kryo
+    #status: server
+  #registry:
+  #  client: nacos
+  #scan-base-packages: com.kivi.demo
+ktf:
+  common:
+    component-scan: com.kivi
+  

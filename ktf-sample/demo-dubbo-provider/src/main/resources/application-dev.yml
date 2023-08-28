@@ -1,0 +1,63 @@
+server:
+  port: 8050
+  servlet:
+    context-path: /
+    
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ktf?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
+    username: root
+    password: root
+    #username: ENC(+3IYjQNVK0dmwcYR8Nkxog==)
+    #password: ENC(8Z6PRmlebIrGSY1khUYB+VzWLEj8PTVk)
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-test-query: SELECT 1
+      connection-timeout: 60000
+      idle-timeout: 500000
+      max-lifetime: 540000
+      maximum-pool-size: 5
+      minimum-idle: 5
+      pool-name: HikariPool-KTF
+  cache:
+    type: redis
+  session:
+    store-type: redis
+    timeout: 3600s
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password: 
+    #password: ENC(ZSWLU+TM5iGQkHLQ7mopQT8+2ihXPtLg)
+    timeout: 5000ms
+    lettuce:
+      pool:
+        max-active: 30
+        max-idle: 30
+        max-wait: 60000ms
+        min-idle: 5
+      shutdown-timeout: 100ms
+logging:
+  level:
+    com.kivi: info
+    com.ins: info
+    
+#nacos:
+#  config:
+#    server-addr: 192.168.0.66:8848
+#    username: nacos
+#    password: nacos
+    
+dubbo:
+  application:
+    qosEnable: false
+  protocol:
+    port: -1
+  provider:
+    retries: 0
+    timeout: 20000
+  registry:    id: zookeeper
+    address: zookeeper://127.0.0.1:2181
+    #address: nacos://${nacos.config.server-addr}/?username=${nacos.config.username}&password=${nacos.config.password}
