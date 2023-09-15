@@ -1,0 +1,19 @@
+{
+	"properties": [
+		{
+		  "name": "ktf.cache",
+		  "type": "com.kivi.framework.cache.properties.KtfCacheProperties",
+		  "description": "A description for 'ktf.cache'"
+		},
+		{
+		  "name": "ktf.cache.redis",
+		  "type": "com.kivi.framework.cache.properties.KtfRedisProperties",
+		  "description": "A description for 'ktf.cache.rdis'"
+		},
+		{
+		  "name": "ktf.cache.redis.redission",
+		  "type": "com.kivi.framework.cache.properties.KtfRedissonProperties",
+		  "description": "A description for 'ktf.cache.rdis.redission'"
+		}
+	]
+}

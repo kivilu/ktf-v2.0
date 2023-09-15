@@ -34,12 +34,10 @@
         <spring-cloud.version>2021.0.8</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.0.4.0</spring-cloud-alibaba.version>
         
-        
         <!-- springboot 3.0 -->
         <!-- <spring-boot.version>3.1.2</spring-boot.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.0.4.0</spring-cloud-alibaba.version> -->
-        
        
         <!-- springboot-admin -->
         <spring-boot-admin.version>2.7.10</spring-boot-admin.version>
@@ -64,10 +62,9 @@
         <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
         <mybatis-typehandlers-jsr310.version>1.0.2</mybatis-typehandlers-jsr310.version>
   		<p6spy.version>3.9.1</p6spy.version>
-  	
         <fst.version>2.57</fst.version>
-        
 		<ktf.version>2.3.0</ktf.version>
+		<knife4j-openapi2.version>4.0.0</knife4j-openapi2.version>
 	</properties>
 
 	<dependencies>
@@ -304,5 +301,6 @@
 		<module>ktf-crypto</module>
 		<module>ktf-db</module>
 		<module>ktf-dubbo</module>
+		<module>ktf-mqtt</module>
 	</modules>
 </project>

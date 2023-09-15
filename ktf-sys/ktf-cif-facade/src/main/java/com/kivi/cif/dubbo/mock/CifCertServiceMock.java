@@ -3,7 +3,7 @@ package com.kivi.cif.dubbo.mock;
 import java.util.List;
 
 import com.kivi.cif.dto.CifCertsDTO;
-import com.kivi.cif.dubbo.service.CertService;
+import com.kivi.cif.service.CertService;
 import com.kivi.framework.crypto.enums.KtfCertType;
 import com.kivi.framework.dto.warapper.WarpReqDTO;
 import com.kivi.framework.exception.KtfException;

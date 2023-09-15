@@ -11,7 +11,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 
 import com.kivi.framework.constant.KtfFramework;
-import com.kivi.framework.properties.KtfTaskPoolProperties;
+import com.kivi.framework.properties.KtfThreadPoolProperties;
 import com.kivi.framework.task.KtfAsyncUncaughtExceptionHandler;
 import com.kivi.framework.task.KtfThreadPoolTaskExecutor;
 import com.kivi.framework.task.RejectedPolicy;
@@ -21,7 +21,7 @@ import com.kivi.framework.task.RejectedPolicy;
 public class KtfConfiguration implements AsyncConfigurer {
 
 	@Autowired
-	private KtfTaskPoolProperties config;
+	private KtfThreadPoolProperties config;
 
 	@Bean(KtfFramework.BEAN_KTFTHREADPOOL)
 	@Order(Integer.MIN_VALUE)

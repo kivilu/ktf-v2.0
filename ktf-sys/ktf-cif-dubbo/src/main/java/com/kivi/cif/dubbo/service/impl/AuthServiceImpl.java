@@ -4,10 +4,10 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kivi.cif.dto.CifCustomerAuthsDTO;
-import com.kivi.cif.dubbo.service.AuthService;
 import com.kivi.cif.entity.CifCustomerAuths;
 import com.kivi.cif.properties.CifProperties;
-import com.kivi.cif.service.CifCustomerAuthsService;
+import com.kivi.cif.service.AuthService;
+import com.kivi.cif.service.ICifCustomerAuthsService;
 import com.kivi.cif.util.CifCredential;
 import com.kivi.framework.annotation.KtfTrace;
 import com.kivi.framework.constant.KtfError;
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthServiceImpl implements AuthService {
 
 	@Autowired
-	private CifCustomerAuthsService cifCustomerAuthsService;
+	private ICifCustomerAuthsService cifCustomerAuthsService;
 
 	@KtfTrace("客户认证")
 	@Override

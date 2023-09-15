@@ -1,0 +1,24 @@
+{
+	"properties": [
+		{
+		  "name": "ktf.common",
+		  "type": "com.kivi.framework.properties.KtfCommonProperties",
+		  "description": "A description for 'ktf.common'"
+		},
+		{
+		  "name": "ktf.sys",
+		  "type": "com.kivi.framework.properties.KtfSysProperties",
+		  "description": "A description for 'ktf.sys'"
+		},
+		{
+		  "name": "ktf.thread",
+		  "type": "com.kivi.framework.properties.KtfThreadPoolProperties",
+		  "description": "A description for 'ktf.thread'"
+		},
+		{
+		  "name": "ktf.logback",
+		  "type": "com.kivi.framework.properties.ktfLogbackProperties",
+		  "description": "A description for 'ktf.logback'"
+		}
+	]
+}

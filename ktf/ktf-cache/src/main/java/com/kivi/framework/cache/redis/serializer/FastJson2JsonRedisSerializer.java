@@ -20,41 +20,41 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 
-	private Class<T> clazz;
+    private Class<T> clazz;
 
-	public FastJson2JsonRedisSerializer(Class<T> clazz) {
-		super();
-		// ParserConfig.getGlobalInstance().addAccept("com.kivi.,com.ins.");
-		// ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+    public FastJson2JsonRedisSerializer(Class<T> clazz) {
+        super();
+        // ParserConfig.getGlobalInstance().addAccept("com.kivi.,com.ins.");
+        // ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
 
-		this.clazz = clazz;
-	}
+        this.clazz = clazz;
+    }
 
-	@Override
-	public byte[] serialize(T t) throws SerializationException {
-		if (t == null) {
-			return new byte[0];
-		}
-		byte[] bytes = JSON.toJSONBytes(t, JSONWriter.Feature.WriteClassName);
+    @Override
+    public byte[] serialize(T t) throws SerializationException {
+        if (t == null) {
+            return new byte[0];
+        }
+        byte[] bytes = JSON.toJSONBytes(t, JSONWriter.Feature.WriteClassName);
 
-		return bytes;
-	}
+        return bytes;
+    }
 
-	@Override
-	public T deserialize(byte[] bytes) throws SerializationException {
-		if (bytes == null || bytes.length <= 0) {
-			return null;
-		}
+    @Override
+    public T deserialize(byte[] bytes) throws SerializationException {
+        if (bytes == null || bytes.length <= 0) {
+            return null;
+        }
 
-		if (log.isTraceEnabled()) {
-			String str = new String(bytes, KtfConstant.DEFAULT_CHARSET);
-			log.trace("json:{}", str);
-		}
+        if (log.isTraceEnabled()) {
+            String str = new String(bytes, KtfConstant.DEFAULT_CHARSET);
+            log.trace("json:{}", str);
+        }
 
-		T obj = JSON.parseObject(bytes, clazz, JSONReader.Feature.SupportAutoType,
-				JSONReader.Feature.IgnoreSetNullValue);
+        T obj =
+            JSON.parseObject(bytes, clazz, JSONReader.Feature.SupportSmartMatch, JSONReader.Feature.IgnoreSetNullValue);
 
-		return obj;
-	}
+        return obj;
+    }
 
 }

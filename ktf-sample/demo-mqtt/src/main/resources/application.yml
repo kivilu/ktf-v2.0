@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: demo-mqtt
+  profiles:
+    active: '@profileActive@'
+
+ktf:
+  common:
+    component-scan: com.kivi
+
+knife4j:
+  enable: true
+  openapi:
+    title: Demo Mqtt文档
+    description: "**MQTT**demo的文档"
+    email: test@foxmail.com
+    concat: inssec
+    url: https://www.inssec.cn
+    version: v1.0
+    license: Apache 2.0
+    license-url: https://www.inssec.cn/
+    terms-of-service-url: https://www.inssec.cn/
+    group:
+      test1:
+        group-name: 分组名称
+        api-rule: package
+        api-rule-resources:
+          - com.kivi.demo.mqtt.controller

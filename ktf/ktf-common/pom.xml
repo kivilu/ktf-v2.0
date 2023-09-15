@@ -11,7 +11,7 @@
   
   <properties>	
   		<persistence-api.version>1.0.2</persistence-api.version>
-  		 <guava.version>32.1.2-jre</guava.version>
+  		<guava.version>32.1.2-jre</guava.version>
   		<joda-time.version>2.12.5</joda-time.version>
   </properties>
   

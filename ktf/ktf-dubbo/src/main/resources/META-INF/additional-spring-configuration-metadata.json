@@ -1,0 +1,10 @@
+{
+	"properties": [
+		{
+		  "name": "ktf.dubbo",
+		  "type": "com.kivi.dubbo.properties.KtfDubboProperties",
+		  "description": "A description for 'ktf.dubbo'"
+		}
+		
+	]
+}

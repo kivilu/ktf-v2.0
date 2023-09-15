@@ -9,7 +9,6 @@ import com.kivi.framework.properties.IKtfProperties;
 import lombok.Data;
 
 @Data
-// @Configuration(KtfDubboProperties.BEAN_NAME)
 @Component(KtfDubboProperties.BEAN_NAME)
 @ConfigurationProperties(prefix = KtfDubboProperties.PREFIX)
 @ConditionalOnProperty(

@@ -1,0 +1,182 @@
+{
+  "dev_regist": {
+    "action": "sub",
+    "qos": "qos0",
+    "topic": "tucp/{orgId}/{deviceId}/dev/regist",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/dev/regist$"
+  },
+  "dev_regist_ack": {
+    "action": "pub",
+    "qos": "qos0",
+    "topic": "tucp/{orgId}/{deviceId}/dev/+/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/(dev/([A-Za-z0-9_-]+|\\+)/ack)$"
+  },
+  "dev_online": {
+    "action": "sub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/dev/online",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/dev/online$"
+  },
+  "dev_online_ack": {
+    "action": "pub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/dev/+/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/(dev/([A-Za-z0-9_-]+|\\+)/ack)$"
+  },
+  "dev_offline": {
+    "action": "sub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/dev/offline",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/dev/offline$"
+  },
+  "dev_offline_ack": {
+    "action": "pub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/dev/+/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/(dev/([A-Za-z0-9_-]+|\\+)/ack)$"
+  },
+  "dev_status": {
+    "action": "sub",
+    "qos": "qos0",
+    "topic": "tucp/{orgId}/{deviceId}/dev/status",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/dev/status$"
+  },
+  "dev_status_ack": {
+    "action": "pub",
+    "qos": "qos0",
+    "topic": "tucp/{orgId}/{deviceId}/dev/+/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/(dev/([A-Za-z0-9_-]+|\\+)/ack)$"
+  },
+  "key_apply": {
+    "action": "sub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/key/apply",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/key/apply$"
+  },
+  "key_apply_ack": {
+    "action": "pub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/key/apply/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/(key/([A-Za-z0-9_-]+|\\+)/ack)$"
+  },
+  "key_update": {
+    "action": "pub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/key/update",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/(key/([A-Za-z0-9_-]+|\\+)$)"
+  },
+  "key_update_ack": {
+    "action": "sub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/key/update/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/key/update/ack$"
+  },
+  "key_deliver": {
+    "action": "pub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/key/deliver",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/(key/([A-Za-z0-9_-]+|\\+))$"
+  },
+  "key_deliver_ack": {
+    "action": "sub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/key/deliver/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/key/deliver/ack$"
+  },
+  "key_revoke": {
+    "action": "pub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/key/revoke",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/(key/([A-Za-z0-9_-]+|\\+))$"
+  },
+  "key_revoke_ack": {
+    "action": "sub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/key/revoke/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/key/revoke/ack$"
+  },
+  "key_expire": {
+    "action": "pub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/key/expire",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/(key/([A-Za-z0-9_-]+|\\+))$"
+  },
+  "key_expire_ack": {
+    "action": "sub",
+    "qos": "qos0",
+    "topic": "tucp/{orgId}/{deviceId}/key/expire/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/key/expire/ack$"
+  },
+  "pin_change": {
+    "action": "pub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/pin/change",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/(pin/([A-Za-z0-9_-]+|\\+))$"
+  },
+  "pin_change_ack": {
+    "action": "sub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/pin/change/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/pin/change/ack$"
+  },
+  "pin_resetInvoke": {
+    "action": "pub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/pin/resetInvoke",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/(pin/([A-Za-z0-9_-]+|\\+))$"
+  },
+  "pin_resetInvoke_ack": {
+    "action": "sub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/pin/resetInvoke/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/pin/resetInvoke/ack$"
+  },
+  "pin_resetApply": {
+    "action": "sub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/pin/resetApply",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/pin/resetApply$"
+  },
+  "pin_resetApply_ack": {
+    "action": "pub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/pin/resetApply/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/(pin/([A-Za-z0-9_-]+|\\+)/ack)$"
+  },
+  "pin_reset": {
+    "action": "pub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/pin/reset",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/(pin/([A-Za-z0-9_-]+|\\+))$"
+  },
+  "pin_reset_ack": {
+    "action": "sub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/{deviceId}/pin/reset/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(\\{*[A-Za-z0-9_-]+\\}*)/pin/reset/ack$"
+  },
+  "bwl_blacklist": {
+    "action": "pub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/bwl/+",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(bwl/blacklist)$"
+  },
+  "bwl_blacklist_ack": {
+    "action": "sub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/bwl/blacklist/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/bwl/blacklist/ack$"
+  },
+  "bwl_whitelist": {
+    "action": "pub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/bwl/+",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/(bwl/whitelist)$"
+  },
+  "bwl_whitelist_ack": {
+    "action": "sub",
+    "qos": "qos2",
+    "topic": "tucp/{orgId}/bwl/whitelist/ack",
+    "regex": "^tucp/(\\{*[A-Za-z0-9_-]+\\}*)/bwl/whitelist/ack$"
+  }
+}

@@ -17,33 +17,33 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CifSimpleAuthentication implements CifAuthentication {
 
-	@Autowired
-	private CifProperties cifProperties;
+    @Autowired
+    private CifProperties cifProperties;
 
-	@KtfTrace("默认用户密码认证")
-	@Override
-	public Integer auth(LoginForm form, UserVo userVo) {
-		String authCredential = this.credential(form.getPassword(), userVo.getSalt());
-		if (!StrKit.equalsNotNull(authCredential, userVo.getPassword())) {
-			log.trace("用户{}密码期望值：{}，实际值：{}", form.getUserName(), userVo.getPassword(), authCredential);
-			log.error("用户{}密码认证不通过", form.getUserName());
-			throw new KtfException(KtfError.E_UNAUTHORIZED, "用户身份校验未通过");
-		}
+    @KtfTrace("默认用户密码认证")
+    @Override
+    public Integer auth(LoginForm form, UserVo userVo) {
+        String authCredential = this.credential(form.getPassword(), userVo.getSalt());
+        if (!StrKit.equalsNotNull(authCredential, userVo.getPassword())) {
+            log.trace("用户{}密码期望值：{}，实际值：{}", form.getUserName(), userVo.getPassword(), authCredential);
+            log.error("用户{}密码认证不通过", form.getUserName());
+            throw new KtfException(KtfError.E_UNAUTHORIZED, "用户身份校验未通过");
+        }
 
-		return form.getType() == null ? KtfConstant.DEFAUT_AUTH_TYPE : form.getType();
-	}
+        return form.getType() == null ? KtfConstant.DEFAUT_AUTH_TYPE : form.getType();
+    }
 
-	@Override
-	public String credential(String credential, String salt) {
-		if (StrKit.isBlank(salt))
-			throw new KtfException("密码salt为null");
-		log.trace("默认密码摘要算法：{}\nsalt：{}\ncredential：{}", cifProperties.getAlgDigest(), salt, credential);
-		return DigestUtil.hashHex(cifProperties.getAlgDigest(), StrKit.join(credential, salt));
-	}
+    @Override
+    public String credential(String credential, String salt) {
+        if (StrKit.isBlank(salt))
+            throw new KtfException("密码salt为null");
+        log.trace("默认密码摘要算法：{}\nsalt：{}\ncredential：{}", cifProperties.getAlgDigest(), salt, credential);
+        return DigestUtil.hashHex(cifProperties.getAlgDigest(), StrKit.join(credential, salt));
+    }
 
-	@Override
-	public boolean verify(String identifier, String plainData, String signData) {
-		return false;
-	}
+    @Override
+    public boolean verify(String ipkDomain, String identifier, String plainData, String signData) {
+        return false;
+    }
 
 }

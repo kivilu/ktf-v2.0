@@ -1,7 +1,7 @@
 package com.kivi.cif.dubbo.mock;
 
 import com.kivi.cif.dto.CifCustomerAuthsDTO;
-import com.kivi.cif.dubbo.service.AuthService;
+import com.kivi.cif.service.AuthService;
 import com.kivi.framework.dto.warapper.WarpReqDTO;
 import com.kivi.framework.exception.KtfException;
 import com.kivi.framework.exception.KtfMockException;

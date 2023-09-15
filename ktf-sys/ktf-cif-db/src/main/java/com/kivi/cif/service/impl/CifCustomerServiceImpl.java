@@ -22,7 +22,7 @@ import com.kivi.cif.service.CifCustomerService;
 import com.kivi.db.page.PageParams;
 import com.kivi.framework.annotation.KtfTrace;
 import com.kivi.framework.cache.annotation.KtfCacheEvict;
-import com.kivi.framework.cache.constant.KtfCache;
+import com.kivi.framework.constant.KtfCache;
 import com.kivi.framework.converter.BeanConverter;
 import com.kivi.framework.util.kit.NumberKit;
 import com.kivi.framework.util.kit.ObjectKit;

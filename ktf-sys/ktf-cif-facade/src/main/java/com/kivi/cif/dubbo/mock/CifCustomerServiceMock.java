@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.kivi.cif.dto.CifCustomerAuthsDTO;
 import com.kivi.cif.dto.CifCustomerDTO;
-import com.kivi.cif.dubbo.service.CustomerService;
+import com.kivi.cif.service.CustomerService;
 import com.kivi.framework.dto.warapper.WarpReqDTO;
 import com.kivi.framework.exception.KtfMockException;
 

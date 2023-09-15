@@ -17,11 +17,6 @@ public class KtfWebProperties implements IKtfProperties {
     public static final String BEAN_NAME = "ktfWebProperties";
     public static final String PREFIX = "ktf.web";
 
-    private Boolean enabled = true;
-    private Boolean kaptchaOpen = false;
-    private Boolean enableCsrf = true;
-    private Boolean enableUkey = false;
-
     /**
      * Web请求默认超时时间
      */

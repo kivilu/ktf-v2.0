@@ -10,7 +10,7 @@
   <description>web常用类以及自定义配置文件属性</description>
   
    <properties>	
-      <knife4j-openapi2.version>4.0.0</knife4j-openapi2.version>
+      
   </properties>
   
   <dependencies>

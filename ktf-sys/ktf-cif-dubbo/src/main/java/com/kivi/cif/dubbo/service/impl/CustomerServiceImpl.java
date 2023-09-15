@@ -9,12 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kivi.cif.dto.CifCustomerAuthsDTO;
 import com.kivi.cif.dto.CifCustomerDTO;
-import com.kivi.cif.dubbo.service.CustomerService;
 import com.kivi.cif.entity.CifCustomer;
 import com.kivi.cif.entity.CifCustomerAuths;
 import com.kivi.cif.properties.CifProperties;
-import com.kivi.cif.service.CifCustomerAuthsService;
+import com.kivi.cif.service.ICifCustomerAuthsService;
 import com.kivi.cif.service.CifCustomerService;
+import com.kivi.cif.service.CustomerService;
 import com.kivi.cif.util.CifCredential;
 import com.kivi.framework.annotation.KtfTrace;
 import com.kivi.framework.constant.KtfError;
@@ -36,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
 	private CifCustomerService		cifCustomerService;
 
 	@Autowired
-	private CifCustomerAuthsService	cifCustomerAuthsService;
+	private ICifCustomerAuthsService	cifCustomerAuthsService;
 
 	@KtfTrace("获取客户信息")
 	@Override

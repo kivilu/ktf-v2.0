@@ -1,0 +1,14 @@
+{
+	"properties": [
+	    {
+		  "name": "ktf.web",
+		  "type": "com.kivi.framework.web.properties.KtfWebProperties",
+		  "description": "A description for 'ktf.web'"
+		},
+		{
+		  "name": "ktf.web.jwt",
+		  "type": "com.kivi.framework.web.properties.KtfJwtProperties",
+		  "description": "A description for 'ktf.web.jwt'"
+		}
+	]
+}

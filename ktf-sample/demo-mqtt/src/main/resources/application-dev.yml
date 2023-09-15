@@ -1,0 +1,23 @@
+server:
+  port: 8080
+  servlet:
+     context-path: /
+     
+ktf:
+  mqtt:
+    topic-json: tucp.json
+    consumer: 
+      # 推送信息的连接地址，如果有多个，用逗号隔开，如：tcp://ip:1883,tcp://ip:1883
+      url: [tcp://test.inssec.cn:11883]
+      username: tucp
+      password: Ins*IK<9ol.
+      async: true
+      client-id: demo-mqtt-consumer
+    producer:
+      # 推送信息的连接地址，如果有多个，用逗号隔开，如：tcp://ip:1883,tcp://ip:1883
+      url: [tcp://test.inssec.cn:11883]
+      username: tucp
+      password: Ins*IK<9ol.
+      async: true
+      client-id: demo-mqtt-producer
+      

@@ -7,24 +7,22 @@
     <relativePath>../ktf/pom.xml</relativePath>
   </parent>
   <artifactId>ktf-sys</artifactId>
-  <version>2.3.0</version>
   <packaging>pom</packaging>
   <name>ktf-sys</name>
-  <description>KTF Dashboard system Service</description>
+  <description>KTF dashboard system Service</description>
   
   <properties>
-  	 <ktf-sys.version>2.3.0</ktf-sys.version>
   </properties>
   
   <modules>
 	<module>ktf-cif-facade</module>
 	<module>ktf-cif-db</module>
-	<module>ktf-dashboard-facade</module>
-	<module>ktf-dashboard-mapper</module>
-	<module>ktf-dashboard-web</module>
-	<module>ktf-dashboard-impl</module>
-	<module>ktf-dashboard-shiro</module>
-	<module>ktf-dashboard-dubbo</module>
+	<module>ktf-sys-facade</module>
+	<module>ktf-sys-mapper</module>
+	<module>ktf-sys-web</module>
+	<module>ktf-sys-impl</module>
+	<module>ktf-sys-shiro</module>
+	<module>ktf-sys-dubbo</module>
 	<module>ktf-cif-dubbo</module>
   </modules>
 	

@@ -28,9 +28,5 @@ dubbo:
 ktf:
   common:
     component-scan: com.kivi
-  cache:
-    enabled: true
-    redis:
-      client-type: lettuce
   db:
     mappers: com.kivi.**.mapper

@@ -1,0 +1,10 @@
+{
+	"properties": [
+		{
+		  "name": "ktf.db",
+		  "type": "com.kivi.db.properties.KtfDbProperties",
+		  "description": "A description for 'ktf.db'"
+		}
+		
+	]
+}

@@ -6,7 +6,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 
 import com.kivi.framework.cache.CacheKit;
-import com.kivi.framework.cache.constant.KtfCache;
+import com.kivi.framework.constant.KtfCache;
 import com.kivi.framework.service.KtfTokenService;
 import com.kivi.framework.util.kit.CollectionKit;
 

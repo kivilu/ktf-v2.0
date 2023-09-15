@@ -28,9 +28,9 @@ import org.springframework.data.redis.serializer.RedisSerializationContext.Seria
 
 import com.alibaba.fastjson2.support.spring.data.redis.FastJsonRedisSerializer;
 import com.alibaba.fastjson2.support.spring.data.redis.GenericFastJsonRedisSerializer;
-import com.kivi.framework.cache.constant.KtfCache;
 import com.kivi.framework.cache.properties.KtfCacheProperties;
 import com.kivi.framework.cache.properties.KtfRedisProperties;
+import com.kivi.framework.constant.KtfCache;
 
 @Configuration
 @ConditionalOnProperty(name = { "spring.cache.type" }, havingValue = "redis", matchIfMissing = false)

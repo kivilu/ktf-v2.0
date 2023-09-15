@@ -1,6 +1,6 @@
 package com.kivi.crypto.constant;
 
-import com.kivi.framework.cache.constant.KtfCache;
+import com.kivi.framework.constant.KtfCache;
 
 public interface KtfCryptoCache extends KtfCache {
 

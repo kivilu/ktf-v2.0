@@ -23,5 +23,6 @@
   	    <module>demo-dubbo-consumer</module>
   	    <module>demo-dubbo-facade</module>
   	    <module>demo-swagger3</module>
+  	    <module>demo-mqtt</module>
     </modules>
 </project>

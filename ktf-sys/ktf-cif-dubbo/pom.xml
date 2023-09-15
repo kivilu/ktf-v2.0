@@ -19,7 +19,7 @@
 	  	<dependency>
   			<groupId>com.kivi</groupId>
     		<artifactId>ktf-cif-db</artifactId>
-    		<version>${ktf-sys.version}</version>
+    		<version>${ktf.version}</version>
   		</dependency>
 	  	
 	  	<!-- /KTF -->

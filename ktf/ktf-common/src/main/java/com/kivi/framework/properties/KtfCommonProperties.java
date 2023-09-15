@@ -33,6 +33,16 @@ public class KtfCommonProperties implements IKtfProperties {
     private String bzApplicatonName = "默认业务应用";
 
     /**
+     * enable-mqtt: 是否开启mqtt功能
+     */
+    private Boolean enableMqtt = false;
+
+    /**
+     * enable-dubbo: 是否开启dubbo功能
+     */
+    private Boolean enableDubbo = false;
+
+    /**
      * 测试是否开启
      */
     private Boolean enableTest = false;

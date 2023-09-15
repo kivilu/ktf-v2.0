@@ -1,0 +1,9 @@
+{
+	"properties": [
+		{
+		  "name": "ktf.mqtt",
+		  "type": "com.kivi.mqtt.properties.KtfMqttProperties",
+		  "description": "A description for 'ktf.mqtt'"
+		}
+	]
+}
